@@ -1,6 +1,5 @@
 {
   "defaultSeverity": "error",
-  "extends": ["tslint:recommended"],
   "rules": {
     "quotemark": [false, "double"],
     "trailing-comma": [true],

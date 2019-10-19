@@ -1,6 +1,6 @@
 <template>
     <div class="TasksLocations">
-        win2 text123
+        win2 text123123
         <button @click="run()">asdf</button>
     </div>
 </template>
