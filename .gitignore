@@ -1,0 +1,16 @@
+# output
+/.cache
+/coverage
+/app/renderer/.parcel
+/app/main/.parcel
+*.map
+/release
+
+# dependencies
+/node_modules
+
+# logs
+*.log
+
+# IDE
+.idea
