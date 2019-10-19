@@ -9,7 +9,9 @@ const path = require('path');
 
 const {BrowserWindow, app} = electron;
 
-process.env.ELECTRON_DISABLE_SECURITY_WARNINGS = 'true';
+if (isDev) {
+    process.env.ELECTRON_DISABLE_SECURITY_WARNINGS = 'true';
+}
 
 Shortcuts.register();
 
@@ -19,7 +21,7 @@ app.on('ready', async () => {
         width: 800,
         height: 800,
         useContentSize: true,
-        x: 300,
+        x: 100,
         y: 100,
         show: false,
         webPreferences: {

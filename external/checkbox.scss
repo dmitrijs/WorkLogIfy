@@ -1,0 +1,83 @@
+// https://codepen.io/Sambego/pen/zDLxe/
+
+$baseFontSize: 16;
+
+$green: #009688;
+$blue: #5677fc;
+$blueDark: #3b50ce;
+
+$slideDistance: 100;
+$slideDuration: .4s;
+
+@function checkbox_rem($val) {
+    @return #{$val / $baseFontSize}rem;
+}
+
+.label--checkbox {
+    position: relative;
+
+    margin: .5rem;
+
+    font-family: Arial, sans-serif;
+    line-height: 135%;
+
+    cursor: pointer;
+}
+
+input[type=checkbox] {
+    display: none;
+
+    + span {
+        position: relative;
+
+        top: 3px;
+
+        cursor: pointer;
+
+        &:before {
+            transition: all .3s ease-in-out;
+
+            content: "";
+
+            position: absolute;
+            left: 0;
+            z-index: 1;
+
+            width: 1rem;
+            height: 1rem;
+
+            border: 2px solid #f2f2f2;
+        }
+
+    }
+    &:checked {
+        + span {
+            &:before {
+                transform: rotate(-45deg);
+
+                height: .5rem;
+
+                border-color: #7b7b7b;
+                border-top-style: none;
+                border-right-style: none;
+            }
+        }
+    }
+
+    + span {
+        &:after {
+            content: "";
+
+            position: absolute;
+            top: checkbox_rem(-2);
+            left: 0;
+
+            width: 1.1rem;
+            height: 1.1rem;
+
+            background: transparent;
+
+            cursor: pointer;
+        }
+    }
+}

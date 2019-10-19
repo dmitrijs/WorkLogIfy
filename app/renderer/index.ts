@@ -7,11 +7,18 @@ import {createRouter} from './router'
 declare global {
     interface Window {
         ipc: Electron.IpcRenderer,
+        remote: Electron.Remote,
     }
 }
 
 Vue.use(VueRouter);
 Vue.mixin(titleMixin);
+
+
+import './../style.scss';
+import './../../external/icofont/icofont.min.css';
+import './../../external/checkbox.scss';
+
 
 new Vue({
     router: createRouter(),
