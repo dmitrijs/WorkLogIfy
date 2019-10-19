@@ -6,25 +6,13 @@
 </template>
 
 <script lang="ts">
-    // import Vue from "vue";
-    // import Component from "vue-class-component";
-    import { ipcRenderer } from 'electron';
+    import Vue from "vue";
 
-    export default {
-        created() {
-            console.log('created', ipcRenderer);
-            //
-            // ipcRenderer.on('asynchronous-reply', (event, arg) => {
-            //     console.log(arg) // prints "pong"
-            // })
-        },
+    export default class Win2 extends Vue {
+        run() {
+            console.log(window.ipc.sendSync('synchronous-message', 'ping')) // prints "pong"
 
-        methods: {
-            run() {
-                console.log(ipcRenderer.sendSync('synchronous-message', 'ping')) // prints "pong"
-
-                ipcRenderer.send('asynchronous-message', 'ping')
-            },
+            window.ipc.send('asynchronous-message', 'ping')
         }
     }
 </script>

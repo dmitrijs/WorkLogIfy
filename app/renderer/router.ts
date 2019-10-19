@@ -1,4 +1,5 @@
 import VueRouter from 'vue-router'
+import Win2 from "./Win2.vue";
 
 const Home = {
     template: `
@@ -51,7 +52,7 @@ const Bar = {
 const routes = [
     {path: '/', component: Home},
     {path: '/foo', component: Foo},
-    {path: '/bar', component: Bar}
+    {path: '/bar', component: Win2}
 ];
 
 export function createRouter() {
