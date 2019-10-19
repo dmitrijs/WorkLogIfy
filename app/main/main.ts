@@ -1,13 +1,20 @@
+import Shortcuts from "./shortcuts";
+
 const {format} = require('url');
 
-const {BrowserWindow, app} = require('electron');
+const electron = require('electron');
 const isDev = require('electron-is-dev');
 const {resolve} = require('app-root-path');
 const path = require('path');
 
+const {BrowserWindow, app} = electron;
+
 process.env.ELECTRON_DISABLE_SECURITY_WARNINGS = 'true';
 
+Shortcuts.register();
+
 app.on('ready', async () => {
+
     const mainWindow = new BrowserWindow({
         width: 800,
         height: 800,
@@ -38,7 +45,7 @@ app.on('ready', async () => {
     });
     const url = isDev ? devPath : prodPath;
 
-    mainWindow.setMenu(null);
+    // mainWindow.setMenu(null);
     mainWindow.loadURL(url)
 
     {
@@ -52,6 +59,27 @@ app.on('ready', async () => {
             console.log(arg) // prints "ping"
             event.returnValue = 'pong'
         })
+
+        ipcMain.on('window.open', (event, arg) => {
+            console.log(arg) // prints "ping"
+
+            let display = electron.screen.getPrimaryDisplay();
+
+            let width = 300, height = 200;
+
+            let win2 = new BrowserWindow({
+                width: width,
+                height: height,
+                useContentSize: true,
+                x: display.bounds.width - width - 50,
+                y: display.bounds.height - height - 150,
+                frame: false,
+            });
+            win2.show();
+            win2.loadURL(url)
+
+            event.returnValue = 'ok'
+        });
     }
 });
 

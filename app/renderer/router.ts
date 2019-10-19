@@ -1,5 +1,6 @@
 import VueRouter from 'vue-router'
 import Win2 from "./Win2.vue";
+import TasksWindow from "./Tasks/TasksWindow.vue";
 
 const Home = {
     template: `
@@ -17,7 +18,7 @@ const Foo = {
   <div>
     <ul>
       <li><router-link to="/">/</router-link></li>
-      <li><router-link to="/bar">/bar</router-link></li>
+      <li><router-link to="/tasks">/tasks</router-link></li>
     </ul>
     <h1>foo!</h1>
   </div>
@@ -28,8 +29,8 @@ const Bar = {
     template: `
   <div>
     <ul>
-      <li><router-link to="/foo">/foo</router-link></li>
       <li><router-link to="/">/</router-link></li>
+      <li><router-link to="/tasks">/tasks</router-link></li>
     </ul>
     <h1>bar!</h1>
     <button @click="run()">run</button>
@@ -50,8 +51,8 @@ const Bar = {
 };
 
 const routes = [
-    {path: '/', component: Home},
-    {path: '/foo', component: Foo},
+    {path: '/', component: TasksWindow},
+    {path: '/tasks', component: Home},
     {path: '/bar', component: Win2}
 ];
 
