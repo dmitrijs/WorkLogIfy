@@ -2,13 +2,15 @@
   "defaultSeverity": "error",
   "extends": ["tslint:recommended"],
   "rules": {
-    "quotemark": [true, "single"],
+    "quotemark": [false, "double"],
     "trailing-comma": [true],
-    "semicolon": [true, "never"],
+    "semicolon": [false, "never"],
     "no-var-requires": false,
     "object-literal-sort-keys": false,
-    "ordered-imports": [true],
+    "ordered-imports": false,
     "jsx-no-multiline-js": false,
-    "jsx-boolean-value": false
+    "jsx-boolean-value": false,
+    "interface-name": false,
+    "no-console": false
   }
 }

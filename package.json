@@ -10,8 +10,8 @@
     "electron:start": "nodemon --watch app/main/.parcel --exec \"electron .\"",
     "electron:build": "build --x64 --publish=never",
     "parcel:watch": "run-p -r main:watch renderer:watch",
-    "main:watch": "parcel watch app/main/main.ts --out-dir app/main/.parcel --out-file main --target electron",
-    "renderer:watch": "parcel app/renderer/index.html --port 1124 --out-dir app/renderer/.parcel/development",
+    "main:watch": "parcel watch app/main/main.ts app/main/preload.ts --no-autoinstall --out-dir app/main/.parcel --out-file main --target electron",
+    "renderer:watch": "parcel app/renderer/index.html --no-autoinstall --port 1124 --out-dir app/renderer/.parcel/development",
     "parcel:build": "run-s main:build renderer:build",
     "main:build": "parcel build app/main/main.ts --out-dir app/main/.parcel --out-file main --target electron",
     "renderer:build": "parcel build app/renderer/index.html --public-url ./ --out-dir app/renderer/.parcel/production",
@@ -82,6 +82,8 @@
     "@babel/core": "^7.4.5",
     "@babel/preset-env": "^7.4.5",
     "@types/jest": "^24.0.15",
+    "@types/node": "^12.11.1",
+    "@vue/component-compiler-utils": "^3.0.0",
     "babel-core": "^7.0.0-bridge.0",
     "babel-jest": "^24.8.0",
     "babel-preset-vue": "^2.0.2",
@@ -95,12 +97,14 @@
     "tslint": "^5.18.0",
     "typescript": "^3.5.2",
     "vue": "^2.6.10",
+    "vue-class-component": "latest",
     "vue-jest": "^3.0.4",
     "vue-router": "^3.0.6",
     "vue-template-compiler": "^2.6.10"
   },
   "dependencies": {
     "app-root-path": "^2.2.1",
-    "electron-is-dev": "^1.1.0"
+    "electron-is-dev": "^1.1.0",
+    "vue-hot-reload-api": "^2.3.4"
   }
 }

@@ -1,31 +1,58 @@
-const { format } = require('url')
+const {format} = require('url');
 
-const { BrowserWindow, app } = require('electron')
-const isDev = require('electron-is-dev')
-const { resolve } = require('app-root-path')
+const {BrowserWindow, app} = require('electron');
+const isDev = require('electron-is-dev');
+const {resolve} = require('app-root-path');
+const path = require('path');
+
+process.env.ELECTRON_DISABLE_SECURITY_WARNINGS = 'true';
 
 app.on('ready', async () => {
-  const mainWindow = new BrowserWindow({
-    width: 800,
-    height: 600,
-    show: false
-  })
+    const mainWindow = new BrowserWindow({
+        width: 800,
+        height: 800,
+        useContentSize: true,
+        x: 300,
+        y: 100,
+        show: false,
+        webPreferences: {
+            nodeIntegration: false,
+            preload: path.resolve(__dirname, 'preload.js'),
+        }
+    });
 
-  mainWindow.once('ready-to-show', () => {
-    mainWindow.show()
-    if (isDev) { mainWindow.webContents.openDevTools() }
-  })
+    mainWindow.once('ready-to-show', () => {
+        mainWindow.show();
+        if (isDev) {
+            mainWindow.webContents.openDevTools({
+                mode: "bottom"
+            })
+        }
+    });
 
-  const devPath = 'http://localhost:1124'
-  const prodPath = format({
-    pathname: resolve('app/renderer/.parcel/production/index.html'),
-    protocol: 'file:',
-    slashes: true
-  })
-  const url = isDev ? devPath : prodPath
+    const devPath = 'http://localhost:1124';
+    const prodPath = format({
+        pathname: resolve('app/renderer/.parcel/production/index.html'),
+        protocol: 'file:',
+        slashes: true
+    });
+    const url = isDev ? devPath : prodPath;
 
-  mainWindow.setMenu(null)
-  mainWindow.loadURL(url)
-})
+    mainWindow.setMenu(null);
+    mainWindow.loadURL(url)
 
-app.on('window-all-closed', app.quit)
+    {
+        const {ipcMain} = require('electron')
+        ipcMain.on('asynchronous-message', (event, arg) => {
+            console.log(arg) // prints "ping"
+            event.reply('asynchronous-reply', 'pong')
+        })
+
+        ipcMain.on('synchronous-message', (event, arg) => {
+            console.log(arg) // prints "ping"
+            event.returnValue = 'pong'
+        })
+    }
+});
+
+app.on('window-all-closed', app.quit);
