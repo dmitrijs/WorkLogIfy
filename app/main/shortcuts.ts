@@ -2,6 +2,7 @@ const {app, globalShortcut} = require('electron')
 
 export default class Shortcuts {
     public static register() {
+        return;
         app.on('ready', () => {
             this.registerOne('CommandOrControl+Shift+Home');
             this.registerOne('CommandOrControl+Shift+PageUp');

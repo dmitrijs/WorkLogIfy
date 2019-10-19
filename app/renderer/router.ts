@@ -44,20 +44,18 @@ const Bar = {
 
             window.ipc.on('asynchronous-reply', (event, arg) => {
                 console.log(arg) // prints "pong"
-            })
+            });
             window.ipc.send('asynchronous-message', 'ping')
         },
     }
 };
 
-const routes = [
-    {path: '/', component: TasksWindow},
-    {path: '/tasks', component: Home},
-    {path: '/bar', component: Win2}
-];
-
 export function createRouter() {
     return new VueRouter({
-        routes
+        routes: [
+            {path: '/', component: TasksWindow},
+            {path: '/tasks', component: Home},
+            {path: '/bar', component: Win2},
+        ],
     })
 }
