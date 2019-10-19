@@ -18,8 +18,14 @@
                 <td><label class="label-checkbox"><input type="checkbox" :checked="task.chargeable"><span></span></label></td>
                 <td><label class="label-checkbox"><input type="checkbox" :checked="task.logged"><span></span></label></td>
                 <td class="Column--Code">{{task.code}}</td>
-                <td class="Column--Title"><span class="Title--Content">{{task.title}}</span></td>
-                <td class="Column--Time">{{task.time_spent_text}}</td>
+                <td class="Column--Title">
+                    <span class="Title--Content">{{task.title}}</span>
+                    <span class="Note--Content">I did this and that and then some more things that I should have done so it's good</span>
+                </td>
+                <td class="Column--Time">
+                    {{task.time_charge_text}}<br />
+                    {{task.time_spent_text}}
+                </td>
             </tr>
             </tbody>
         </table>
@@ -39,7 +45,7 @@
         }
 
         get tasks() {
-            return this.$store.state.tasks;
+            return this.$store.getters.getTasks;
         }
 
         created() {
@@ -87,12 +93,13 @@
     }
 
     .Column--Title {
+        .Note--Content,
         .Title--Content {
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
             width: 220px;
-            display: inline-block;
+            display: block;
         }
     }
 
