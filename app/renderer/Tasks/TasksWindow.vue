@@ -1,36 +1,44 @@
 <template>
     <div>
-        Tasks
-        <table class="table table-sm">
-            <thead>
-            <tr>
-                <th title="Distributed"><i class="icofont-exchange"></i></th>
-                <th title="Cannot charge"><i class="icofont-not-allowed"></i></th>
-                <th title="Logged"><i class="icofont-wall-clock"></i></th>
-                <th class="Column--Code">ID</th>
-                <th class="Column--Title">Title</th>
-                <th class="Column--Time">Time</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr v-for="task of tasks">
-                <td><label class="label-checkbox"><input type="checkbox" :checked="task.distributed"><span></span></label></td>
-                <td><label class="label-checkbox"><input type="checkbox" :checked="task.chargeable"><span></span></label></td>
-                <td><label class="label-checkbox"><input type="checkbox" :checked="task.logged"><span></span></label></td>
-                <td class="Column--Code">{{task.code}}</td>
-                <td class="Column--Title">
-                    <span class="Title--Content">{{task.title}}</span>
-                    <span class="Note--Content">I did this and that and then some more things that I should have done so it's good</span>
-                </td>
-                <td class="Column--Time">
-                    {{task.time_charge_text}}<br />
+        <div class="TasksTable">
+            <div class="TRow --header">
+                <div class="TCol --selected">
+                    <div class="label-checkbox" @click="$store.commit('tasksUiToggle', task._key)">
+                    <input type="checkbox"><span></span></div>
+                </div>
+                <div class="TCol --distributed"><i class="icofont-exchange"></i></div>
+                <div class="TCol --chargeable"><i class="icofont-not-allowed"></i></div>
+                <div class="TCol --logged"><i class="icofont-wall-clock"></i></div>
+                <div class="TCol --code">ID</div>
+                <div class="TCol --title">Title</div>
+                <div class="TCol --time">Time</div>
+            </div>
+            <div class="TRow" v-for="task of tasks" @mouseenter="$store.commit('tasksUiHoveredId', task._key)">
+                <div class="TCol --selected">
+                    <div class="label-checkbox" @click="$store.commit('tasksUiToggle', task._key)">
+                        <input type="checkbox" :checked="task._selected"><span></span></div>
+                </div>
+                <div class="TCol --distributed"><i class="IconAsInput icofont-exchange"></i></div>
+                <div class="TCol --chargeable"><i class="IconAsInput icofont-not-allowed"></i></div>
+                <div class="TCol --logged"><i class="IconAsInput icofont-wall-clock" @click="$store.commit('updateTask', [task._key, 'logged', 'YES'])"></i></div>
+                <div class="TCol --code">{{task.code}}</div>
+                <div class="TCol --title">
+                    <span class="Title--Content ellipsis"><span>{{task.title}}</span></span>
+                    <span class="Note--Content ellipsis"><span>I did this and that and then some more things that I should have done so it's good</span></span>
+                </div>
+                <div class="TCol --time">
+                    {{task.time_charge_text}}<br/>
                     {{task.time_spent_text}}
-                </td>
-            </tr>
-            </tbody>
-        </table>
+                </div>
+            </div>
+        </div>
 
-        {{ tasks }}
+        <div class="Debug">
+            {{ tasks_ui }}
+            <hr/>
+            {{ tasks }}
+        </div>
+
     </div>
 </template>
 
@@ -46,6 +54,10 @@
 
         get tasks() {
             return this.$store.getters.getTasks;
+        }
+
+        get tasks_ui() {
+            return this.$store.getters.getTasksUi;
         }
 
         created() {
@@ -88,23 +100,5 @@
 </script>
 
 <style scoped lang="scss">
-    .Column--Code {
-        white-space: nowrap;
-    }
-
-    .Column--Title {
-        .Note--Content,
-        .Title--Content {
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            width: 220px;
-            display: block;
-        }
-    }
-
-    .Column--Time {
-        width: 70px;
-    }
-
+    @import "./TasksWindow";
 </style>

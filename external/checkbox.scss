@@ -28,7 +28,12 @@ input[type=checkbox] {
     display: none;
 
     + span {
+        content: "X";
         position: relative;
+
+        display: inline-block;
+        min-width: 1rem;
+        min-height: 1rem;
 
         cursor: pointer;
 
@@ -63,19 +68,20 @@ input[type=checkbox] {
     }
 
     + span {
-        &:after {
-            content: "";
-
-            position: absolute;
-            top: checkbox_rem(-2);
-            left: 0;
-
-            width: 1.1rem;
-            height: 1.1rem;
-
-            background: transparent;
-
-            cursor: pointer;
-        }
+        //&:after {
+        //    content: 'X';
+        //    visibility: hidden;
+        //
+        //    position: absolute;
+        //    top: checkbox_rem(-2);
+        //    left: 0;
+        //
+        //    width: 1.1rem;
+        //    height: 1.1rem;
+        //
+        //    background: transparent;
+        //
+        //    cursor: pointer;
+        //}
     }
 }

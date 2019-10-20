@@ -1,0 +1,82 @@
+.TasksTable {
+
+    .TRow {
+        display: grid;
+        grid-template-columns: 22px 22px 22px 22px 73px 1fr 63px;
+        grid-template-rows: auto;
+
+        &.--header {
+            padding: 1px 0 3px 0;
+
+            .TCol {
+                font-weight: bold;
+            }
+        }
+
+        &:hover {
+            background-color: #f5f5f5;
+        }
+    }
+
+    .TCol {
+        padding: 1px 3px;
+
+        &.--code {
+            white-space: nowrap;
+        }
+        &.--selected,
+        &.--distributed,
+        &.--chargeable ,
+        &.--logged {
+            text-align: center;
+        }
+        &.--title {
+            .Note--Content,
+            .Title--Content {
+                display: block;
+            }
+        }
+        &.--time {
+
+        }
+    }
+}
+
+.Debug {
+    position: absolute;
+    left: 470px;
+    top: 5px;
+    width: 200px;
+    z-index: 111;
+}
+
+[class*=" icofont-"],
+[class^=icofont-] {
+    font-size: 17px;
+}
+.IconAsInput {
+    opacity: 0.5;
+    cursor: pointer;
+
+    &:hover {
+        opacity: 1;
+    }
+}
+
+.ellipsis {
+    position: relative;
+}
+
+.ellipsis:before {
+    content: 'X';
+    visibility: hidden;
+}
+
+.ellipsis span {
+    position: absolute;
+    left: 0;
+    right: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
