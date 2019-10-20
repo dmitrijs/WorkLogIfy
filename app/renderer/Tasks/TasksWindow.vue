@@ -35,8 +35,8 @@
                         <span class="Note--Content ellipsis"><span>I did this and that and then some more things that I should have done so it's good</span></span>
                     </div>
                     <div class="TCol --time">
-                        {{task.time_charge_text}}<br/>
-                        {{task.time_spent_text}}
+                        <span>{{task.time_charge_text}}</span>
+                        <span>{{task.time_spent_text}}</span>
                     </div>
                 </div>
             </template>
