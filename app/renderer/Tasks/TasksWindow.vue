@@ -23,7 +23,12 @@
                     <div class="TCol --timespan --timespan-spent" title="Spent">{{ group.time_spent_text }}</div>
                 </div>
 
-                <div class="TRow" v-for="task of group.tasks" @mouseenter="$store.commit('tasksUiHoveredId', task._key)" :class="{ selected: tasks_ui.hoveredId === task._key, logged: task.logged }">
+                <div class="TRow"
+                     v-for="task of group.tasks"
+                     @mouseenter="$store.commit('tasksUiHoveredId', task._key)"
+                     :class="{ selected: task._selected, logged: task.logged, hovered: tasks_ui.hoveredId === task._key }"
+                    @click="rowOnClick($event, task)"
+                >
                     <div class="TCol --selected">
                         <div class="label-checkbox" @click="$store.commit('tasksUiToggle', task._key)">
                             <input type="checkbox" :checked="task._selected"><span></span></div>
@@ -106,6 +111,12 @@
             }, false);
 
             console.log('done');
+        }
+
+        rowOnClick($event, task) {
+            if ($event.ctrlKey) {
+                this.$store.commit('tasksUiToggle', task._key);
+            }
         }
     }
 </script>
