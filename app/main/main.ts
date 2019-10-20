@@ -8,7 +8,11 @@ const isDev = require('electron-is-dev');
 const {resolve} = require('app-root-path');
 const path = require('path');
 
-const {BrowserWindow, app} = electron;
+// @ts-ignore
+import trayPng from './tray.png';
+
+let tray;
+const {BrowserWindow, Menu, Tray, app} = electron;
 
 if (isDev) {
     process.env.ELECTRON_DISABLE_SECURITY_WARNINGS = 'true';
@@ -20,13 +24,31 @@ app.on('ready', async () => {
         width: 800,
         height: 800,
         useContentSize: true,
-        x: 100,
-        y: 100,
+        x: 10,
+        y: 10,
         show: false,
         webPreferences: {
             nodeIntegration: false,
             preload: path.resolve(__dirname, 'preload.js'),
         }
+    });
+
+    tray = new Tray(path.join(__dirname, trayPng));
+
+    var contextMenu = Menu.buildFromTemplate([
+        { label: 'Show App', click:  function(){
+                mainWindow.show();
+            } },
+        { label: 'Quit', click:  function(){
+                mainWindow.destroy();
+                app.quit();
+            } }
+    ]);
+    tray.setContextMenu(contextMenu);
+
+    mainWindow.on('close', function (event) {
+        event.preventDefault();
+        mainWindow.hide();
     });
 
     mainWindow.once('ready-to-show', () => {
