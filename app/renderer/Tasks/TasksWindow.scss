@@ -1,3 +1,7 @@
+& {
+    padding-bottom: 26px; // compensate Statistics
+}
+
 .TasksTable {
 
     .TRow {
@@ -90,12 +94,16 @@
     }
 }
 
-.Debug {
+.SelectionStatistics {
     position: absolute;
-    left: 510px;
-    top: 5px;
-    width: 200px;
-    z-index: 111;
+    top: 395px;
+    background: white;
+    z-index: 1;
+    width: 492px;
+    margin-left: -5px;
+    padding: 4px 6px;
+    border-top: 1px solid grey;
+    border-radius: 3px;
 }
 
 [class*=" icofont-"],

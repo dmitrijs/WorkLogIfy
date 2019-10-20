@@ -17,12 +17,13 @@ import store from './store'
 import './../style.scss';
 import './../../external/icofont/icofont.min.css';
 import './../../external/checkbox.scss';
+import App from "./App.vue";
 
 Vue.prototype.$store = store;
 
 let vue = new Vue({
     router: createRouter(),
-    template: '<router-view />'
+    render: h => h(App),
 }).$mount('#root');
 
 window.ipc.on('user-is-idle', function (emitter, secondsIdle) {

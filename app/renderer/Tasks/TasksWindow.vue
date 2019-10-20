@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="TasksWindow">
         <div class="TasksTable">
             <div class="TRow --header">
                 <div class="TCol --selected">
@@ -51,12 +51,9 @@
             </template>
         </div>
 
-        <div class="Debug">
-            {{ tasks_ui }}
-            <hr/>
-            {{ tasksGrouped }}
+        <div class="SelectionStatistics">
+            Statistics!
         </div>
-
     </div>
 </template>
 
@@ -122,5 +119,7 @@
 </script>
 
 <style scoped lang="scss">
-    @import "./TasksWindow";
+    .TasksWindow {
+        @import "./TasksWindow";
+    }
 </style>
