@@ -11,12 +11,12 @@ const store = new Vuex.Store({
     state: {
         tasks: fromJS({
             1: Map({
-                code: 'TSKS-1111', title: 'Create task from some sentence and that is it', distributed: false, chargeable: true, logged: false,
+                code: 'TSKS-1111', title: 'Create task from some sentence and that is it', distributed: false, chargeable: false, logged: false,
                 time_spent_seconds: 3600 + 15 * 60 + 45,
                 date: '2019-10-16',
             }),
             2: Map({
-                code: 'TSKS-3333', title: 'Blog creation', distributed: true, chargeable: true, logged: false,
+                code: 'TSKS-3333', title: 'Blog creation', distributed: true, chargeable: false, logged: false,
                 time_spent_seconds: 12 * 3600 + 15 * 60 + 45,
                 date: '2019-10-16',
             }),
@@ -25,7 +25,7 @@ const store = new Vuex.Store({
                 code: 'TSKS-5444',
                 title: 'Enjoy a rest ater this work is done to have some not at all exception there is not a thing for this',
                 distributed: true,
-                chargeable: true,
+                chargeable: false,
                 logged: false,
                 time_spent_seconds: 3 * 3600 + 54 * 60 + 45,
                 date: '2019-10-16',
@@ -98,20 +98,20 @@ const store = new Vuex.Store({
                 title: 'Enjoy a rest ater this work is done to have some not at all exception there is not a thing for this',
                 distributed: true,
                 chargeable: true,
-                logged: true,
-                time_spent_seconds: 3600 + 15 * 60 + 45,
-                date: '2019-10-13',
+                logged: false,
+                time_spent_seconds: 4 * 3600 + 0 * 60 + 0,
+                date: '2019-10-16',
             },
             14: {
                 id: 14,
                 code: 'TSKS-1111', title: 'Create task from some sentence and that is it', distributed: false, chargeable: true, logged: false,
-                time_spent_seconds: 3600 + 15 * 60 + 45,
-                date: '2019-10-14',
+                time_spent_seconds: 3 * 3600 + 0 * 60 + 0,
+                date: '2019-10-16',
             },
             15: {
                 id: 15,
                 code: 'TSKS-3333', title: 'Blog creation', distributed: true, chargeable: true, logged: false,
-                time_spent_seconds: 3600 + 15 * 60 + 45,
+                time_spent_seconds: 2 * 3600 + 0 * 60 + 0,
                 date: '2019-10-16',
             },
             16: {
@@ -121,7 +121,7 @@ const store = new Vuex.Store({
                 distributed: true,
                 chargeable: true,
                 logged: false,
-                time_spent_seconds: 3600 + 15 * 60 + 45,
+                time_spent_seconds: 3600 + 0 * 60 + 0,
                 date: '2019-10-16',
             },
         }),
@@ -141,26 +141,75 @@ const store = new Vuex.Store({
                 }
                 (<any>task)._key = key;
                 (<any>task)._selected = state.tasksSelectedIds.get(key);
-                (<any>task).time_charge_text = timespanToText(task.time_spent_seconds * 2);
+
+                (<any>task).time_charge_text = 'error';
+
                 (<any>task).time_spent_text = timespanToText(task.time_spent_seconds);
                 result = result.push(task);
             });
 
             result = result.groupBy((x) => x['date']);
             result = result.sortBy((val, key) => key, comparatorLt);
+
+            //
             result = result.map((tasks) => {
 
-                const timeCharge = tasks.map((x) => (x.chargeable ? x.time_spent_seconds : 0))
-                    .reduce((x, y) => x + y, 0);
+                let spent = 0;
+                let charge = 0;
+                let distributed = 0;
+                let not_distributed = 0;
 
-                const timeSpent = tasks.map((x) => (x.time_spent_seconds))
-                    .reduce((x, y) => x + y, 0);
+                tasks.forEach((task) => {
+                    spent += (task.time_spent_seconds);
+                    if (task.chargeable) {
+                        charge += task.time_spent_seconds;
+
+                        if (task.distributed) {
+                            distributed += task.time_spent_seconds;
+                        } else {
+                            not_distributed += task.time_spent_seconds;
+                        }
+                    }
+                });
 
                 return Map({
                     tasks: tasks,
-                    time_charge_text: timespanToText(timeCharge),
-                    time_spent_text: timespanToText(timeSpent),
+                    time_charge_seconds: charge,
+                    time_spent_seconds: spent,
+                    time_distributed_seconds: distributed,
+                    time_not_distributed_seconds: not_distributed,
+                    time_charge_text: timespanToText(charge),
+                    time_spent_text: timespanToText(spent),
                 });
+            });
+
+            // populate charge_time
+            result = result.map((group) => {
+
+                let tasks = group.get('tasks');
+                let distributed = group.get('time_distributed_seconds');
+                let not_distributed = group.get('time_not_distributed_seconds');
+
+                if (not_distributed === 0) {
+                    return group;
+                }
+
+                tasks = tasks.map((task) => {
+                    // no charging for lunch, meetings
+                    if (!task.chargeable || task.distributed) {
+                        task.time_charge_seconds = 0;
+
+                    } else {
+                        let spent = task.time_spent_seconds;
+
+                        task.time_charge_seconds = spent + ((spent / not_distributed) * distributed);
+                    }
+
+                    (<any>task).time_charge_text = timespanToText(task.time_charge_seconds);
+                    return task;
+                });
+
+                return group.set('tasks', tasks);
             });
 
             console.log(result.toJS());
