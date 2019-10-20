@@ -71,7 +71,7 @@ app.on('ready', async () => {
     });
     const url = isDev ? devPath : prodPath;
 
-    // mainWindow.setMenu(null);
+    mainWindow.setMenu(null);
     mainWindow.loadURL(url)
 
     {
