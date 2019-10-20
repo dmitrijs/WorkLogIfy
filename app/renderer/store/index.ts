@@ -1,7 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import {timespanToText} from './../utils';
-import * as _ from 'lodash';
 import {fromJS, List, Map} from 'immutable';
 import {comparatorLt} from '../utils';
 
@@ -16,7 +15,7 @@ const store = new Vuex.Store({
                 date: '2019-10-16',
             }),
             2: Map({
-                code: 'TSKS-3333', title: 'Blog creation', distributed: true, chargeable: false, logged: false,
+                code: 'TSKS-3333', title: 'Blog creation', distributed: true, frozen: true, chargeable: false, logged: false,
                 time_spent_seconds: 12 * 3600 + 15 * 60 + 45,
                 date: '2019-10-16',
             }),
@@ -24,7 +23,7 @@ const store = new Vuex.Store({
                 id: 3,
                 code: 'TSKS-5444',
                 title: 'Enjoy a rest ater this work is done to have some not at all exception there is not a thing for this',
-                distributed: true,
+                distributed: true, frozen: false,
                 chargeable: false,
                 logged: false,
                 time_spent_seconds: 3 * 3600 + 54 * 60 + 45,
@@ -38,7 +37,7 @@ const store = new Vuex.Store({
             },
             5: {
                 id: 5,
-                code: 'TSKS-3333', title: 'Blog creation', distributed: true, chargeable: true, logged: false,
+                code: 'TSKS-3333', title: 'Blog creation', distributed: true, frozen: false, chargeable: true, logged: false,
                 time_spent_seconds: 2 * 3600 + 2 * 60 + 45,
                 date: '2019-10-07',
             },
@@ -46,7 +45,7 @@ const store = new Vuex.Store({
                 id: 6,
                 code: 'TSKS-5444',
                 title: 'Enjoy a rest ater this work is done to have some not at all exception there is not a thing for this',
-                distributed: true,
+                distributed: true, frozen: true,
                 chargeable: true,
                 logged: false,
                 time_spent_seconds: 1 * 60 + 45,
@@ -54,7 +53,12 @@ const store = new Vuex.Store({
             },
             7: {
                 id: 7,
-                code: 'TSKS-1243', title: 'Add some tasks to some tasks for some tasks', distributed: true, chargeable: true, logged: false,
+                code: 'TSKS-1243',
+                title: 'Add some tasks to some tasks for some tasks',
+                distributed: true,
+                frozen: false,
+                chargeable: true,
+                logged: false,
                 time_spent_seconds: 3 * 60 + 45,
                 date: '2019-10-10',
             },
@@ -66,7 +70,7 @@ const store = new Vuex.Store({
             },
             9: {
                 id: 9,
-                code: 'TSKS-3333', title: 'Blog creation', distributed: true, chargeable: true, logged: false,
+                code: 'TSKS-3333', title: 'Blog creation', distributed: true, frozen: true, chargeable: true, logged: false,
                 time_spent_seconds: 3600 + 15 * 60 + 45,
                 date: '2019-10-10',
             },
@@ -74,7 +78,7 @@ const store = new Vuex.Store({
                 id: 10,
                 code: 'TSKS-5444',
                 title: 'Enjoy a rest ater this work is done to have some not at all exception there is not a thing for this',
-                distributed: true,
+                distributed: true, frozen: true,
                 chargeable: true,
                 logged: true,
                 time_spent_seconds: 3600 + 15 * 60 + 45,
@@ -88,7 +92,7 @@ const store = new Vuex.Store({
             },
             12: {
                 id: 12,
-                code: 'TSKS-3333', title: 'Blog creation', distributed: true, chargeable: true, logged: false,
+                code: 'TSKS-3333', title: 'Blog creation', distributed: true, frozen: true, chargeable: true, logged: false,
                 time_spent_seconds: 3600 + 15 * 60 + 45,
                 date: '2019-10-12',
             },
@@ -96,7 +100,7 @@ const store = new Vuex.Store({
                 id: 13,
                 code: 'TSKS-5444',
                 title: 'Enjoy a rest ater this work is done to have some not at all exception there is not a thing for this',
-                distributed: true,
+                distributed: true, frozen: false,
                 chargeable: true,
                 logged: false,
                 time_spent_seconds: 4 * 3600 + 0 * 60 + 0,
@@ -110,7 +114,7 @@ const store = new Vuex.Store({
             },
             15: {
                 id: 15,
-                code: 'TSKS-3333', title: 'Blog creation', distributed: true, chargeable: true, logged: false,
+                code: 'TSKS-3333', title: 'Blog creation', distributed: true, frozen: false, chargeable: true, logged: false,
                 time_spent_seconds: 2 * 3600 + 0 * 60 + 0,
                 date: '2019-10-16',
             },
@@ -118,7 +122,7 @@ const store = new Vuex.Store({
                 id: 16,
                 code: 'TSKS-5444',
                 title: 'Enjoy a rest ater this work is done to have some not at all exception there is not a thing for this',
-                distributed: true,
+                distributed: true, frozen: true,
                 chargeable: true,
                 logged: false,
                 time_spent_seconds: 3600 + 0 * 60 + 0,
@@ -167,7 +171,9 @@ const store = new Vuex.Store({
                         if (task.distributed) {
                             distributed += task.time_spent_seconds;
                         } else {
-                            not_distributed += task.time_spent_seconds;
+                            if (!task.frozen) {
+                                not_distributed += task.time_spent_seconds;
+                            }
                         }
                     }
                 });
@@ -198,6 +204,9 @@ const store = new Vuex.Store({
                     // no charging for lunch, meetings
                     if (!task.chargeable || task.distributed) {
                         task.time_charge_seconds = 0;
+
+                    } else if (task.frozen) {
+                        task.time_charge_seconds = task.time_spent_seconds;
 
                     } else {
                         let spent = task.time_spent_seconds;

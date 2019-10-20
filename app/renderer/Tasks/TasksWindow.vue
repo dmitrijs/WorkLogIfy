@@ -6,9 +6,9 @@
                     <div class="label-checkbox" @click="$store.commit('tasksUiToggle', task._key)">
                     <input type="checkbox"><span></span></div>
                 </div>
-                <div class="TCol --distributed"><i class="icofont-exchange"></i></div>
                 <div class="TCol --chargeable"><i class="icofont-not-allowed"></i></div>
-                <div class="TCol --logged"><i class="icofont-wall-clock"></i></div>
+                <div class="TCol --distributed"><i class="icofont-exchange"></i></div>
+                <div class="TCol --frozen"><i class="icofont-unlock"></i></div>
                 <div class="TCol --time">Time</div>
                 <div class="TCol --code">ID</div>
                 <div class="TCol --title">Title</div>
@@ -17,6 +17,7 @@
             <template class="TGroup" v-for="(group, date) of tasksGrouped">
                 <div class="TRowDate">
                     <div class="TCol --selected"></div>
+                    <div class="TCol --frozen"><i class="IconAsInput icofont-wall-clock" :class="{ active: group.logged }"></i></div>
                     <div class="TCol --group-date">{{ date }}</div>
                     <div class="TCol --timespan --timespan-charge" title="Charge">{{ group.time_charge_text }}</div>
                     <div class="TCol --timespan --timespan-spent" title="Spent">{{ group.time_spent_text }}</div>
@@ -27,9 +28,10 @@
                         <div class="label-checkbox" @click="$store.commit('tasksUiToggle', task._key)">
                             <input type="checkbox" :checked="task._selected"><span></span></div>
                     </div>
-                    <div class="TCol --distributed"><i class="IconAsInput icofont-exchange" :class="{ active: task.distributed }" @click="$store.commit('updateTask', [task._key, 'distributed', !task.distributed])"></i></div>
                     <div class="TCol --chargeable"><i class="IconAsInput icofont-not-allowed" :class="{ active: !task.chargeable }" @click="$store.commit('updateTask', [task._key, 'chargeable', !task.chargeable])"></i></div>
-                    <div class="TCol --logged"><i class="IconAsInput icofont-wall-clock" :class="{ active: task.logged }" @click="$store.commit('updateTask', [task._key, 'logged', !task.logged])"></i></div>
+                    <div class="TCol --distributed"><i class="IconAsInput icofont-exchange" :class="{ active: task.distributed }" @click="$store.commit('updateTask', [task._key, 'distributed', !task.distributed])"></i></div>
+                    <div class="TCol --frozen">
+                        <i class="IconAsInput icofont-unlock" :class="{ active: task.frozen }" @click="$store.commit('updateTask', [task._key, 'frozen', !task.frozen])"></i></div>
                     <div class="TCol --time">13:00</div>
                     <div class="TCol --code">{{task.code}}</div>
                     <div class="TCol --title">
