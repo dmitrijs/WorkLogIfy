@@ -28,7 +28,12 @@
         &.--distributed,
         &.--chargeable ,
         &.--logged {
+            align-self: center;
             text-align: center;
+        }
+        &.--code,
+        &.--time {
+            align-self: center;
         }
         &.--title {
             .Note--Content,
