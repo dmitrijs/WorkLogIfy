@@ -10,7 +10,16 @@ export function timespanToText(seconds) {
         result += Math.floor(minutes) + 'm ';
     }
     if (!result) {
-        result = '<1m';
+        result = '0m';
     }
     return result.trim();
+}
+
+
+export function comparatorGt(a, b) {
+    return a > b ? 1 : a < b ? -1 : 0;
+}
+
+export function comparatorLt(a, b) {
+    return a > b ? -1 : a < b ? 1 : 0;
 }

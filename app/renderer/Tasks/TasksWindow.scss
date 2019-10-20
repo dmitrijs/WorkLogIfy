@@ -19,6 +19,9 @@
             &.--code {
                 white-space: nowrap;
             }
+            &.--time {
+                color: #364abc;
+            }
             &.--selected,
             &.--distributed,
             &.--chargeable,
@@ -28,6 +31,10 @@
             }
             &.--timespan {
                 align-self: center;
+
+                .--timespan-spent {
+                    opacity: 0.5;
+                }
             }
             &.--title {
                 .Note--Content,
@@ -76,13 +83,16 @@
                     right: 5px;
                 }
             }
+            &.--timespan-spent {
+                opacity: 0.5;
+            }
         }
     }
 }
 
 .Debug {
     position: absolute;
-    left: 470px;
+    left: 510px;
     top: 5px;
     width: 200px;
     z-index: 111;
@@ -93,22 +103,30 @@
     font-size: 17px;
 }
 
-.TRow {
-
+.TRow.logged {
+    .TCol {
+        color: darkgrey !important;
+    }
 }
 
-.IconAsInput {
-    opacity: 0.2;
-    cursor: pointer;
+.TRow {
+    .IconAsInput {
+        opacity: 0.1;
+        cursor: pointer;
 
-    &:hover {
-        opacity: 1;
+        &.active {
+            opacity: 1 !important;
+        }
     }
 }
 
 .TRow:hover {
     .IconAsInput {
-        opacity: 0.5;
+        opacity: 0.3;
+
+        &:hover {
+            opacity: 1;
+        }
     }
 }
 

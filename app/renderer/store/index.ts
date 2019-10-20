@@ -3,6 +3,7 @@ import Vuex from 'vuex'
 import {timespanToText} from './../utils';
 import * as _ from 'lodash';
 import {fromJS, List, Map} from 'immutable';
+import {comparatorLt} from '../utils';
 
 Vue.use(Vuex);
 
@@ -10,14 +11,14 @@ const store = new Vuex.Store({
     state: {
         tasks: fromJS({
             1: Map({
-                code: 'TSKS-1111', title: 'Create task from some sentence and that is it', distributed: false, chargeable: true, logged: true,
+                code: 'TSKS-1111', title: 'Create task from some sentence and that is it', distributed: false, chargeable: true, logged: false,
                 time_spent_seconds: 3600 + 15 * 60 + 45,
-                date: '2019-10-07',
+                date: '2019-10-16',
             }),
             2: Map({
-                code: 'TSKS-3333', title: 'Blog creation', distributed: true, chargeable: true, logged: true,
+                code: 'TSKS-3333', title: 'Blog creation', distributed: true, chargeable: true, logged: false,
                 time_spent_seconds: 12 * 3600 + 15 * 60 + 45,
-                date: '2019-10-07',
+                date: '2019-10-16',
             }),
             3: {
                 id: 3,
@@ -25,19 +26,19 @@ const store = new Vuex.Store({
                 title: 'Enjoy a rest ater this work is done to have some not at all exception there is not a thing for this',
                 distributed: true,
                 chargeable: true,
-                logged: true,
+                logged: false,
                 time_spent_seconds: 3 * 3600 + 54 * 60 + 45,
-                date: '2019-10-07',
+                date: '2019-10-16',
             },
             4: {
                 id: 4,
-                code: 'TSKS-1111', title: 'Create task from some sentence and that is it', distributed: false, chargeable: true, logged: true,
+                code: 'TSKS-1111', title: 'Create task from some sentence and that is it', distributed: false, chargeable: true, logged: false,
                 time_spent_seconds: 43 * 60 + 45,
-                date: '2019-10-07',
+                date: '2019-10-14',
             },
             5: {
                 id: 5,
-                code: 'TSKS-3333', title: 'Blog creation', distributed: true, chargeable: true, logged: true,
+                code: 'TSKS-3333', title: 'Blog creation', distributed: true, chargeable: true, logged: false,
                 time_spent_seconds: 2 * 3600 + 2 * 60 + 45,
                 date: '2019-10-07',
             },
@@ -47,7 +48,7 @@ const store = new Vuex.Store({
                 title: 'Enjoy a rest ater this work is done to have some not at all exception there is not a thing for this',
                 distributed: true,
                 chargeable: true,
-                logged: true,
+                logged: false,
                 time_spent_seconds: 1 * 60 + 45,
                 date: '2019-10-10',
             },
@@ -65,7 +66,7 @@ const store = new Vuex.Store({
             },
             9: {
                 id: 9,
-                code: 'TSKS-3333', title: 'Blog creation', distributed: true, chargeable: true, logged: true,
+                code: 'TSKS-3333', title: 'Blog creation', distributed: true, chargeable: true, logged: false,
                 time_spent_seconds: 3600 + 15 * 60 + 45,
                 date: '2019-10-10',
             },
@@ -87,7 +88,7 @@ const store = new Vuex.Store({
             },
             12: {
                 id: 12,
-                code: 'TSKS-3333', title: 'Blog creation', distributed: true, chargeable: true, logged: true,
+                code: 'TSKS-3333', title: 'Blog creation', distributed: true, chargeable: true, logged: false,
                 time_spent_seconds: 3600 + 15 * 60 + 45,
                 date: '2019-10-12',
             },
@@ -103,13 +104,13 @@ const store = new Vuex.Store({
             },
             14: {
                 id: 14,
-                code: 'TSKS-1111', title: 'Create task from some sentence and that is it', distributed: false, chargeable: true, logged: true,
+                code: 'TSKS-1111', title: 'Create task from some sentence and that is it', distributed: false, chargeable: true, logged: false,
                 time_spent_seconds: 3600 + 15 * 60 + 45,
                 date: '2019-10-14',
             },
             15: {
                 id: 15,
-                code: 'TSKS-3333', title: 'Blog creation', distributed: true, chargeable: true, logged: true,
+                code: 'TSKS-3333', title: 'Blog creation', distributed: true, chargeable: true, logged: false,
                 time_spent_seconds: 3600 + 15 * 60 + 45,
                 date: '2019-10-16',
             },
@@ -119,7 +120,7 @@ const store = new Vuex.Store({
                 title: 'Enjoy a rest ater this work is done to have some not at all exception there is not a thing for this',
                 distributed: true,
                 chargeable: true,
-                logged: true,
+                logged: false,
                 time_spent_seconds: 3600 + 15 * 60 + 45,
                 date: '2019-10-16',
             },
@@ -131,7 +132,8 @@ const store = new Vuex.Store({
     getters: {
         getTasksGrouped(state) {
             // populate time charge
-            let result = List();
+            let result;
+            result = List();
 
             state.tasks.forEach((task, key) => {
                 if (Map.isMap(task)) {
@@ -144,15 +146,20 @@ const store = new Vuex.Store({
                 result = result.push(task);
             });
 
-            result = result.groupBy((x) => x['date']).map((tasks) => {
+            result = result.groupBy((x) => x['date']);
+            result = result.sortBy((val, key) => key, comparatorLt);
+            result = result.map((tasks) => {
 
-                const timeSum = tasks.map((x) => x.time_spent_seconds)
+                const timeCharge = tasks.map((x) => (x.chargeable ? x.time_spent_seconds : 0))
+                    .reduce((x, y) => x + y, 0);
+
+                const timeSpent = tasks.map((x) => (x.time_spent_seconds))
                     .reduce((x, y) => x + y, 0);
 
                 return Map({
                     tasks: tasks,
-                    time_charge_text: timespanToText(timeSum),
-                    time_spent_text: timespanToText(timeSum * 2),
+                    time_charge_text: timespanToText(timeCharge),
+                    time_spent_text: timespanToText(timeSpent),
                 });
             });
 
