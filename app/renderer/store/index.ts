@@ -1,11 +1,10 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-
-Vue.use(Vuex);
-
 import {timespanToText} from './../utils';
 import * as _ from 'lodash';
 import {fromJS, List, Map} from 'immutable';
+
+Vue.use(Vuex);
 
 const store = new Vuex.Store({
     state: {
@@ -13,10 +12,12 @@ const store = new Vuex.Store({
             1: Map({
                 code: 'TSKS-1111', title: 'Create task from some sentence and that is it', distributed: false, chargeable: true, logged: true,
                 time_spent_seconds: 3600 + 15 * 60 + 45,
+                date: '2019-10-07',
             }),
             2: Map({
                 code: 'TSKS-3333', title: 'Blog creation', distributed: true, chargeable: true, logged: true,
                 time_spent_seconds: 12 * 3600 + 15 * 60 + 45,
+                date: '2019-10-07',
             }),
             3: {
                 id: 3,
@@ -26,16 +27,19 @@ const store = new Vuex.Store({
                 chargeable: true,
                 logged: true,
                 time_spent_seconds: 3 * 3600 + 54 * 60 + 45,
+                date: '2019-10-07',
             },
             4: {
                 id: 4,
                 code: 'TSKS-1111', title: 'Create task from some sentence and that is it', distributed: false, chargeable: true, logged: true,
                 time_spent_seconds: 43 * 60 + 45,
+                date: '2019-10-07',
             },
             5: {
                 id: 5,
                 code: 'TSKS-3333', title: 'Blog creation', distributed: true, chargeable: true, logged: true,
                 time_spent_seconds: 2 * 3600 + 2 * 60 + 45,
+                date: '2019-10-07',
             },
             6: {
                 id: 6,
@@ -45,21 +49,25 @@ const store = new Vuex.Store({
                 chargeable: true,
                 logged: true,
                 time_spent_seconds: 1 * 60 + 45,
+                date: '2019-10-10',
             },
             7: {
                 id: 7,
                 code: 'TSKS-1243', title: 'Add some tasks to some tasks for some tasks', distributed: true, chargeable: true, logged: false,
                 time_spent_seconds: 3 * 60 + 45,
+                date: '2019-10-10',
             },
             8: {
                 id: 8,
                 code: 'TSKS-1111', title: 'Create task from some sentence and that is it', distributed: false, chargeable: true, logged: true,
                 time_spent_seconds: 3600 + 33 * 60 + 45,
+                date: '2019-10-10',
             },
             9: {
                 id: 9,
                 code: 'TSKS-3333', title: 'Blog creation', distributed: true, chargeable: true, logged: true,
                 time_spent_seconds: 3600 + 15 * 60 + 45,
+                date: '2019-10-10',
             },
             10: {
                 id: 10,
@@ -69,16 +77,19 @@ const store = new Vuex.Store({
                 chargeable: true,
                 logged: true,
                 time_spent_seconds: 3600 + 15 * 60 + 45,
+                date: '2019-10-12',
             },
             11: {
                 id: 11,
                 code: 'TSKS-1111', title: 'Create task from some sentence and that is it', distributed: false, chargeable: true, logged: true,
                 time_spent_seconds: 3600 + 15 * 60 + 45,
+                date: '2019-10-12',
             },
             12: {
                 id: 12,
                 code: 'TSKS-3333', title: 'Blog creation', distributed: true, chargeable: true, logged: true,
                 time_spent_seconds: 3600 + 15 * 60 + 45,
+                date: '2019-10-12',
             },
             13: {
                 id: 13,
@@ -88,16 +99,19 @@ const store = new Vuex.Store({
                 chargeable: true,
                 logged: true,
                 time_spent_seconds: 3600 + 15 * 60 + 45,
+                date: '2019-10-13',
             },
             14: {
                 id: 14,
                 code: 'TSKS-1111', title: 'Create task from some sentence and that is it', distributed: false, chargeable: true, logged: true,
                 time_spent_seconds: 3600 + 15 * 60 + 45,
+                date: '2019-10-14',
             },
             15: {
                 id: 15,
                 code: 'TSKS-3333', title: 'Blog creation', distributed: true, chargeable: true, logged: true,
                 time_spent_seconds: 3600 + 15 * 60 + 45,
+                date: '2019-10-16',
             },
             16: {
                 id: 16,
@@ -107,6 +121,7 @@ const store = new Vuex.Store({
                 chargeable: true,
                 logged: true,
                 time_spent_seconds: 3600 + 15 * 60 + 45,
+                date: '2019-10-16',
             },
         }),
 
@@ -114,9 +129,9 @@ const store = new Vuex.Store({
         tasksHoveredId: -1,
     },
     getters: {
-        getTasks(state) {
+        getTasksGrouped(state) {
             // populate time charge
-            let result = [];
+            let result = List();
 
             state.tasks.forEach((task, key) => {
                 if (Map.isMap(task)) {
@@ -126,9 +141,23 @@ const store = new Vuex.Store({
                 (<any>task)._selected = state.tasksSelectedIds.get(key);
                 (<any>task).time_charge_text = timespanToText(task.time_spent_seconds * 2);
                 (<any>task).time_spent_text = timespanToText(task.time_spent_seconds);
-                result.push(task);
+                result = result.push(task);
             });
-            return result;
+
+            result = result.groupBy((x) => x['date']).map((tasks) => {
+
+                const timeSum = tasks.map((x) => x.time_spent_seconds)
+                    .reduce((x, y) => x + y, 0);
+
+                return Map({
+                    tasks: tasks,
+                    time_charge_text: timespanToText(timeSum),
+                    time_spent_text: timespanToText(timeSum * 2),
+                });
+            });
+
+            console.log(result.toJS());
+            return result.toJS();
         },
 
         getTasksUi(state) {
