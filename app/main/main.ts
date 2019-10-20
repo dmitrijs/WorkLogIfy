@@ -1,4 +1,5 @@
 import Shortcuts from "./shortcuts";
+import IdleUser from "./idle";
 
 const {format} = require('url');
 
@@ -12,8 +13,6 @@ const {BrowserWindow, app} = electron;
 if (isDev) {
     process.env.ELECTRON_DISABLE_SECURITY_WARNINGS = 'true';
 }
-
-Shortcuts.register();
 
 app.on('ready', async () => {
 
@@ -38,6 +37,9 @@ app.on('ready', async () => {
             })
         }
     });
+
+    Shortcuts.registerOnReady();
+    IdleUser.registerOnReady(mainWindow, 'user-is-idle');
 
     const devPath = 'http://localhost:1124';
     const prodPath = format({

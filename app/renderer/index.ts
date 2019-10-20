@@ -20,7 +20,11 @@ import './../../external/checkbox.scss';
 
 Vue.prototype.$store = store;
 
-new Vue({
+let vue = new Vue({
     router: createRouter(),
     template: '<router-view />'
 }).$mount('#root');
+
+window.ipc.on('user-is-idle', function (emitter, secondsIdle) {
+    console.log(`You are idle now! ${secondsIdle} seconds passed.`);
+});
