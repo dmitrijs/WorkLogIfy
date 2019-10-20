@@ -2,7 +2,7 @@
 
     .TRow {
         display: grid;
-        grid-template-columns: 22px 22px 22px 22px 73px 1fr 63px;
+        grid-template-columns: 22px 22px 22px 22px 38px 73px 1fr 63px;
         grid-template-rows: auto;
 
         &.--header {
@@ -26,7 +26,7 @@
                 align-self: center;
                 text-align: center;
             }
-            &.--time {
+            &.--timespan {
                 align-self: center;
             }
             &.--title {
@@ -35,11 +35,15 @@
                     display: block;
                 }
             }
-            &.--time {
+            &.--timespan {
                 span {
                     display: block;
                 }
             }
+        }
+
+        &.selected {
+            font-weight: bold;
         }
 
         &:hover {

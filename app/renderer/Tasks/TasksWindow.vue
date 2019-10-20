@@ -9,19 +9,20 @@
                 <div class="TCol --distributed"><i class="icofont-exchange"></i></div>
                 <div class="TCol --chargeable"><i class="icofont-not-allowed"></i></div>
                 <div class="TCol --logged"><i class="icofont-wall-clock"></i></div>
+                <div class="TCol --time">Time</div>
                 <div class="TCol --code">ID</div>
                 <div class="TCol --title">Title</div>
-                <div class="TCol --time">Time</div>
+                <div class="TCol --timespan">Time</div>
             </div>
             <template class="TGroup" v-for="(group, date) of tasksGrouped">
                 <div class="TRowDate">
                     <div class="TCol --selected"></div>
                     <div class="TCol --group-date">{{ date }}</div>
-                    <div class="TCol --time">{{ group.time_charge_text }}</div>
-                    <div class="TCol --time">{{ group.time_spent_text }}</div>
+                    <div class="TCol --timespan">{{ group.time_charge_text }}</div>
+                    <div class="TCol --timespan">{{ group.time_spent_text }}</div>
                 </div>
 
-                <div class="TRow" v-for="task of group.tasks" @mouseenter="$store.commit('tasksUiHoveredId', task._key)">
+                <div class="TRow" v-for="task of group.tasks" @mouseenter="$store.commit('tasksUiHoveredId', task._key)" :class="{ selected: tasks_ui.hoveredId === task._key }">
                     <div class="TCol --selected">
                         <div class="label-checkbox" @click="$store.commit('tasksUiToggle', task._key)">
                             <input type="checkbox" :checked="task._selected"><span></span></div>
@@ -29,12 +30,13 @@
                     <div class="TCol --distributed"><i class="IconAsInput icofont-exchange"></i></div>
                     <div class="TCol --chargeable"><i class="IconAsInput icofont-not-allowed"></i></div>
                     <div class="TCol --logged"><i class="IconAsInput icofont-wall-clock" @click="$store.commit('updateTask', [task._key, 'logged', 'YES'])"></i></div>
+                    <div class="TCol --time">13:00</div>
                     <div class="TCol --code">{{task.code}}</div>
                     <div class="TCol --title">
                         <span class="Title--Content ellipsis"><span>{{task.title}}</span></span>
                         <span class="Note--Content ellipsis"><span>I did this and that and then some more things that I should have done so it's good</span></span>
                     </div>
-                    <div class="TCol --time">
+                    <div class="TCol --timespan">
                         <span>{{task.time_charge_text}}</span>
                         <span>{{task.time_spent_text}}</span>
                     </div>
@@ -81,7 +83,6 @@
         }
 
         createMenu() {
-
             console.log('creating');
 
             const remote = window.remote;
@@ -95,7 +96,6 @@
             }));
             menu.append(new MenuItem({type: 'separator'}));
             menu.append(new MenuItem({label: 'MenuItem2', type: 'checkbox', checked: true}));
-
 
             window.addEventListener('contextmenu', (e) => {
                 console.log('in context menu');

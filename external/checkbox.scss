@@ -51,8 +51,8 @@ input[type=checkbox] {
 
             border: 2px solid #f2f2f2;
         }
-
     }
+
     &:checked {
         + span {
             &:before {
@@ -65,23 +65,5 @@ input[type=checkbox] {
                 border-right-style: none;
             }
         }
-    }
-
-    + span {
-        //&:after {
-        //    content: 'X';
-        //    visibility: hidden;
-        //
-        //    position: absolute;
-        //    top: checkbox_rem(-2);
-        //    left: 0;
-        //
-        //    width: 1.1rem;
-        //    height: 1.1rem;
-        //
-        //    background: transparent;
-        //
-        //    cursor: pointer;
-        //}
     }
 }
