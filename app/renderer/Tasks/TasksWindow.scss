@@ -1,9 +1,14 @@
 & {
-    padding-bottom: 26px; // compensate Statistics
+    display: flex;
+    flex-direction: column;
+    height: 100%;
 }
 
 .TasksTable {
+    overflow-y: scroll;
+}
 
+& {
     .TRow {
         display: grid;
         grid-template-columns: 22px 22px 22px 22px 38px 73px 1fr 63px;
@@ -95,12 +100,7 @@
 }
 
 .SelectionStatistics {
-    position: absolute;
-    top: 395px;
     background: white;
-    z-index: 1;
-    width: 492px;
-    margin-left: -5px;
     padding: 4px 6px;
     border-top: 1px solid grey;
     border-radius: 3px;
@@ -134,6 +134,28 @@
 
         &:hover {
             opacity: 0.5;
+        }
+    }
+}
+
+.Timeline {
+    height: 110px;
+    overflow-x: scroll;
+}
+
+.TimelineItems {
+    width: auto;
+    height: 40px;
+    display: flex;
+    padding: 3px;
+
+    > div {
+        height: 40px;
+    }
+
+    &:hover {
+        > div {
+            flex-shrink: 0;
         }
     }
 }

@@ -6,10 +6,9 @@ body {
 }
 
 .App {
-    padding: 5px;
     width: 500px;
     height: 420px;
-    overflow-y: scroll;
+    overflow: hidden;
 
     outline: 1px solid black;
 }
@@ -20,6 +19,7 @@ table {
 
 ::-webkit-scrollbar {
     width: 8px;
+    height: 8px;
 }
 
 ::-webkit-scrollbar-track {
