@@ -10,6 +10,7 @@ const path = require('path');
 
 // @ts-ignore
 import trayPng from './tray.png';
+import Filesystem from "./filesystem";
 
 let tray;
 const {BrowserWindow, Menu, Tray, app} = electron;
@@ -105,6 +106,16 @@ app.on('ready', async () => {
             win2.loadURL(url)
 
             event.returnValue = 'ok'
+        });
+
+        ipcMain.on('tasks.save', (event, arg) => {
+            Filesystem.saveWorkLog(arg);
+            event.returnValue = 'ok'
+        });
+
+        ipcMain.on('tasks.load', (event, arg) => {
+
+            event.returnValue = Filesystem.getWorkLog();
         });
     }
 });

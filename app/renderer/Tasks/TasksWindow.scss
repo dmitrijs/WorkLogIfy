@@ -139,8 +139,9 @@
 }
 
 .Timeline {
-    height: 110px;
+    height: 52px;
     overflow-x: scroll;
+    flex-shrink: 0;
 }
 
 .TimelineItems {

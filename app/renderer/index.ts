@@ -21,6 +21,9 @@ import App from "./App.vue";
 
 Vue.prototype.$store = store;
 
+let tasks = window.ipc.sendSync('tasks.load');
+store.commit('loadTasks', tasks);
+
 let vue = new Vue({
     router: createRouter(),
     render: h => h(App),
