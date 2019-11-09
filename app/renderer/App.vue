@@ -10,7 +10,7 @@
         <div class="Debug" v-if="tasks_ui.is_debug">
             <button onclick="document.location.reload()" style="padding: 10px 20px; float: right">reload</button>
             <button type="button" @click="save()">save</button>
-            {{ tasks_ui }}
+            <div v-for="(value, key) of tasks_ui"><strong>{{key}}:</strong> {{value}}</div>
             <hr />
             Timer <button type="button" @click="timerStop" :disabled="!tasks_ui.timeredId">stop</button>
             <hr/>
@@ -46,7 +46,7 @@
         }
 
         save() {
-            window.ipc.sendSync('tasks.save', this.$store.state.tasks.toJSON());
+            window.ipc.sendSync('tasks.save', this.$store.state.day_key, this.$store.state.tasks.toJSON());
         }
 
         timerStop() {

@@ -112,13 +112,13 @@ app.on('ready', async () => {
             event.returnValue = 'ok'
         });
 
-        ipcMain.on('tasks.save', (event, arg) => {
-            Filesystem.saveWorkLog(arg);
+        ipcMain.on('tasks.save', (event, day_key, arg) => {
+            Filesystem.saveWorkLog(day_key, arg);
             event.returnValue = 'ok'
         });
 
         ipcMain.on('tasks.load', (event, arg) => {
-            event.returnValue = Filesystem.getWorkLog();
+            event.returnValue = Filesystem.getWorkLog(arg);
         });
     }
 

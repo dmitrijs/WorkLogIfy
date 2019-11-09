@@ -8,6 +8,10 @@ const moment = require("moment");
 
 Vue.use(Vuex);
 
+function saveTasks(state) {
+    window.ipc.sendSync('tasks.save', state.day_key, state.tasks.toJSON());
+}
+
 const store = new Vuex.Store({
     state: {
         tasks: null,
@@ -305,7 +309,7 @@ const store = new Vuex.Store({
 
             state.screen = 'tasks';
 
-            window.ipc.sendSync('tasks.save', state.tasks.toJSON());
+            saveTasks(state);
         },
         saveTask(state, task) {
             state.tasks = state.tasks.setIn([task.id, 'code'], task.code);
@@ -314,14 +318,14 @@ const store = new Vuex.Store({
             state.tasks = state.tasks.setIn([task.id, 'notes'], task.notes);
 
             console.log(state.tasks.toJS());
-            window.ipc.sendSync('tasks.save', state.tasks.toJSON());
+            saveTasks(state);
         },
         updateTask(state, [task_id, field, value]) {
             console.log(state.tasks.get(task_id));
             state.tasks = state.tasks.setIn([task_id, field], value);
             console.log(state.tasks.toJS());
 
-            window.ipc.sendSync('tasks.save', state.tasks.toJSON());
+            saveTasks(state);
         },
         setScreen(state, screen) {
             state.screen = screen;

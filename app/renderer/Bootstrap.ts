@@ -15,10 +15,10 @@ import './../../external/checkbox.scss';
 import App from "./App.vue";
 
 Vue.prototype.$store = store;
-
-let tasks = window.ipc.sendSync('tasks.load');
-store.commit('loadTasks', tasks);
 store.commit('setDayNow');
+
+let tasks = window.ipc.sendSync('tasks.load', store.state.day_key);
+store.commit('loadTasks', tasks);
 
 window.ipc.on('change.screen', function($event, where) {
     store.commit('setScreen', where);

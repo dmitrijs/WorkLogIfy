@@ -14,21 +14,21 @@ class Filesystem {
         return dir;
     }
 
-    public static getWorkLog() {
+    public static getWorkLog(day_key) {
         const dir = this.getDir();
         let worklog = [];
 
-        if (fs.existsSync(dir + '/worklog.json')) {
-            let contents = fs.readFileSync(dir + '/worklog.json', 'utf8');
+        if (fs.existsSync(dir + '/worklog-' + day_key + '.json')) {
+            let contents = fs.readFileSync(dir + '/worklog-' + day_key + '.json', 'utf8');
             worklog = JSON.parse(contents);
         }
 
         return worklog;
     }
 
-    public static saveWorkLog(worklog) {
+    public static saveWorkLog(day_key, worklog) {
         const dir = this.getDir();
-        fs.writeFileSync(dir + '/worklog.json', JSON.stringify(worklog));
+        fs.writeFileSync(dir + '/worklog-' + day_key + '.json', JSON.stringify(worklog));
     }
 }
 
