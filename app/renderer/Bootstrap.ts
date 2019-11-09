@@ -10,7 +10,7 @@ declare global {
 
 Vue.use(VueRouter);
 
-import store from './store'
+import store from './Store/Store'
 
 import './../style.scss';
 import './../../external/icofont/icofont.min.css';

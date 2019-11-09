@@ -1,8 +1,8 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import {timespanToText} from './../utils';
+import {timespanToText} from './../Utils/Utils';
 import {List, Map} from 'immutable';
-import {comparatorLt} from '../utils';
+import {comparatorLt} from '../Utils/Utils';
 
 Vue.use(Vuex);
 
