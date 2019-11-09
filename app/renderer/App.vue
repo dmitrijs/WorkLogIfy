@@ -12,7 +12,7 @@
             <button type="button" @click="load()">load</button>
             {{ tasks_ui }}
             <hr />
-            {{ $route }}
+            Timer <button type="button" @click="timerStop" :disabled="!tasks_ui.timeredId">stop</button>
             <hr/>
             {{ tasksGrouped }}
         </div>
@@ -26,6 +26,7 @@
     import TaskAdd from "./Tasks/TaskAdd.vue";
     import DayLog from "./Tasks/DayLog.vue";
     import TaskEdit from "./Tasks/TaskEdit.vue";
+    import timer from "./Timer";
 
     @Component({
         components: {
@@ -48,7 +49,8 @@
             window.ipc.sendSync('tasks.save', this.$store.state.tasks.toJSON());
         }
 
-        load() {
+        timerStop() {
+            timer.stop();
         }
     }
 </script>

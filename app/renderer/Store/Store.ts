@@ -134,8 +134,9 @@ const store = new Vuex.Store({
         // }),
 
         tasksSelectedIds: Map<Number, Boolean>({}),
-        tasksHoveredId: -1,
-        taskEditedId: -1,
+        tasksHoveredId: null,
+        taskEditedId: null,
+        taskTimeredId: null,
         screen: 'tasks',
         day_key: '',
     },
@@ -239,7 +240,8 @@ const store = new Vuex.Store({
             return {
                 selectedIds: state.tasksSelectedIds,
                 hoveredId: state.tasksHoveredId,
-                taskEditedId: state.taskEditedId,
+                editedId: state.taskEditedId,
+                timeredId: state.taskTimeredId,
                 screen: state.screen,
                 day_key: state.day_key,
             }
@@ -312,6 +314,12 @@ const store = new Vuex.Store({
         },
         setDayNow(state) {
             state.day_key = moment().format("YYYY-MM-DD");
+        },
+        activateTimer(state) {
+            state.taskTimeredId = state.tasksHoveredId;
+        },
+        stopTimer(state) {
+            state.taskTimeredId = null;
         },
     },
 });

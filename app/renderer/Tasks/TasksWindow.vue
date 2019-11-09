@@ -26,7 +26,7 @@
                 <div class="TRow"
                      v-for="task of group.tasks"
                      @mouseenter="$store.commit('tasksUiHoveredId', task._key)"
-                     :class="{ selected: task._selected, logged: task.logged, hovered: tasks_ui.hoveredId === task._key }"
+                     :class="{ selected: task._selected, logged: task.logged, hovered: tasks_ui.hoveredId === task._key, timered: tasks_ui.timeredId === task._key }"
                      @click="rowOnClick($event, task)"
                 >
                     <div class="TCol --selected">
