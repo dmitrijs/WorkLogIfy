@@ -135,6 +135,7 @@ const store = new Vuex.Store({
 
         tasksSelectedIds: Map<Number, Boolean>({}),
         tasksHoveredId: -1,
+        taskEditedId: -1,
         screen: 'tasks',
         day_key: '',
     },
@@ -238,9 +239,14 @@ const store = new Vuex.Store({
             return {
                 selectedIds: state.tasksSelectedIds,
                 hoveredId: state.tasksHoveredId,
+                taskEditedId: state.taskEditedId,
                 screen: state.screen,
                 day_key: state.day_key,
             }
+        },
+
+        getEditedTask(state) {
+            return state.tasks.get(state.taskEditedId);
         },
     },
 
@@ -299,6 +305,10 @@ const store = new Vuex.Store({
         },
         setScreen(state, screen) {
             state.screen = screen;
+        },
+        taskEdit(state, key) {
+            state.screen = 'task.edit';
+            state.taskEditedId = key;
         },
         setDayNow(state) {
             state.day_key = moment().format("YYYY-MM-DD");

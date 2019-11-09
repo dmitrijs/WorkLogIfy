@@ -43,7 +43,7 @@
                         <i class="IconAsInput icofont-unlock" :class="{ active: task.frozen }" @click="$store.commit('updateTask', [task._key, 'frozen', !task.frozen])"></i>
                     </div>
                     <div class="TCol --time">13:00</div>
-                    <div class="TCol --code">{{task.code}}</div>
+                    <div class="TCol --code" @click="editTask($event, task)">{{task.code}}</div>
                     <div class="TCol --title">
                         <span class="Title--Content ellipsis"><span>{{task.title}}</span></span>
                         <span class="Note--Content ellipsis"><span>I did this and that and then some more things that I should have done so it's good</span></span>
@@ -141,6 +141,10 @@
             if ($event.ctrlKey) {
                 this.$store.commit('tasksUiToggle', task._key);
             }
+        }
+
+        editTask($event, task) {
+            this.$store.commit('taskEdit', task._key);
         }
     }
 </script>
