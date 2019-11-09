@@ -302,6 +302,13 @@ const store = new Vuex.Store({
             }));
             console.log(state.tasks.toJS());
         },
+        saveTask(state, task) {
+            state.tasks = state.tasks.setIn([task.id, 'code'], task.code);
+            state.tasks = state.tasks.setIn([task.id, 'title'], task.title);
+            state.tasks = state.tasks.setIn([task.id, 'date'], task.date);
+
+            console.log(state.tasks.toJS());
+        },
         updateTask(state, [task_id, field, value]) {
             console.log(state.tasks.get(task_id));
             state.tasks = state.tasks.setIn([task_id, field], value);

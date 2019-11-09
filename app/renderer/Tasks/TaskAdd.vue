@@ -1,5 +1,8 @@
 <template>
     <div class="TaskAdd">
+        <button @click="$store.commit('setScreen', 'tasks')">&lt; back</button><br/>
+        <br/>
+
         <form @submit.prevent="save">
             Code: <input type="text" placeholder="TSKS-0000" v-model="task.code"/><br/>
             Title: <input type="text" v-model="task.title"/><br/>

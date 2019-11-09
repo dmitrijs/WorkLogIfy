@@ -1,5 +1,8 @@
 <template>
     <div class="TaskEdit">
+        <button @click="$store.commit('setScreen', 'tasks')">&lt; back</button><br/>
+        <br/>
+
         <form @submit.prevent="save">
             Code: <input type="text" placeholder="TSKS-0000" v-model="task.code"/><br/>
             Title: <input type="text" v-model="task.title"/><br/>
@@ -26,7 +29,7 @@
         }
 
         save() {
-            this.$store.commit('createTask', this.task);
+            this.$store.commit('saveTask', this.task);
         }
     }
 </script>
