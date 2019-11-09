@@ -68,6 +68,13 @@
         }
     }
 
+    .TasksTable { // not header
+        .--code,
+        .--title {
+            cursor: pointer;
+        }
+    }
+
     .TRowDate {
         display: grid;
         grid-template-columns: 22px 22px 1fr 63px 63px;

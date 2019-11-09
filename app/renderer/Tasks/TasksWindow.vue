@@ -44,7 +44,7 @@
                     </div>
                     <div class="TCol --time">13:00</div>
                     <div class="TCol --code" @click="editTask($event, task)">{{task.code}}</div>
-                    <div class="TCol --title">
+                    <div class="TCol --title" @click="editTask($event, task)">
                         <span class="Title--Content ellipsis"><span>{{task.title}}</span></span>
                         <span class="Note--Content ellipsis"><span>I did this and that and then some more things that I should have done so it's good</span></span>
                     </div>
