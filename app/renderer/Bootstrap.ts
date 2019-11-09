@@ -21,6 +21,7 @@ Vue.prototype.$store = store;
 
 let tasks = window.ipc.sendSync('tasks.load');
 store.commit('loadTasks', tasks);
+store.commit('setDayNow');
 
 window.ipc.on('change.screen', function($event, where) {
     store.commit('setScreen', where);

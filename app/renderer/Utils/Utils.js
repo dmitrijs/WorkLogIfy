@@ -1,3 +1,5 @@
+const moment = require("moment");
+
 export function timespanToText(seconds) {
     // let result = String(seconds);
     let hours = Math.floor(seconds / 3600);
@@ -23,4 +25,8 @@ export function comparatorGt(a, b) {
 
 export function comparatorLt(a, b) {
     return a > b ? -1 : a < b ? 1 : 0;
+}
+
+export function now() {
+    return moment();
 }

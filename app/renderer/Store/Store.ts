@@ -1,8 +1,10 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import {timespanToText} from './../Utils/Utils';
-import {List, Map} from 'immutable';
+import {fromJS, List, Map} from 'immutable';
 import {comparatorLt} from '../Utils/Utils';
+
+const moment = require("moment");
 
 Vue.use(Vuex);
 
@@ -134,6 +136,7 @@ const store = new Vuex.Store({
         tasksSelectedIds: Map<Number, Boolean>({}),
         tasksHoveredId: -1,
         screen: 'tasks',
+        day_key: '',
     },
     getters: {
         getTasksGrouped(state) {
@@ -236,6 +239,7 @@ const store = new Vuex.Store({
                 selectedIds: state.tasksSelectedIds,
                 hoveredId: state.tasksHoveredId,
                 screen: state.screen,
+                day_key: state.day_key,
             }
         },
     },
@@ -250,7 +254,7 @@ const store = new Vuex.Store({
                 for (let key of keys) {
                     let js_task = js_tasks[key];
 
-                    tasks = tasks.set(parseInt(key), js_task);
+                    tasks = tasks.set(key, fromJS(js_task));
                 }
             }
 
@@ -274,6 +278,20 @@ const store = new Vuex.Store({
                 state.tasksSelectedIds = state.tasksSelectedIds.set(id, true);
             }
         },
+        createTask(state, task) {
+            const id = 'task_' + moment.utc();
+            state.tasks = state.tasks.set(id, Map({
+                id: id,
+                code: task.code,
+                title: task.title,
+                distributed: false,
+                chargeable: true,
+                logged: false,
+                time_spent_seconds: 0,
+                date: task.date_key,
+            }));
+            console.log(state.tasks.toJS());
+        },
         updateTask(state, [task_id, field, value]) {
             console.log(state.tasks.get(task_id));
             state.tasks = state.tasks.setIn([task_id, field], value);
@@ -281,6 +299,9 @@ const store = new Vuex.Store({
         },
         setScreen(state, screen) {
             state.screen = screen;
+        },
+        setDayNow(state) {
+            state.day_key = moment().format("YYYY-MM-DD");
         },
     },
 });

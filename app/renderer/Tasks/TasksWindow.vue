@@ -87,6 +87,18 @@
     import Component from "vue-class-component";
     import horizontal_scroller from "../library/horizontal_scroller";
 
+    const remote = window.remote;
+    const {Menu, MenuItem} = remote;
+
+    const menu = new Menu();
+    menu.append(new MenuItem({
+        label: 'MenuItem1', click() {
+            console.log('item 1 clicked')
+        }
+    }));
+    menu.append(new MenuItem({type: 'separator'}));
+    menu.append(new MenuItem({label: 'MenuItem2', type: 'checkbox', checked: true}));
+
     @Component({})
     export default class TasksWindow extends Vue {
         data() {
@@ -115,18 +127,6 @@
 
         createMenu() {
             console.log('creating');
-
-            const remote = window.remote;
-            const {Menu, MenuItem} = remote;
-
-            const menu = new Menu();
-            menu.append(new MenuItem({
-                label: 'MenuItem1', click() {
-                    console.log('item 1 clicked')
-                }
-            }));
-            menu.append(new MenuItem({type: 'separator'}));
-            menu.append(new MenuItem({label: 'MenuItem2', type: 'checkbox', checked: true}));
 
             window.addEventListener('contextmenu', (e) => {
                 console.log('in context menu');

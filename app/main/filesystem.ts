@@ -3,7 +3,7 @@ const fs = require('fs');
 const {app} = require('electron');
 
 class Filesystem {
-    public static getWorkLog() {
+    public static getDir() {
         var rootDir = app.getAppPath();
         var dir = rootDir + '/WORKLOG/';
 
@@ -11,6 +11,11 @@ class Filesystem {
             fs.mkdirSync(dir);
         }
 
+        return dir;
+    }
+
+    public static getWorkLog() {
+        const dir = this.getDir();
         let worklog = [];
 
         if (fs.existsSync(dir + '/worklog.json')) {
@@ -22,9 +27,8 @@ class Filesystem {
     }
 
     public static saveWorkLog(worklog) {
-        var documentsPath = app.getPath('documents');
-
-        fs.writeFileSync(documentsPath + '/worklog.json', JSON.stringify(worklog));
+        const dir = this.getDir();
+        fs.writeFileSync(dir + '/worklog.json', JSON.stringify(worklog));
     }
 }
 
