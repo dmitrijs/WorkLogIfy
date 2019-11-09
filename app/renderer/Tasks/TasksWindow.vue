@@ -86,18 +86,7 @@
     import Vue from "vue";
     import Component from "vue-class-component";
     import horizontal_scroller from "../library/horizontal_scroller";
-
-    const remote = window.remote;
-    const {Menu, MenuItem} = remote;
-
-    const menu = new Menu();
-    menu.append(new MenuItem({
-        label: 'MenuItem1', click() {
-            console.log('item 1 clicked')
-        }
-    }));
-    menu.append(new MenuItem({type: 'separator'}));
-    menu.append(new MenuItem({label: 'MenuItem2', type: 'checkbox', checked: true}));
+    import menu from './TasksMenu';
 
     @Component({})
     export default class TasksWindow extends Vue {
@@ -118,23 +107,22 @@
 
         mounted() {
             horizontal_scroller(this.$refs.timeline);
-            this.createMenu();
+
+            window.addEventListener('contextmenu', this.contextMenuShow, false);
+        }
+
+        beforeDestroy() {
+            window.removeEventListener('contextmenu', this.contextMenuShow);
         }
 
         run() {
             console.log(window.ipc.sendSync('window.open', 'Title 1')) // prints "pong"
         }
 
-        createMenu() {
-            console.log('creating');
-
-            window.addEventListener('contextmenu', (e) => {
-                console.log('in context menu');
-                e.preventDefault();
-                menu.popup({window: remote.getCurrentWindow()})
-            }, false);
-
-            console.log('done');
+        contextMenuShow(e) {
+            console.log('in context menu');
+            e.preventDefault();
+            menu.popup({window: remote.getCurrentWindow()})
         }
 
         rowOnClick($event, task) {
