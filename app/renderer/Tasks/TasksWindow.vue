@@ -46,7 +46,7 @@
                     <div class="TCol --code" @click="editTask($event, task)">{{task.code}}</div>
                     <div class="TCol --title" @click="editTask($event, task)">
                         <span class="Title--Content ellipsis"><span>{{task.title}}</span></span>
-                        <span class="Note--Content ellipsis"><span>I did this and that and then some more things that I should have done so it's good</span></span>
+                        <span class="Note--Content ellipsis"><span>{{task.notes}}</span></span>
                     </div>
                     <div class="TCol --timespan">
                         <span class="--timespan-charge" title="Charge">{{task.time_charge_text}}</span>

@@ -8,6 +8,7 @@
             Title: <input type="text" v-model="task.title"/><br/>
             Time Spent: <input type="text" v-model="task.time_spent_seconds" readonly/><br/>
             Date: <input type="text" v-model="task.date"/><br/>
+            <textarea v-model="task.notes"></textarea>
             <button>update</button>
         </form>
     </div>

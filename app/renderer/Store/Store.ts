@@ -298,21 +298,30 @@ const store = new Vuex.Store({
                 chargeable: true,
                 logged: false,
                 time_spent_seconds: 0,
+                notes: '',
                 date: task.date_key,
             }));
             console.log(state.tasks.toJS());
+
+            state.screen = 'tasks';
+
+            window.ipc.sendSync('tasks.save', state.tasks.toJSON());
         },
         saveTask(state, task) {
             state.tasks = state.tasks.setIn([task.id, 'code'], task.code);
             state.tasks = state.tasks.setIn([task.id, 'title'], task.title);
             state.tasks = state.tasks.setIn([task.id, 'date'], task.date);
+            state.tasks = state.tasks.setIn([task.id, 'notes'], task.notes);
 
             console.log(state.tasks.toJS());
+            window.ipc.sendSync('tasks.save', state.tasks.toJSON());
         },
         updateTask(state, [task_id, field, value]) {
             console.log(state.tasks.get(task_id));
             state.tasks = state.tasks.setIn([task_id, field], value);
             console.log(state.tasks.toJS());
+
+            window.ipc.sendSync('tasks.save', state.tasks.toJSON());
         },
         setScreen(state, screen) {
             state.screen = screen;
