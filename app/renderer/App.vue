@@ -7,9 +7,9 @@
             <TaskEdit v-if="tasks_ui.screen === 'task.edit'"></TaskEdit>
         </transition>
 
-        <div class="Debug">
+        <div class="Debug" v-if="tasks_ui.is_debug">
+            <button onclick="document.location.reload()" style="padding: 10px 20px; float: right">reload</button>
             <button type="button" @click="save()">save</button>
-            <button type="button" @click="load()">load</button>
             {{ tasks_ui }}
             <hr />
             Timer <button type="button" @click="timerStop" :disabled="!tasks_ui.timeredId">stop</button>

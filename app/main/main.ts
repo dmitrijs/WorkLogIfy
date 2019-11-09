@@ -3,6 +3,7 @@ import IdleUser from "./idle";
 // @ts-ignore
 import trayPng from './tray.png';
 import Filesystem from "./filesystem";
+import createMainMenu from "./menu";
 
 const {format} = require('url');
 
@@ -121,27 +122,7 @@ app.on('ready', async () => {
         });
     }
 
-    var mainMenu = Menu.buildFromTemplate([
-        {
-            label: 'List', click: function () {
-                mainWindow.show();
-                mainWindow.webContents.send('change.screen', 'tasks');
-            }
-        },
-        {
-            label: 'New', click: function () {
-                mainWindow.show();
-                mainWindow.webContents.send('change.screen', 'task.new');
-            }
-        },
-        {
-            label: 'DayLog', click: function () {
-                mainWindow.show();
-                mainWindow.webContents.send('change.screen', 'DayLog');
-            }
-        },
-    ]);
-    mainWindow.setMenu(mainMenu);
+    mainWindow.setMenu(createMainMenu(mainWindow));
 
 });
 

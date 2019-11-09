@@ -138,6 +138,7 @@ const store = new Vuex.Store({
         taskEditedId: null,
         taskTimeredId: null,
         screen: 'tasks',
+        is_debug: true,
         day_key: '',
     },
     getters: {
@@ -243,6 +244,7 @@ const store = new Vuex.Store({
                 editedId: state.taskEditedId,
                 timeredId: state.taskTimeredId,
                 screen: state.screen,
+                is_debug: state.is_debug,
                 day_key: state.day_key,
             }
         },
@@ -307,6 +309,9 @@ const store = new Vuex.Store({
         },
         setScreen(state, screen) {
             state.screen = screen;
+        },
+        toggleDebug(state) {
+            state.is_debug = !state.is_debug;
         },
         taskEdit(state, key) {
             state.screen = 'task.edit';
