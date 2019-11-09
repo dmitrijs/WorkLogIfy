@@ -133,6 +133,7 @@ const store = new Vuex.Store({
 
         tasksSelectedIds: Map<Number, Boolean>({}),
         tasksHoveredId: -1,
+        screen: 'tasks',
     },
     getters: {
         getTasksGrouped(state) {
@@ -234,6 +235,7 @@ const store = new Vuex.Store({
             return {
                 selectedIds: state.tasksSelectedIds,
                 hoveredId: state.tasksHoveredId,
+                screen: state.screen,
             }
         },
     },
@@ -276,6 +278,9 @@ const store = new Vuex.Store({
             console.log(state.tasks.get(task_id));
             state.tasks = state.tasks.setIn([task_id, field], value);
             console.log(state.tasks.toJS());
+        },
+        setScreen(state, screen) {
+            state.screen = screen;
         },
     },
 });

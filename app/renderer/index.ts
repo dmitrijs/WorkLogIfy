@@ -1,8 +1,6 @@
 import Vue from 'vue/dist/vue.min'
 import VueRouter from 'vue-router'
 
-import {createRouter} from './router'
-
 declare global {
     interface Window {
         ipc: Electron.IpcRenderer,
@@ -24,8 +22,11 @@ Vue.prototype.$store = store;
 let tasks = window.ipc.sendSync('tasks.load');
 store.commit('loadTasks', tasks);
 
+window.ipc.on('change.screen', function($event, where) {
+    store.commit('setScreen', where);
+});
+
 let vue = new Vue({
-    router: createRouter(),
     render: h => h(App),
 }).$mount('#root');
 

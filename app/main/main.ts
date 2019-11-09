@@ -1,5 +1,8 @@
 import Shortcuts from "./shortcuts";
 import IdleUser from "./idle";
+// @ts-ignore
+import trayPng from './tray.png';
+import Filesystem from "./filesystem";
 
 const {format} = require('url');
 
@@ -7,10 +10,6 @@ const electron = require('electron');
 const isDev = require('electron-is-dev');
 const {resolve} = require('app-root-path');
 const path = require('path');
-
-// @ts-ignore
-import trayPng from './tray.png';
-import Filesystem from "./filesystem";
 
 let tray;
 const {BrowserWindow, Menu, Tray, app} = electron;
@@ -37,13 +36,17 @@ app.on('ready', async () => {
     tray = new Tray(path.join(__dirname, trayPng));
 
     var contextMenu = Menu.buildFromTemplate([
-        { label: 'Show App', click:  function(){
+        {
+            label: 'Show App', click: function () {
                 mainWindow.show();
-            } },
-        { label: 'Quit', click:  function(){
+            }
+        },
+        {
+            label: 'Quit', click: function () {
                 mainWindow.destroy();
                 app.quit();
-            } }
+            }
+        }
     ]);
     tray.setContextMenu(contextMenu);
 
@@ -72,11 +75,11 @@ app.on('ready', async () => {
     });
     const url = isDev ? devPath : prodPath;
 
-    mainWindow.setMenu(null);
-    mainWindow.loadURL(url)
+    mainWindow.loadURL(url);
+
+    const {ipcMain} = require('electron')
 
     {
-        const {ipcMain} = require('electron')
         ipcMain.on('asynchronous-message', (event, arg) => {
             console.log(arg) // prints "ping"
             event.reply('asynchronous-reply', 'pong')
@@ -114,10 +117,32 @@ app.on('ready', async () => {
         });
 
         ipcMain.on('tasks.load', (event, arg) => {
-
             event.returnValue = Filesystem.getWorkLog();
         });
     }
+
+    var mainMenu = Menu.buildFromTemplate([
+        {
+            label: 'List', click: function () {
+                mainWindow.show();
+                mainWindow.webContents.send('change.screen', 'tasks');
+            }
+        },
+        {
+            label: 'New', click: function () {
+                mainWindow.show();
+                mainWindow.webContents.send('change.screen', 'task.new');
+            }
+        },
+        {
+            label: 'DayLog', click: function () {
+                mainWindow.show();
+                mainWindow.webContents.send('change.screen', 'DayLog');
+            }
+        },
+    ]);
+    mainWindow.setMenu(mainMenu);
+
 });
 
 app.on('window-all-closed', app.quit);

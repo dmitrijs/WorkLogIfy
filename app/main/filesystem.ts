@@ -4,11 +4,20 @@ const {app} = require('electron');
 
 class Filesystem {
     public static getWorkLog() {
-        var documentsPath = app.getPath('documents');
+        var rootDir = app.getAppPath();
+        var dir = rootDir + '/WORKLOG/';
 
-        let contents = fs.readFileSync(documentsPath + '/worklog.json', 'utf8');
+        if (!fs.existsSync(dir)) {
+            fs.mkdirSync(dir);
+        }
 
-        let worklog = JSON.parse(contents);
+        let worklog = [];
+
+        if (fs.existsSync(dir + '/worklog.json')) {
+            let contents = fs.readFileSync(dir + '/worklog.json', 'utf8');
+            worklog = JSON.parse(contents);
+        }
+
         return worklog;
     }
 
