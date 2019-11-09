@@ -1,5 +1,4 @@
 import Vue from 'vue/dist/vue.min'
-import VueRouter from 'vue-router'
 
 declare global {
     interface Window {
@@ -7,8 +6,6 @@ declare global {
         remote: Electron.Remote,
     }
 }
-
-Vue.use(VueRouter);
 
 import store from './Store/Store'
 

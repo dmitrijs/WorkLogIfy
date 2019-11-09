@@ -21,14 +21,11 @@
 
 <script lang="ts">
     import Vue from "vue";
-    import VueRouter from 'vue-router'
     import Component from "vue-class-component";
     import TasksWindow from "./Tasks/TasksWindow.vue";
     import TaskAdd from "./Tasks/TaskAdd.vue";
     import DayLog from "./Tasks/DayLog.vue";
     import TaskEdit from "./Tasks/TaskEdit.vue";
-
-    Vue.use(VueRouter);
 
     @Component({
         components: {
