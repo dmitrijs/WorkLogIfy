@@ -12,6 +12,17 @@ function saveTasks(state) {
     window.ipc.sendSync('tasks.save', state.day_key, state.tasks.toJSON());
 }
 
+function addSession(tasks, task_id, spentSeconds, method) {
+    let sessions = tasks.get(task_id).get('sessions');
+    sessions = sessions.push({
+        started_at: moment().subtract(spentSeconds, 'seconds').toISOString(),
+        finished_at: moment().toISOString(),
+        spent_seconds: spentSeconds,
+        method: method,
+    });
+    return tasks.setIn([task_id, 'sessions'], sessions);
+}
+
 const store = new Vuex.Store({
     state: {
         tasks: null,
@@ -46,7 +57,10 @@ const store = new Vuex.Store({
 
                 (<any>task).time_charge_text = 'error';
 
-                (<any>task).time_spent_text = timespanToText(task.time_spent_seconds);
+                let spentSeconds = task.sessions.reduce((sum, obj) => sum + obj.spent_seconds, 0);
+
+                (<any>task).time_spent_seconds = spentSeconds;
+                (<any>task).time_spent_text = timespanToText(spentSeconds);
                 result = result.push(task);
             });
 
@@ -157,7 +171,10 @@ const store = new Vuex.Store({
                 for (let key of keys) {
                     let js_task = js_tasks[key];
 
-                    tasks = tasks.set(key, fromJS(js_task));
+                    let task = fromJS(js_task);
+                    task = task.set('sessions', fromJS(task.get('sessions')));
+
+                    tasks = tasks.set(key, task);
                 }
             }
 
@@ -191,7 +208,7 @@ const store = new Vuex.Store({
                 chargeable: true,
                 logged: false,
                 time_spent_seconds: 0,
-                notes: '',
+                notes: task.notes,
                 date: task.date,
                 sessions: List(),
             }));
@@ -204,19 +221,16 @@ const store = new Vuex.Store({
         saveTask(state, task) {
             console.log('save', task);
 
-            let time_spent_seconds = parseInt(task.time_spent_seconds);
-            if (task.time_add_minutes) {
-                time_spent_seconds += parseInt(task.time_add_minutes) * 60;
-            }
-            console.log('task.time_spent_seconds', task.time_spent_seconds);
-            console.log('task.time_add_minutes', task.time_add_minutes);
-            console.log('time_spent_seconds', time_spent_seconds);
-
             state.tasks = state.tasks.setIn([task.id, 'code'], task.code);
             state.tasks = state.tasks.setIn([task.id, 'title'], task.title);
             state.tasks = state.tasks.setIn([task.id, 'date'], task.date);
             state.tasks = state.tasks.setIn([task.id, 'notes'], task.notes);
-            state.tasks = state.tasks.setIn([task.id, 'time_spent_seconds'], time_spent_seconds);
+
+            if (task.time_add_minutes) {
+                let time_spent_seconds = parseInt(task.time_add_minutes) * 60;
+
+                state.tasks = addSession(state.tasks, task.id, time_spent_seconds, 'manual');
+            }
 
             state.taskEditedId = null;
             state.screen = 'tasks';
