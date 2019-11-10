@@ -8,26 +8,28 @@
             <table style="width: 100%;">
                 <tr>
                     <td width="100">Code:</td>
-                    <td><input type="text" placeholder="TSKS-0000" v-model="task.code"/><br/></td>
+                    <td><input type="text" placeholder="TSKS-0000" v-model="task.code"/></td>
                 </tr>
                 <tr>
                     <td>Title:</td>
-                    <td><input type="text" v-model="task.title"/><br/></td>
+                    <td><input type="text" v-model="task.title"/></td>
                 </tr>
                 <tr>
                     <td>Time Spent:</td>
-                    <td><input type="text" v-model="task.time_spent_seconds" readonly/><br/></td>
+                    <td class="Complex">
+                        <div><input type="text" v-model="task.time_spent_seconds"/> + <input type="text" v-model="task.time_add_minutes">m</div>
+                    </td>
                 </tr>
                 <tr>
                     <td>Date:</td>
-                    <td><input type="text" v-model="task.date"/><br/></td>
+                    <td><input type="text" v-model="task.date"/></td>
                 </tr>
                 <tr>
                     <td>Notes:</td>
                     <td><textarea v-model="task.notes"></textarea></td>
                 </tr>
             </table>
-            <button class="btn btn-secondary btn-sm">update</button>
+            <button class="btn btn-secondary btn-sm">{{ mode === 'edit' ? 'update' : 'create' }}</button>
         </form>
     </div>
 </template>
@@ -43,25 +45,24 @@
         },
     })
     export default class TaskEdit extends Vue {
-        freshTask = {
+        task = {
             code: '',
             title: '',
-            time_spent_text: '',
+            time_spent_seconds: 0,
             date: '',
         };
 
-        get task() {
-            if (this.mode === 'edit') {
-                return this.$store.getters.getEditedTask.toJS();
-            } else {
-                return this.freshTask;
-            }
+        get editedTask() {
+            return this.$store.getters.getEditedTask.toJS();
         }
 
         created() {
             if (this.mode === 'new') {
-                this.freshTask.date = now().format('YYYY-MM-DD');
+                this.task.date = now().format('YYYY-MM-DD');
+            } else {
+                this.task = this.editedTask;
             }
+            this.$set(this.task, 'time_add_minutes', 0);
         }
 
         save() {

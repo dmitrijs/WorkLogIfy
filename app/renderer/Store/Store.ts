@@ -312,10 +312,17 @@ const store = new Vuex.Store({
             saveTasks(state);
         },
         saveTask(state, task) {
+            if (task.time_add_minutes) {
+                task.time_spent_seconds += task.time_add_minutes * 60;
+            }
+
             state.tasks = state.tasks.setIn([task.id, 'code'], task.code);
             state.tasks = state.tasks.setIn([task.id, 'title'], task.title);
             state.tasks = state.tasks.setIn([task.id, 'date'], task.date);
             state.tasks = state.tasks.setIn([task.id, 'notes'], task.notes);
+            state.tasks = state.tasks.setIn([task.id, 'time_spent_seconds'], task.time_spent_seconds);
+
+            state.screen = 'tasks';
 
             console.log(state.tasks.toJS());
             saveTasks(state);

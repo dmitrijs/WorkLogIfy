@@ -1,5 +1,5 @@
 .TaskEditForm {
-    td {
+    td:not(.Complex) {
         input,
         textarea {
             width: 100%;
@@ -7,6 +7,13 @@
 
         textarea {
             min-height: 64px;
+        }
+    }
+
+    .Complex {
+        > div {
+            align-items: baseline;
+            display: flex;
         }
     }
 }
