@@ -15,13 +15,13 @@ class Timer {
             this.timeStart = moment.utc();
             store.commit('activateTimer');
 
-            this.handle = setInterval(this.tick, 3000);
+            this.handle = setInterval(this.tick.bind(this), 1000);
             this.tick();
         }
     }
 
     tick() {
-        store.commit('activeTimer', Math.round((moment.utc() - this.timeStart) / 1000));
+        store.commit('activeTimer', this.getSecondsElapsed(moment.utc()));
 
         console.log('timer tick');
     }
@@ -29,13 +29,16 @@ class Timer {
     stop() {
         if (this.handle) {
             this.timeEnd = moment.utc();
-            let timeElapsed = this.timeEnd - this.timeStart;
-            let secondsElapsed = Math.round(timeElapsed / 1000);
-            store.commit('stopTimer', secondsElapsed);
+            store.commit('stopTimer', this.getSecondsElapsed(this.timeEnd));
 
             clearInterval(this.handle);
             this.handle = 0;
         }
+    }
+
+    getSecondsElapsed(timeEnd) {
+        let timeElapsed = timeEnd - this.timeStart;
+        return Math.round(timeElapsed / 1000) * (store.state.is_debug ? 60 : 1);
     }
 }
 

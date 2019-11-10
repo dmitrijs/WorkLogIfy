@@ -19,7 +19,7 @@
                     <td>Time Spent:</td>
                     <td class="Complex">
                         <div>
-                            <strong>{{ task_time_spent_text }}</strong>
+                            <span><strong>{{ task_time_spent_text }}</strong> ({{ task.time_spent_seconds }})</span>
                             <span>Adjust: <input type="text" v-model="task.time_add_minutes">m</span>
                         </div>
                     </td>
