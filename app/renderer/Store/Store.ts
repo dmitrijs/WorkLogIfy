@@ -207,7 +207,6 @@ const store = new Vuex.Store({
                 distributed: false,
                 chargeable: true,
                 logged: false,
-                time_spent_seconds: 0,
                 notes: task.notes,
                 date: task.date,
                 sessions: List(),
@@ -227,9 +226,9 @@ const store = new Vuex.Store({
             state.tasks = state.tasks.setIn([task.id, 'notes'], task.notes);
 
             if (task.time_add_minutes) {
-                let time_spent_seconds = parseInt(task.time_add_minutes) * 60;
+                let spentSeconds = parseInt(task.time_add_minutes) * 60;
 
-                state.tasks = addSession(state.tasks, task.id, time_spent_seconds, 'manual');
+                state.tasks = addSession(state.tasks, task.id, spentSeconds, 'manual');
             }
 
             state.taskEditedId = null;
@@ -300,12 +299,7 @@ const store = new Vuex.Store({
         stopTimer(state, secondsElapsed) {
             console.log('secondsElapsed', secondsElapsed);
 
-            let timeredTask = state.tasks.get(state.taskTimeredId);
-            console.log('timeredTask', timeredTask.toJSON());
-            timeredTask = timeredTask.set('time_spent_seconds', parseInt(timeredTask.get('time_spent_seconds')) + secondsElapsed);
-            console.log('timeredTask', timeredTask.toJSON());
-
-            state.tasks = state.tasks.set(state.taskTimeredId, timeredTask);
+            state.tasks = addSession(state.tasks, state.taskTimeredId, secondsElapsed, 'timer');
 
             state.tasksSelectedIds = Map();
             state.timerElapsedText = '';
