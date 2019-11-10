@@ -124,6 +124,7 @@
 
         contextMenuShow(e) {
             console.log('in context menu');
+            this.$store.commit('selectHovered');
             e.preventDefault();
             menu.popup({window: remote.getCurrentWindow()})
         }

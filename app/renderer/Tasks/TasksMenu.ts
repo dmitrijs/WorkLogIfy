@@ -1,4 +1,5 @@
 import timer from "../Timer";
+import store from "../Store/Store";
 
 const remote = window.remote;
 const {Menu, MenuItem} = remote;
@@ -14,10 +15,16 @@ menu.append(new MenuItem({
         timer.stop();
     },
 }));
+// menu.append(new MenuItem({type: 'separator'}));
+// menu.append(new MenuItem({
+//     label: 'MenuItem2', type: 'checkbox', checked: true, click() {
+//         console.log('item 2 clicked')
+//     },
+// }));
 menu.append(new MenuItem({type: 'separator'}));
 menu.append(new MenuItem({
-    label: 'MenuItem2', type: 'checkbox', checked: true, click() {
-        console.log('item 2 clicked')
+    label: 'Delete', click() {
+        store.commit('deleteSelected');
     },
 }));
 

@@ -250,8 +250,32 @@ const store = new Vuex.Store({
             let tasks = window.ipc.sendSync('tasks.load', state.day_key);
             this.commit('loadTasks', tasks);
         },
+        selectHovered(state) {
+            if (!state.tasksHoveredId) {
+                return;
+            }
+            state.tasksSelectedIds = state.tasksSelectedIds.set(state.tasksHoveredId, true);
+        },
+        deleteSelected(state) {
+            console.log('state.tasksSelectedIds.size', state.tasksSelectedIds.size);
+            if (!state.tasksSelectedIds.size) {
+                return;
+            }
+
+            if (!confirm('Delete ' + state.tasksSelectedIds.size + ' tasks?')) {
+                return;
+            }
+
+            console.log('state.tasks', state.tasks);
+
+            state.tasks = state.tasksSelectedIds.keySeq().reduce((map, key) => map.delete(key), state.tasks);
+            state.tasksSelectedIds = Map();
+
+            saveTasks(state);
+        },
         activateTimer(state) {
             state.taskTimeredId = state.tasksHoveredId;
+            state.tasksSelectedIds = Map();
         },
         activeTimer(state, secondsElapsed) {
             state.timerElapsedText = timespanToText(secondsElapsed, '++');
@@ -269,6 +293,7 @@ const store = new Vuex.Store({
 
             state.tasks = state.tasks.set(state.taskTimeredId, timeredTask);
 
+            state.tasksSelectedIds = Map();
             state.timerElapsedText = '';
             state.taskTimeredId = null;
         },
