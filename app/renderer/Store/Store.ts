@@ -303,7 +303,7 @@ const store = new Vuex.Store({
                 logged: false,
                 time_spent_seconds: 0,
                 notes: '',
-                date: task.date_key,
+                date: task.date,
             }));
             console.log(state.tasks.toJS());
 

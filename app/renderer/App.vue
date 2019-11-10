@@ -2,17 +2,18 @@
     <div class="App">
         <transition name="fade" mode="out-in">
             <TasksWindow v-if="tasks_ui.screen === 'tasks'"></TasksWindow>
-            <TaskAdd v-if="tasks_ui.screen === 'task.new'"></TaskAdd>
+            <TaskEdit v-if="tasks_ui.screen === 'task.edit'" mode="edit"></TaskEdit>
+            <TaskEdit v-if="tasks_ui.screen === 'task.new'" mode="new"></TaskEdit>
             <DayLog v-if="tasks_ui.screen === 'DayLog'"></DayLog>
-            <TaskEdit v-if="tasks_ui.screen === 'task.edit'"></TaskEdit>
         </transition>
 
         <div class="Debug" v-if="tasks_ui.is_debug">
             <button onclick="document.location.reload()" style="padding: 10px 20px; float: right">reload</button>
             <button type="button" @click="save()">save</button>
             <div v-for="(value, key) of tasks_ui"><strong>{{key}}:</strong> {{value}}</div>
-            <hr />
-            Timer <button type="button" @click="timerStop" :disabled="!tasks_ui.timeredId">stop</button>
+            <hr/>
+            Timer
+            <button type="button" @click="timerStop" :disabled="!tasks_ui.timeredId">stop</button>
             <hr/>
             {{ tasksGrouped }}
         </div>
@@ -23,7 +24,6 @@
     import Vue from "vue";
     import Component from "vue-class-component";
     import TasksWindow from "./Tasks/TasksWindow.vue";
-    import TaskAdd from "./Tasks/TaskAdd.vue";
     import DayLog from "./Tasks/DayLog.vue";
     import TaskEdit from "./Tasks/TaskEdit.vue";
     import timer from "./Timer";
@@ -32,7 +32,6 @@
         components: {
             TaskEdit,
             DayLog,
-            TaskAdd,
             TasksWindow,
         },
     })

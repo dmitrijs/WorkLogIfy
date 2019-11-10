@@ -1,0 +1,12 @@
+.TaskEditForm {
+    td {
+        input,
+        textarea {
+            width: 100%;
+        }
+
+        textarea {
+            min-height: 64px;
+        }
+    }
+}
