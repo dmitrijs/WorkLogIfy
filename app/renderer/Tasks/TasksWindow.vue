@@ -42,7 +42,7 @@
                     <div class="TCol --frozen">
                         <i class="IconAsInput icofont-unlock" :class="{ active: task.frozen }" @click="$store.commit('updateTask', [task._key, 'frozen', !task.frozen])"></i>
                     </div>
-                    <div class="TCol --time">13:00</div>
+                    <div class="TCol --time"></div>
                     <div class="TCol --code" @click="editTask($event, task)">{{task.code}}</div>
                     <div class="TCol --title" @click="editTask($event, task)">
                         <span class="Title--Content ellipsis"><span>{{task.title}}</span></span>
