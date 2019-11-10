@@ -1,7 +1,8 @@
 <template>
     <div class="TaskEdit" :data-mode="mode">
-        <button class="btn btn-secondary btn-sm" @click="$store.commit('setScreen', 'tasks')">&lt; back</button>
-        <br/>
+        <div class="text-right">
+            <button class="btn btn-secondary btn-sm" @click="$store.commit('setScreen', 'tasks')">&lt; back</button>
+        </div>
         <br/>
 
         <form class="TaskEditForm" @submit.prevent="save">
@@ -17,7 +18,10 @@
                 <tr>
                     <td>Time Spent:</td>
                     <td class="Complex">
-                        <div><input type="text" v-model="task.time_spent_seconds"/> + <input type="text" v-model="task.time_add_minutes">m</div>
+                        <div>
+                            <strong>{{ task_time_spent_text }}</strong>
+                            <span>Adjust: <input type="text" v-model="task.time_add_minutes">m</span>
+                        </div>
                     </td>
                 </tr>
                 <tr>
@@ -28,8 +32,14 @@
                     <td>Notes:</td>
                     <td><textarea v-model="task.notes"></textarea></td>
                 </tr>
+                <tr>
+                    <td colspan="2" class="text-right"><button class="btn btn-secondary btn-sm">{{ mode === 'edit' ? 'update' : 'create' }}</button></td>
+                </tr>
+                <tr>
+                    <td>Sessions:</td>
+                    <td>{{ task.sessions }}</td>
+                </tr>
             </table>
-            <button class="btn btn-secondary btn-sm">{{ mode === 'edit' ? 'update' : 'create' }}</button>
         </form>
     </div>
 </template>
@@ -37,7 +47,7 @@
 <script type="ts">
     import Vue from "vue";
     import Component from "vue-class-component";
-    import {now} from "../Utils/Utils";
+    import {now, timespanToText} from "../Utils/Utils";
 
     @Component({
         props: {
@@ -54,6 +64,10 @@
 
         get editedTask() {
             return this.$store.getters.getEditedTask.toJS();
+        }
+
+        get task_time_spent_text() {
+            return timespanToText(this.task.time_spent_seconds);
         }
 
         created() {

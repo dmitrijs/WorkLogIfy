@@ -65,6 +65,12 @@
 
         &.timered {
             color: green;
+
+            .TCol.--code,
+            .TCol.--title,
+            .TCol.--timespan {
+                font-weight: bold;
+            }
         }
 
         &:hover {
@@ -73,8 +79,9 @@
     }
 
     .TasksTable { // not header
-        .--code,
-        .--title {
+        .TCol.--code,
+        .TCol.--title,
+        .TCol.--timespan {
             cursor: pointer;
         }
     }

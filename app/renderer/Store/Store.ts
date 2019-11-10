@@ -20,6 +20,7 @@ const store = new Vuex.Store({
         tasksHoveredId: null,
         taskEditedId: null,
         taskTimeredId: null,
+        timerElapsedText: null,
         screen: 'tasks',
         is_debug: true,
         day_key: '',
@@ -127,6 +128,7 @@ const store = new Vuex.Store({
                 hoveredId: state.tasksHoveredId,
                 editedId: state.taskEditedId,
                 timeredId: state.taskTimeredId,
+                timerElapsedText: state.timerElapsedText,
                 screen: state.screen,
                 is_debug: state.is_debug,
                 day_key: state.day_key,
@@ -134,6 +136,7 @@ const store = new Vuex.Store({
         },
 
         getEditedTask(state) {
+            console.log('getEditedTask', state.taskEditedId);
             return state.tasks.get(state.taskEditedId);
         },
     },
@@ -184,6 +187,7 @@ const store = new Vuex.Store({
                 time_spent_seconds: 0,
                 notes: '',
                 date: task.date,
+                sessions: List(),
             }));
             console.log(state.tasks.toJS());
 
@@ -192,16 +196,23 @@ const store = new Vuex.Store({
             saveTasks(state);
         },
         saveTask(state, task) {
+            console.log('save', task);
+
+            let time_spent_seconds = parseInt(task.time_spent_seconds);
             if (task.time_add_minutes) {
-                task.time_spent_seconds += task.time_add_minutes * 60;
+                time_spent_seconds += parseInt(task.time_add_minutes) * 60;
             }
+            console.log('task.time_spent_seconds', task.time_spent_seconds);
+            console.log('task.time_add_minutes', task.time_add_minutes);
+            console.log('time_spent_seconds', time_spent_seconds);
 
             state.tasks = state.tasks.setIn([task.id, 'code'], task.code);
             state.tasks = state.tasks.setIn([task.id, 'title'], task.title);
             state.tasks = state.tasks.setIn([task.id, 'date'], task.date);
             state.tasks = state.tasks.setIn([task.id, 'notes'], task.notes);
-            state.tasks = state.tasks.setIn([task.id, 'time_spent_seconds'], task.time_spent_seconds);
+            state.tasks = state.tasks.setIn([task.id, 'time_spent_seconds'], time_spent_seconds);
 
+            state.taskEditedId = null;
             state.screen = 'tasks';
 
             console.log(state.tasks.toJS());
@@ -230,7 +241,20 @@ const store = new Vuex.Store({
         activateTimer(state) {
             state.taskTimeredId = state.tasksHoveredId;
         },
-        stopTimer(state) {
+        activeTimer(state, secondsElapsed) {
+            state.timerElapsedText = timespanToText(secondsElapsed, '++');
+        },
+        stopTimer(state, secondsElapsed) {
+            console.log('secondsElapsed', secondsElapsed);
+
+            let timeredTask = state.tasks.get(state.taskTimeredId);
+            console.log('timeredTask', timeredTask.toJSON());
+            timeredTask = timeredTask.set('time_spent_seconds', parseInt(timeredTask.get('time_spent_seconds')) + secondsElapsed);
+            console.log('timeredTask', timeredTask.toJSON());
+
+            state.tasks = state.tasks.set(state.taskTimeredId, timeredTask);
+
+            state.timerElapsedText = '';
             state.taskTimeredId = null;
         },
     },

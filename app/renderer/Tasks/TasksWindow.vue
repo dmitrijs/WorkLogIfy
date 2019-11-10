@@ -48,8 +48,11 @@
                         <span class="Title--Content ellipsis"><span>{{task.title}}</span></span>
                         <span class="Note--Content ellipsis"><span>{{task.notes}}</span></span>
                     </div>
-                    <div class="TCol --timespan">
-                        <span class="--timespan-charge" title="Charge">{{task.time_charge_text}}</span>
+                    <div class="TCol --timespan" @click="editTask($event, task)">
+                        <span class="--timespan-charge" title="Charge">
+                            {{task.time_charge_text}}
+                            <em v-if="tasks_ui.timeredId === task._key">{{ tasks_ui.timerElapsedText }}</em>
+                        </span>
                         <span class="--timespan-spent" title="Spent">{{task.time_spent_text}}</span>
                     </div>
                 </div>

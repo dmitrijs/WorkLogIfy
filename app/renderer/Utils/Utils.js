@@ -1,6 +1,6 @@
 const moment = require("moment");
 
-export function timespanToText(seconds) {
+export function timespanToText(seconds, emptyValue = '-') {
     // let result = String(seconds);
     let hours = Math.floor(seconds / 3600);
     let minutes = Math.floor((seconds - hours * 3600) / 60);
@@ -13,7 +13,7 @@ export function timespanToText(seconds) {
         result += Math.floor(minutes) + 'm ';
     }
     if (!result) {
-        result = '-';
+        result = emptyValue;
     }
     return result.trim();
 }
