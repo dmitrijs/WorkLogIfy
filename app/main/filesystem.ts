@@ -1,15 +1,15 @@
 const fs = require('fs');
 var glob = require("glob");
 
-const {app} = require('electron');
+const {app, dialog} = require('electron');
 
 class Filesystem {
     public static getDir() {
-        var rootDir = app.getAppPath();
-        var dir = rootDir + '/WORKLOG/';
+        var rootDir = app.getPath('appData');
+        var dir = rootDir + '/WorkLogIfy/';
 
         if (!fs.existsSync(dir)) {
-            fs.mkdirSync(dir);
+            fs.mkdirSync(dir, {recursive: true});
         }
 
         return dir;

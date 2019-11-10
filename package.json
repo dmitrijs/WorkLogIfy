@@ -1,6 +1,6 @@
 {
   "name": "work-log-ify",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "WorkLogIfy",
   "main": "app/main/.parcel/main.js",
   "scripts": {
@@ -36,20 +36,20 @@
       "target": [
         "zip"
       ],
-      "artifactName": "${productName}-mac.${ext}"
+      "artifactName": "${productName}-mac-v${version}.${ext}"
     },
     "win": {
       "target": [
         "zip"
       ],
-      "artifactName": "${productName}-win.${ext}"
+      "artifactName": "${productName}-win-v${version}.${ext}"
     },
     "linux": {
       "target": [
         "zip"
       ],
       "category": "Development",
-      "artifactName": "${productName}-linux.${ext}"
+      "artifactName": "${productName}-linux-v${version}.${ext}"
     },
     "directories": {
       "output": "release"
@@ -111,6 +111,7 @@
   "dependencies": {
     "app-root-path": "^2.2.1",
     "electron-is-dev": "^1.1.0",
+    "glob": "^7.1.6",
     "vue-hot-reload-api": "^2.3.4"
   }
 }

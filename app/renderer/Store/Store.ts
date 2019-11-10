@@ -291,7 +291,7 @@ const store = new Vuex.Store({
             state.tasksSelectedIds = Map();
         },
         activeTimer(state, secondsElapsed) {
-            state.timerElapsedText = timespanToText(secondsElapsed, '++');
+            state.timerElapsedText = '+' + timespanToText(secondsElapsed, '+');
         },
         setAllFiles(state, allFiles) {
             state.allFiles = allFiles;
