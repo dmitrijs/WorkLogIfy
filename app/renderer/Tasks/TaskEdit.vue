@@ -37,7 +37,11 @@
                 </tr>
                 <tr>
                     <td>Sessions:</td>
-                    <td>{{ task.sessions }}</td>
+                    <td>
+                        <div v-for="sess of task.sessions">
+                            {{ formatSession(sess) }}
+                        </div>
+                    </td>
                 </tr>
             </table>
         </form>
@@ -48,6 +52,8 @@
     import Vue from "vue";
     import Component from "vue-class-component";
     import {now, timespanToText} from "../Utils/Utils";
+
+    const moment = require("moment");
 
     @Component({
         props: {
@@ -85,6 +91,11 @@
             } else {
                 this.$store.commit('createTask', this.task);
             }
+        }
+
+        formatSession(sess) {
+            let timespan = timespanToText(sess.spent_seconds);
+            return `[${sess.method}] ${moment(sess.started_at).format('HH:mm')} -> ${moment(sess.finished_at).format('HH:mm')} = ${timespan}`;
         }
     }
 </script>
