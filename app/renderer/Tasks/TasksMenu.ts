@@ -9,6 +9,11 @@ menu.append(new MenuItem({
         timer.start();
     },
 }));
+menu.append(new MenuItem({
+    label: 'Stop Timer', click() {
+        timer.stop();
+    },
+}));
 menu.append(new MenuItem({type: 'separator'}));
 menu.append(new MenuItem({
     label: 'MenuItem2', type: 'checkbox', checked: true, click() {

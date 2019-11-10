@@ -14,11 +14,13 @@ import './../../external/icofont/icofont.min.css';
 import './../../external/checkbox.scss';
 import App from "./App.vue";
 
-Vue.prototype.$store = store;
-store.commit('setDayNow');
+const moment = require("moment");
 
-let tasks = window.ipc.sendSync('tasks.load', store.state.day_key);
-store.commit('loadTasks', tasks);
+Vue.prototype.$store = store;
+store.commit('setDay', moment().format("YYYY-MM-DD"));
+
+let allFiles = window.ipc.sendSync('tasks.allfiles');
+store.commit('setAllFiles', allFiles);
 
 window.ipc.on('change.screen', function($event, where) {
     store.commit('setScreen', where);

@@ -16,6 +16,12 @@ export default function createMainMenu(mainWindow) {
             }
         },
         {
+            label: 'Calendar', click: function () {
+                mainWindow.show();
+                mainWindow.webContents.send('change.screen', 'calendar');
+            }
+        },
+        {
             label: 'DayLog', click: function () {
                 mainWindow.show();
                 mainWindow.webContents.send('change.screen', 'DayLog');

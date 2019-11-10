@@ -120,6 +120,10 @@ app.on('ready', async () => {
         ipcMain.on('tasks.load', (event, arg) => {
             event.returnValue = Filesystem.getWorkLog(arg);
         });
+
+        ipcMain.on('tasks.allfiles', (event) => {
+            event.returnValue = Filesystem.getAllFiles();
+        });
     }
 
     mainWindow.setMenu(createMainMenu(mainWindow));

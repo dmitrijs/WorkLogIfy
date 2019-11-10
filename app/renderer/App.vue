@@ -5,6 +5,7 @@
             <TaskEdit v-if="tasks_ui.screen === 'task.edit'" mode="edit"></TaskEdit>
             <TaskEdit v-if="tasks_ui.screen === 'task.new'" mode="new"></TaskEdit>
             <DayLog v-if="tasks_ui.screen === 'DayLog'"></DayLog>
+            <CalendarWindow v-if="tasks_ui.screen === 'calendar'"></CalendarWindow>
         </transition>
 
         <div class="Debug" v-if="tasks_ui.is_debug">
@@ -27,9 +28,11 @@
     import DayLog from "./Tasks/DayLog.vue";
     import TaskEdit from "./Tasks/TaskEdit.vue";
     import timer from "./Timer";
+    import CalendarWindow from "./Tasks/CalendarWindow.vue";
 
     @Component({
         components: {
+            CalendarWindow,
             TaskEdit,
             DayLog,
             TasksWindow,

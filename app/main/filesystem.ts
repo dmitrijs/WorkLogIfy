@@ -1,4 +1,5 @@
 const fs = require('fs');
+var glob = require("glob");
 
 const {app} = require('electron');
 
@@ -12,6 +13,21 @@ class Filesystem {
         }
 
         return dir;
+    }
+
+    public static getAllFiles() {
+        const dir = this.getDir();
+
+        let files = glob.sync(dir + '/worklog-*.json');
+
+        const result = [];
+        for (let file of files) {
+            let m = file.match(/\/worklog-([\d-]+)\.json$/);
+            if (m) {
+                result.push(m[1]);
+            }
+        }
+        return result.sort().reverse();
     }
 
     public static getWorkLog(day_key) {

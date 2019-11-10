@@ -24,9 +24,11 @@ const store = new Vuex.Store({
         screen: 'tasks',
         is_debug: true,
         day_key: '',
+        allFiles: [],
     },
     getters: {
         getTasksGrouped(state) {
+            console.log('getTasksGrouped');
             // populate time charge
             let result;
             result = List();
@@ -139,6 +141,10 @@ const store = new Vuex.Store({
             console.log('getEditedTask', state.taskEditedId);
             return state.tasks.get(state.taskEditedId);
         },
+
+        getAllFiles(state) {
+            return state.allFiles;
+        },
     },
 
     mutations: {
@@ -235,14 +241,23 @@ const store = new Vuex.Store({
             state.screen = 'task.edit';
             state.taskEditedId = key;
         },
-        setDayNow(state) {
-            state.day_key = moment().format("YYYY-MM-DD");
+        setDay(state, day) {
+            if (state.taskTimeredId) {
+                alert('Cannot change date if ome task is active.');
+                return;
+            }
+            state.day_key = day;
+            let tasks = window.ipc.sendSync('tasks.load', state.day_key);
+            this.commit('loadTasks', tasks);
         },
         activateTimer(state) {
             state.taskTimeredId = state.tasksHoveredId;
         },
         activeTimer(state, secondsElapsed) {
             state.timerElapsedText = timespanToText(secondsElapsed, '++');
+        },
+        setAllFiles(state, allFiles) {
+            state.allFiles = allFiles;
         },
         stopTimer(state, secondsElapsed) {
             console.log('secondsElapsed', secondsElapsed);
