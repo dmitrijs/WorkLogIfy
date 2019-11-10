@@ -1,3 +1,3 @@
-# ZxcWorkLog
+# WorkLogIfy
 
 Track you work.

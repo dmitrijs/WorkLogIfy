@@ -1,7 +1,7 @@
 {
-  "name": "zxc-work-log",
-  "version": "0.1.0",
-  "description": "ZxcWorkLog",
+  "name": "work-log-ify",
+  "version": "1.0.0",
+  "description": "WorkLogIfy",
   "main": "app/main/.parcel/main.js",
   "scripts": {
     "start": "run-s main:build watch",
@@ -22,8 +22,8 @@
   "author": "Dmitrijs Sadovskis",
   "license": "MIT",
   "build": {
-    "productName": "ElectronVueParcel",
-    "appId": "lv.zxc.worklog",
+    "productName": "WorkLogIfy",
+    "appId": "lv.ify.worklog",
     "files": [
       "app/**",
       "!app/main/main.ts",
