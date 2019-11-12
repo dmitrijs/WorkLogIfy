@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import {timespanToText} from './../Utils/Utils';
-import {fromJS, List, Map} from 'immutable';
+import {List, Map} from 'immutable';
 import {comparatorLt} from '../Utils/Utils';
 
 const moment = require("moment");
@@ -189,8 +189,8 @@ const store = new Vuex.Store({
                 for (let key of keys) {
                     let js_task = js_tasks[key];
 
-                    let task = fromJS(js_task);
-                    task = task.set('sessions', fromJS(task.get('sessions')));
+                    let task = Map(js_task);
+                    task = task.set('sessions', List(task.get('sessions')));
 
                     tasks = tasks.set(key, task);
                 }

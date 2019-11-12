@@ -1,8 +1,10 @@
 const moment = require("moment");
 
 export function timespanToText(seconds, emptyValue = '-') {
+    let sign = '';
     if (seconds < 0) {
-        return 'negative';
+        sign = '-';
+        seconds *= -1;
     }
     // let result = String(seconds);
     let hours = Math.floor(seconds / 3600);
@@ -18,7 +20,7 @@ export function timespanToText(seconds, emptyValue = '-') {
     if (!result) {
         result = emptyValue;
     }
-    return result.trim();
+    return sign + result.trim();
 }
 
 

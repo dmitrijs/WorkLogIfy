@@ -9,7 +9,7 @@
             <table style="width: 100%;">
                 <tr>
                     <td width="100">Code:</td>
-                    <td><input type="text" placeholder="TSKS-0000" v-model="task.code"/></td>
+                    <td><input type="text" placeholder="TSKS-0000" v-model="task.code" ref="task_code" /></td>
                 </tr>
                 <tr>
                     <td>Title:</td>
@@ -83,6 +83,10 @@
                 this.task = this.editedTask;
             }
             this.$set(this.task, 'time_add_minutes', '');
+        }
+
+        mounted() {
+            this.$refs.task_code.focus();
         }
 
         save() {
