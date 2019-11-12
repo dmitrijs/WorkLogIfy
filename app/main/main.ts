@@ -1,10 +1,10 @@
 import Shortcuts from "./shortcuts";
 import IdleUser from "./idle";
 // @ts-ignore
-import trayPng from './tray.png';
 import taskbarPng from './taskbar.png';
 import Filesystem from "./filesystem";
 import createMainMenu from "./menu";
+import createTray from "./tray";
 
 const {format} = require('url');
 
@@ -36,30 +36,7 @@ app.on('ready', async () => {
         }
     });
 
-    tray = new Tray(path.join(__dirname, trayPng));
-
-    var contextMenu = Menu.buildFromTemplate([
-        {
-            label: 'Show App', click: function () {
-                mainWindow.show();
-            }
-        },
-        {
-            label: 'Quit', click: function () {
-                mainWindow.destroy();
-                app.quit();
-            }
-        }
-    ]);
-    tray.on('click', function(e){
-        if (mainWindow.isVisible()) {
-            mainWindow.hide();
-        } else {
-            mainWindow.show();
-        }
-    });
-    tray.setIgnoreDoubleClickEvents(true);
-    tray.setContextMenu(contextMenu);
+    tray = createTray(mainWindow);
 
     mainWindow.on('close', function (event) {
         event.preventDefault();
