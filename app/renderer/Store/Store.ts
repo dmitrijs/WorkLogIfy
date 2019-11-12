@@ -32,6 +32,7 @@ const store = new Vuex.Store({
         taskEditedId: null,
         taskTimeredId: null,
         timerElapsedText: null,
+        timerElapsed: 0,
         screen: 'tasks',
         is_debug: true,
         day_key: '',
@@ -90,6 +91,9 @@ const store = new Vuex.Store({
                         }
                     }
                 });
+
+                spent += state.timerElapsed;
+                charge += state.timerElapsed;
 
                 tasks = tasks.sort((task1, task2) => {
                     let sess1 = task1.sessions;
@@ -306,6 +310,7 @@ const store = new Vuex.Store({
         },
         activeTimer(state, secondsElapsed) {
             state.timerElapsedText = '+' + timespanToText(secondsElapsed, '+');
+            state.timerElapsed = secondsElapsed;
         },
         setAllFiles(state, allFiles) {
             state.allFiles = allFiles;
@@ -317,6 +322,7 @@ const store = new Vuex.Store({
 
             state.tasksSelectedIds = Map();
             state.timerElapsedText = '';
+            state.timerElapsed = 0;
             state.taskTimeredId = null;
         },
     },
