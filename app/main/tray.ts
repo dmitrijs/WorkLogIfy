@@ -1,6 +1,6 @@
 import * as path from "path";
 // @ts-ignore
-import trayPng from './tray.png';
+import trayPng from './assets/tray.png';
 
 const electron = require('electron');
 const {Menu, Tray, app} = electron;

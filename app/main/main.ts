@@ -1,7 +1,7 @@
 import Shortcuts from "./shortcuts";
 import IdleUser from "./idle";
 // @ts-ignore
-import taskbarPng from './taskbar.png';
+import taskbarPng from './assets/taskbar.png';
 import Filesystem from "./filesystem";
 import createMainMenu from "./menu";
 import createTray from "./tray";
