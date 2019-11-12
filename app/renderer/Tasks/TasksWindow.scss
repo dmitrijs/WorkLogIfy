@@ -73,6 +73,11 @@
             }
         }
 
+        &.notchargeable,
+        &.distributed {
+            opacity: 0.4;
+        }
+
         &:hover {
             background-color: #f5f5f5;
         }

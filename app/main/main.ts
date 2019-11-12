@@ -2,6 +2,7 @@ import Shortcuts from "./shortcuts";
 import IdleUser from "./idle";
 // @ts-ignore
 import trayPng from './tray.png';
+import taskbarPng from './taskbar.png';
 import Filesystem from "./filesystem";
 import createMainMenu from "./menu";
 
@@ -28,6 +29,7 @@ app.on('ready', async () => {
         x: 10,
         y: 10,
         show: false,
+        icon: path.join(__dirname, taskbarPng),
         webPreferences: {
             nodeIntegration: false,
             preload: path.resolve(__dirname, 'preload.js'),
