@@ -229,6 +229,13 @@ const store = new Vuex.Store({
                 date: task.date,
                 sessions: List(),
             }));
+
+            if (task.time_add_minutes) {
+                let spentSeconds = parseInt(task.time_add_minutes) * 60;
+
+                state.tasks = addSession(state.tasks, id, spentSeconds, 'manual');
+            }
+
             console.log(state.tasks.toJS());
 
             state.screen = 'tasks';

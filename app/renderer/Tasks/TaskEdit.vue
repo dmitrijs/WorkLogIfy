@@ -82,7 +82,7 @@
             } else {
                 this.task = this.editedTask;
             }
-            this.$set(this.task, 'time_add_minutes', 0);
+            this.$set(this.task, 'time_add_minutes', '');
         }
 
         save() {
