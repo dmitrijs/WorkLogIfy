@@ -14,7 +14,7 @@ const {resolve} = require('app-root-path');
 const path = require('path');
 
 let tray;
-const {BrowserWindow, Menu, Tray, app} = electron;
+const {BrowserWindow, app} = electron;
 
 if (isDev) {
     process.env.ELECTRON_DISABLE_SECURITY_WARNINGS = 'true';
@@ -65,7 +65,7 @@ app.on('ready', async () => {
 
     mainWindow.loadURL(url);
 
-    const {ipcMain} = require('electron')
+    const {ipcMain} = require('electron');
 
     {
         ipcMain.on('asynchronous-message', (event, arg) => {
