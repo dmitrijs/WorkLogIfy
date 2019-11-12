@@ -49,6 +49,14 @@ app.on('ready', async () => {
             }
         }
     ]);
+    tray.on('click', function(e){
+        if (mainWindow.isVisible()) {
+            mainWindow.hide();
+        } else {
+            mainWindow.show();
+        }
+    });
+    tray.setIgnoreDoubleClickEvents(true);
     tray.setContextMenu(contextMenu);
 
     mainWindow.on('close', function (event) {
