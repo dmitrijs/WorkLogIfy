@@ -32,5 +32,10 @@ export default function createMainMenu(mainWindow) {
                 mainWindow.webContents.send('debug.toggle');
             }
         },
+        {
+            label: 'Dev Tools', click: function () {
+                mainWindow.openDevTools();
+            }
+        },
     ]);
 }
