@@ -1,4 +1,10 @@
 .App {
+    &:not(.isDebug) {
+        .Timeline,
+        .SelectionStatistics {
+            display: none !important;
+        }
+    }
 }
 
 .Debug {

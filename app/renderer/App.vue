@@ -1,5 +1,5 @@
 <template>
-    <div class="App">
+    <div class="App" :class="{ isDebug: tasks_ui.is_debug }">
         <transition name="fade" mode="out-in">
             <TasksWindow v-if="tasks_ui.screen === 'tasks'"></TasksWindow>
             <TaskEdit v-if="tasks_ui.screen === 'task.edit'" mode="edit"></TaskEdit>
