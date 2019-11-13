@@ -30,6 +30,8 @@ export default function createMainMenu(mainWindow) {
         {
             label: 'Toggle Debug', click: function () {
                 mainWindow.webContents.send('debug.toggle');
+                let size = mainWindow.getContentSize();
+                mainWindow.setContentSize(500, size[1]);
             }
         },
         {
