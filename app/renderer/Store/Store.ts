@@ -98,8 +98,8 @@ const store = new Vuex.Store({
                 tasks = tasks.sort((task1, task2) => {
                     let sess1 = task1.sessions;
                     let sess2 = task2.sessions;
-                    let text1 = '';
-                    let text2 = '';
+                    let text1 = '9';
+                    let text2 = '0';
                     if (sess1 && sess1[0]) {
                         text1 = sess1[0].started_at;
                     }
