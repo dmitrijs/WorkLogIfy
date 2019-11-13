@@ -10,6 +10,10 @@ class Timer {
     timeStart = 0;
     timeEnd = 0;
 
+    isActive() {
+        return !!this.handle;
+    }
+
     start() {
         if (!this.handle) {
             this.timeStart = moment.utc();
@@ -26,10 +30,10 @@ class Timer {
         console.log('timer tick');
     }
 
-    stop() {
+    stop(idleSeconds = 0) {
         if (this.handle) {
             this.timeEnd = moment.utc();
-            store.commit('stopTimer', this.getSecondsElapsed(this.timeEnd));
+            store.commit('stopTimer', [this.getSecondsElapsed(this.timeEnd), idleSeconds * (store.state.is_debug ? 60 : 1)]);
 
             clearInterval(this.handle);
             this.handle = 0;

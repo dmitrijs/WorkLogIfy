@@ -78,6 +78,10 @@ app.on('ready', async () => {
             event.returnValue = 'pong'
         })
 
+        ipcMain.on('show.error', (event, title, content) => {
+            electron.dialog.showErrorBox(title, content);
+        });
+
         ipcMain.on('window.open', (event, arg) => {
             console.log(arg) // prints "ping"
 

@@ -12,12 +12,12 @@ function saveTasks(state) {
     window.ipc.sendSync('tasks.save', state.day_key, state.tasks.toJSON());
 }
 
-function addSession(tasks, task_id, spentSeconds, method) {
+function addSession(tasks, task_id, spentSeconds, method, idleSeconds = 0) {
     let sessions = tasks.get(task_id).get('sessions');
     sessions = sessions.push({
         started_at: moment().subtract(spentSeconds, 'seconds').toISOString(),
-        finished_at: moment().toISOString(),
-        spent_seconds: spentSeconds,
+        finished_at: moment().subtract(idleSeconds, 'seconds').toISOString(),
+        spent_seconds: (spentSeconds - idleSeconds),
         method: method,
     });
     return tasks.setIn([task_id, 'sessions'], sessions);
@@ -322,10 +322,10 @@ const store = new Vuex.Store({
         setAllFiles(state, allFiles) {
             state.allFiles = allFiles;
         },
-        stopTimer(state, secondsElapsed) {
-            console.log('secondsElapsed', secondsElapsed);
+        stopTimer(state, [secondsElapsed, secondsIdle]) {
+            console.log('secondsElapsed', secondsElapsed, 'secondsIdle', secondsIdle);
 
-            state.tasks = addSession(state.tasks, state.taskTimeredId, secondsElapsed, 'timer');
+            state.tasks = addSession(state.tasks, state.taskTimeredId, secondsElapsed, 'timer', secondsIdle);
 
             state.tasksSelectedIds = Map();
             state.timerElapsedText = '';
