@@ -15,6 +15,7 @@ class Timer {
     }
 
     start() {
+        window.ipc.send('timer-state', 'active');
         if (!this.handle) {
             this.timeStart = moment.utc();
             store.commit('activateTimer');
@@ -31,6 +32,7 @@ class Timer {
     }
 
     stop(idleSeconds = 0) {
+        window.ipc.send('timer-state', 'stopped');
         if (this.handle) {
             this.timeEnd = moment.utc();
             store.commit('stopTimer', [this.getSecondsElapsed(this.timeEnd), idleSeconds * (store.state.is_debug ? 60 : 1)]);

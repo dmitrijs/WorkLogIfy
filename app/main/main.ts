@@ -4,7 +4,7 @@ import IdleUser from "./idle";
 import taskbarPng from './assets/taskbar.png';
 import Filesystem from "./filesystem";
 import createMainMenu from "./menu";
-import createTray from "./tray";
+import createTray, {setTrayIconActive, setTrayIconIdle} from "./tray";
 
 const {format} = require('url');
 
@@ -68,6 +68,19 @@ app.on('ready', async () => {
     const {ipcMain} = require('electron');
 
     {
+        ipcMain.on('timer-state', (event, arg) => {
+            console.log('timer-state', arg)
+            switch (arg) {
+                case 'stopped':
+                    setTrayIconIdle();
+                    break;
+                case 'active':
+                    setTrayIconActive();
+                    break;
+            }
+            event.reply('asynchronous-reply', 'ok')
+        });
+
         ipcMain.on('asynchronous-message', (event, arg) => {
             console.log(arg) // prints "ping"
             event.reply('asynchronous-reply', 'pong')
