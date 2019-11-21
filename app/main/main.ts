@@ -5,6 +5,7 @@ import taskbarPng from './assets/taskbar.png';
 import Filesystem from "./filesystem";
 import createMainMenu from "./menu";
 import createTray, {setTrayIconActive, setTrayIconIdle} from "./tray";
+import timer from "../renderer/Timer";
 
 const {format} = require('url');
 
@@ -111,12 +112,13 @@ app.on('ready', async () => {
                 frame: false,
             });
             win2.show();
-            win2.loadURL(url)
+            win2.loadURL(url);
 
             event.returnValue = 'ok'
         });
 
         ipcMain.on('tasks.save', (event, day_key, arg) => {
+            console.log('saving tasks');
             Filesystem.saveWorkLog(day_key, arg);
             event.returnValue = 'ok'
         });
@@ -132,6 +134,11 @@ app.on('ready', async () => {
 
     mainWindow.setMenu(createMainMenu(mainWindow));
 
+    mainWindow.on('session-end', () => {
+        console.log('session-end');
+        // Windows only event
+        timer.stop();
+    });
 });
 
 app.on('window-all-closed', app.quit);
