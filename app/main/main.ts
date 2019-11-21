@@ -3,7 +3,7 @@ import IdleUser from "./idle";
 // @ts-ignore
 import taskbarPng from './assets/taskbar.png';
 import Filesystem from "./filesystem";
-import createMainMenu from "./menu";
+import createMainMenu, {toggleDebug} from "./menu";
 import createTray, {setTrayIconActive, setTrayIconIdle} from "./tray";
 
 const {format} = require('url');
@@ -49,6 +49,8 @@ app.on('ready', async () => {
             mainWindow.webContents.openDevTools({
                 mode: "bottom"
             })
+        } else {
+            toggleDebug(mainWindow);
         }
     });
 

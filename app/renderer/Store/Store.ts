@@ -89,7 +89,7 @@ const {store} = createDirectStore({
             state.tasks = tasks;
         },
 
-        tasksUiHoveredId(state:AppState, id) {
+        tasksUiHoveredId(state:AppState, id:string) {
             console.log('state.tasksHoveredId = ', id);
             state.tasksHoveredId = id;
         },
