@@ -5,7 +5,6 @@ import taskbarPng from './assets/taskbar.png';
 import Filesystem from "./filesystem";
 import createMainMenu from "./menu";
 import createTray, {setTrayIconActive, setTrayIconIdle} from "./tray";
-import timer from "../renderer/Timer";
 
 const {format} = require('url');
 
@@ -137,7 +136,7 @@ app.on('ready', async () => {
     mainWindow.on('session-end', () => {
         console.log('session-end');
         // Windows only event
-        timer.stop();
+        mainWindow.webContents.send('timer-stop');
     });
 });
 

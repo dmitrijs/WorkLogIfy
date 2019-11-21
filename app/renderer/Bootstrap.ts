@@ -43,3 +43,9 @@ window.ipc.on('user-is-idle', function (emitter, secondsIdle, secondsToBecomeIdl
         window.ipc.send('show.error', "Timer stopped", `Timer stopped because of inactivity.`);
     }
 });
+
+window.ipc.on('timer-stop', function (emitter, secondsIdle, secondsToBecomeIdle) {
+    if (timer.isActive()) {
+        timer.stop();
+    }
+});
