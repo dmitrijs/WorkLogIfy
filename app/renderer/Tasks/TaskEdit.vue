@@ -1,7 +1,7 @@
 <template>
     <div class="TaskEdit" :data-mode="mode">
         <div class="text-right">
-            <button class="btn btn-secondary btn-sm" @click="$store.commit('setScreen', 'tasks')">&lt; back</button>
+            <button class="btn btn-secondary btn-sm" @click="back">&lt; back</button>
         </div>
         <br/>
 
@@ -9,7 +9,7 @@
             <table style="width: 100%;">
                 <tr>
                     <td width="100">Code:</td>
-                    <td><input type="text" placeholder="TSKS-0000" v-model="task.code" ref="task_code" /></td>
+                    <td><input type="text" placeholder="TSKS-0000" v-model="task.code" ref="task_code"/></td>
                 </tr>
                 <tr>
                     <td>Title:</td>
@@ -33,7 +33,9 @@
                     <td><textarea v-model="task.notes"></textarea></td>
                 </tr>
                 <tr>
-                    <td colspan="2" class="text-right"><button class="btn btn-secondary btn-sm">{{ mode === 'edit' ? 'update' : 'create' }}</button></td>
+                    <td colspan="2" class="text-right">
+                        <button class="btn btn-secondary btn-sm">{{ mode === 'edit' ? 'update' : 'create' }}</button>
+                    </td>
                 </tr>
                 <tr>
                     <td>Sessions:</td>
@@ -52,14 +54,12 @@
     import Vue from "vue";
     import Component from "vue-class-component";
     import {now, timespanToText} from "../Utils/Utils";
+    import {Prop} from "vue-property-decorator";
+    import store from "../Store/Store";
 
     const moment = require("moment");
 
-    @Component({
-        props: {
-            mode: String,
-        },
-    })
+    @Component({})
     export default class TaskEdit extends Vue {
         task = {
             code: '',
@@ -68,8 +68,10 @@
             date: '',
         };
 
+        @Prop({type: String}) mode;
+
         get editedTask() {
-            return this.$store.getters.getEditedTask.toJS();
+            return store.getters.getEditedTask.toJS();
         }
 
         get task_time_spent_text() {
@@ -91,10 +93,14 @@
 
         save() {
             if (this.mode === 'edit') {
-                this.$store.commit('saveTask', this.task);
+                store.commit.saveTask(this.task);
             } else {
-                this.$store.commit('createTask', this.task);
+                store.commit.createTask(this.task);
             }
+        }
+
+        back() {
+            store.commit.setScreen('tasks');
         }
 
         formatSession(sess) {

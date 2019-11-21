@@ -2,7 +2,7 @@
     <div class="TasksWindow">
         <div class="TRow --header">
             <div class="TCol --selected">
-                <div class="label-checkbox" @click="$store.commit('tasksUiToggle', task._key)">
+                <div class="label-checkbox" @click="store.commit.tasksUiToggle(task.id)">
                     <input type="checkbox"><span></span></div>
             </div>
             <div class="TCol --chargeable"><i class="icofont-not-allowed"></i></div>
@@ -25,22 +25,22 @@
 
                 <div class="TRow"
                      v-for="task of group.tasks"
-                     @mouseenter="$store.commit('tasksUiHoveredId', task._key)"
-                     :class="{ selected: task._selected, logged: task.logged, hovered: tasks_ui.hoveredId === task._key, timered: tasks_ui.timeredId === task._key, distributed: task.distributed, notchargeable: !task.chargeable }"
+                     @mouseenter="$store.direct.commit.tasksUiHoveredId(task.id)"
+                     :class="{ selected: task._selected, logged: task.logged, hovered: tasks_ui.hoveredId === task.id, timered: tasks_ui.timeredId === task.id, distributed: task.distributed, notchargeable: !task.chargeable }"
                      @click="rowOnClick($event, task)"
                 >
                     <div class="TCol --selected">
-                        <div class="label-checkbox" @click="$store.commit('tasksUiToggle', task._key)">
+                        <div class="label-checkbox" @click="$store.direct.commit.tasksUiToggle(task.id)">
                             <input type="checkbox" :checked="task._selected"><span></span></div>
                     </div>
                     <div class="TCol --chargeable">
-                        <i class="IconAsInput icofont-not-allowed" :class="{ active: !task.chargeable }" @click="$store.commit('updateTask', [task._key, 'chargeable', !task.chargeable])"></i>
+                        <i class="IconAsInput icofont-not-allowed" :class="{ active: !task.chargeable }" @click="$store.direct.commit.updateTask([task.id, 'chargeable', !task.chargeable])"></i>
                     </div>
                     <div class="TCol --distributed">
-                        <i class="IconAsInput icofont-exchange" :class="{ active: task.distributed }" @click="$store.commit('updateTask', [task._key, 'distributed', !task.distributed])"></i>
+                        <i class="IconAsInput icofont-exchange" :class="{ active: task.distributed }" @click="$store.direct.commit.updateTask([task.id, 'distributed', !task.distributed])"></i>
                     </div>
                     <div class="TCol --frozen">
-                        <i class="IconAsInput icofont-unlock" :class="{ active: task.frozen }" @click="$store.commit('updateTask', [task._key, 'frozen', !task.frozen])"></i>
+                        <i class="IconAsInput icofont-unlock" :class="{ active: task.frozen }" @click="$store.direct.commit.updateTask([task.id, 'frozen', !task.frozen])"></i>
                     </div>
                     <div class="TCol --time"></div>
                     <div class="TCol --code" @click="editTask($event, task)">{{task.code}}</div>
@@ -51,7 +51,7 @@
                     <div class="TCol --timespan" @click="editTask($event, task)">
                         <span class="--timespan-charge" title="Charge">
                             {{task.time_charge_text}}
-                            <em v-if="tasks_ui.timeredId === task._key">{{ tasks_ui.timerElapsedText }}</em>
+                            <em v-if="tasks_ui.timeredId === task.id">{{ tasks_ui.timerElapsedText }}</em>
                         </span>
                         <span class="--timespan-spent" title="Spent">{{task.time_spent_text}}</span>
                     </div>
@@ -90,6 +90,7 @@
     import Component from "vue-class-component";
     import horizontal_scroller from "../library/horizontal_scroller";
     import menu from './TasksMenu';
+    import store from "../Store/Store";
 
     @Component({})
     export default class TasksWindow extends Vue {
@@ -98,11 +99,11 @@
         }
 
         get tasksGrouped() {
-            return this.$store.getters.getTasksGrouped;
+            return store.getters.getTasksGrouped;
         }
 
         get tasks_ui() {
-            return this.$store.getters.getTasksUi;
+            return store.getters.getTasksUi;
         }
 
         created() {
@@ -124,19 +125,19 @@
 
         contextMenuShow(e) {
             console.log('in context menu');
-            this.$store.commit('selectHovered');
+            store.commit.selectHovered();
             e.preventDefault();
             menu.popup({window: remote.getCurrentWindow()})
         }
 
         rowOnClick($event, task) {
             if ($event.ctrlKey) {
-                this.$store.commit('tasksUiToggle', task._key);
+                store.commit.tasksUiToggle(task.id);
             }
         }
 
         editTask($event, task) {
-            this.$store.commit('taskEdit', task._key);
+            store.commit.taskEdit(task.id);
         }
     }
 </script>

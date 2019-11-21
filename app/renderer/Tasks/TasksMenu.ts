@@ -24,7 +24,7 @@ menu.append(new MenuItem({
 menu.append(new MenuItem({type: 'separator'}));
 menu.append(new MenuItem({
     label: 'Delete', click() {
-        store.commit('deleteSelected');
+        store.commit.deleteSelected();
     },
 }));
 

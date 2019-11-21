@@ -1,15 +1,16 @@
 import Vue from 'vue'
-import Vuex from 'vuex'
+import Vuex, {Store} from 'vuex'
 import {timespanToText} from './../Utils/Utils';
 import {List, Map} from 'immutable';
 import Store_GetGroupedTasks from "./Store_GetGroupedTasks";
+import {createDirectStore} from "direct-vuex";
 
 const moment = require("moment");
 
 Vue.use(Vuex);
 
-function saveTasks(state) {
-    window.ipc.sendSync('tasks.save', state.day_key, state.tasks.toJSON());
+function saveTasks(state:AppState) {
+    window.ipc.sendSync('tasks.save', state.day_key, state.tasks.toJS());
 }
 
 function addSession(tasks, task_id, spentSeconds, method, idleSeconds = 0) {
@@ -23,27 +24,29 @@ function addSession(tasks, task_id, spentSeconds, method, idleSeconds = 0) {
     return tasks.setIn([task_id, 'sessions'], sessions);
 }
 
-const store = new Vuex.Store({
-    state: {
-        tasks: null,
+const state = {
+    tasks: null as Map<string, Map<string, any>>,
 
-        tasksSelectedIds: Map<Number, Boolean>({}),
-        tasksHoveredId: null,
-        taskEditedId: null,
-        taskTimeredId: null,
-        timerElapsedText: null,
-        timerElapsed: 0,
-        screen: 'tasks',
-        is_debug: true,
-        day_key: '',
-        allFiles: [],
-    },
+    tasksSelectedIds: Map<string, Boolean>({}),
+    tasksHoveredId: null,
+    taskEditedId: null,
+    taskTimeredId: null,
+    timerElapsedText: null,
+    timerElapsed: 0,
+    screen: 'tasks',
+    is_debug: true,
+    day_key: '',
+    allFiles: [],
+};
+
+const {store} = createDirectStore({
+    state: state,
     getters: {
-        getTasksGrouped(state) {
+        getTasksGrouped(state:AppState) {
             return Store_GetGroupedTasks(state);
         },
 
-        getTasksUi(state) {
+        getTasksUi(state:AppState) {
             return {
                 selectedIds: state.tasksSelectedIds,
                 hoveredId: state.tasksHoveredId,
@@ -56,19 +59,19 @@ const store = new Vuex.Store({
             }
         },
 
-        getEditedTask(state) {
+        getEditedTask(state:AppState) {
             console.log('getEditedTask', state.taskEditedId);
             return state.tasks.get(state.taskEditedId);
         },
 
-        getAllFiles(state) {
+        getAllFiles(state:AppState) {
             return state.allFiles;
         },
     },
 
     mutations: {
-        loadTasks(state, js_tasks) {
-            let tasks = Map();
+        loadTasks(state:AppState, js_tasks) {
+            let tasks = Map<string, Map<string, any>>();
 
             if (typeof js_tasks === 'object') {
                 let keys = Object.keys(js_tasks);
@@ -76,7 +79,7 @@ const store = new Vuex.Store({
                 for (let key of keys) {
                     let js_task = js_tasks[key];
 
-                    let task = Map(js_task);
+                    let task = Map<string, any>(js_task);
                     task = task.set('sessions', List(task.get('sessions')));
 
                     tasks = tasks.set(key, task);
@@ -86,7 +89,8 @@ const store = new Vuex.Store({
             state.tasks = tasks;
         },
 
-        tasksUiHoveredId(state, id) {
+        tasksUiHoveredId(state:AppState, id) {
+            console.log('state.tasksHoveredId = ', id);
             state.tasksHoveredId = id;
         },
         // tasksUiSelect(state, id) {
@@ -95,7 +99,7 @@ const store = new Vuex.Store({
         // tasksUiDeselect(state, id) {
         //     delete state.tasksSelectedIds[id];
         // },
-        tasksUiToggle(state, id) {
+        tasksUiToggle(state:AppState, id) {
             console.log(id);
             if (state.tasksSelectedIds.get(id)) {
                 state.tasksSelectedIds = state.tasksSelectedIds.delete(id);
@@ -103,7 +107,7 @@ const store = new Vuex.Store({
                 state.tasksSelectedIds = state.tasksSelectedIds.set(id, true);
             }
         },
-        createTask(state, task) {
+        createTask(state:AppState, task) {
             const id = 'task_' + moment.utc();
             state.tasks = state.tasks.set(id, Map({
                 id: id,
@@ -130,7 +134,7 @@ const store = new Vuex.Store({
 
             saveTasks(state);
         },
-        saveTask(state, task) {
+        saveTask(state:AppState, task) {
             console.log('save', task);
 
             state.tasks = state.tasks.setIn([task.id, 'code'], task.code);
@@ -150,24 +154,24 @@ const store = new Vuex.Store({
             console.log(state.tasks.toJS());
             saveTasks(state);
         },
-        updateTask(state, [task_id, field, value]) {
+        updateTask(state:AppState, [task_id, field, value]) {
             console.log(state.tasks.get(task_id));
             state.tasks = state.tasks.setIn([task_id, field], value);
             console.log(state.tasks.toJS());
 
             saveTasks(state);
         },
-        setScreen(state, screen) {
+        setScreen(state:AppState, screen) {
             state.screen = screen;
         },
-        toggleDebug(state) {
+        toggleDebug(state:AppState) {
             state.is_debug = !state.is_debug;
         },
-        taskEdit(state, key) {
-            state.screen = 'task.edit';
+        taskEdit(state:AppState, key) {
             state.taskEditedId = key;
+            state.screen = 'task.edit';
         },
-        setDay(state, day) {
+        setDay(state:AppState, day:string) {
             if (state.taskTimeredId) {
                 alert('Cannot change date if ome task is active.');
                 return;
@@ -176,13 +180,13 @@ const store = new Vuex.Store({
             let tasks = window.ipc.sendSync('tasks.load', state.day_key);
             this.commit('loadTasks', tasks);
         },
-        selectHovered(state) {
+        selectHovered(state:AppState) {
             if (!state.tasksHoveredId) {
                 return;
             }
             state.tasksSelectedIds = state.tasksSelectedIds.set(state.tasksHoveredId, true);
         },
-        deleteSelected(state) {
+        deleteSelected(state:AppState) {
             console.log('state.tasksSelectedIds.size', state.tasksSelectedIds.size);
             if (!state.tasksSelectedIds.size) {
                 return;
@@ -199,18 +203,18 @@ const store = new Vuex.Store({
 
             saveTasks(state);
         },
-        activateTimer(state) {
+        activateTimer(state:AppState) {
             state.taskTimeredId = state.tasksHoveredId;
             state.tasksSelectedIds = Map();
         },
-        activeTimer(state, secondsElapsed) {
+        activeTimer(state:AppState, secondsElapsed) {
             state.timerElapsedText = '+' + timespanToText(secondsElapsed, '+');
             state.timerElapsed = secondsElapsed;
         },
-        setAllFiles(state, allFiles) {
+        setAllFiles(state:AppState, allFiles) {
             state.allFiles = allFiles;
         },
-        stopTimer(state, [secondsElapsed, secondsIdle]) {
+        stopTimer(state:AppState, [secondsElapsed, secondsIdle]) {
             console.log('secondsElapsed', secondsElapsed, 'secondsIdle', secondsIdle);
 
             state.tasks = addSession(state.tasks, state.taskTimeredId, secondsElapsed, 'timer', secondsIdle);
@@ -219,8 +223,21 @@ const store = new Vuex.Store({
             state.timerElapsedText = '';
             state.timerElapsed = 0;
             state.taskTimeredId = null;
+
+            saveTasks(state);
         },
     },
 });
 
+// Export the direct-store instead of the classic Vuex store.
 export default store;
+
+// The following lines enable types in the injected store '$store'.
+export type AppStore = typeof store;
+export type AppState = typeof state;
+
+declare module "vuex" {
+    interface Store<S> {
+        direct: AppStore,
+    }
+}

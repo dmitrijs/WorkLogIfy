@@ -11,8 +11,6 @@
 <script type="ts">
     import Vue from "vue";
     import Component from "vue-class-component";
-    import horizontal_scroller from "../library/horizontal_scroller";
-    import menu from './TasksMenu';
     import store from "../Store/Store";
 
     @Component({})
@@ -22,12 +20,12 @@
         }
 
         get allFiles() {
-            return this.$store.getters.getAllFiles;
+            return store.getters.getAllFiles;
         }
 
         open(day) {
-            store.commit('setDay', day);
-            store.commit('setScreen', 'tasks');
+            store.commit.setDay(day);
+            store.commit.setScreen('tasks');
         }
     }
 </script>

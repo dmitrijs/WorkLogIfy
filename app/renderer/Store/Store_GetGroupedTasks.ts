@@ -1,5 +1,6 @@
 import {List, Map} from "immutable";
 import {comparatorLt, timespanToText} from "../Utils/Utils";
+import {AppState} from "./Store";
 
 export function sort_tasks(tasks) {
     return tasks.sort((task1, task2) => {
@@ -17,11 +18,11 @@ export function sort_tasks(tasks) {
     });
 }
 
-export default function Store_GetGroupedTasks(state) {
+export default function Store_GetGroupedTasks(state:AppState) {
     console.log('getTasksGrouped');
     // populate time charge
     let result;
-    result = List<Task>();
+    result = List();
 
     if (!state.tasks) {
         return result;
@@ -35,7 +36,7 @@ export default function Store_GetGroupedTasks(state) {
 
         (<any>task).time_charge_text = 'error';
 
-        let spentSeconds = task.sessions.reduce((sum, obj) => sum + obj.spent_seconds, 0);
+        let spentSeconds = (<any>task).sessions.reduce((sum, obj) => sum + obj.spent_seconds, 0);
 
         (<any>task).time_spent_seconds = spentSeconds;
         (<any>task).time_spent_text = timespanToText(spentSeconds);

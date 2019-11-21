@@ -16,18 +16,18 @@ declare global {
 
 const moment = require("moment");
 
-Vue.prototype.$store = store;
-store.commit('setDay', moment().format("YYYY-MM-DD"));
+Vue.prototype.$store = store.original;
+store.commit.setDay(moment().format("YYYY-MM-DD"));
 
 let allFiles = window.ipc.sendSync('tasks.allfiles');
-store.commit('setAllFiles', allFiles);
+store.commit.setAllFiles(allFiles);
 
 window.ipc.on('change.screen', function ($event, where) {
-    store.commit('setScreen', where);
+    store.commit.setScreen(where);
 });
 
 window.ipc.on('debug.toggle', function ($event) {
-    store.commit('toggleDebug');
+    store.commit.toggleDebug();
 });
 
 const {app} = remote;

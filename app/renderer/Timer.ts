@@ -2,8 +2,6 @@ import store from "./Store/Store";
 
 const moment = require("moment");
 
-const remote = window.remote;
-
 class Timer {
 
     handle: any = 0;
@@ -18,7 +16,7 @@ class Timer {
         window.ipc.send('timer-state', 'active');
         if (!this.handle) {
             this.timeStart = moment.utc();
-            store.commit('activateTimer');
+            store.commit.activateTimer();
 
             this.handle = setInterval(this.tick.bind(this), 1000);
             this.tick();
@@ -26,7 +24,7 @@ class Timer {
     }
 
     tick() {
-        store.commit('activeTimer', this.getSecondsElapsed(moment.utc()));
+        store.commit.activeTimer(this.getSecondsElapsed(moment.utc()));
 
         console.log('timer tick');
     }
@@ -35,7 +33,7 @@ class Timer {
         window.ipc.send('timer-state', 'stopped');
         if (this.handle) {
             this.timeEnd = moment.utc();
-            store.commit('stopTimer', [this.getSecondsElapsed(this.timeEnd), idleSeconds * (store.state.is_debug ? 60 : 1)]);
+            store.commit.stopTimer([this.getSecondsElapsed(this.timeEnd), idleSeconds * (store.state.is_debug ? 60 : 1)]);
 
             clearInterval(this.handle);
             this.handle = 0;

@@ -29,6 +29,7 @@
     import TaskEdit from "./Tasks/TaskEdit.vue";
     import timer from "./Timer";
     import CalendarWindow from "./Tasks/CalendarWindow.vue";
+    import store from "./Store/Store";
 
     @Component({
         components: {
@@ -40,15 +41,15 @@
     })
     export default class App extends Vue {
         get tasksGrouped() {
-            return this.$store.getters.getTasksGrouped;
+            return store.getters.getTasksGrouped;
         }
 
         get tasks_ui() {
-            return this.$store.getters.getTasksUi;
+            return store.getters.getTasksUi;
         }
 
         save() {
-            window.ipc.sendSync('tasks.save', this.$store.state.day_key, this.$store.state.tasks.toJSON());
+            window.ipc.sendSync('tasks.save', store.state.day_key, store.state.tasks.toJS());
         }
 
         timerStop() {
