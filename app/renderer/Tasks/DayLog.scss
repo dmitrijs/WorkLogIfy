@@ -1,0 +1,29 @@
+.TRow {
+    clear: both;
+
+    padding: 5px 3px;
+
+    .Code {
+        float: left;
+
+        .Code--Content {
+            cursor: pointer;
+        }
+    }
+
+    .Description {
+        padding-left: 100px;
+
+        .Title--Content {
+            opacity: 0.5;
+        }
+
+        .Note--Content {
+            cursor: pointer;
+        }
+    }
+
+    &:hover {
+        background: #f1f1f1;
+    }
+}

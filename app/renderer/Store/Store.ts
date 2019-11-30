@@ -30,14 +30,16 @@ const state = {
     tasksSelectedIds: Map<string, Boolean>({}),
     tasksHoveredId: null,
     taskEditedId: null,
+    tasksScreen: 'tasks',
     taskTimeredId: null,
     timerElapsedText: null,
     timerElapsed: 0,
-    screen: 'tasks',
+    screen: null,
     is_debug: true,
     day_key: '',
     allFiles: [],
 };
+state.screen = state.tasksScreen;
 
 const {store} = createDirectStore({
     state: state,
@@ -130,7 +132,7 @@ const {store} = createDirectStore({
 
             console.log(state.tasks.toJS());
 
-            state.screen = 'tasks';
+            state.screen = state.tasksScreen;
 
             saveTasks(state);
         },
@@ -149,7 +151,7 @@ const {store} = createDirectStore({
             }
 
             state.taskEditedId = null;
-            state.screen = 'tasks';
+            state.screen = state.tasksScreen;
 
             console.log(state.tasks.toJS());
             saveTasks(state);
@@ -163,6 +165,12 @@ const {store} = createDirectStore({
         },
         setScreen(state:AppState, screen) {
             state.screen = screen;
+            if (screen === 'tasks' || screen === 'DayLog') {
+                state.tasksScreen = screen;
+            }
+        },
+        returnToTasksScreen(state:AppState) {
+            state.screen = state.tasksScreen;
         },
         toggleDebug(state:AppState) {
             state.is_debug = !state.is_debug;

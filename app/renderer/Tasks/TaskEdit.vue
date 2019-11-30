@@ -100,7 +100,7 @@
         }
 
         back() {
-            store.commit.setScreen('tasks');
+            store.commit.returnToTasksScreen();
         }
 
         formatSession(sess) {
