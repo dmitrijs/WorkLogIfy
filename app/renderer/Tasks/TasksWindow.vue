@@ -19,7 +19,10 @@
                     <div class="TCol --selected"></div>
                     <div class="TCol --frozen"><i class="IconAsInput icofont-wall-clock" :class="{ active: group.logged }"></i></div>
                     <div class="TCol --group-date">{{ date }}</div>
-                    <div class="TCol --timespan --timespan-charge" title="Charge">{{ group.time_charge_text }}</div>
+                    <div class="TCol --timespan --timespan-charge" title="Charge">
+                        {{ group.time_charge_rounded_text }}
+                        <span class="original-time">({{ group.time_charge_text }})</span>
+                    </div>
                     <div class="TCol --timespan --timespan-spent" title="Spent">{{ group.time_spent_text }}</div>
                 </div>
 

@@ -18,7 +18,7 @@ export function sort_tasks(tasks) {
     });
 }
 
-export default function Store_GetGroupedTasks(state:AppState) {
+export default function Store_GetGroupedTasks(state: AppState) {
     console.log('getTasksGrouped');
     // populate time charge
     let result;
@@ -115,7 +115,50 @@ export default function Store_GetGroupedTasks(state:AppState) {
             return task;
         });
 
-        return group.set('tasks', tasks);
+        let chargest_task_seconds = 100000000;
+        let chargest_task_id = null;
+
+        // round times
+        let time_charge_rounded_seconds = 0;
+        tasks = tasks.map((task) => {
+            let timeBlockLengthSeconds = 60 * 10;
+            let blockCount = Math.round(task.time_charge_seconds / timeBlockLengthSeconds);
+            task.time_charge_seconds = blockCount * timeBlockLengthSeconds;
+            (<any>task).time_charge_text = timespanToText(task.time_charge_seconds);
+
+            if (task.time_charge_seconds > 0 && task.time_charge_seconds < chargest_task_seconds) {
+                chargest_task_seconds = task.time_charge_seconds;
+                chargest_task_id = task.id;
+            }
+            time_charge_rounded_seconds += task.time_charge_seconds;
+            return task;
+        });
+        console.log('chargest_task_id', chargest_task_id);
+        {
+            let secondsMissing = parseInt(group.get('time_charge_seconds')) - time_charge_rounded_seconds;
+            let microTimeBlockSeconds = 60 * 5;
+            let blockCount = Math.round((secondsMissing + 60) / microTimeBlockSeconds);
+            let secondsMissingRounded = blockCount * microTimeBlockSeconds;
+
+            console.log('minutesMissing', secondsMissing / 60);
+            console.log('minutesMissingRounded', secondsMissingRounded / 60);
+
+            if (Math.abs(secondsMissing) > 60) {
+                tasks.map((task) => {
+                    if (task.id === chargest_task_id) {
+                        time_charge_rounded_seconds += secondsMissingRounded;
+                        task.time_charge_seconds += secondsMissingRounded;
+                        task.time_charge_text = timespanToText(task.time_charge_seconds);
+                    }
+                    return task;
+                });
+            }
+        }
+
+        group = group.set('tasks', tasks);
+        group = group.set('time_charge_rounded_seconds', time_charge_rounded_seconds);
+        group = group.set('time_charge_rounded_text', timespanToText(time_charge_rounded_seconds));
+        return group;
     });
 
     console.log(result.toJS());

@@ -92,15 +92,8 @@ const {store} = createDirectStore({
         },
 
         tasksUiHoveredId(state:AppState, id:string) {
-            console.log('state.tasksHoveredId = ', id);
             state.tasksHoveredId = id;
         },
-        // tasksUiSelect(state, id) {
-        //     state.tasksSelectedIds[id] = true;
-        // },
-        // tasksUiDeselect(state, id) {
-        //     delete state.tasksSelectedIds[id];
-        // },
         tasksUiToggle(state:AppState, id) {
             console.log(id);
             if (state.tasksSelectedIds.get(id)) {

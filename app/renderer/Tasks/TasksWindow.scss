@@ -93,7 +93,7 @@
 
     .TRowDate {
         display: grid;
-        grid-template-columns: 22px 22px 1fr 63px 63px;
+        grid-template-columns: 22px 22px 1fr 114px 63px;
         grid-template-rows: auto;
 
         padding: 2px 0px;
@@ -114,6 +114,11 @@
                     background: #b8c1f1;
                     top: 9px;
                     right: 5px;
+                }
+            }
+            &.--timespan-charge {
+                .original-time {
+                    opacity: 0.5;
                 }
             }
             &.--timespan-spent {
