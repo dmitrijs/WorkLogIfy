@@ -39,7 +39,12 @@ export default function Store_GetGroupedTasks(state: AppState) {
         let spentSeconds = (<any>task).sessions.reduce((sum, obj) => sum + obj.spent_seconds, 0);
 
         (<any>task).time_spent_seconds = spentSeconds;
-        (<any>task).time_spent_text = timespanToText(spentSeconds);
+        if (state.taskTimeredId === task.id) {
+            (<any>task).time_spent_seconds += state.timerElapsed;
+            (<any>task).timer_elapsed_seconds_text = timespanToText(state.timerElapsed);
+        }
+
+        (<any>task).time_spent_text = timespanToText((<any>task).time_spent_seconds);
         result = result.push(task);
     });
 
@@ -69,9 +74,6 @@ export default function Store_GetGroupedTasks(state: AppState) {
                 }
             }
         });
-
-        spent += state.timerElapsed;
-        charge += state.timerElapsed;
 
         tasks = sort_tasks(tasks);
 

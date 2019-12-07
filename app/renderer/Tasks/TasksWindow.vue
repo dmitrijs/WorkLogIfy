@@ -54,9 +54,10 @@
                     <div class="TCol --timespan" @click="editTask($event, task)">
                         <span class="--timespan-charge" title="Charge">
                             {{task.time_charge_text}}
-                            <em v-if="tasks_ui.timeredId === task.id">{{ tasks_ui.timerElapsedText }}</em>
                         </span>
-                        <span class="--timespan-spent" title="Spent">{{task.time_spent_text}}</span>
+                        <span class="--timespan-spent" :title="'Spent' + (task.timer_elapsed_seconds_text ? ' ('+task.timer_elapsed_seconds_text+' timer)' : '')">
+                            {{task.time_spent_text}}<em v-if="tasks_ui.timeredId === task.id">+</em>
+                        </span>
                     </div>
                 </div>
             </template>
