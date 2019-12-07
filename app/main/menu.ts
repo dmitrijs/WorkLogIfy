@@ -14,15 +14,21 @@ export function toggleDebug(mainWindow) {
 export default function createMainMenu(mainWindow) {
     return Menu.buildFromTemplate([
         {
-            label: 'List', click: function () {
+            label: 'New', click: function () {
+                mainWindow.show();
+                mainWindow.webContents.send('change.screen', 'task.new');
+            }
+        },
+        {
+            label: 'List (active)', click: function () {
                 mainWindow.show();
                 mainWindow.webContents.send('change.screen', 'tasks');
             }
         },
         {
-            label: 'New', click: function () {
+            label: 'List (report)', click: function () {
                 mainWindow.show();
-                mainWindow.webContents.send('change.screen', 'task.new');
+                mainWindow.webContents.send('change.screen', 'DayLog');
             }
         },
         {
@@ -32,20 +38,19 @@ export default function createMainMenu(mainWindow) {
             }
         },
         {
-            label: 'DayLog', click: function () {
-                mainWindow.show();
-                mainWindow.webContents.send('change.screen', 'DayLog');
-            }
-        },
-        {
-            label: 'Toggle Debug', click: function () {
-                toggleDebug(mainWindow);
-            }
-        },
-        {
-            label: 'Dev Tools', click: function () {
-                mainWindow.openDevTools();
-            }
+            label: '...',
+            submenu: [
+                {
+                    label: 'Toggle Debug', click: function () {
+                        toggleDebug(mainWindow);
+                    }
+                },
+                {
+                    label: 'Dev Tools', click: function () {
+                        mainWindow.openDevTools();
+                    }
+                },
+            ],
         },
     ]);
 }
