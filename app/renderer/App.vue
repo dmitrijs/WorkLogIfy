@@ -16,7 +16,20 @@
             Timer
             <button type="button" @click="timerStop" :disabled="!tasks_ui.timeredId">stop</button>
             <hr/>
-            {{ tasksGrouped }}
+            <div v-for="(day, dayId) of tasksGrouped">
+                <strong>{{dayId}}</strong><br />
+                <div v-for="(val, prop) of day">
+                    <template v-if="prop === 'tasks'">
+                        <div style="padding-left: 10px;" v-for="(task) of val">
+                            <strong>{{task.id}}</strong>
+                            {{task}}
+                        </div>
+                    </template>
+                    <div v-else>
+                        <em>{{prop}}</em>: {{val}}
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </template>
