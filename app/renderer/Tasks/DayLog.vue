@@ -3,8 +3,8 @@
         <template v-for="(group, date) of tasksGrouped">
             <div>
                 Date: {{ date }} -
-                <span title="Charge">{{ group.time_charge_text }} chargeable</span>
-                <span title="Spent">({{ group.time_spent_text }} total)</span>
+                <span title="Charge">{{ group.time_charge_rounded_text }} ({{ group.time_charge_text }}) to charge, </span>
+                <span title="Spent">{{ group.time_spent_text }} total</span>
             </div>
 
             <div class="TRow"
