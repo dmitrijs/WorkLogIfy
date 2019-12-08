@@ -1,10 +1,6 @@
 <template>
     <div class="TaskEdit" :data-mode="mode">
-        <div class="text-right">
-            <button class="btn btn-secondary btn-sm" @click="back">&lt; back</button>
-        </div>
         <br/>
-
         <form class="TaskEditForm" @submit.prevent="save">
             <table style="width: 100%;">
                 <tr>
@@ -34,7 +30,8 @@
                 </tr>
                 <tr>
                     <td colspan="2" class="text-right">
-                        <button class="btn btn-secondary btn-sm">{{ mode === 'edit' ? 'update' : 'create' }}</button>
+                        <button class="btn btn-secondary btn-sm" type="button" @click="back">&lt; back</button>
+                        <button class="btn btn-primary btn-sm">{{ mode === 'edit' ? 'update' : 'create' }}</button>
                     </td>
                 </tr>
                 <tr>
