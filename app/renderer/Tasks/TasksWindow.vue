@@ -56,8 +56,14 @@
                             {{task.time_charge_text}}
                         </span>
                         <span class="--timespan-spent" :title="'Spent' + (task.timer_elapsed_seconds_text ? ' ('+task.timer_elapsed_seconds_text+' timer)' : '')">
-                            {{task.time_spent_text}}<em v-if="tasks_ui.timeredId === task.id">+</em>
+                            {{task.time_spent_text}}<em v-if="">+</em>
                         </span>
+                    </div>
+                    <div class="TCol --playback">
+                        <i class="IconAsInput icofont-ui-play-stop" v-if="tasks_ui.timeredId === task.id"
+                           @click="stopTimer()"></i>
+                        <i class="IconAsInput icofont-ui-play" v-if="tasks_ui.timeredId === null"
+                           @click="startTimer($event, task)"></i>
                     </div>
                 </div>
             </template>
@@ -95,6 +101,7 @@
     import horizontal_scroller from "../library/horizontal_scroller";
     import menu from './TasksMenu';
     import store from "../Store/Store";
+    import timer from "../Timer";
 
     @Component({})
     export default class TasksWindow extends Vue {
@@ -142,6 +149,14 @@
 
         editTask($event, task) {
             store.commit.taskEdit(task.id);
+        }
+
+        startTimer($event, task) {
+            timer.start(task.id);
+        }
+
+        stopTimer() {
+            timer.stop();
         }
     }
 </script>

@@ -204,8 +204,11 @@ const {store} = createDirectStore({
 
             saveTasks(state);
         },
-        activateTimer(state:AppState) {
-            state.taskTimeredId = state.tasksHoveredId;
+        activateTimer(state:AppState, taskId) {
+            if (taskId === null) {
+                taskId = state.tasksHoveredId;
+            }
+            state.taskTimeredId = taskId;
             state.tasksSelectedIds = Map();
         },
         activeTimer(state:AppState, secondsElapsed) {

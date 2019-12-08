@@ -12,7 +12,7 @@
 & {
     .TRow {
         display: grid;
-        grid-template-columns: 22px 22px 22px 22px 38px 73px 1fr 63px;
+        grid-template-columns: 22px 22px 22px 22px 38px 73px 1fr 63px 22px;
         grid-template-rows: auto;
 
         &.--header {
@@ -57,6 +57,13 @@
                     display: block;
                 }
             }
+            &.--playback {
+                align-self: center;
+
+                .IconAsInput {
+                    display: none;
+                }
+            }
         }
 
         &.selected {
@@ -80,6 +87,10 @@
 
         &:hover {
             background-color: #f5f5f5;
+
+            .TCol.--playback .IconAsInput {
+                display: block;
+            }
         }
     }
 
@@ -93,7 +104,7 @@
 
     .TRowDate {
         display: grid;
-        grid-template-columns: 22px 22px 1fr 114px 63px;
+        grid-template-columns: 22px 22px 1fr 114px 63px 22px;
         grid-template-rows: auto;
 
         padding: 2px 0px;

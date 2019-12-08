@@ -12,11 +12,11 @@ class Timer {
         return !!this.handle;
     }
 
-    start() {
+    start(taskId = null) {
         window.ipc.send('timer-state', 'active');
         if (!this.handle) {
             this.timeStart = moment.utc();
-            store.commit.activateTimer();
+            store.commit.activateTimer(taskId);
 
             this.handle = setInterval(this.tick.bind(this), 1000);
             this.tick();
