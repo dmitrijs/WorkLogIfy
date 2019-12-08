@@ -117,9 +117,6 @@ export default function Store_GetGroupedTasks(state: AppState) {
             return task;
         });
 
-        let chargest_task_seconds = 100000000;
-        let chargest_task_id = null;
-
         // round times
         let time_charge_rounded_seconds = 0;
         tasks = tasks.map((task) => {
@@ -128,22 +125,28 @@ export default function Store_GetGroupedTasks(state: AppState) {
             task.time_charge_seconds = blockCount * timeBlockLengthSeconds;
             (<any>task).time_charge_text = timespanToText(task.time_charge_seconds);
 
-            if (task.time_charge_seconds > 0 && task.time_charge_seconds < chargest_task_seconds) {
-                chargest_task_seconds = task.time_charge_seconds;
-                chargest_task_id = task.id;
-            }
             time_charge_rounded_seconds += task.time_charge_seconds;
             return task;
         });
-        console.log('chargest_task_id', chargest_task_id);
         {
             let secondsMissing = parseInt(group.get('time_charge_seconds')) - time_charge_rounded_seconds;
             let microTimeBlockSeconds = 60 * 5;
             let blockCount = Math.round((secondsMissing + 60) / microTimeBlockSeconds);
             let secondsMissingRounded = blockCount * microTimeBlockSeconds;
-
             console.log('minutesMissing', secondsMissing / 60);
             console.log('minutesMissingRounded', secondsMissingRounded / 60);
+
+            // chargest task
+            let chargest_task_seconds = 100000000;
+            let chargest_task_id = null;
+
+            tasks.map((task) => {
+                if (task.time_charge_seconds + secondsMissingRounded > 0 && task.time_charge_seconds < chargest_task_seconds) {
+                    chargest_task_seconds = task.time_charge_seconds;
+                    chargest_task_id = task.id;
+                }
+            });
+            console.log('chargest_task_id', chargest_task_id);
 
             if (Math.abs(secondsMissing) > 60) {
                 tasks.map((task) => {
