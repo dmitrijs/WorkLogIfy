@@ -47,16 +47,17 @@ class Filesystem {
         fs.writeFileSync(dir + '/worklog-' + day_key + '.json', JSON.stringify(worklog));
 
         {
-            if (!worklogProcessed[day_key]) {
-                console.log('worklog_totals: no records for day', day_key);
-                return;
+            let time_charge_rounded_seconds = 0;
+            for (let group of Object.values(worklogProcessed)) {
+                time_charge_rounded_seconds += group.time_charge_rounded_seconds;
             }
+            console.log('worklog_totals: sum for', day_key, 'is', time_charge_rounded_seconds);
 
             let contents = this.getFileTotals();
             let day = contents[day_key] || {
                 time_charge_rounded_seconds: 0,
             };
-            day.time_charge_rounded_seconds = worklogProcessed[day_key].time_charge_rounded_seconds;
+            day.time_charge_rounded_seconds = time_charge_rounded_seconds;
             contents[day_key] = day;
             fs.writeFileSync(dir + '/worklog_totals.json', JSON.stringify(contents));
         }
