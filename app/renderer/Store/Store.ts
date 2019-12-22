@@ -10,7 +10,7 @@ const moment = require("moment");
 Vue.use(Vuex);
 
 function saveTasks(state:AppState) {
-    window.ipc.sendSync('tasks.save', state.day_key, state.tasks.toJS());
+    window.ipc.sendSync('tasks.save', state.day_key, state.tasks.toJS(), store.getters.getTasksGrouped);
 }
 
 function addSession(tasks, task_id, spentSeconds, method, idleSeconds = 0) {
@@ -38,6 +38,7 @@ const state = {
     is_debug: true,
     day_key: '',
     allFiles: [],
+    fileTotals: {},
 };
 state.screen = state.tasksScreen;
 
@@ -68,6 +69,10 @@ const {store} = createDirectStore({
 
         getAllFiles(state:AppState) {
             return state.allFiles;
+        },
+
+        getFileTotals(state:AppState) {
+            return state.fileTotals;
         },
     },
 
@@ -217,6 +222,9 @@ const {store} = createDirectStore({
         },
         setAllFiles(state:AppState, allFiles) {
             state.allFiles = allFiles;
+        },
+        setFileTotals(state:AppState, fileTotals) {
+            state.fileTotals = fileTotals;
         },
         stopTimer(state:AppState, [secondsElapsed, secondsIdle]) {
             console.log('secondsElapsed', secondsElapsed, 'secondsIdle', secondsIdle);

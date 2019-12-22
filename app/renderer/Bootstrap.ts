@@ -19,8 +19,9 @@ const moment = require("moment");
 Vue.prototype.$store = store.original;
 store.commit.setDay(moment().format("YYYY-MM-DD"));
 
-let allFiles = window.ipc.sendSync('tasks.allfiles');
-store.commit.setAllFiles(allFiles);
+store.commit.setAllFiles(window.ipc.sendSync('tasks.allfiles'));
+
+store.commit.setFileTotals(window.ipc.sendSync('tasks.getFileTotals'));
 
 window.ipc.on('change.screen', function ($event, where) {
     store.commit.setScreen(where);

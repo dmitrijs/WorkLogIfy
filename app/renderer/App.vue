@@ -62,7 +62,7 @@
         }
 
         save() {
-            window.ipc.sendSync('tasks.save', store.state.day_key, store.state.tasks.toJS());
+            window.ipc.sendSync('tasks.save', store.state.day_key, store.state.tasks.toJS(), store.getters.getTasksGrouped);
         }
 
         timerStop() {
