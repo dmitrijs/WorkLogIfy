@@ -56,7 +56,7 @@
                             {{task.time_charge_text}}
                         </span>
                         <span class="--timespan-spent" :title="'Spent' + (task.timer_elapsed_seconds_text ? ' ('+task.timer_elapsed_seconds_text+' timer)' : '')">
-                            {{task.time_spent_text}}<em v-if="">+</em>
+                            {{task.time_spent_text}}
                         </span>
                     </div>
                     <div class="TCol --playback">
