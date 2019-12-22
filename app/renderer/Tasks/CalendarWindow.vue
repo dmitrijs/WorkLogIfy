@@ -19,12 +19,15 @@
     import Vue from "vue";
     import Component from "vue-class-component";
     import store from "../Store/Store";
-    import {List} from "immutable";
-    import {comparatorGt, timespanToText} from "../Utils/Utils";
+    import {timespanToText} from "../Utils/Utils";
 
     const moment = require("moment");
 
-    @Component({})
+    @Component({
+        created() {
+            store.commit.setFileTotals(window.ipc.sendSync('tasks.getFileTotals'));
+        },
+    })
     export default class CalendarWindow extends Vue {
         get weeks() {
             let weeks = {};
@@ -85,7 +88,8 @@
 </script>
 
 <style scoped lang="scss">
-    .Weekend {
+    .Day:nth-child(6),
+    .Day:nth-child(7), { // weekend
         opacity: 0.3;
     }
 
