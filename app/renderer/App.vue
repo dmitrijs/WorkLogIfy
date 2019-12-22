@@ -54,7 +54,7 @@
     })
     export default class App extends Vue {
         get tasksGrouped() {
-            return store.getters.getTasksGrouped;
+            return store.getters.getTasksGrouped.toJS();
         }
 
         get tasks_ui() {
@@ -62,7 +62,7 @@
         }
 
         save() {
-            window.ipc.sendSync('tasks.save', store.state.day_key, store.state.tasks.toJS(), store.getters.getTasksGrouped);
+            window.ipc.sendSync('tasks.save', store.state.day_key, store.state.tasks.toJS(), store.getters.getTasksGrouped.toJS());
         }
 
         timerStop() {

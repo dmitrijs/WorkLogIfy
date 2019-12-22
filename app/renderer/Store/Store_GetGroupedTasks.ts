@@ -18,6 +18,52 @@ export function sort_tasks(tasks) {
     });
 }
 
+export function Store_MergeSameCodes(tasks: Map<string, any>) {
+    let unique = Map<string, any>();
+    tasks.map((js_task) => {
+        let task = Map<string, any>(js_task);
+        let existing = unique.get(task.get('code'));
+        if (!existing) {
+            unique = unique.set(task.get('code'), task);
+            return;
+        }
+
+        if (task.get('time_charge_seconds') <= 0) { // no action required
+            return;
+        }
+        if (existing.get('time_charge_seconds') <= 0) { // replace empty
+            unique = unique.set(task.get('code'), task);
+            return;
+        }
+
+        console.log(task.get('code'), 'Adding', task.get('time_charge_text'), 'to', existing.get('time_charge_text'));
+
+        existing = existing.set('time_charge_seconds', existing.get('time_charge_seconds') + task.get('time_charge_seconds'));
+        existing = existing.set('time_charge_text', timespanToText(existing.get('time_charge_seconds')));
+
+        let title = existing.get('title');
+        title += '; ' + task.get('title');
+        if (title.indexOf('[combined] ') !== 0) {
+            title = '[combined] ' + title;
+        }
+        existing = existing.set('title', title.trim());
+
+        let notes = existing.get('notes');
+        notes += '; ' + task.get('notes');
+        existing = existing.set('notes', notes.trim());
+
+        existing = existing.remove('id');
+
+        console.log('existing', existing.toJS());
+
+        unique = unique.set(task.get('code'), existing);
+    });
+
+    console.log('unique', unique.toJS());
+
+    return unique;
+}
+
 export default function Store_GetGroupedTasks(state: AppState) {
     console.log('getTasksGrouped');
     // populate time charge
@@ -167,5 +213,5 @@ export default function Store_GetGroupedTasks(state: AppState) {
     });
 
     console.log(result.toJS());
-    return result.toJS();
+    return result;
 }

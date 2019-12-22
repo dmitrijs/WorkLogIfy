@@ -10,7 +10,7 @@ const moment = require("moment");
 Vue.use(Vuex);
 
 function saveTasks(state:AppState) {
-    window.ipc.sendSync('tasks.save', state.day_key, state.tasks.toJS(), store.getters.getTasksGrouped);
+    window.ipc.sendSync('tasks.save', state.day_key, state.tasks.toJS(), store.getters.getTasksGrouped.toJS());
 }
 
 function addSession(tasks, task_id, spentSeconds, method, idleSeconds = 0) {

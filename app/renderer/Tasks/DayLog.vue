@@ -11,9 +11,9 @@
                  v-for="task of group.tasks"
                  v-show="task.chargeable && !task.distributed"
             >
-                <div class="Code">
+                <div class="Code" :class="{ combined: !task.id }">
                     <div class="Code--Content" @click="copyToClipboard($event, task.code)">{{task.code}}</div>
-                    <a href="#" @click.prevent="editTask($event, task)">edit</a>
+                    <a href="#" @click.prevent="editTask($event, task)" v-if="task.id">edit</a>
                 </div>
 
                 <div class="Description">
@@ -31,6 +31,8 @@
                 </div>
             </div>
         </template>
+
+        <button type="button" @click="combineSameCodes = !combineSameCodes">{{ combineSameCodes ? 'show original' : 'combine same codes' }}</button>
     </div>
 </template>
 
@@ -38,15 +40,26 @@
     import Vue from "vue";
     import Component from "vue-class-component";
     import store from "../Store/Store";
+    import {Store_MergeSameCodes} from "../Store/Store_GetGroupedTasks";
 
     @Component({})
     export default class DayLog extends Vue {
+        combineSameCodes = false;
+
         data() {
             return {}
         }
 
         get tasksGrouped() {
-            return store.getters.getTasksGrouped;
+            let groups = store.getters.getTasksGrouped;
+            let result = groups;
+            if (this.combineSameCodes) {
+                groups.map((group, group_id) => {
+                    let tasks = Store_MergeSameCodes(group.get('tasks'));
+                    result = result.setIn([group_id, 'tasks'], tasks);
+                });
+            }
+            return result.toJS();
         }
 
         copyToClipboard(ev, text) {
@@ -66,5 +79,9 @@
 <style scoped lang="scss">
     .DayLog {
         @import "./DayLog";
+
+        .Code.combined {
+            font-weight: bold;
+        }
     }
 </style>

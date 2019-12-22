@@ -110,7 +110,7 @@
         }
 
         get tasksGrouped() {
-            return store.getters.getTasksGrouped;
+            return store.getters.getTasksGrouped.toJS();
         }
 
         get tasks_ui() {
