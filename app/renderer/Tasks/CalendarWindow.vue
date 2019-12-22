@@ -12,15 +12,6 @@
                 <span class="WeekTimeCharged" v-if="week.week_charged">&Sigma; {{ week.week_charged_text }}</span>
             </div>
         </div>
-
-        <template v-for="(days) of filesByWeeks">
-            <template v-for="(day) of days">
-                <button @click="open(day.fn)" :class="{ Weekend: day.isWeekend }">
-                    <strong>{{ day.title }}</strong> {{day.suffix}}
-                </button>&nbsp;
-            </template>
-            <hr/>
-        </template>
     </div>
 </template>
 
@@ -84,38 +75,6 @@
             }
 
             return weeks;
-        }
-
-        get filesByWeeks() {
-            let fileNames = store.getters.getAllFiles;
-
-            let list = List();
-
-            for (let obj of fileNames) {
-                let fn = obj.key;
-                let day = moment(fn, 'YYYY-MM-DD');
-                let dowIso = parseInt(day.format("E"));
-
-                let suffix = "";
-                if (dowIso === 1 || dowIso === 5) {
-                    suffix = day.format("(MMM D)");
-                }
-                list = list.push({
-                    fn: fn,
-                    week: parseInt(day.format("W")),
-                    title: day.format('ddd'),
-                    suffix: suffix,
-                    isWeekend: (dowIso >= 6),
-                    counter: dowIso,
-                });
-            }
-
-            let map = list.groupBy((x) => x['week']);
-            map = map.map((list) => {
-                return list.sortBy((val) => val['counter'], comparatorGt);
-            });
-            map = map.toOrderedMap().sortBy((val, key) => -key);
-            return map.toList();
         }
 
         open(day) {
