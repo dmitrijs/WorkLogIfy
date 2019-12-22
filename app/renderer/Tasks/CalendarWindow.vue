@@ -136,8 +136,8 @@
                 border-color: #00c4ff;
             }
             &.is01 {
-                border-left-color: #8e8e8e;
-                border-bottom-color: #8e8e8e;
+                border-left-color: #8e8e8e !important;
+                border-bottom-color: #8e8e8e !important;
             }
 
             &.is_opened,
