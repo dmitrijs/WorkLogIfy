@@ -164,5 +164,17 @@
 <style scoped lang="scss">
     .TasksWindow {
         @import "./TasksWindow";
+
+        .TRow.distributed,
+        .TRow.notchargeable {
+            height: 18px;
+
+            .TCol {
+                .Note--Content,
+                .--timespan-spent {
+                    display: none;
+                }
+            }
+        }
     }
 </style>
