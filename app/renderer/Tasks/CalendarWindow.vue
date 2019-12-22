@@ -5,7 +5,8 @@
             <div v-for="(week, week_key) of weeks" class="Week" :data-week="week_key">
                 <div v-for="(day) of week.days" class="Day"
                      @click="open(day.dayCode)"
-                     :class="{ is_today: day.isToday, is_current_month: day.isCurrentMonth, is_opened: day.isOpened }">
+                     :title="day.dayCode"
+                     :class="{ is_today: day.isToday, is_current_month: day.isCurrentMonth, is_opened: day.isOpened, is01: day.isFirstDayOfTheMonth, is_weekend: day.isWeekend }">
                     <span class="DayTitle">{{ day.title }}</span>
                     <span class="TimeCharged">{{ day.charged_seconds_text }}</span>
                 </div>
@@ -48,12 +49,15 @@
 
                 {
                     let charged_seconds = (totals[dayCode] ? totals[dayCode].time_charge_rounded_seconds : 0);
+                    let dow = day.format('E');
 
                     this.$set(week, dayCode, {
                         dayCode: dayCode,
-                        title: day.format('MMM DD'),
+                        title: (day.format('DD') === '01' ? day.format('MMM DD') : day.format('DD')),
                         isOpened: (store.state.day_key === dayCode),
+                        isFirstDayOfTheMonth: (day.format('DD') === '01'),
                         isToday: (todayCode === dayCode),
+                        isWeekend: (dow >= 6),
                         isCurrentMonth: (currentMonthCode === day.format('YYYY-MM')),
                         charged_seconds: charged_seconds,
                         charged_seconds_text: timespanToText(charged_seconds, ''),
@@ -66,12 +70,14 @@
 
             for (let week_code of Object.keys(weeks)) {
                 let sumCharged = 0;
-                for (let day of Object.values(weeks[week_code])) {
-                    console.log(day);
+                let daysSorted = {};
+                for (let day_code of Object.keys(weeks[week_code]).reverse()) {
+                    let day = weeks[week_code][day_code];
                     sumCharged += day.charged_seconds;
+                    daysSorted[day_code] = day;
                 }
                 this.$set(weeks, week_code, {
-                    days: weeks[week_code],
+                    days: daysSorted,
                     week_charged: sumCharged,
                     week_charged_text: timespanToText(sumCharged, ''),
                 });
@@ -88,13 +94,8 @@
 </script>
 
 <style scoped lang="scss">
-    .Day:nth-child(6),
-    .Day:nth-child(7), { // weekend
-        opacity: 0.3;
-    }
-
     .CalendarWindow {
-        overflow-y: scroll;
+        overflow-y: auto;
         max-height: 100%;
 
         .Week {
@@ -108,7 +109,7 @@
         }
 
         .Day {
-            border: 1px solid #d8d8d8;
+            border: 1px solid #f5f5f5;
             width: 54px;
             height: 30px;
             padding: 0 3px;
@@ -117,12 +118,26 @@
 
             color: #a2a2a2;
 
+            &.is_weekend {
+                color: #d0d0d0;
+            }
+
             &.is_current_month {
                 color: black;
+                border: 1px solid #bdbdbd;
+
+                &.is_weekend {
+                    color: #9c9c9c;
+                    border-color: #e4e4e4;
+                }
             }
 
             &.is_today {
                 border-color: #00c4ff;
+            }
+            &.is01 {
+                border-left-color: #8e8e8e;
+                border-bottom-color: #8e8e8e;
             }
 
             &.is_opened,
