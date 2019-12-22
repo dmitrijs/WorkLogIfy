@@ -50,7 +50,7 @@
 <script type="ts">
     import Vue from "vue";
     import Component from "vue-class-component";
-    import {now, timespanToText} from "../Utils/Utils";
+    import {timespanToText} from "../Utils/Utils";
     import {Prop} from "vue-property-decorator";
     import store from "../Store/Store";
 
@@ -77,7 +77,7 @@
 
         created() {
             if (this.mode === 'new') {
-                this.task.date = now().format('YYYY-MM-DD');
+                this.task.date = store.state.day_key;
             } else {
                 this.task = this.editedTask;
             }
