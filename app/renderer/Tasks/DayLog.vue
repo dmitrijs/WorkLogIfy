@@ -9,7 +9,7 @@
 
             <div class="TRow"
                  v-for="task of group.tasks"
-                 v-show="task.chargeable && !task.distributed"
+                 v-show="task.time_charge_seconds > 0"
             >
                 <div class="Code" :class="{ combined: !task.id }">
                     <div class="Code--Content" @click="copyToClipboard($event, task.code)">{{task.code}}</div>
@@ -32,7 +32,12 @@
             </div>
         </template>
 
-        <button type="button" v-if="duplicatesExist" @click="combineSameCodes = !combineSameCodes">{{ combineSameCodes ? 'show original' : 'combine same codes' }}</button>
+        <div v-if="duplicatesExist">
+            <br />
+            <button type="button" class="btn btn-xs"
+                    :class="{ 'btn-secondary': combineSameCodes, 'btn-warning': !combineSameCodes}"
+                    @click="combineSameCodes = !combineSameCodes">{{ combineSameCodes ? 'show original' : 'combine same codes' }}</button>
+        </div>
     </div>
 </template>
 

@@ -26,55 +26,55 @@ export function sort_tasks(tasks) {
 
 export function Store_MergeSameCodes(tasks: Map<string, any>) {
     let unique = Map<string, any>();
-    tasks.map((js_task) => {
-        let task = Map<string, any>(js_task);
-        let existing = unique.get(task.get('code'));
+    tasks.map((task: TaskObj) => {
+        let existing = unique.get(task.code);
         if (!existing) {
-            unique = unique.set(task.get('code'), task);
+            unique = unique.set(task.code, {...task});
             return;
         }
 
-        if (task.get('time_charge_seconds') <= 0) { // no action required
+        if (task.time_charge_seconds <= 0) { // no action required
             return;
         }
-        if (existing.get('time_charge_seconds') <= 0) { // replace empty
-            unique = unique.set(task.get('code'), task);
+        if (existing.time_charge_seconds <= 0) { // replace empty
+            unique = unique.set(task.code, {...task});
             return;
         }
 
-        console.log(task.get('code'), 'Adding', task.get('time_charge_text'), 'to', existing.get('time_charge_text'));
+        console.log(task.code, 'Adding', task.time_charge_text, 'to', existing.time_charge_text);
 
-        existing = existing.set('time_charge_seconds', existing.get('time_charge_seconds') + task.get('time_charge_seconds'));
-        existing = existing.set('time_charge_text', timespanToText(existing.get('time_charge_seconds')));
+        existing.time_charge_seconds = existing.time_charge_seconds + task.time_charge_seconds;
+        existing.time_charge_text = timespanToText(existing.time_charge_seconds);
 
-        let title = existing.get('title');
-        if (task.get('title')) {
-            title += '; ' + task.get('title');
+        let title = existing.title;
+        if (task.title) {
+            title += '; ' + task.title;
         }
         if (title.indexOf('[combined] ') !== 0) {
             title = '[combined] ' + title;
         }
-        existing = existing.set('title', title.trim());
+        existing.title = title.trim();
 
-        let notes = existing.get('notes');
+        let notes = existing.notes;
         if (!notes) {
             notes = '';
         }
-        if (task.get('notes')) {
-            notes += '; ' + task.get('notes');
+        if (task.notes) {
+            notes += '; ' + task.notes;
         }
-        existing = existing.set('notes', notes.trim());
+        existing.notes = notes.trim();
 
-        existing = existing.remove('id');
+        delete existing.id;
 
-        console.log('existing', existing.toJS());
+        console.log('existing', existing);
 
-        unique = unique.set(task.get('code'), existing);
+        unique = unique.set(task.code, existing);
     });
 
     console.log('unique', unique.toJS());
 
-    return unique;
+    let tasksList = unique.toList();
+    return sort_tasks(tasksList);
 }
 
 export default function Store_GetGroupedTasks(state: AppState) {
@@ -158,7 +158,7 @@ export default function Store_GetGroupedTasks(state: AppState) {
     }).toMap();
 
     // populate charge_time
-    groups = groups.map((group) => {
+    groups = <any>groups.map((group) => {
 
         let tasks: List<TaskObj> = group.get('tasks');
         let distributed = group.get('time_distributed_seconds');
@@ -241,7 +241,7 @@ export default function Store_GetGroupedTasks(state: AppState) {
         group = group.set('time_charge_rounded_seconds', time_charge_rounded_seconds);
         group = group.set('time_charge_rounded_text', timespanToText(time_charge_rounded_seconds));
         return group;
-    }).toOrderedMap();
+    });
 
     console.log(groups.toJS());
     return groups;
