@@ -89,6 +89,9 @@
     .DayLog {
         @import "./DayLog";
 
+        overflow-y: auto;
+        max-height: 100%;
+
         .Code.combined {
             font-weight: bold;
         }
