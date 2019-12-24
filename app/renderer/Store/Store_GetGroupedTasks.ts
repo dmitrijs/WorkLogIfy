@@ -6,14 +6,20 @@ export function sort_tasks(tasks) {
     return tasks.sort((task1, task2) => {
         let sess1 = task1.sessions;
         let sess2 = task2.sessions;
-        let text1 = '9999-' + task1.id;
-        let text2 = '9999-' + task2.id;
+        let text1 = '9999-new-on-top-' + task1.id;
+        let text2 = '9999-new-on-top-' + task2.id;
         if (sess1 && sess1[0]) {
             text1 = sess1[0].started_at;
         }
         if (sess2 && sess2[0]) {
             text2 = sess2[0].started_at;
         }
+        // if (!task1.chargeable) {
+        //     text1 = '0000-unimportant-in-bottom-' + text1;
+        // }
+        // if (!task2.chargeable) {
+        //     text2 = '0000-unimportant-in-bottom-' + text2;
+        // }
         return comparatorLt(text1, text2);
     });
 }
@@ -105,7 +111,6 @@ export default function Store_GetGroupedTasks(state: AppState) {
 
     let tasks: OrderedMap<string, Iterable<number, TaskObj>>;
     tasks = tasksList.groupBy((x) => x.date).toOrderedMap();
-    tasks = tasks.sortBy((val, key) => key, comparatorLt).toOrderedMap();
 
     let groups = Map<string, any>();
     groups = tasks.map((tasks) => {
@@ -139,8 +144,6 @@ export default function Store_GetGroupedTasks(state: AppState) {
                 }
             }
         });
-
-        tasks = sort_tasks(tasks);
 
         return Map({
             tasks: tasks,
@@ -231,6 +234,8 @@ export default function Store_GetGroupedTasks(state: AppState) {
                 });
             }
         }
+
+        tasks = sort_tasks(tasks);
 
         group = group.set('tasks', tasks);
         group = group.set('time_charge_rounded_seconds', time_charge_rounded_seconds);
