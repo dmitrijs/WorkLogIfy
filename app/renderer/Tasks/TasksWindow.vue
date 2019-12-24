@@ -179,5 +179,13 @@
                 }
             }
         }
+
+        .TRow.notchargeable {
+            .TCol {
+                .--timespan-spent {
+                    text-decoration: line-through;
+                }
+            }
+        }
     }
 </style>
