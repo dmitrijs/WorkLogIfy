@@ -1,4 +1,4 @@
-import {List, Map} from "immutable";
+import {Iterable, List, Map, OrderedMap} from "immutable";
 import {comparatorLt, timespanToText} from "../Utils/Utils";
 import {AppState} from "./Store";
 
@@ -67,38 +67,41 @@ export function Store_MergeSameCodes(tasks: Map<string, any>) {
 export default function Store_GetGroupedTasks(state: AppState) {
     console.log('getTasksGrouped');
     // populate time charge
-    let result;
-    result = List();
+    let tasksList = List<TaskObj>();
 
     if (!state.tasks) {
-        return result;
+        return tasksList;
     }
 
-    state.tasks.forEach((task, key) => {
-        if (Map.isMap(task)) {
-            task = task.toJS();
+    state.tasks.forEach((taskMap, key) => {
+        let task: TaskObj;
+        if (Map.isMap(taskMap)) {
+            task = taskMap.toJS();
+        } else {
+            task = <any>taskMap;
         }
-        (<any>task)._selected = state.tasksSelectedIds.get(key);
+        task._selected = !!state.tasksSelectedIds.get(key);
 
-        (<any>task).time_charge_text = 'error';
+        task.time_charge_text = 'error';
 
-        let spentSeconds = (<any>task).sessions.reduce((sum, obj) => sum + obj.spent_seconds, 0);
+        let spentSeconds = task.sessions.reduce((sum, obj: SessionObj) => sum + obj.spent_seconds, 0);
 
-        (<any>task).time_spent_seconds = spentSeconds;
+        task.time_spent_seconds = spentSeconds;
         if (state.taskTimeredId === task.id) {
-            (<any>task).time_spent_seconds += state.timerElapsed;
-            (<any>task).timer_elapsed_seconds_text = timespanToText(state.timerElapsed);
+            task.time_spent_seconds += state.timerElapsed;
+            task.timer_elapsed_seconds_text = timespanToText(state.timerElapsed);
         }
 
-        (<any>task).time_spent_text = timespanToText((<any>task).time_spent_seconds);
-        result = result.push(task);
+        task.time_spent_text = timespanToText(task.time_spent_seconds);
+        tasksList = tasksList.push(task);
     });
 
-    result = result.groupBy((x) => x['date']);
-    result = result.sortBy((val, key) => key, comparatorLt);
+    let tasks: OrderedMap<string, Iterable<number, TaskObj>>;
+    tasks = tasksList.groupBy((x) => x.date).toOrderedMap();
+    tasks = tasks.sortBy((val, key) => key, comparatorLt).toOrderedMap();
 
-    //
-    result = result.map((tasks) => {
+    let groups = Map<string, any>();
+    groups = tasks.map((tasks) => {
 
         let spent = 0;
         let charge = 0;
@@ -106,7 +109,7 @@ export default function Store_GetGroupedTasks(state: AppState) {
         let not_distributed = 0;
 
         tasks.forEach((task) => {
-            const seconds = parseInt(task.time_spent_seconds);
+            const seconds = parseInt(String(task.time_spent_seconds));
             spent += (seconds);
             if (task.chargeable) {
                 charge += seconds;
@@ -132,12 +135,12 @@ export default function Store_GetGroupedTasks(state: AppState) {
             time_charge_text: timespanToText(charge),
             time_spent_text: timespanToText(spent),
         });
-    });
+    }).toMap();
 
     // populate charge_time
-    result = result.map((group) => {
+    groups = groups.map((group) => {
 
-        let tasks = group.get('tasks');
+        let tasks: List<TaskObj> = group.get('tasks');
         let distributed = group.get('time_distributed_seconds');
         let not_distributed = group.get('time_not_distributed_seconds');
 
@@ -154,16 +157,16 @@ export default function Store_GetGroupedTasks(state: AppState) {
                 task.time_charge_seconds = task.time_spent_seconds;
 
             } else {
-                let spent = parseInt(task.time_spent_seconds);
+                let spent = parseInt(String(task.time_spent_seconds));
 
                 task.time_charge_seconds = spent + ((spent / not_distributed) * distributed);
             }
 
-            (<any>task).time_charge_text = timespanToText(task.time_charge_seconds);
-            (<any>task).time_charge_extra_seconds = task.time_charge_seconds - task.time_spent_seconds;
-            (<any>task).time_charge_extra_text = timespanToText(task.time_charge_extra_seconds);
+            task.time_charge_text = timespanToText(task.time_charge_seconds);
+            task.time_charge_extra_seconds = task.time_charge_seconds - task.time_spent_seconds;
+            task.time_charge_extra_text = timespanToText(task.time_charge_extra_seconds);
             return task;
-        });
+        }).toList();
 
         // round times
         let time_charge_rounded_seconds = 0;
@@ -171,11 +174,12 @@ export default function Store_GetGroupedTasks(state: AppState) {
             let timeBlockLengthSeconds = 60 * 10;
             let blockCount = Math.round(task.time_charge_seconds / timeBlockLengthSeconds);
             task.time_charge_seconds = blockCount * timeBlockLengthSeconds;
-            (<any>task).time_charge_text = timespanToText(task.time_charge_seconds);
+            task.time_charge_text = timespanToText(task.time_charge_seconds);
 
             time_charge_rounded_seconds += task.time_charge_seconds;
             return task;
-        });
+        }).toList();
+
         {
             let secondsMissing = parseInt(group.get('time_charge_seconds')) - time_charge_rounded_seconds;
             let microTimeBlockSeconds = 60 * 5;
@@ -212,8 +216,8 @@ export default function Store_GetGroupedTasks(state: AppState) {
         group = group.set('time_charge_rounded_seconds', time_charge_rounded_seconds);
         group = group.set('time_charge_rounded_text', timespanToText(time_charge_rounded_seconds));
         return group;
-    });
+    }).toOrderedMap();
 
-    console.log(result.toJS());
-    return result;
+    console.log(groups.toJS());
+    return groups;
 }
