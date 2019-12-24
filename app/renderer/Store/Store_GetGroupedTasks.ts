@@ -42,14 +42,21 @@ export function Store_MergeSameCodes(tasks: Map<string, any>) {
         existing = existing.set('time_charge_text', timespanToText(existing.get('time_charge_seconds')));
 
         let title = existing.get('title');
-        title += '; ' + task.get('title');
+        if (task.get('title')) {
+            title += '; ' + task.get('title');
+        }
         if (title.indexOf('[combined] ') !== 0) {
             title = '[combined] ' + title;
         }
         existing = existing.set('title', title.trim());
 
         let notes = existing.get('notes');
-        notes += '; ' + task.get('notes');
+        if (!notes) {
+            notes = '';
+        }
+        if (task.get('notes')) {
+            notes += '; ' + task.get('notes');
+        }
         existing = existing.set('notes', notes.trim());
 
         existing = existing.remove('id');
