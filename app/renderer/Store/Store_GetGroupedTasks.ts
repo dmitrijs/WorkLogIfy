@@ -160,6 +160,8 @@ export default function Store_GetGroupedTasks(state: AppState) {
             }
 
             (<any>task).time_charge_text = timespanToText(task.time_charge_seconds);
+            (<any>task).time_charge_extra_seconds = task.time_charge_seconds - task.time_spent_seconds;
+            (<any>task).time_charge_extra_text = timespanToText(task.time_charge_extra_seconds);
             return task;
         });
 

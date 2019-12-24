@@ -52,11 +52,11 @@
                         <span class="Note--Content ellipsis"><span>{{task.notes}}</span></span>
                     </div>
                     <div class="TCol --timespan" @click="editTask($event, task)">
-                        <span class="--timespan-charge" title="Charge">
-                            {{task.time_charge_text}}
-                        </span>
                         <span class="--timespan-spent" :title="'Spent' + (task.timer_elapsed_seconds_text ? ' ('+task.timer_elapsed_seconds_text+' timer)' : '')">
                             {{task.time_spent_text}}
+                        </span>
+                        <span class="--timespan-charge" title="Charge" v-if="task.time_charge_extra_seconds > 0">
+                            +{{task.time_charge_extra_text}}
                         </span>
                     </div>
                     <div class="TCol --playback">
@@ -171,8 +171,11 @@
 
             .TCol {
                 .Note--Content,
-                .--timespan-spent {
+                .--timespan-charge {
                     display: none;
+                }
+                .--timespan-spent {
+                    opacity: 0.35 !important;
                 }
             }
         }
