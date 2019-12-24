@@ -193,7 +193,8 @@ export default function Store_GetGroupedTasks(state: AppState) {
             let chargest_task_id = null;
 
             tasks.map((task) => {
-                if (task.time_charge_seconds > 0 &&
+                if (!task.frozen &&
+                    task.time_charge_seconds > 0 &&
                     task.time_charge_seconds + secondsMissingRounded > 0 &&
                     task.time_charge_seconds < chargest_task_seconds) {
                     chargest_task_seconds = task.time_charge_seconds;
