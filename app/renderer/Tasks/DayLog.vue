@@ -32,7 +32,7 @@
             </div>
         </template>
 
-        <button type="button" @click="combineSameCodes = !combineSameCodes">{{ combineSameCodes ? 'show original' : 'combine same codes' }}</button>
+        <button type="button" v-if="duplicatesExist" @click="combineSameCodes = !combineSameCodes">{{ combineSameCodes ? 'show original' : 'combine same codes' }}</button>
     </div>
 </template>
 
@@ -45,6 +45,7 @@
     @Component({})
     export default class DayLog extends Vue {
         combineSameCodes = false;
+        duplicatesExist = false;
 
         data() {
             return {}
@@ -52,6 +53,14 @@
 
         get tasksGrouped() {
             let groups = store.getters.getTasksGrouped;
+
+            this.duplicatesExist = false;
+            groups.forEach((group) => {
+                if (group.get('duplicatesExist')) {
+                    this.duplicatesExist = true;
+                }
+            });
+
             let result = groups;
             if (this.combineSameCodes) {
                 groups.map((group, group_id) => {

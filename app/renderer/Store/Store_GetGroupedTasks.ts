@@ -108,6 +108,15 @@ export default function Store_GetGroupedTasks(state: AppState) {
         let distributed = 0;
         let not_distributed = 0;
 
+        let duplicatesExist = false;
+        let duplicatesCheck = {};
+        tasks.forEach((task) => {
+            if (duplicatesCheck[task.code]) {
+                duplicatesExist = true;
+            }
+            duplicatesCheck[task.code] = true;
+        });
+
         tasks.forEach((task) => {
             const seconds = parseInt(String(task.time_spent_seconds));
             spent += (seconds);
@@ -128,6 +137,7 @@ export default function Store_GetGroupedTasks(state: AppState) {
 
         return Map({
             tasks: tasks,
+            duplicatesExist: duplicatesExist,
             time_charge_seconds: charge,
             time_spent_seconds: spent,
             time_distributed_seconds: distributed,
