@@ -56,7 +56,7 @@
                             {{task.time_spent_text}}
                         </span>
                         <span class="--timespan-charge" :title="'Final charge: ' + task.time_charge_text" v-if="task.time_charge_extra_seconds > 0">
-                            <template v-if="task.time_charge_extra_seconds > 0">+</template>{{task.time_charge_extra_text}}
+                            +{{task.time_charge_extra_text}}
                         </span>
                     </div>
                     <div class="TCol --playback">
