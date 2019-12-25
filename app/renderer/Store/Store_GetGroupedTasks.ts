@@ -183,8 +183,6 @@ export default function Store_GetGroupedTasks(state: AppState) {
             }
 
             task.time_charge_text = timespanToText(task.time_charge_seconds);
-            task.time_charge_extra_seconds = task.time_charge_seconds - task.time_spent_seconds;
-            task.time_charge_extra_text = timespanToText(task.time_charge_extra_seconds);
             return task;
         }).toList();
 
@@ -234,6 +232,11 @@ export default function Store_GetGroupedTasks(state: AppState) {
                 });
             }
         }
+
+        tasks.map((task) => {
+            task.time_charge_extra_seconds = task.time_charge_seconds - task.time_spent_seconds;
+            task.time_charge_extra_text = timespanToText(task.time_charge_extra_seconds);
+        });
 
         tasks = sort_tasks(tasks);
 
