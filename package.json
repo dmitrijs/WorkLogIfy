@@ -6,9 +6,11 @@
   "scripts": {
     "start": "run-s main:build watch",
     "release": "run-s parcel:build \"electron:build {@}\" --",
+    "release-win": "run-s parcel:build \"electron:build-win {@}\" --",
     "watch": "run-p -r parcel:watch electron:start",
     "electron:start": "nodemon --watch app/main/.parcel --exec \"electron .\"",
-    "electron:build": "build --x64 --publish=never",
+    "electron:build": "build {@} --x64 --publish=never",
+    "electron:build-win": "build --win --x64 --publish=never",
     "parcel:watch": "run-p -r main:watch renderer:watch",
     "main:watch": "parcel watch app/main/main.ts app/main/preload.ts --no-autoinstall --out-dir app/main/.parcel --out-file main --target electron",
     "renderer:watch": "parcel app/renderer/index.html --no-autoinstall --port 1124 --out-dir app/renderer/.parcel/development",
