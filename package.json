@@ -23,6 +23,12 @@
   },
   "author": "Dmitrijs Sadovskis",
   "license": "MIT",
+  "standard-version": {
+    "releaseCommitMessageFormat": "chore(release): v{{currentTag}} [ci skip]",
+    "skip": {
+      "changelog": true
+    }
+  },
   "build": {
     "productName": "WorkLogIfy",
     "appId": "lv.ify.worklog",
@@ -103,6 +109,7 @@
     "parcel-bundler": "^1.12.3",
     "sass": "^1.23.0",
     "spectron": "^7.0.0",
+    "standard-version": "^7.1.0",
     "ts-jest": "^24.1.0",
     "tslint": "^5.18.0",
     "typescript": "^3.5.2",
