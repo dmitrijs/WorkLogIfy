@@ -55,7 +55,7 @@ jobs:
 workflows:
   version: 2
 
-  main_workflow:
+  publish:
     jobs:
       - build_windows:
           filters:
