@@ -39,6 +39,7 @@ jobs:
           root: circleci_workspace
           paths:
             - ./artifacts
+            - ./metadata
 
   publish_github_release:
     docker:
