@@ -7,10 +7,14 @@
                      @click="open(day.dayCode)"
                      :title="day.dayCode"
                      :class="{ is_today: day.isToday, is_current_month: day.isCurrentMonth, is_opened: day.isOpened, is01: day.isFirstDayOfTheMonth, is_weekend: day.isWeekend }">
-                    <span class="DayTitle">{{ day.title }}</span>
+                    <span class="DayTitle">{{ day.title }}/{{day.isLastDay}}</span>
                     <span class="TimeCharged">{{ day.charged_seconds_text }}</span>
                 </div>
-                <span class="WeekTimeCharged" v-if="week.week_charged">&Sigma; {{ week.week_charged_text }}</span>
+                <span class="MonthTimeCharged" v-if="months[week_key] && months[week_key].month_charged_seconds">
+                    <span class="_Week" v-if="week.week_charged">&Sigma; {{ week.week_charged_text }}</span><br />
+                    <span class="_Month">{{ months[week_key].month_title }}: {{ months[week_key].month_charged_seconds_text }}</span>
+                </span>
+                <span class="WeekTimeCharged" v-if="!months[week_key] && week.week_charged">&Sigma; {{ week.week_charged_text }}</span>
             </div>
         </div>
     </div>
@@ -30,8 +34,28 @@
         },
     })
     export default class CalendarWindow extends Vue {
+
+        data = null;
+
         get weeks() {
+            this.collect_data();
+
+            return this.data.weeks;
+        }
+
+        get months() {
+            this.collect_data();
+
+            return this.data.months;
+        }
+
+        collect_data() {
+            if (this.data) {
+                return;
+            }
+
             let weeks = {};
+            let months = {};
             let today = moment.utc();
             let endOfThisMonth = moment(today).endOf('month').endOf('day');
             let startOfMonthBeforePrevious = moment(today).subtract(2, 'months').startOf('month');
@@ -46,6 +70,9 @@
                 let weekCode = moment(day).endOf('isoWeek').format('YYYY-WW');
                 let week = weeks[weekCode] || {};
                 let dayCode = day.format('YYYY-MM-DD');
+
+                let monthCode = moment(day).endOf('month').endOf('isoWeek').format('YYYY-WW');
+                let month = months[monthCode] || {};
 
                 {
                     let charged_seconds = (totals[dayCode] ? totals[dayCode].time_charge_rounded_seconds : 0);
@@ -62,6 +89,12 @@
                         charged_seconds: charged_seconds,
                         charged_seconds_text: timespanToText(charged_seconds, ''),
                     });
+
+                    let month_charged_seconds = (month.month_charged_seconds || 0) + charged_seconds;
+                    this.$set(month, 'month_charged_seconds', month_charged_seconds);
+                    this.$set(month, 'month_charged_seconds_text', timespanToText(month_charged_seconds, ''));
+                    this.$set(month, 'month_title', month.month_title || moment(day).format('MMM'));
+                    this.$set(months, monthCode, month);
                 }
                 this.$set(weeks, weekCode, week);
 
@@ -83,7 +116,7 @@
                 });
             }
 
-            return weeks;
+            this.data = {weeks, months};
         }
 
         open(day) {
@@ -101,6 +134,16 @@
         .Week {
             display: flex;
 
+            .MonthTimeCharged {
+                line-height: 13px;
+                padding-left: 5px;
+                color: grey;
+                padding-top: 3px;
+
+                ._Month {
+                    color: #bebebe;
+                }
+            }
             .WeekTimeCharged {
                 line-height: 29px;
                 padding-left: 5px;
