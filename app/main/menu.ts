@@ -50,6 +50,11 @@ export default function createMainMenu(mainWindow) {
                         mainWindow.openDevTools();
                     }
                 },
+                {
+                    label: 'Reload', click: function () {
+                        mainWindow.reload();
+                    }
+                },
             ],
         },
     ]);
