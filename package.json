@@ -24,10 +24,7 @@
   "author": "Dmitrijs Sadovskis",
   "license": "MIT",
   "standard-version": {
-    "releaseCommitMessageFormat": "chore(release): v{{currentTag}} [ci skip]",
-    "skip": {
-      "changelog": true
-    }
+    "releaseCommitMessageFormat": "chore(release): v{{currentTag}} [ci skip]"
   },
   "build": {
     "productName": "WorkLogIfy",
