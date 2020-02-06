@@ -4,7 +4,7 @@
   "description": "WorkLogIfy",
   "main": "app/main/.parcel/main.js",
   "scripts": {
-    "stadard-version": "standard-version --releaseCommitMessageFormat=\"chore(release): v{{currentTag}}\"",
+    "stadard-version": "npx standard-version",
     "start": "run-s main:build watch",
     "release": "run-s parcel:build \"electron:build {@}\" --",
     "release-win": "run-s parcel:build \"electron:build-win {@}\" --",
