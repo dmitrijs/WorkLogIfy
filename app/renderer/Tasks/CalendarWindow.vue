@@ -7,7 +7,7 @@
                      @click="open(day.dayCode)"
                      :title="day.dayCode"
                      :class="{ is_today: day.isToday, is_current_month: day.isCurrentMonth, is_opened: day.isOpened, is01: day.isFirstDayOfTheMonth, is_weekend: day.isWeekend }">
-                    <span class="DayTitle">{{ day.title }}/{{day.isLastDay}}</span>
+                    <span class="DayTitle">{{ day.title }}</span>
                     <span class="TimeCharged">{{ day.charged_seconds_text }}</span>
                 </div>
                 <span class="MonthTimeCharged" v-if="months[week_key] && months[week_key].month_charged_seconds">
