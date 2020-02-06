@@ -6,6 +6,11 @@ jobs:
       - image: circleci/node:lts
     steps:
       - checkout
+      - run: |
+          git tag --points-at HEAD
+          if [ -n "$(git tag --points-at HEAD)" ]; then
+            circleci-agent step halt
+          fi
       - run: git branch -u "origin/$CIRCLE_BRANCH" $CIRCLE_BRANCH
       - run: git config user.email "sdo@inbox.lv"
       - run: git config user.name "Dmitrijs Sadovskis"
@@ -65,8 +70,9 @@ workflows:
     jobs:
       - standard_version:
           filters:
-            tags:
-              ignore: /^v\d+\.\d+\.\d+$/
+            branches:
+              only:
+                - master
 
       - build_windows:
           filters:
