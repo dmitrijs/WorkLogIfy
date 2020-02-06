@@ -1,12 +1,24 @@
 version: 2
 jobs:
+
+  standard_version:
+    docker:
+      - image: circleci/node:lts
+    steps:
+      - checkout
+      - run: git branch -u "origin/$CIRCLE_BRANCH" $CIRCLE_BRANCH
+      - run: git config user.email "sdo@inbox.lv"
+      - run: git config user.name "Dmitrijs Sadovskis"
+      - run: git config push.default simple
+      - run: npx standard-version
+      - run: git push --follow-tags
+
   build_windows:
     docker:
       - image: electronuserland/builder:wine
 
     steps:
       - checkout
-      - run: git branch -u "origin/$CIRCLE_BRANCH" $CIRCLE_BRANCH
       - restore_cache:
           keys:
             - v1-npm-deps-{{ checksum "package-lock.json" }}
@@ -18,12 +30,6 @@ jobs:
           key: v1-npm-deps-{{ checksum "package-lock.json" }}
           paths:
             - node_modules
-
-      - run: git config user.email "sdo@inbox.lv"
-      - run: git config user.name "Dmitrijs Sadovskis"
-      - run: git config push.default simple
-      - run: npx standard-version
-      - run: git push --follow-tags
 
       - run: npm run release-win
 
@@ -57,16 +63,23 @@ workflows:
 
   publish:
     jobs:
+      - standard_version:
+          filters:
+            tags:
+              ignore: /^v\d+\.\d+\.\d+$/
+
       - build_windows:
           filters:
             branches:
-              only:
-                - master
+              ignore: /.*/
+            tags:
+              only: /^v\d+\.\d+\.\d+$/
 
       - publish_github_release:
           requires:
             - build_windows
           filters:
             branches:
-              only:
-                - master
+              ignore: /.*/
+            tags:
+              only: /^v\d+\.\d+\.\d+$/
