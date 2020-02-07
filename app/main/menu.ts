@@ -1,5 +1,5 @@
 const electron = require('electron');
-const {Menu} = electron;
+const {Menu, app} = electron;
 
 export function toggleDebug(mainWindow) {
     mainWindow.webContents.send('debug.toggle');
@@ -53,6 +53,12 @@ export default function createMainMenu(mainWindow) {
                 {
                     label: 'Reload', click: function () {
                         mainWindow.reload();
+                    }
+                },
+                {type: 'separator'},
+                {
+                    label: 'Quit', click: function () {
+                        app.quit();
                     }
                 },
             ],
