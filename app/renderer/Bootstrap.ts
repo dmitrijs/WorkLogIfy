@@ -16,6 +16,8 @@ declare global {
 
 const moment = require("moment");
 
+timer.init();
+
 Vue.prototype.$store = store.original;
 store.commit.setDay(moment().format("YYYY-MM-DD"));
 
@@ -26,9 +28,6 @@ window.ipc.on('change.screen', function ($event, where) {
 window.ipc.on('debug.toggle', function ($event) {
     store.commit.toggleDebug();
 });
-
-const {app} = remote;
-document.title += ' v' + app.getVersion();
 
 let vue = new Vue({
     render: h => h(App),

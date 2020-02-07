@@ -1,6 +1,13 @@
 import store from "./Store/Store";
 
 const moment = require("moment");
+const {app} = remote;
+
+let baseTitle;
+
+function setTitle(timerActive = true) {
+    document.title = baseTitle + ' v' + app.getVersion() + (timerActive ? '' : ' - INACTIVE');
+}
 
 class Timer {
 
@@ -8,12 +15,16 @@ class Timer {
     timeStart = 0;
     timeEnd = 0;
 
+    init() {
+        baseTitle = document.title;
+        setTitle(this.isActive());
+    }
+
     isActive() {
         return !!this.handle;
     }
 
     start(taskId = null) {
-        window.ipc.send('timer-state', 'active');
         if (!this.handle) {
             this.timeStart = moment.utc();
             store.commit.activateTimer(taskId);
@@ -21,6 +32,8 @@ class Timer {
             this.handle = setInterval(this.tick.bind(this), 1000);
             this.tick();
         }
+        window.ipc.send('timer-state', 'active');
+        setTitle(this.isActive());
     }
 
     tick() {
@@ -30,7 +43,6 @@ class Timer {
     }
 
     stop(idleSeconds = 0) {
-        window.ipc.send('timer-state', 'stopped');
         if (this.handle) {
             this.timeEnd = moment.utc();
             store.commit.stopTimer([this.getSecondsElapsed(this.timeEnd), idleSeconds * (store.state.is_debug ? 60 : 1)]);
@@ -38,6 +50,8 @@ class Timer {
             clearInterval(this.handle);
             this.handle = 0;
         }
+        setTitle(false);
+        window.ipc.send('timer-state', 'stopped');
     }
 
     getSecondsElapsed(timeEnd) {
