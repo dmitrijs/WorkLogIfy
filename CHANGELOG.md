@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.12.6](https://github.com/dmitrijs/WorkLogIfy/compare/v1.12.5...v1.12.6) (2020-02-08)
+
+
+### Features
+
+* added Quit menu item ([38b3064](https://github.com/dmitrijs/WorkLogIfy/commit/38b30649cc4bcd5e6665c2fc043e67b625052821))
+* show timer status in the window title ([055459b](https://github.com/dmitrijs/WorkLogIfy/commit/055459b26534aeb8a3909ab66ebbb987f5b0c909))
+
+
+### Bug Fixes
+
+* ignore empty tasks when looking for duplicates ([e0c41aa](https://github.com/dmitrijs/WorkLogIfy/commit/e0c41aad3a059e13af871f41c840442a39d921cd))
+
 ### [1.12.5](https://github.com/dmitrijs/WorkLogIfy/compare/v1.12.4...v1.12.5) (2020-02-06)
 
 ### [1.12.4](https://github.com/dmitrijs/WorkLogIfy/compare/v1.12.3...v1.12.4) (2020-02-06)
