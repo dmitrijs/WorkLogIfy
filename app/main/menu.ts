@@ -38,6 +38,12 @@ export default function createMainMenu(mainWindow) {
             }
         },
         {
+            label: 'Templates', click: function () {
+                mainWindow.show();
+                mainWindow.webContents.send('change.screen', 'task.templates');
+            }
+        },
+        {
             label: '...',
             submenu: [
                 {

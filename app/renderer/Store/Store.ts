@@ -13,6 +13,10 @@ function saveTasks(state:AppState) {
     window.ipc.sendSync('tasks.save', state.day_key, state.tasks.toJS(), store.getters.getTasksGrouped.toJS());
 }
 
+function saveTaskTemplates(state:AppState) {
+    window.ipc.sendSync('tasks.templates.save', state.templates);
+}
+
 function addSession(tasks, task_id, spentSeconds, method, idleSeconds = 0) {
     let sessions = tasks.get(task_id).get('sessions');
     sessions = sessions.push({
@@ -39,6 +43,7 @@ const state = {
     day_key: '',
     allFiles: [],
     fileTotals: {},
+    templates: [],
 };
 state.screen = state.tasksScreen;
 
@@ -73,6 +78,10 @@ const {store} = createDirectStore({
 
         getFileTotals(state:AppState) {
             return state.fileTotals;
+        },
+
+        getTaskTemplates(state:AppState) {
+            return state.templates;
         },
     },
 
@@ -226,6 +235,9 @@ const {store} = createDirectStore({
         setFileTotals(state:AppState, fileTotals) {
             state.fileTotals = fileTotals;
         },
+        setTaskTemplates(state:AppState, templates) {
+            state.templates = templates;
+        },
         stopTimer(state:AppState, [secondsElapsed, secondsIdle]) {
             console.log('secondsElapsed', secondsElapsed, 'secondsIdle', secondsIdle);
 
@@ -237,6 +249,24 @@ const {store} = createDirectStore({
             state.taskTimeredId = null;
 
             saveTasks(state);
+        },
+        templateNew(state:AppState) {
+            state.templates.push({
+                code: '',
+                notes: '',
+            });
+
+            saveTaskTemplates(state);
+        },
+        templateUpdate(state:AppState, [idx, updated]) {
+            state.templates[idx] = updated;
+
+            saveTaskTemplates(state);
+        },
+        templateDelete(state:AppState, [idx]) {
+            state.templates.splice(idx, 1);
+
+            saveTaskTemplates(state);
         },
     },
 });

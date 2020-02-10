@@ -124,6 +124,12 @@ app.on('ready', async () => {
             event.returnValue = 'ok'
         });
 
+        ipcMain.on('tasks.templates.save', (event, arg1) => {
+            console.log('saving task templates');
+            Filesystem.saveTaskTemplates(arg1);
+            event.returnValue = 'ok'
+        });
+
         ipcMain.on('tasks.load', (event, arg) => {
             event.returnValue = Filesystem.getWorkLog(arg);
         });
@@ -134,6 +140,10 @@ app.on('ready', async () => {
 
         ipcMain.on('tasks.getFileTotals', (event) => {
             event.returnValue = Filesystem.getFileTotals();
+        });
+
+        ipcMain.on('tasks.getTaskTemplates', (event) => {
+            event.returnValue = Filesystem.getTaskTemplates();
         });
     }
 

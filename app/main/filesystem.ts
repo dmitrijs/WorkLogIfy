@@ -73,6 +73,22 @@ class Filesystem {
         }
         return contents;
     }
+
+    public static saveTaskTemplates(taskTemplates) {
+        const dir = this.getDir();
+        fs.writeFileSync(dir + '/worklog_templates.json', JSON.stringify(taskTemplates));
+    }
+
+    public static getTaskTemplates() {
+        const dir = this.getDir();
+
+        let contents = [];
+        if (fs.existsSync(dir + '/worklog_templates.json')) {
+            contents = JSON.parse(fs.readFileSync(dir + '/worklog_templates.json'));
+            contents = contents || [];
+        }
+        return contents;
+    }
 }
 
 export default Filesystem;

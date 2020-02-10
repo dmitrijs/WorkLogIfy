@@ -20,6 +20,7 @@ timer.init();
 
 Vue.prototype.$store = store.original;
 store.commit.setDay(moment().format("YYYY-MM-DD"));
+store.commit.setTaskTemplates(window.ipc.sendSync('tasks.getTaskTemplates'));
 
 window.ipc.on('change.screen', function ($event, where) {
     store.commit.setScreen(where);

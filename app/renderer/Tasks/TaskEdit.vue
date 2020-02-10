@@ -42,6 +42,16 @@
                         </div>
                     </td>
                 </tr>
+                <tr><td colspan="2"><hr /></td></tr>
+                <tr>
+                    <td>Fill in from a template:</td>
+                    <td>
+                        <div v-for="template of templates">
+                            <button type="button" @click="fill(template)">fill in</button>
+                            {{ template.code }} ({{ template.notes }})
+                        </div>
+                    </td>
+                </tr>
             </table>
         </form>
     </div>
@@ -71,6 +81,10 @@
             return store.getters.getEditedTask.toJS();
         }
 
+        get templates() {
+            return store.getters.getTaskTemplates;
+        }
+
         get task_time_spent_text() {
             return timespanToText(this.task.time_spent_seconds);
         }
@@ -93,6 +107,17 @@
                 store.commit.saveTask(this.task);
             } else {
                 store.commit.createTask(this.task);
+            }
+        }
+
+        fill(template) {
+            let forced = false;
+            if (this.task.code === template.code) {
+                forced = true;
+            }
+            this.$set(this.task, 'code', template.code);
+            if (!this.task.notes || forced) {
+                this.$set(this.task, 'notes', template.notes);
             }
         }
 
