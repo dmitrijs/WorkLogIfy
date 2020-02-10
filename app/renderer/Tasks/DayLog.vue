@@ -49,7 +49,7 @@
 
     @Component({})
     export default class DayLog extends Vue {
-        combineSameCodes = false;
+        combineSameCodes = true;
         duplicatesExist = false;
 
         data() {
