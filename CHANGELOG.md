@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.12.7](https://github.com/dmitrijs/WorkLogIfy/compare/v1.12.6...v1.12.7) (2020-02-10)
+
+
+### Features
+
+* extract task code from Jira URL ([304e555](https://github.com/dmitrijs/WorkLogIfy/commit/304e5551a50aaf301a78ff421f2195dfd30b33ed))
+
+
+### Bug Fixes
+
+* remove unneeded extra characters when combining task titles and descriptions ([e93e530](https://github.com/dmitrijs/WorkLogIfy/commit/e93e530ec687f0774556afdd1025f809a6589b21))
+
 ### [1.12.6](https://github.com/dmitrijs/WorkLogIfy/compare/v1.12.5...v1.12.6) (2020-02-08)
 
 
