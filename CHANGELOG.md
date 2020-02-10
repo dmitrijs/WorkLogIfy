@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.13.0](https://github.com/dmitrijs/WorkLogIfy/compare/v1.12.7...v1.13.0) (2020-02-10)
+
+
+### Features
+
+* task templates ([2b2198d](https://github.com/dmitrijs/WorkLogIfy/commit/2b2198dd0e60b124316eea3d093585a43db21602))
+
 ### [1.12.7](https://github.com/dmitrijs/WorkLogIfy/compare/v1.12.6...v1.12.7) (2020-02-10)
 
 
