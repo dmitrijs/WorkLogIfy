@@ -48,7 +48,7 @@ export function Store_MergeSameCodes(tasks: Map<string, any>) {
 
         let title = existing.title;
         if (task.title) {
-            title += '; ' + task.title;
+            title += (title ? '; ' : '') + task.title;
         }
         if (title.indexOf('[combined] ') !== 0) {
             title = '[combined] ' + title;
@@ -60,7 +60,7 @@ export function Store_MergeSameCodes(tasks: Map<string, any>) {
             notes = '';
         }
         if (task.notes) {
-            notes += '; ' + task.notes;
+            notes += (notes ? '; ' : '') + task.notes;
         }
         existing.notes = notes.trim();
 
