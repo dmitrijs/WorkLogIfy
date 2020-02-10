@@ -5,7 +5,7 @@
             <table style="width: 100%;">
                 <tr>
                     <td width="100">Code:</td>
-                    <td><input type="text" placeholder="TSKS-0000" v-model="task.code" ref="task_code"/></td>
+                    <td><input type="text" placeholder="TSKS-0000" v-model="task.code" ref="task_code" @keyup="codeChanged()"/></td>
                 </tr>
                 <tr>
                     <td>Title:</td>
@@ -103,6 +103,17 @@
         formatSession(sess) {
             let timespan = timespanToText(sess.spent_seconds);
             return `[${sess.method}] ${moment(sess.started_at).format('HH:mm')} -> ${moment(sess.finished_at).format('HH:mm')} = ${timespan}`;
+        }
+
+        codeChanged() {
+            if (!this.task.code) {
+                return;
+            }
+
+            let matches = this.task.code.match(/(?:https:\/\/)?[^.]+\.atlassian\.net\/browse\/(\S+-\d+).*?/);
+            if (matches) {
+                this.$set(this.task, 'code', matches[1]);
+            }
         }
     }
 </script>
