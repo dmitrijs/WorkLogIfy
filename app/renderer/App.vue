@@ -2,8 +2,8 @@
     <div class="App" :class="{ isDebug: tasks_ui.is_debug }">
         <transition name="fade" mode="out-in">
             <TasksWindow v-if="tasks_ui.screen === 'tasks'"></TasksWindow>
-            <TaskEdit v-if="tasks_ui.screen === 'task.edit'" mode="edit"></TaskEdit>
-            <TaskEdit v-if="tasks_ui.screen === 'task.new'" mode="new"></TaskEdit>
+            <TaskEdit v-if="tasks_ui.screen === 'task.edit'" mode="edit" key="task.edit"></TaskEdit>
+            <TaskEdit v-if="tasks_ui.screen === 'task.new'" mode="new" key="task.new"></TaskEdit>
             <DayLog v-if="tasks_ui.screen === 'DayLog'"></DayLog>
             <CalendarWindow v-if="tasks_ui.screen === 'calendar'"></CalendarWindow>
             <TemplatesWindow v-if="tasks_ui.screen === 'task.templates'"></TemplatesWindow>
