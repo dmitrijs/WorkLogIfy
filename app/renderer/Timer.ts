@@ -24,7 +24,7 @@ class Timer {
         return !!this.handle;
     }
 
-    start(taskId = null) {
+    start(taskId = null, sendEvents = true) {
         if (!this.handle) {
             this.timeStart = moment.utc();
             store.commit.activateTimer(taskId);
@@ -32,8 +32,10 @@ class Timer {
             this.handle = setInterval(this.tick.bind(this), 1000);
             this.tick();
         }
-        window.ipc.send('timer-state', 'active');
-        setTitle(this.isActive());
+        if (sendEvents) {
+            window.ipc.send('timer-state', 'active');
+            setTitle(this.isActive());
+        }
     }
 
     tick() {
@@ -42,7 +44,7 @@ class Timer {
         console.log('timer tick');
     }
 
-    stop(idleSeconds = 0) {
+    stop(idleSeconds = 0, sendEvent = true) {
         if (this.handle) {
             this.timeEnd = moment.utc();
             store.commit.stopTimer([this.getSecondsElapsed(this.timeEnd), idleSeconds * (store.state.is_debug ? 60 : 1)]);
@@ -50,8 +52,15 @@ class Timer {
             clearInterval(this.handle);
             this.handle = 0;
         }
-        setTitle(false);
-        window.ipc.send('timer-state', 'stopped');
+        if (sendEvent) {
+            setTitle(false);
+            window.ipc.send('timer-state', 'stopped');
+        }
+    }
+
+    switch(taskId) {
+        this.stop(0, false);
+        this.start(taskId, false);
     }
 
     getSecondsElapsed(timeEnd) {

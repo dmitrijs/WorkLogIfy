@@ -62,7 +62,7 @@
                     <div class="TCol --playback">
                         <i class="IconAsInput icofont-ui-play-stop" v-if="tasks_ui.timeredId === task.id"
                            @click="stopTimer()"></i>
-                        <i class="IconAsInput icofont-ui-play" v-if="tasks_ui.timeredId === null"
+                        <i class="IconAsInput icofont-ui-play" v-if="tasks_ui.timeredId !== task.id"
                            @click="startTimer($event, task)"></i>
                     </div>
                 </div>
@@ -152,7 +152,11 @@
         }
 
         startTimer($event, task) {
-            timer.start(task.id);
+            if (this.tasks_ui.timeredId === null) {
+                timer.start(task.id);
+            } else {
+                timer.switch(task.id);
+            }
         }
 
         stopTimer() {
