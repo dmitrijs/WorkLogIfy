@@ -42,13 +42,16 @@
                         </div>
                     </td>
                 </tr>
-                <tr><td colspan="2"><hr /></td></tr>
+                <tr>
+                    <td colspan="2">
+                        <hr/>
+                    </td>
+                </tr>
                 <tr>
                     <td>Fill in from a template:</td>
                     <td>
-                        <div v-for="template of templates">
-                            <button type="button" @click="fill(template)">fill in</button>
-                            {{ template.code }} ({{ template.notes }})
+                        <div v-for="template of templates" class="Template" @click="fill(template)">
+                            {{ template.notes }} <span class="TemplateCode">({{ template.code }})</span>
                         </div>
                     </td>
                 </tr>
@@ -145,4 +148,17 @@
 
 <style scoped lang="scss">
     @import 'TaskEdit';
+
+    .Template {
+        cursor: pointer;
+        margin-bottom: 4px;
+
+        .TemplateCode {
+            opacity: 0.5;
+        }
+
+        &:hover {
+            text-decoration: underline;
+        }
+    }
 </style>

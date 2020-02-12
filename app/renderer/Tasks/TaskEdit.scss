@@ -4,6 +4,10 @@
 }
 
 .TaskEditForm {
+    td {
+        vertical-align: top;
+    }
+
     td:not(.Complex) {
         input,
         textarea {
