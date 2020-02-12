@@ -4,12 +4,12 @@
         <form class="TaskEditForm" @submit.prevent="save">
             <table style="width: 100%;">
                 <tr>
-                    <td width="100">Code:</td>
-                    <td><input type="text" placeholder="TSKS-0000" v-model="task.code" ref="task_code" @keyup="codeChanged()"/></td>
+                    <td>Title:</td>
+                    <td><input type="text" v-model="task.title" ref="focused"/></td>
                 </tr>
                 <tr>
-                    <td>Title:</td>
-                    <td><input type="text" v-model="task.title"/></td>
+                    <td width="100">Code:</td>
+                    <td><input type="text" placeholder="TSKS-0000" v-model="task.code" @keyup="codeChanged()"/></td>
                 </tr>
                 <tr>
                     <td>Time Spent:</td>
@@ -99,7 +99,7 @@
         }
 
         mounted() {
-            this.$refs.task_code.focus();
+            this.$refs.focused.focus();
         }
 
         save() {
