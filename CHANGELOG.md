@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.13.1](https://github.com/dmitrijs/WorkLogIfy/compare/v1.13.0...v1.13.1) (2020-02-12)
+
+
+### Features
+
+* allow switching active (timer) task in one click ([884be5f](https://github.com/dmitrijs/WorkLogIfy/commit/884be5f65b95c564698693d6e4ae9d9c17dcd590))
+
+
+### Bug Fixes
+
+* clear task "Edit" form when "New" button is clicked ([0976130](https://github.com/dmitrijs/WorkLogIfy/commit/09761303028e29bc6375c3860199b856924fa9d3))
+
 ## [1.13.0](https://github.com/dmitrijs/WorkLogIfy/compare/v1.12.7...v1.13.0) (2020-02-10)
 
 
