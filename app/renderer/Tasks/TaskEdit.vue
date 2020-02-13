@@ -1,7 +1,7 @@
 <template>
     <div class="TaskEdit" :data-mode="mode">
         <br/>
-        <form class="TaskEditForm" @submit.prevent="save">
+        <div class="TaskEditForm">
             <table style="width: 100%;">
                 <tr>
                     <td>Title:</td>
@@ -30,8 +30,14 @@
                 </tr>
                 <tr>
                     <td colspan="2" class="text-right">
-                        <button class="btn btn-secondary btn-sm" type="button" @click="back">&lt; back</button>
-                        <button class="btn btn-primary btn-sm">{{ mode === 'edit' ? 'update' : 'create' }}</button>
+                        <button class="btn btn-outline-secondary btn-sm" type="button" @click="back">&lt; back</button>
+                        <button class="btn btn-secondary btn-sm" @click="save()">{{ mode === 'edit' ? 'update' :
+                            'create' }}
+                        </button>
+                        <button class="btn btn-primary btn-sm" @click="save(true)" v-if="mode !== 'edit'">
+                            start &nbsp;
+                            <i class="IconAsInput icofont-ui-play"></i>
+                        </button>
                     </td>
                 </tr>
                 <tr>
@@ -56,7 +62,7 @@
                     </td>
                 </tr>
             </table>
-        </form>
+        </div>
     </div>
 </template>
 
@@ -66,6 +72,7 @@
     import {timespanToText} from "../Utils/Utils";
     import {Prop} from "vue-property-decorator";
     import store from "../Store/Store";
+    import timer from "../Timer";
 
     const moment = require("moment");
 
@@ -105,11 +112,14 @@
             this.$refs.focused.focus();
         }
 
-        save() {
+        save(autostart = false) {
             if (this.mode === 'edit') {
                 store.commit.saveTask(this.task);
             } else {
                 store.commit.createTask(this.task);
+                if (autostart) {
+                    timer.start(store.state.createdTaskId);
+                }
             }
         }
 

@@ -44,6 +44,7 @@ const state = {
     allFiles: [],
     fileTotals: {},
     templates: [],
+    createdTaskId: '',
 };
 state.screen = state.tasksScreen;
 
@@ -130,6 +131,7 @@ const {store} = createDirectStore({
                 created_at: moment().toISOString(),
                 sessions: List(),
             }));
+            state.createdTaskId = id;
 
             if (task.time_add_minutes) {
                 let spentSeconds = parseInt(task.time_add_minutes) * 60;
