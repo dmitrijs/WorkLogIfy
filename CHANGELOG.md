@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.13.2](https://github.com/dmitrijs/WorkLogIfy/compare/v1.13.1...v1.13.2) (2020-02-13)
+
+
+### Features
+
+* added button to create a task and start the timer immediately ([2778b45](https://github.com/dmitrijs/WorkLogIfy/commit/2778b454630b14a34d9fe3f07b9016779072f7f8))
+
 ### [1.13.1](https://github.com/dmitrijs/WorkLogIfy/compare/v1.13.0...v1.13.1) (2020-02-12)
 
 
