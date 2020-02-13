@@ -152,11 +152,7 @@
         }
 
         startTimer($event, task) {
-            if (this.tasks_ui.timeredId === null) {
-                timer.start(task.id);
-            } else {
-                timer.switch(task.id);
-            }
+            timer.start(task.id);
         }
 
         stopTimer() {

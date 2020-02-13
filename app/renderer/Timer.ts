@@ -24,7 +24,11 @@ class Timer {
         return !!this.handle;
     }
 
-    start(taskId = null, sendEvents = true) {
+    start(taskId = null) {
+        let wasAlreadyActive = !!this.handle;
+        if (wasAlreadyActive) {
+            this.stop(0, false);
+        }
         if (!this.handle) {
             this.timeStart = moment.utc();
             store.commit.activateTimer(taskId);
@@ -32,7 +36,7 @@ class Timer {
             this.handle = setInterval(this.tick.bind(this), 1000);
             this.tick();
         }
-        if (sendEvents) {
+        if (!wasAlreadyActive) {
             window.ipc.send('timer-state', 'active');
             setTitle(this.isActive());
         }
@@ -56,11 +60,6 @@ class Timer {
             setTitle(false);
             window.ipc.send('timer-state', 'stopped');
         }
-    }
-
-    switch(taskId) {
-        this.stop(0, false);
-        this.start(taskId, false);
     }
 
     getSecondsElapsed(timeEnd) {
