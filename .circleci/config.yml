@@ -41,6 +41,7 @@ jobs:
       - run: mkdir circleci_workspace && mkdir circleci_workspace/artifacts && mkdir circleci_workspace/metadata
       - run: cp release/*.zip circleci_workspace/artifacts/
       - run: git describe --abbrev=0 --tags > circleci_workspace/metadata/version.txt
+      - run: awk -v start=1 '/\/compare\//{n++;next};n==start;n==start+1{exit}' CHANGELOG.md > circleci_workspace/metadata/changelog.txt
 
       - store_artifacts:
           path: circleci_workspace/artifacts
@@ -61,7 +62,7 @@ jobs:
       - run:
           name: "Publish Release on GitHub"
           command: |
-            ghr -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} $(cat ./circleci_workspace/metadata/version.txt) ./circleci_workspace/artifacts/
+            ghr -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -b "$(cat ./circleci_workspace/metadata/changelog.txt)" $(cat ./circleci_workspace/metadata/version.txt) ./circleci_workspace/artifacts/
 
 workflows:
   version: 2
