@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.14.1](https://github.com/dmitrijs/WorkLogIfy/compare/v1.14.0...v1.14.1) (2020-02-15)
+
+
+### Bug Fixes
+
+* submit task edit form on "enter" key press ([a411fd1](https://github.com/dmitrijs/WorkLogIfy/commit/a411fd15846520b6501e9da5ea18be30fa970b32))
+
 ## [1.14.0](https://github.com/dmitrijs/WorkLogIfy/compare/v1.13.2...v1.14.0) (2020-02-15)
 
 
