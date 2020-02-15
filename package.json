@@ -26,6 +26,20 @@
   "author": "Dmitrijs Sadovskis",
   "license": "MIT",
   "standard-version": {
+    "types": [
+      {
+        "type": "feat",
+        "section": "Features"
+      },
+      {
+        "type": "fix",
+        "section": "Bug Fixes"
+      },
+      {
+        "type": "ux",
+        "section": "UI/UX"
+      }
+    ],
     "releaseCommitMessageFormat": "chore(release): v{{currentTag}} [ci skip]"
   },
   "build": {
