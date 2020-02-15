@@ -1,6 +1,6 @@
 {
   "name": "work-log-ify",
-  "version": "1.13.2",
+  "version": "1.14.0",
   "description": "WorkLogIfy",
   "main": "app/main/.parcel/main.js",
   "scripts": {

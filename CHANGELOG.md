@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.14.0](https://github.com/dmitrijs/WorkLogIfy/compare/v1.13.2...v1.14.0) (2020-02-15)
+
+
+### Features
+
+* enable spell checker ([bc05488](https://github.com/dmitrijs/WorkLogIfy/commit/bc054887fbf8f78085b3c5447ad576161a857a80))
+
 ### [1.13.2](https://github.com/dmitrijs/WorkLogIfy/compare/v1.13.1...v1.13.2) (2020-02-13)
 
 
