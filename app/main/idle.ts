@@ -6,19 +6,19 @@ export default class IdleUser {
 
     public static registerOnReady(mainWindow, eventName) {
         setInterval(() => {
-            electron.powerMonitor.querySystemIdleTime((time) => {
-                console.log('idle for', time, 'seconds');
-                if (time < this.seconds_to_become_idle) {
-                    this.isIdle = false;
-                }
+            const time = electron.powerMonitor.getSystemIdleTime();
 
-                if (time >= this.seconds_to_become_idle) {
-                    if (!this.isIdle) {
-                        mainWindow.webContents.send(eventName, time, this.seconds_to_become_idle);
-                    }
-                    this.isIdle = true;
+            console.log('idle for', time, 'seconds');
+            if (time < this.seconds_to_become_idle) {
+                this.isIdle = false;
+            }
+
+            if (time >= this.seconds_to_become_idle) {
+                if (!this.isIdle) {
+                    mainWindow.webContents.send(eventName, time, this.seconds_to_become_idle);
                 }
-            });
+                this.isIdle = true;
+            }
         }, 30 * 1000);
     }
 }
