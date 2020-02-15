@@ -33,6 +33,7 @@ app.on('ready', async () => {
         webPreferences: {
             nodeIntegration: false,
             preload: path.resolve(__dirname, 'preload.js'),
+            spellcheck: true,
         }
     });
 
