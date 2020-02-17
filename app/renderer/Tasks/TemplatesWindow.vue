@@ -1,7 +1,15 @@
 <template>
     <div class="TemplatesWindow">
         <div v-for="(template, index) of templates">
-            <button type="button" @click="del(index)" class="btn btn-xs btn-danger">delete</button>
+            <div class="actions">
+                <i class="IconAsInput icofont-arrow-up"
+                   @click="swap(index, index - 1)" v-if="(index - 1) >= 0"></i>
+                <i class="IconAsInput icofont-arrow-down"
+                   @click="swap(index, index + 1)" v-if="(index + 1) <= (templates.length - 1)"></i>
+
+                <button type="button" @click="del(index)" class="btn btn-xs btn-danger">delete</button>
+            </div>
+
             Code: <input type="text" placeholder="TSKS-0000" v-model="template.code" @change="update(index, template)"><br/>
             Notes: <input type="text" v-model="template.notes" @change="update(index, template)" style="width: 300px;"><br/>
         </div>
@@ -43,6 +51,15 @@
         del(idx) {
             store.commit.templateDelete([idx]);
         }
+
+        swap(idx1, idx2) {
+            let templates = this.templates;
+            let a = templates[idx1];
+            let b = templates[idx2];
+
+            store.commit.templateUpdate([idx2, a]);
+            store.commit.templateUpdate([idx1, b]);
+        }
     }
 </script>
 
@@ -56,9 +73,14 @@
             border-bottom: 1px solid #E5E5E5;
             margin-bottom: 6px;
 
-            .btn-danger {
+            .actions {
                 float: right;
             }
+        }
+
+        .IconAsInput {
+            font-size: 17px;
+            cursor: pointer;
         }
     }
 </style>

@@ -261,7 +261,7 @@ const {store} = createDirectStore({
             saveTaskTemplates(state);
         },
         templateUpdate(state:AppState, [idx, updated]) {
-            state.templates[idx] = updated;
+            state.templates.splice(idx, 1, updated);
 
             saveTaskTemplates(state);
         },
