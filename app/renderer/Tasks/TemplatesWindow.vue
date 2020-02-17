@@ -10,8 +10,8 @@
                 <button type="button" @click="del(index)" class="btn btn-xs btn-danger">delete</button>
             </div>
 
-            Code: <input type="text" placeholder="TSKS-0000" v-model="template.code" @change="update(index, template)"><br/>
-            Notes: <input type="text" v-model="template.notes" @change="update(index, template)" style="width: 300px;"><br/>
+            <label>Code:</label> <input type="text" placeholder="TSKS-0000" v-model="template.code" @change="update(index, template)"><br/>
+            <label>Notes:</label> <input type="text" v-model="template.notes" @change="update(index, template)" style="width: 300px;"><br/>
         </div>
 
         <button type="button" class="btn btn-xs btn-secondary" @click="add()">+ add another</button>
@@ -75,6 +75,10 @@
 
             .actions {
                 float: right;
+            }
+
+            label {
+                width: 38px;
             }
         }
 
