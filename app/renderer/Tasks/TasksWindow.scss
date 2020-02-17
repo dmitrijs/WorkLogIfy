@@ -12,7 +12,7 @@
 & {
     .TRow {
         display: grid;
-        grid-template-columns: 22px 22px 22px 22px 38px 73px 1fr 63px 22px;
+        grid-template-columns: 22px 22px 22px 22px 73px 1fr 63px 22px;
         grid-template-rows: auto;
 
         &.--header {

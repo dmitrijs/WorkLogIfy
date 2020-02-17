@@ -8,8 +8,7 @@
             <div class="TCol --chargeable"><i class="icofont-not-allowed"></i></div>
             <div class="TCol --distributed"><i class="icofont-exchange"></i></div>
             <div class="TCol --frozen"><i class="icofont-unlock"></i></div>
-            <div class="TCol --time">Time</div>
-            <div class="TCol --code">ID</div>
+            <div class="TCol --code">Code</div>
             <div class="TCol --title">Title</div>
             <div class="TCol --timespan">Time</div>
         </div>
@@ -45,7 +44,6 @@
                     <div class="TCol --frozen">
                         <i class="IconAsInput icofont-unlock" :class="{ active: task.frozen }" @click="$store.direct.commit.updateTask([task.id, 'frozen', !task.frozen])"></i>
                     </div>
-                    <div class="TCol --time"></div>
                     <div class="TCol --code" @click="editTask($event, task)">{{task.code}}</div>
                     <div class="TCol --title" @click="editTask($event, task)">
                         <span class="Title--Content ellipsis"><span>{{task.title}}</span></span>
