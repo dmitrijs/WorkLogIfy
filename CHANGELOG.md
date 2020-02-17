@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.14.3](https://github.com/dmitrijs/WorkLogIfy/compare/v1.14.2...v1.14.3) (2020-02-17)
+
+
+### Features
+
+* allow changing templates order ([596d657](https://github.com/dmitrijs/WorkLogIfy/commit/596d657d2b22ed46a438b02f9f7b8b1a37b207c7))
+
+
+### UI/UX
+
+* combine "create" and "start" buttons into one ([67134f4](https://github.com/dmitrijs/WorkLogIfy/commit/67134f48a6fa99f35faca45f895ea8ea5137d1e5))
+* indicate that task being edited is currently active ([f637920](https://github.com/dmitrijs/WorkLogIfy/commit/f637920b73bdf53df132443f9d5aff6d028623ad))
+
 ### [1.14.2](https://github.com/dmitrijs/WorkLogIfy/compare/v1.14.1...v1.14.2) (2020-02-15)
 
 ### [1.14.1](https://github.com/dmitrijs/WorkLogIfy/compare/v1.14.0...v1.14.1) (2020-02-15)
