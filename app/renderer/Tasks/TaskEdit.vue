@@ -31,13 +31,16 @@
                 <tr>
                     <td colspan="2" class="text-right">
                         <button class="btn btn-outline-secondary btn-sm" type="button" @click="back">&lt; back</button>
-                        <button class="btn btn-secondary btn-sm">{{ mode === 'edit' ? 'update' :
-                            'create' }}
-                        </button>
-                        <button type="button" class="btn btn-primary btn-sm" @click="save(true)" v-if="mode !== 'edit'">
-                            start &nbsp;
-                            <i class="IconAsInput icofont-ui-play"></i>
-                        </button>
+                        <div class="btn-group" role="group">
+                            <button class="btn btn-secondary btn-sm">
+                                {{ mode === 'edit' ? 'update' : 'create' }}
+                            </button>
+                            <button type="button" class="btn btn-primary btn-sm"
+                                    @click="save(true)"
+                                    v-if="mode !== 'edit'">
+                                <i class="IconAsInput icofont-ui-play"></i>
+                            </button>
+                        </div>
                     </td>
                 </tr>
                 <tr>
