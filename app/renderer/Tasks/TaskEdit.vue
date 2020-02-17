@@ -32,7 +32,7 @@
                     <td colspan="2" class="text-right">
                         <button class="btn btn-outline-secondary btn-sm" type="button" @click="back">&lt; back</button>
                         <div class="btn-group" role="group">
-                            <button class="btn btn-secondary btn-sm">
+                            <button class="btn btn-secondary btn-sm" :class="{ 'btn-primary': $store.state.taskTimeredId === task.id }">
                                 {{ mode === 'edit' ? 'update' : 'create' }}
                             </button>
                             <button type="button" class="btn btn-primary btn-sm"
