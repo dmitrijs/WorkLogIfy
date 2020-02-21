@@ -26,6 +26,7 @@
   "author": "Dmitrijs Sadovskis",
   "license": "MIT",
   "standard-version": {
+    "header": "# Changelog\n\nAll notable changes to this project will be documented in this file.\n",
     "types": [
       {
         "type": "feat",
