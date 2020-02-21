@@ -1,6 +1,14 @@
 # Changelog
 
-All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
+All notable changes to this project will be documented in this file.
+
+### [1.14.4](https://github.com/dmitrijs/WorkLogIfy/compare/v1.14.3...v1.14.4) (2020-02-21)
+
+
+### Bug Fixes
+
+* **menu:** terminate app properly on Quit menu click ([dd1b295](https://github.com/dmitrijs/WorkLogIfy/commit/dd1b295ea5c922b3580811f0ab23c4319babe109))
+* **task edit:** ignore invalid adjustment time ([b100939](https://github.com/dmitrijs/WorkLogIfy/commit/b1009398c9f6eeda3f5277c13a1be3b1ce314ed5))
 
 ### [1.14.3](https://github.com/dmitrijs/WorkLogIfy/compare/v1.14.2...v1.14.3) (2020-02-17)
 
