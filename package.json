@@ -4,8 +4,8 @@
   "description": "WorkLogIfy",
   "main": "app/main/.parcel/main.js",
   "scripts": {
-    "stadard-version": "npx standard-version",
-    "stadard-version-patch": "npx standard-version --release-as patch",
+    "standard-version": "npx standard-version",
+    "standard-version-patch": "npx standard-version --release-as patch",
     "start": "run-s main:build watch",
     "release": "run-s parcel:build \"electron:build {@}\" --",
     "release-win": "run-s parcel:build \"electron:build-win {@}\" --",
