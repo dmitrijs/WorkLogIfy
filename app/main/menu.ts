@@ -64,6 +64,7 @@ export default function createMainMenu(mainWindow) {
                 {type: 'separator'},
                 {
                     label: 'Quit', click: function () {
+                        mainWindow.destroy();
                         app.quit();
                     }
                 },
