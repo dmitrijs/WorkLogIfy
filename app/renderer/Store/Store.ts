@@ -134,7 +134,7 @@ const {store} = createDirectStore({
             state.createdTaskId = id;
 
             if (task.time_add_minutes) {
-                let spentSeconds = parseInt(task.time_add_minutes) * 60;
+                let spentSeconds = parseInt(task.time_add_minutes) * 60 || 0;
 
                 state.tasks = addSession(state.tasks, id, spentSeconds, 'manual');
             }
@@ -154,7 +154,7 @@ const {store} = createDirectStore({
             state.tasks = state.tasks.setIn([task.id, 'notes'], task.notes);
 
             if (task.time_add_minutes) {
-                let spentSeconds = parseInt(task.time_add_minutes) * 60;
+                let spentSeconds = parseInt(task.time_add_minutes) * 60 || 0;
 
                 state.tasks = addSession(state.tasks, task.id, spentSeconds, 'manual');
             }
