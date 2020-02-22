@@ -64,6 +64,7 @@
       "target": [
         "zip"
       ],
+      "icon": "app/main/assets/app_icon.png",
       "artifactName": "${productName}-win-v${version}.${ext}"
     },
     "linux": {
