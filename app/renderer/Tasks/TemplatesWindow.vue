@@ -10,8 +10,10 @@
                 <button type="button" @click="del(index)" class="btn btn-xs btn-danger">delete</button>
             </div>
 
-            <label>Code:</label> <input type="text" placeholder="TSKS-0000" v-model="template.code" @change="update(index, template)"><br/>
-            <label>Notes:</label> <input type="text" v-model="template.notes" @change="update(index, template)" style="width: 300px;"><br/>
+            <label>Title:</label> <input type="text" class="narrow" v-model="template.title" @change="update(index, template)">
+            <label>Code:</label> <input type="text" class="narrow" placeholder="TSKS-0000" v-model="template.code" @change="update(index, template)"><br/>
+            <label>Notes:</label> <input type="text" v-model="template.notes" @change="update(index, template)" style="width: 300px;">
+            <i class="IconAsInput icofont-unlock" :class="{ active: template.frozen }" @click="template.frozen = !template.frozen, update(index, template)"></i>
         </div>
 
         <button type="button" class="btn btn-xs btn-secondary" @click="add()">+ add another</button>
@@ -79,6 +81,15 @@
 
             label {
                 width: 38px;
+                margin-bottom: 0.3rem;
+            }
+
+            input[type=text].narrow {
+                max-width: 127px;
+            }
+
+            .IconAsInput:not(.active) {
+                opacity: 0.2;
             }
         }
 

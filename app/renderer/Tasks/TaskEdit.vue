@@ -60,7 +60,7 @@
                     <td>Fill in from a template:</td>
                     <td>
                         <div v-for="template of templates" class="Template" @click="fill(template)">
-                            {{ template.notes }} <span class="TemplateCode">({{ template.code }})</span>
+                            {{ template.notes }} <span class="TemplateCode">(<span v-if="template.title">{{ template.title }} / </span>{{ template.code }}<span v-if="template.frozen"> <i class="IconAsInput icofont-unlock"></i></span>)</span>
                         </div>
                     </td>
                 </tr>
@@ -84,6 +84,7 @@
         task = {
             code: '',
             title: '',
+            frozen: false,
             time_spent_seconds: 0,
             date: '',
         };
@@ -131,7 +132,9 @@
             if (this.task.code === template.code) {
                 forced = true;
             }
+            this.$set(this.task, 'title', template.title);
             this.$set(this.task, 'code', template.code);
+            this.$set(this.task, 'frozen', !!template.frozen);
             if (!this.task.notes || forced) {
                 this.$set(this.task, 'notes', template.notes);
             }

@@ -126,6 +126,7 @@ const {store} = createDirectStore({
                 distributed: false,
                 chargeable: true,
                 logged: false,
+                frozen: !!task.frozen,
                 notes: task.notes,
                 date: task.date,
                 created_at: moment().toISOString(),
@@ -151,6 +152,7 @@ const {store} = createDirectStore({
             state.tasks = state.tasks.setIn([task.id, 'code'], task.code);
             state.tasks = state.tasks.setIn([task.id, 'title'], task.title);
             state.tasks = state.tasks.setIn([task.id, 'date'], task.date);
+            state.tasks = state.tasks.setIn([task.id, 'frozen'], !!task.frozen);
             state.tasks = state.tasks.setIn([task.id, 'notes'], task.notes);
 
             if (task.time_add_minutes) {
