@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+### [1.14.5](https://github.com/dmitrijs/WorkLogIfy/compare/v1.14.4...v1.14.5) (2020-02-27)
+
+
+### Features
+
+* **templates:** add 'title' and 'frozen' to the task templates ([b039c11](https://github.com/dmitrijs/WorkLogIfy/commit/b039c1102ac62a4c405fe6dccfb32ff881002483))
+
 ### [1.14.4](https://github.com/dmitrijs/WorkLogIfy/compare/v1.14.3...v1.14.4) (2020-02-21)
 
 
