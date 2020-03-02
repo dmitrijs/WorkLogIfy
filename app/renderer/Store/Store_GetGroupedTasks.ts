@@ -47,6 +47,9 @@ export function Store_MergeSameCodes(tasks: Map<string, any>) {
         existing.time_charge_text = timespanToText(existing.time_charge_seconds);
 
         let title = existing.title;
+        if (!title) {
+            title = '';
+        }
         if (task.title) {
             title += (title ? '; ' : '') + task.title;
         }

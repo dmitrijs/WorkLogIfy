@@ -256,6 +256,7 @@ const {store} = createDirectStore({
         },
         templateNew(state:AppState) {
             state.templates.push({
+                title: '',
                 code: '',
                 notes: '',
             });
