@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+### [1.14.6](https://github.com/dmitrijs/WorkLogIfy/compare/v1.14.5...v1.14.6) (2020-03-02)
+
+
+### Bug Fixes
+
+* handle cases when task title is not defined ([32f5ccd](https://github.com/dmitrijs/WorkLogIfy/commit/32f5ccd21ae8819315e6ba0c0fcab7e4dc048859))
+
 ### [1.14.5](https://github.com/dmitrijs/WorkLogIfy/compare/v1.14.4...v1.14.5) (2020-02-27)
 
 
