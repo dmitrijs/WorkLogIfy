@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+### [1.14.7](https://github.com/dmitrijs/WorkLogIfy/compare/v1.14.6...v1.14.7) (2020-03-11)
+
+
+### Bug Fixes
+
+* **templates:** do not overwrite the title or code with empty values when applying a template ([39d5818](https://github.com/dmitrijs/WorkLogIfy/commit/39d5818461db09d81d0669b879bc13e2a641afc6))
+
 ### [1.14.6](https://github.com/dmitrijs/WorkLogIfy/compare/v1.14.5...v1.14.6) (2020-03-02)
 
 
