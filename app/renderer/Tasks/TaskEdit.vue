@@ -132,8 +132,12 @@
             if (this.task.code === template.code) {
                 forced = true;
             }
-            this.$set(this.task, 'title', template.title);
-            this.$set(this.task, 'code', template.code);
+            if (template.title) {
+                this.$set(this.task, 'title', template.title);
+            }
+            if (template.code) {
+                this.$set(this.task, 'code', template.code);
+            }
             this.$set(this.task, 'frozen', !!template.frozen);
             if (!this.task.notes || forced) {
                 this.$set(this.task, 'notes', template.notes);
