@@ -1,6 +1,6 @@
 const moment = require("moment");
 
-export function timespanToText(seconds, emptyValue = '-') {
+export function timespanToText(seconds, emptyValue = '-'): string {
     let sign = '';
     if (seconds < 0) {
         sign = '-';
@@ -24,11 +24,11 @@ export function timespanToText(seconds, emptyValue = '-') {
 }
 
 
-export function comparatorGt(a, b) {
+export function comparatorGt(a, b): number {
     return a > b ? 1 : a < b ? -1 : 0;
 }
 
-export function comparatorLt(a, b) {
+export function comparatorLt(a, b): number {
     return a > b ? -1 : a < b ? 1 : 0;
 }
 

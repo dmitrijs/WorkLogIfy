@@ -3,15 +3,15 @@ import {comparatorLt, timespanToText} from "../Utils/Utils";
 import {AppState} from "./Store";
 
 export function sort_tasks(tasks) {
-    return tasks.sort((task1, task2) => {
+    return tasks.sort((task1: TaskObj, task2: TaskObj) => {
         let sess1 = task1.sessions;
         let sess2 = task2.sessions;
         let text1 = '9999-new-on-top-' + task1.id;
         let text2 = '9999-new-on-top-' + task2.id;
-        if (sess1 && sess1[0]) {
+        if (sess1 && sess1.length > 0) {
             text1 = sess1[0].started_at;
         }
-        if (sess2 && sess2[0]) {
+        if (sess2 && sess2.length > 0) {
             text2 = sess2[0].started_at;
         }
         // if (!task1.chargeable) {
@@ -100,9 +100,7 @@ export default function Store_GetGroupedTasks(state: AppState) {
 
         task.time_charge_text = 'error';
 
-        let spentSeconds = task.sessions.reduce((sum, obj: SessionObj) => sum + obj.spent_seconds, 0);
-
-        task.time_spent_seconds = spentSeconds;
+        task.time_spent_seconds = task.sessions.reduce((sum, obj: SessionObj) => sum + obj.spent_seconds, 0);
         if (state.taskTimeredId === task.id) {
             task.time_spent_seconds += state.timerElapsed;
             task.timer_elapsed_seconds_text = timespanToText(state.timerElapsed);
@@ -115,7 +113,7 @@ export default function Store_GetGroupedTasks(state: AppState) {
     let tasks: OrderedMap<string, Iterable<number, TaskObj>>;
     tasks = tasksList.groupBy((x) => x.date).toOrderedMap();
 
-    let groups = Map<string, any>();
+    let groups: Map<string, any>;
     groups = tasks.map((tasks) => {
 
         let spent = 0;

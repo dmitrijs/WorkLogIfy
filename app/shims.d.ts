@@ -24,9 +24,19 @@ declare type TaskObj = {
 
     timer_elapsed_seconds_text: string;
 
-    sessions: [];
+    sessions: SessionObj[];
+}
+
+declare type TemplateObj = {
+    code?: string;
+    title?: string;
+    notes?: string;
+    frozen?: boolean;
 }
 
 declare type SessionObj = {
     spent_seconds: number;
+    method: string;
+    started_at: string;
+    finished_at: string;
 }
