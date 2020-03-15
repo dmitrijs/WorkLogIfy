@@ -80,15 +80,13 @@ export function Store_MergeSameCodes(tasks: Map<string, any>) {
     return sort_tasks(tasksList);
 }
 
-export default function Store_GetGroupedTasks(state: AppState) {
+export default function Store_GetGroupedTasks(state: AppState): Map<string, any> {
     console.log('getTasksGrouped');
-    // populate time charge
-    let tasksList = List<TaskObj>();
-
     if (!state.tasks) {
-        return tasksList;
+        return Map<string, any>();
     }
 
+    let tasksList = List<TaskObj>();
     state.tasks.forEach((taskMap, key) => {
         let task: TaskObj;
         if (Map.isMap(taskMap)) {

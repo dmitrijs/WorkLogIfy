@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Vuex, {Store} from 'vuex'
-import {timespanToText} from './../Utils/Utils';
+import {timespanToText} from '../Utils/Utils';
 import {List, Map} from 'immutable';
 import Store_GetGroupedTasks from "./Store_GetGroupedTasks";
 import {createDirectStore} from "direct-vuex";
@@ -9,11 +9,11 @@ const moment = require("moment");
 
 Vue.use(Vuex);
 
-function saveTasks(state:AppState) {
+function saveTasks(state: AppState) {
     window.ipc.sendSync('tasks.save', state.day_key, state.tasks.toJS(), store.getters.getTasksGrouped.toJS());
 }
 
-function saveTaskTemplates(state:AppState) {
+function saveTaskTemplates(state: AppState) {
     window.ipc.sendSync('tasks.templates.save', state.templates);
 }
 
@@ -51,11 +51,11 @@ state.screen = state.tasksScreen;
 const {store} = createDirectStore({
     state: state,
     getters: {
-        getTasksGrouped(state:AppState) {
+        getTasksGrouped(state: AppState): Map<string, any> {
             return Store_GetGroupedTasks(state);
         },
 
-        getTasksUi(state:AppState) {
+        getTasksUi(state: AppState) {
             return {
                 selectedIds: state.tasksSelectedIds,
                 hoveredId: state.tasksHoveredId,
@@ -68,26 +68,22 @@ const {store} = createDirectStore({
             }
         },
 
-        getEditedTask(state:AppState) {
+        getEditedTask(state: AppState) {
             console.log('getEditedTask', state.taskEditedId);
             return state.tasks.get(state.taskEditedId);
         },
 
-        getAllFiles(state:AppState) {
-            return state.allFiles;
-        },
-
-        getFileTotals(state:AppState) {
+        getFileTotals(state: AppState) {
             return state.fileTotals;
         },
 
-        getTaskTemplates(state:AppState) {
+        getTaskTemplates(state: AppState) {
             return state.templates;
         },
     },
 
     mutations: {
-        loadTasks(state:AppState, js_tasks) {
+        loadTasks(state: AppState, js_tasks) {
             let tasks = Map<string, Map<string, any>>();
 
             if (typeof js_tasks === 'object') {
@@ -106,10 +102,10 @@ const {store} = createDirectStore({
             state.tasks = tasks;
         },
 
-        tasksUiHoveredId(state:AppState, id:string) {
+        tasksUiHoveredId(state: AppState, id: string) {
             state.tasksHoveredId = id;
         },
-        tasksUiToggle(state:AppState, id) {
+        tasksUiToggle(state: AppState, id) {
             console.log(id);
             if (state.tasksSelectedIds.get(id)) {
                 state.tasksSelectedIds = state.tasksSelectedIds.delete(id);
@@ -117,7 +113,7 @@ const {store} = createDirectStore({
                 state.tasksSelectedIds = state.tasksSelectedIds.set(id, true);
             }
         },
-        createTask(state:AppState, task) {
+        createTask(state: AppState, task) {
             const id = 'task_' + moment.utc();
             state.tasks = state.tasks.set(id, Map({
                 id: id,
@@ -146,7 +142,7 @@ const {store} = createDirectStore({
 
             saveTasks(state);
         },
-        saveTask(state:AppState, task) {
+        saveTask(state: AppState, task) {
             console.log('save', task);
 
             state.tasks = state.tasks.setIn([task.id, 'code'], task.code);
@@ -167,30 +163,30 @@ const {store} = createDirectStore({
             console.log(state.tasks.toJS());
             saveTasks(state);
         },
-        updateTask(state:AppState, [task_id, field, value]) {
+        updateTask(state: AppState, [task_id, field, value]) {
             console.log(state.tasks.get(task_id));
             state.tasks = state.tasks.setIn([task_id, field], value);
             console.log(state.tasks.toJS());
 
             saveTasks(state);
         },
-        setScreen(state:AppState, screen) {
+        setScreen(state: AppState, screen) {
             state.screen = screen;
             if (screen === 'tasks' || screen === 'DayLog') {
                 state.tasksScreen = screen;
             }
         },
-        returnToTasksScreen(state:AppState) {
+        returnToTasksScreen(state: AppState) {
             state.screen = state.tasksScreen;
         },
-        toggleDebug(state:AppState) {
+        toggleDebug(state: AppState) {
             state.is_debug = !state.is_debug;
         },
-        taskEdit(state:AppState, key) {
+        taskEdit(state: AppState, key) {
             state.taskEditedId = key;
             state.screen = 'task.edit';
         },
-        setDay(state:AppState, day:string) {
+        setDay(state: AppState, day: string) {
             if (state.taskTimeredId) {
                 alert('Cannot change date if ome task is active.');
                 return;
@@ -199,13 +195,13 @@ const {store} = createDirectStore({
             let tasks = window.ipc.sendSync('tasks.load', state.day_key);
             this.commit('loadTasks', tasks);
         },
-        selectHovered(state:AppState) {
+        selectHovered(state: AppState) {
             if (!state.tasksHoveredId) {
                 return;
             }
             state.tasksSelectedIds = state.tasksSelectedIds.set(state.tasksHoveredId, true);
         },
-        deleteSelected(state:AppState) {
+        deleteSelected(state: AppState) {
             console.log('state.tasksSelectedIds.size', state.tasksSelectedIds.size);
             if (!state.tasksSelectedIds.size) {
                 return;
@@ -222,27 +218,24 @@ const {store} = createDirectStore({
 
             saveTasks(state);
         },
-        activateTimer(state:AppState, taskId) {
+        activateTimer(state: AppState, taskId) {
             if (taskId === null) {
                 taskId = state.tasksHoveredId;
             }
             state.taskTimeredId = taskId;
             state.tasksSelectedIds = Map();
         },
-        activeTimer(state:AppState, secondsElapsed) {
+        activeTimer(state: AppState, secondsElapsed) {
             state.timerElapsedText = '+' + timespanToText(secondsElapsed, '+');
             state.timerElapsed = secondsElapsed;
         },
-        setAllFiles(state:AppState, allFiles) {
-            state.allFiles = allFiles;
-        },
-        setFileTotals(state:AppState, fileTotals) {
+        setFileTotals(state: AppState, fileTotals) {
             state.fileTotals = fileTotals;
         },
-        setTaskTemplates(state:AppState, templates) {
+        setTaskTemplates(state: AppState, templates) {
             state.templates = templates;
         },
-        stopTimer(state:AppState, [secondsElapsed, secondsIdle]) {
+        stopTimer(state: AppState, [secondsElapsed, secondsIdle]) {
             console.log('secondsElapsed', secondsElapsed, 'secondsIdle', secondsIdle);
 
             state.tasks = addSession(state.tasks, state.taskTimeredId, secondsElapsed, 'timer', secondsIdle);
@@ -254,7 +247,7 @@ const {store} = createDirectStore({
 
             saveTasks(state);
         },
-        templateNew(state:AppState) {
+        templateNew(state: AppState) {
             state.templates.push({
                 title: '',
                 code: '',
@@ -263,12 +256,12 @@ const {store} = createDirectStore({
 
             saveTaskTemplates(state);
         },
-        templateUpdate(state:AppState, [idx, updated]) {
+        templateUpdate(state: AppState, [idx, updated]) {
             state.templates.splice(idx, 1, updated);
 
             saveTaskTemplates(state);
         },
-        templateDelete(state:AppState, [idx]) {
+        templateDelete(state: AppState, [idx]) {
             state.templates.splice(idx, 1);
 
             saveTaskTemplates(state);

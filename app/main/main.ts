@@ -135,10 +135,6 @@ app.on('ready', async () => {
             event.returnValue = Filesystem.getWorkLog(arg);
         });
 
-        ipcMain.on('tasks.allfiles', (event) => {
-            event.returnValue = Filesystem.getAllFiles();
-        });
-
         ipcMain.on('tasks.getFileTotals', (event) => {
             event.returnValue = Filesystem.getFileTotals();
         });
