@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+### [1.14.8](https://github.com/dmitrijs/WorkLogIfy/compare/v1.14.7...v1.14.8) (2020-03-29)
+
+
+### UI/UX
+
+* added app icon ([428a46b](https://github.com/dmitrijs/WorkLogIfy/commit/428a46bcd5eafb528bc839f9010f53eb1335f81b))
+
 ### [1.14.7](https://github.com/dmitrijs/WorkLogIfy/compare/v1.14.6...v1.14.7) (2020-03-11)
 
 
