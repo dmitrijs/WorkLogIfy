@@ -16,13 +16,18 @@
                     <td class="Complex">
                         <div>
                             <span><strong>{{ task_time_spent_text }}</strong> ({{ task.time_spent_seconds }})</span>
-                            <span>Adjust: <input type="text" v-model="task.time_add_minutes">m</span>
+                            <span>Adjust: <input type="text" class="narrow" v-model="task.time_add_minutes">m</span>
                         </div>
                     </td>
                 </tr>
                 <tr>
                     <td>Date:</td>
-                    <td><input type="text" v-model="task.date"/></td>
+                    <td class="Complex">
+                        <div>
+                            <span><input type="text" v-model="task.date"/></span>
+                            <span>Recorded: <input type="text" class="narrow" v-model="task.time_record_minutes">m</span>
+                        </div>
+                    </td>
                 </tr>
                 <tr>
                     <td>Notes:</td>
@@ -44,11 +49,21 @@
                     </td>
                 </tr>
                 <tr>
+                    <td><strong>Recorded:</strong></td>
+                    <td>
+                        <div v-for="rec of task.records">
+                            <span v-html="formatRecord(rec)"></span>
+                        </div>
+                        <div v-if="!task.records || !task.records.length">none</div>
+                    </td>
+                </tr>
+                <tr>
                     <td>Sessions:</td>
                     <td>
                         <div v-for="sess of task.sessions">
                             {{ formatSession(sess) }}
                         </div>
+                        <div v-if="!task.sessions || !task.sessions.length">none</div>
                     </td>
                 </tr>
                 <tr>
@@ -110,6 +125,7 @@
                 this.task = this.editedTask;
             }
             this.$set(this.task, 'time_add_minutes', '');
+            this.$set(this.task, 'time_record_minutes', '');
         }
 
         mounted() {
@@ -151,6 +167,11 @@
         formatSession(sess) {
             let timespan = timespanToText(sess.spent_seconds);
             return `[${sess.method}] ${moment(sess.started_at).format('HH:mm')} -> ${moment(sess.finished_at).format('HH:mm')} = ${timespan}`;
+        }
+
+        formatRecord(rec) {
+            let timespan = timespanToText(rec.recorded_seconds);
+            return `<strong>${timespan}</strong> (${rec.method} at ${moment(rec.created_at).format('HH:mm')})`;
         }
 
         codeChanged() {

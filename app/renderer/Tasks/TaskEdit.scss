@@ -25,6 +25,10 @@
             display: flex;
             justify-content: space-between;
         }
+
+        input.narrow {
+            max-width: 100px;
+        }
     }
 
     .btn-primary {

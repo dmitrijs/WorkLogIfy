@@ -103,8 +103,10 @@ export default function Store_GetGroupedTasks(state: AppState): Map<string, any>
             task.time_spent_seconds += state.timerElapsed;
             task.timer_elapsed_seconds_text = timespanToText(state.timerElapsed);
         }
-
         task.time_spent_text = timespanToText(task.time_spent_seconds);
+
+        task.time_recorded_seconds = task.records.reduce((sum, obj: RecordObj) => sum + obj.recorded_seconds, 0);
+        task.time_recorded_text = timespanToText(task.time_recorded_seconds);
         tasksList = tasksList.push(task);
     });
 
@@ -234,6 +236,11 @@ export default function Store_GetGroupedTasks(state: AppState): Map<string, any>
                 duplicatesExist = true;
             }
             duplicatesCheck[task.code] = true;
+        });
+
+        tasks.forEach((task) => {
+            task.time_unrecorded_seconds = task.time_charge_seconds - task.time_recorded_seconds;
+            task.time_unrecorded_text = timespanToText(task.time_unrecorded_seconds);
         });
 
         tasks = sort_tasks(tasks);

@@ -28,6 +28,16 @@ function addSession(tasks, task_id, spentSeconds, method, idleSeconds = 0) {
     return tasks.setIn([task_id, 'sessions'], sessions);
 }
 
+function addRecord(tasks, task_id, recordedSeconds, method) {
+    let records = tasks.get(task_id).get('records');
+    records = records.push({
+        created_at: moment().toISOString(),
+        recorded_seconds: recordedSeconds,
+        method: method,
+    });
+    return tasks.setIn([task_id, 'records'], records);
+}
+
 const state = {
     tasks: null as Map<string, Map<string, any>>,
 
@@ -94,6 +104,7 @@ const {store} = createDirectStore({
 
                     let task = Map<string, any>(js_task);
                     task = task.set('sessions', List(task.get('sessions')));
+                    task = task.set('records', List(task.get('records')));
 
                     tasks = tasks.set(key, task);
                 }
@@ -127,6 +138,7 @@ const {store} = createDirectStore({
                 date: task.date,
                 created_at: moment().toISOString(),
                 sessions: List(),
+                records: List(),
             }));
             state.createdTaskId = id;
 
@@ -155,6 +167,11 @@ const {store} = createDirectStore({
                 let spentSeconds = parseInt(task.time_add_minutes) * 60 || 0;
 
                 state.tasks = addSession(state.tasks, task.id, spentSeconds, 'manual');
+            }
+            if (task.time_record_minutes) {
+                let recordSeconds = parseInt(task.time_record_minutes) * 60 || 0;
+
+                state.tasks = addRecord(state.tasks, task.id, recordSeconds, 'manual');
             }
 
             state.taskEditedId = null;

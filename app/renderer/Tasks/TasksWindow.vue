@@ -29,7 +29,12 @@
                 <div class="TRow"
                      v-for="task of group.tasks"
                      @mouseenter="$store.direct.commit.tasksUiHoveredId(task.id)"
-                     :class="{ selected: task._selected, logged: task.logged, hovered: tasks_ui.hoveredId === task.id, timered: tasks_ui.timeredId === task.id, distributed: task.distributed, notchargeable: !task.chargeable }"
+                     :class="{ 
+                         selected: task._selected, logged: task.logged, distributed: task.distributed, notchargeable: !task.chargeable,
+                         hovered: tasks_ui.hoveredId === task.id,
+                         timered: tasks_ui.timeredId === task.id,
+                         hasRecords: !!task.time_recorded_seconds,
+                     }"
                      @click="rowOnClick($event, task)"
                 >
                     <div class="TCol --selected">
@@ -53,19 +58,23 @@
                         <span class="Title--Content ellipsis"><span>{{task.title}}</span></span>
                         <span class="Note--Content ellipsis"><span>{{task.notes}}</span></span>
                     </div>
-                    <div class="TCol --timespan" @click="editTask($event, task)">
-                        <span class="--timespan-spent"
-                              :title="(task.timer_elapsed_seconds_text ? 'Spent ('+task.timer_elapsed_seconds_text+' timer)' : 'Charge ' + task.time_charge_text)">
+                    <div class="TCol --timespan" @click="editTask($event, task)"
+                         :title="'Final charge: ' + task.time_charge_text + '\n' + 'Recorded: ' + task.time_recorded_text + '\n' + 'Not recorded: ' + task.time_unrecorded_text"
+                    >
+                        <span class="--timespan-spent">
                             {{task.time_spent_text}}
                             <LineChart class="bg-warning"
                                        v-if="task.time_charge_extra_seconds > 0"
                                        :total="task.time_charge_seconds"
                                        :progress_normal="task.time_spent_seconds"></LineChart>
+                            <LineChart v-if="task.time_recorded_seconds > 0"
+                                       :height="3"
+                                       :total="task.time_charge_seconds"
+                                       :progress_success="task.time_recorded_seconds"></LineChart>
                         </span>
                         <span class="--timespan-charge"
-                              :title="'Final charge: ' + task.time_charge_text"
                               v-if="task.time_charge_extra_seconds > 0">
-                            {{task.time_charge_text}}
+                            {{task.time_unrecorded_text}}
                         </span>
                     </div>
                     <div class="TCol --playback">
@@ -199,6 +208,34 @@
             .TCol {
                 .--timespan-spent {
                     text-decoration: line-through;
+                }
+            }
+        }
+
+        .TRow {
+            .TCol {
+                .--timespan-spent-unrecorded {
+                    display: none;
+                }
+            }
+        }
+
+        .TRow.hasRecords {
+            .TCol {
+                .--timespan-spent-total {
+                    display: none !important;
+                }
+            }
+
+            &:hover {
+                .TCol {
+                    .--timespan-spent-unrecorded {
+                        display: none;
+                    }
+
+                    .--timespan-spent-total {
+                        display: inline !important;
+                    }
                 }
             }
         }
