@@ -16,7 +16,8 @@
             <template class="TGroup" v-for="(group, date) of tasksGrouped">
                 <div class="TRowDate">
                     <div class="TCol --selected"></div>
-                    <div class="TCol --frozen"><i class="IconAsInput icofont-wall-clock" :class="{ active: group.logged }"></i></div>
+                    <div class="TCol --frozen"><i class="IconAsInput icofont-wall-clock"
+                                                  :class="{ active: group.logged }"></i></div>
                     <div class="TCol --group-date">{{ date }}</div>
                     <div class="TCol --timespan --timespan-charge" title="Charge">
                         {{ group.time_charge_rounded_text }}
@@ -36,13 +37,16 @@
                             <input type="checkbox" :checked="task._selected"><span></span></div>
                     </div>
                     <div class="TCol --chargeable">
-                        <i class="IconAsInput icofont-not-allowed" :class="{ active: !task.chargeable }" @click="$store.direct.commit.updateTask([task.id, 'chargeable', !task.chargeable])"></i>
+                        <i class="IconAsInput icofont-not-allowed" :class="{ active: !task.chargeable }"
+                           @click="$store.direct.commit.updateTask([task.id, 'chargeable', !task.chargeable])"></i>
                     </div>
                     <div class="TCol --distributed">
-                        <i class="IconAsInput icofont-exchange" :class="{ active: task.distributed }" @click="$store.direct.commit.updateTask([task.id, 'distributed', !task.distributed])"></i>
+                        <i class="IconAsInput icofont-exchange" :class="{ active: task.distributed }"
+                           @click="$store.direct.commit.updateTask([task.id, 'distributed', !task.distributed])"></i>
                     </div>
                     <div class="TCol --frozen">
-                        <i class="IconAsInput icofont-unlock" :class="{ active: task.frozen }" @click="$store.direct.commit.updateTask([task.id, 'frozen', !task.frozen])"></i>
+                        <i class="IconAsInput icofont-unlock" :class="{ active: task.frozen }"
+                           @click="$store.direct.commit.updateTask([task.id, 'frozen', !task.frozen])"></i>
                     </div>
                     <div class="TCol --code" @click="editTask($event, task)">{{task.code}}</div>
                     <div class="TCol --title" @click="editTask($event, task)">
@@ -50,11 +54,18 @@
                         <span class="Note--Content ellipsis"><span>{{task.notes}}</span></span>
                     </div>
                     <div class="TCol --timespan" @click="editTask($event, task)">
-                        <span class="--timespan-spent" :title="(task.timer_elapsed_seconds_text ? 'Spent ('+task.timer_elapsed_seconds_text+' timer)' : 'Charge ' + task.time_charge_text)">
+                        <span class="--timespan-spent"
+                              :title="(task.timer_elapsed_seconds_text ? 'Spent ('+task.timer_elapsed_seconds_text+' timer)' : 'Charge ' + task.time_charge_text)">
                             {{task.time_spent_text}}
+                            <LineChart class="bg-warning"
+                                       v-if="task.time_charge_extra_seconds > 0"
+                                       :total="task.time_charge_seconds"
+                                       :progress_normal="task.time_spent_seconds"></LineChart>
                         </span>
-                        <span class="--timespan-charge" :title="'Final charge: ' + task.time_charge_text" v-if="task.time_charge_extra_seconds > 0">
-                            +{{task.time_charge_extra_text}}
+                        <span class="--timespan-charge"
+                              :title="'Final charge: ' + task.time_charge_text"
+                              v-if="task.time_charge_extra_seconds > 0">
+                            {{task.time_charge_text}}
                         </span>
                     </div>
                     <div class="TCol --playback">
@@ -98,10 +109,15 @@
     import Component from "vue-class-component";
     import horizontal_scroller from "../library/horizontal_scroller";
     import menu from './TasksMenu';
+    import LineChart from '../Components/LineChart.vue';
     import store from "../Store/Store";
     import timer from "../Timer";
 
-    @Component({})
+    @Component({
+        components: {
+            LineChart,
+        }
+    })
     export default class TasksWindow extends Vue {
         data() {
             return {}
@@ -172,6 +188,7 @@
                 .--timespan-charge {
                     display: none;
                 }
+
                 .--timespan-spent {
                     opacity: 0.35 !important;
                 }
