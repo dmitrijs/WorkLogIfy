@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.15.0](https://github.com/dmitrijs/WorkLogIfy/compare/v1.14.8...v1.15.0) (2020-03-30)
+
+
+### Features
+
+* **tasks:** allow specifying amount of time that was recorded to the time tracking system ([438ed1c](https://github.com/dmitrijs/WorkLogIfy/commit/438ed1c98e3d6812a54ddd22040e3890d83d7ace))
+* **tasks:** show a line chart of the task timespan ([b09c94d](https://github.com/dmitrijs/WorkLogIfy/commit/b09c94df3ed1f53c872ff27e7e0a48d5ce1305eb))
+
+
+### Bug Fixes
+
+* **tasks:** fix charge extra seconds calculation ([8b9d58a](https://github.com/dmitrijs/WorkLogIfy/commit/8b9d58ac921e9db2804cc1dfd939273c34334ad5))
+
 ### [1.14.8](https://github.com/dmitrijs/WorkLogIfy/compare/v1.14.7...v1.14.8) (2020-03-29)
 
 
