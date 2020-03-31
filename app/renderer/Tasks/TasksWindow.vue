@@ -65,9 +65,11 @@
                             {{task.time_spent_text}}
                             <LineChart class="bg-warning"
                                        v-if="task.time_charge_extra_seconds > 0"
+                                       :height="3"
                                        :total="task.time_charge_seconds"
                                        :progress_normal="task.time_spent_seconds"></LineChart>
-                            <LineChart v-if="task.time_recorded_seconds > 0"
+                            <LineChart class="bg-dark"
+                                       v-if="task.time_recorded_seconds > 0"
                                        :height="3"
                                        :total="task.time_charge_seconds"
                                        :progress_success="task.time_recorded_seconds"></LineChart>
