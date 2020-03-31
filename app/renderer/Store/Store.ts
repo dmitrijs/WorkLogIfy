@@ -210,12 +210,17 @@ const {store} = createDirectStore({
         },
         setDay(state: AppState, day: string) {
             if (state.taskTimeredId) {
-                alert('Cannot change date if ome task is active.');
+                alert('Cannot change date if some task is active.');
                 return;
             }
             state.day_key = day;
             let tasks = window.ipc.sendSync('tasks.load', state.day_key);
             this.commit('loadTasks', tasks);
+        },
+        openNextDay(state: AppState) {
+            let today = moment(state.day_key, 'YYYY-MM-DD');
+            let tomorrow = today.add(1, 'day').format('YYYY-MM-DD');
+            this.commit('setDay', tomorrow);
         },
         selectHovered(state: AppState) {
             if (!state.tasksHoveredId) {

@@ -2,7 +2,7 @@
     <div class="TasksWindow">
         <div class="TRow --header">
             <div class="TCol --selected">
-                <div class="label-checkbox" @click="store.commit.tasksUiToggle(task.id)">
+                <div class="label-checkbox">
                     <input type="checkbox"><span></span></div>
             </div>
             <div class="TCol --chargeable"><i class="icofont-not-allowed"></i></div>
@@ -11,6 +11,9 @@
             <div class="TCol --code">Code</div>
             <div class="TCol --title">Title</div>
             <div class="TCol --timespan">Time</div>
+            <div class="TCol --timespan">
+                <i class="IconAsInput icofont-arrow-right" @click="$store.direct.commit.openNextDay()"></i>
+            </div>
         </div>
         <div class="TasksTable" :class="{ ShowAsReport: tasks_ui.tasksShowAsReport }">
             <template class="TGroup" v-for="(group, date) of tasksGrouped">
