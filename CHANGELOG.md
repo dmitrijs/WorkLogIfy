@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.17.0](https://github.com/dmitrijs/WorkLogIfy/compare/v1.16.0...v1.17.0) (2020-03-31)
+
+
+### Features
+
+* allow time drag&drop ([d841e76](https://github.com/dmitrijs/WorkLogIfy/commit/d841e761a890ed6556373634c3c7c25cf63859ca))
+
 ## [1.16.0](https://github.com/dmitrijs/WorkLogIfy/compare/v1.15.0...v1.16.0) (2020-03-31)
 
 
