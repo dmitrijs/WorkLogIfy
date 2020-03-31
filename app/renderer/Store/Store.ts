@@ -196,8 +196,8 @@ const {store} = createDirectStore({
         returnToTasksScreen(state: AppState) {
             state.screen = state.tasksScreen;
         },
-        toggleDebug(state: AppState) {
-            state.is_debug = !state.is_debug;
+        toggleDebug(state: AppState, value) {
+            state.is_debug = value;
         },
         taskEdit(state: AppState, key) {
             state.taskEditedId = key;

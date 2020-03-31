@@ -26,8 +26,8 @@ window.ipc.on('change.screen', function ($event, where) {
     store.commit.setScreen(where);
 });
 
-window.ipc.on('debug.toggle', function ($event) {
-    store.commit.toggleDebug();
+window.ipc.on('debug.toggle', function ($event, value) {
+    store.commit.toggleDebug(value);
 });
 
 let vue = new Vue({
