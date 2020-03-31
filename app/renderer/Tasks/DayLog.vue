@@ -13,7 +13,7 @@
             >
                 <div class="Code" :class="{ combined: !task.id }">
                     <div class="Code--Content" @click="copyToClipboard($event, task.code)">{{task.code}}</div>
-                    <a href="#" @click.prevent="editTask($event, task)" v-if="task.id">edit</a>
+                    <a href="#" @click.prevent="editTask($event, task)" v-if="!task.grouped">edit</a>
                 </div>
 
                 <div class="Description">

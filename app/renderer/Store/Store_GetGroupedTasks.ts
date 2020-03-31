@@ -26,7 +26,9 @@ export function sort_tasks(tasks) {
 
 export function Store_MergeSameCodes(tasks: Map<string, any>) {
     let unique = Map<string, any>();
+    let idx = 0;
     tasks.map((task: TaskObj) => {
+        idx++;
         let existing = unique.get(task.code);
         if (!existing) {
             unique = unique.set(task.code, {...task});
@@ -67,7 +69,8 @@ export function Store_MergeSameCodes(tasks: Map<string, any>) {
         }
         existing.notes = notes.trim();
 
-        delete existing.id;
+        existing.id = 'group_' + idx;
+        existing.grouped = true;
 
         console.log('existing', existing);
 

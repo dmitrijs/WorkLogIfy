@@ -12,7 +12,7 @@
             <div class="TCol --title">Title</div>
             <div class="TCol --timespan">Time</div>
         </div>
-        <div class="TasksTable">
+        <div class="TasksTable" :class="{ ShowAsReport: tasks_ui.tasksShowAsReport }">
             <template class="TGroup" v-for="(group, date) of tasksGrouped">
                 <div class="TRowDate">
                     <div class="TCol --selected"></div>
@@ -29,7 +29,8 @@
                 <div class="TRow"
                      v-for="task of group.tasks"
                      @mouseenter="$store.direct.commit.tasksUiHoveredId(task.id)"
-                     :class="{ 
+                     :key="task.id + forceUpdateKey"
+                     :class="{
                          selected: task._selected, logged: task.logged, distributed: task.distributed, notchargeable: !task.chargeable,
                          hovered: tasks_ui.hoveredId === task.id,
                          timered: tasks_ui.timeredId === task.id,
@@ -53,10 +54,19 @@
                         <i class="IconAsInput icofont-unlock" :class="{ active: task.frozen }"
                            @click="$store.direct.commit.updateTask([task.id, 'frozen', !task.frozen])"></i>
                     </div>
-                    <div class="TCol --code" @click="editTask($event, task)">{{task.code}}</div>
-                    <div class="TCol --title" @click="editTask($event, task)">
-                        <span class="Title--Content ellipsis"><span>{{task.title}}</span></span>
-                        <span class="Note--Content ellipsis"><span>{{task.notes}}</span></span>
+                    <div class="TCol --code"
+                         @click="tasks_ui.tasksShowAsReport ? copyToClipboard($event, task.code) : editTask($event, task)">
+                        {{task.code}}
+                        <div class="--edit-button">
+                            <a href="#" @click.stop="editTask($event, task)" v-if="!task.grouped">edit</a>
+                        </div>
+                    </div>
+                    <div class="TCol --title"
+                         @click="tasks_ui.tasksShowAsReport ? copyToClipboard($event, task.notes) : editTask($event, task)">
+                        <span class="Title--Content"
+                              :class="{ ellipsis: !tasks_ui.tasksShowAsReport }"><span>{{task.title}}</span></span>
+                        <span class="Note--Content "
+                              :class="{ ellipsis: !tasks_ui.tasksShowAsReport }"><span>{{task.notes}}</span></span>
                     </div>
                     <div class="TCol --timespan" @click="editTask($event, task)"
                          :title="'Final charge: ' + task.time_charge_text + '\n' + 'Recorded: ' + task.time_recorded_text + '\n' + 'Not recorded: ' + task.time_unrecorded_text"
@@ -78,6 +88,9 @@
                               v-if="task.time_charge_extra_seconds > 0">
                             {{task.time_unrecorded_text}}
                         </span>
+                        <span class="--timespan-final-charge">
+                            {{task.time_charge_text}}
+                        </span>
                     </div>
                     <div class="TCol --playback">
                         <i class="IconAsInput icofont-ui-play-stop" v-if="tasks_ui.timeredId === task.id"
@@ -87,6 +100,13 @@
                     </div>
                 </div>
             </template>
+        </div>
+
+        <div>
+            <div class="label--checkbox label--checkbox--with-text"
+                 @click.prevent="toggleShowAsReport()">
+                <input type="checkbox" :checked="tasks_ui.tasksShowAsReport"><span></span> show as report
+            </div>
         </div>
 
         <div class="SelectionStatistics">
@@ -123,6 +143,7 @@
     import LineChart from '../Components/LineChart.vue';
     import store from "../Store/Store";
     import timer from "../Timer";
+    import {Store_MergeSameCodes} from "../Store/Store_GetGroupedTasks";
 
     @Component({
         components: {
@@ -131,11 +152,23 @@
     })
     export default class TasksWindow extends Vue {
         data() {
-            return {}
+            return {
+                forceUpdateKey: 1,
+            };
         }
 
         get tasksGrouped() {
-            return store.getters.getTasksGrouped.toJS();
+            let groups = store.getters.getTasksGrouped;
+
+            let result = groups;
+            if (store.state.tasksShowAsReport) {
+                groups.map((group, group_id) => {
+                    let tasks = Store_MergeSameCodes(group.get('tasks'));
+                    result = result.setIn([group_id, 'tasks'], tasks);
+                });
+            }
+
+            return result.toJS();
         }
 
         get tasks_ui() {
@@ -183,6 +216,23 @@
         stopTimer() {
             timer.stop();
         }
+
+        toggleShowAsReport() {
+            if (this.tasks_ui.tasksShowAsReport) {
+                setTimeout(function () {
+                    this.forceUpdateKey++; // force reload to remove animation classes
+                }.bind(this), 200/* transition 200ms */);
+            }
+            store.commit.toggleTasksShowAsReport();
+        }
+
+        copyToClipboard(ev, text) {
+            navigator.clipboard.writeText(text).then(function () {
+                ev.target.classList.add('AnimationPulseOnceAndHide');
+            }, function () {
+                /* clipboard write failed */
+            });
+        }
     }
 </script>
 
@@ -190,12 +240,27 @@
     .TasksWindow {
         @import "./TasksWindow";
 
+        .--edit-button {
+            display: none;
+        }
+
+        .label--checkbox--with-text {
+            margin: 2px 0px 4px 4px;
+
+            input[type=checkbox] {
+                + span {
+                    top: 4px;
+                }
+            }
+        }
+
         .TRow.distributed,
         .TRow.notchargeable {
             height: 18px;
 
             .TCol {
                 .Note--Content,
+                .--edit-button,
                 .--timespan-charge {
                     display: none;
                 }
@@ -215,8 +280,14 @@
         }
 
         .TRow {
-            .TCol {
+            transition: all 200ms;
+
+            .TCol.--timespan {
                 .--timespan-spent-unrecorded {
+                    display: none;
+                }
+
+                .--timespan-final-charge {
                     display: none;
                 }
             }
@@ -238,6 +309,36 @@
                     .--timespan-spent-total {
                         display: inline !important;
                     }
+                }
+            }
+        }
+
+        .TasksTable.ShowAsReport {
+            .--edit-button {
+                display: block;
+                opacity: 0.5;
+            }
+
+            .TRow {
+                margin-bottom: 5px;
+
+                .Title--Content {
+                    opacity: 0.5;
+                }
+
+                .TCol.--timespan {
+                    .--timespan-spent,
+                    .--timespan-charge {
+                        display: none;
+                    }
+
+                    .--timespan-final-charge {
+                        display: block;
+                    }
+                }
+
+                &.notchargeable {
+                    opacity: 0.12;
                 }
             }
         }

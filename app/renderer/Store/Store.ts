@@ -46,6 +46,7 @@ const state = {
     taskEditedId: null,
     tasksScreen: 'tasks',
     taskTimeredId: null,
+    tasksShowAsReport: false,
     timerElapsedText: null,
     timerElapsed: 0,
     screen: null,
@@ -75,6 +76,7 @@ const {store} = createDirectStore({
                 screen: state.screen,
                 is_debug: state.is_debug,
                 day_key: state.day_key,
+                tasksShowAsReport: state.tasksShowAsReport,
             }
         },
 
@@ -198,6 +200,9 @@ const {store} = createDirectStore({
         },
         toggleDebug(state: AppState, value) {
             state.is_debug = value;
+        },
+        toggleTasksShowAsReport(state: AppState) {
+            state.tasksShowAsReport = !state.tasksShowAsReport;
         },
         taskEdit(state: AppState, key) {
             state.taskEditedId = key;
