@@ -21,15 +21,9 @@ export default function createMainMenu(mainWindow) {
             }
         },
         {
-            label: 'List (active)', click: function () {
+            label: 'My Tasks', click: function () {
                 mainWindow.show();
                 mainWindow.webContents.send('change.screen', 'tasks');
-            }
-        },
-        {
-            label: 'List (report)', click: function () {
-                mainWindow.show();
-                mainWindow.webContents.send('change.screen', 'DayLog');
             }
         },
         {
@@ -60,6 +54,13 @@ export default function createMainMenu(mainWindow) {
                 {
                     label: 'Reload', click: function () {
                         mainWindow.reload();
+                    }
+                },
+                {type: 'separator'},
+                {
+                    label: 'Report (deprecated)', click: function () {
+                        mainWindow.show();
+                        mainWindow.webContents.send('change.screen', 'DayLog');
                     }
                 },
                 {type: 'separator'},
