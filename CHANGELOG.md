@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.16.0](https://github.com/dmitrijs/WorkLogIfy/compare/v1.15.0...v1.16.0) (2020-03-31)
+
+
+### Features
+
+* added button that opens the following day ([9e46650](https://github.com/dmitrijs/WorkLogIfy/commit/9e46650fcc71b185813036f1df9258f379ded4b5))
+* **tasks:** combined active tasks list and report into one screen ([01cdc84](https://github.com/dmitrijs/WorkLogIfy/commit/01cdc84aa67a7f6a9a58461309ec5351930a5f53))
+
+
+### Bug Fixes
+
+* debug mode toggling fixes ([dde61c8](https://github.com/dmitrijs/WorkLogIfy/commit/dde61c85ad6137c6fa6ba6de3314b8c70b38aa6a))
+
+
+### UI/UX
+
+* deprecated the 'List (report)' screen ([607467f](https://github.com/dmitrijs/WorkLogIfy/commit/607467fafd4e41463d3be6219f93451f64cfb0ab))
+
 ## [1.15.0](https://github.com/dmitrijs/WorkLogIfy/compare/v1.14.8...v1.15.0) (2020-03-30)
 
 
