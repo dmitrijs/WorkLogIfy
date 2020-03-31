@@ -1,5 +1,12 @@
 <template>
-    <div class="TasksWindow">
+    <div class="TasksWindow" @mousemove="dragContinue($event)" @mouseup="dragStop">
+        <div class="DragGhost"
+             :style="'left: ' + drag.nowAt[0] + 'px; top: ' + (drag.nowAt[1] - 16) + 'px;'"
+             v-if="drag.active && drag.distance > 20"
+        >
+            <span v-if="drag.minutes > 0">{{ drag.minutes }}m</span>
+            <span v-else>cancel</span>
+        </div>
         <div class="TRow --header">
             <div class="TCol --selected">
                 <div class="label-checkbox">
@@ -71,7 +78,9 @@
                         <span class="Note--Content "
                               :class="{ ellipsis: !tasks_ui.tasksShowAsReport }"><span>{{task.notes}}</span></span>
                     </div>
-                    <div class="TCol --timespan" @click="editTask($event, task)"
+                    <div class="TCol --timespan"
+                         @click="drag.readyToDrop ? dropTime($event, task) : editTask($event, task)"
+                         @mousedown.prevent.stop="dragStart($event, task)"
                          :title="'Final charge: ' + task.time_charge_text + '\n' + 'Recorded: ' + task.time_recorded_text + '\n' + 'Not recorded: ' + task.time_unrecorded_text"
                     >
                         <span class="--timespan-spent">
@@ -106,14 +115,15 @@
         </div>
 
         <div>
-            <div class="label--checkbox label--checkbox--with-text"
-                 @click.prevent="toggleShowAsReport()">
+            <a href="#" @click="drag.active = drag.readyToDrop = false" v-if="drag.readyToDrop" style="float: right;">cancel</a>
+            <span class="label--checkbox label--checkbox--with-text"
+                  @click.prevent="toggleShowAsReport()">
                 <input type="checkbox" :checked="tasks_ui.tasksShowAsReport"><span></span> show as report
-            </div>
+            </span>
         </div>
 
         <div class="SelectionStatistics">
-            Statistics!
+            {{ drag }}
         </div>
 
         <div class="Timeline" ref="timeline">
@@ -154,6 +164,17 @@
         }
     })
     export default class TasksWindow extends Vue {
+        drag = {
+            active: false,
+            readyToDrop: false,
+            distance: 0,
+            minutes: 0,
+            startedAt: [0, 0],
+            nowAt: [0, 0],
+            taskFrom: 0,
+            taskTo: 0,
+        };
+
         data() {
             return {
                 forceUpdateKey: 1,
@@ -236,6 +257,66 @@
                 /* clipboard write failed */
             });
         }
+
+        dragClear() {
+            this.drag.active = false;
+            this.drag.readyToDrop = false;
+            this.drag.minutes = 0;
+            this.drag.startedAt = [0, 0];
+            this.drag.nowAt = [0, 0];
+            this.drag.taskFrom = 0;
+            this.drag.taskTo = 0;
+        }
+
+        dragStart($event, task) {
+            if (this.drag.readyToDrop) {
+                return;
+            }
+            this.dragClear();
+
+            this.drag.active = true;
+            this.drag.startedAt = [$event.clientX, $event.clientY];
+            this.drag.nowAt = [$event.clientX, $event.clientY];
+            this.drag.taskFrom = task.id;
+        }
+
+        dragContinue($event) {
+            if (!this.drag.active) {
+                return;
+            }
+            this.drag.nowAt = [$event.clientX, $event.clientY];
+
+            let distance = Math.sqrt(
+                Math.pow(this.drag.startedAt[0] - this.drag.nowAt[0], 2) +
+                Math.pow(this.drag.startedAt[1] - this.drag.nowAt[1], 2)
+            );
+            if (!this.drag.readyToDrop) {
+                this.drag.distance = distance;
+                this.drag.minutes = Math.max(0, Math.round(distance / 8.0) - 5);
+            }
+        }
+
+        dragStop($event) {
+            this.drag.readyToDrop = this.drag.minutes > 0;
+            this.drag.active = this.drag.minutes > 0;
+
+            if (!this.drag.active) {
+                this.dragClear();
+            }
+        }
+
+        dropTime($event, task = null) {
+            if (!this.drag.active || !this.drag.readyToDrop) {
+                return;
+            }
+            this.drag.readyToDrop = this.drag.active = false;
+            this.drag.taskTo = task.id;
+            if (this.drag.minutes > 0 && this.drag.taskFrom && this.drag.taskTo) {
+                store.commit.taskAddSession([this.drag.taskFrom, -this.drag.minutes, 'drag']);
+                store.commit.taskAddSession([this.drag.taskTo, this.drag.minutes, 'drop']);
+            }
+            this.dragClear();
+        }
     }
 </script>
 
@@ -248,6 +329,7 @@
         }
 
         .label--checkbox--with-text {
+            display: inline-block;
             margin: 2px 0px 4px 4px;
 
             input[type=checkbox] {
@@ -255,6 +337,14 @@
                     top: 4px;
                 }
             }
+        }
+
+        .DragGhost {
+            position: fixed;
+            pointer-events: none;
+            background: white;
+            padding: 0 4px;
+            border-radius: 3px;
         }
 
         .TRow.distributed,

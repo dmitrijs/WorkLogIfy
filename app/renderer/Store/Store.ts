@@ -274,6 +274,10 @@ const {store} = createDirectStore({
 
             saveTasks(state);
         },
+        taskAddSession(state: AppState, [taskId, minutes, method]) {
+            state.tasks = addSession(state.tasks, taskId, minutes * 60, method);
+            saveTasks(state);
+        },
         templateNew(state: AppState) {
             state.templates.push({
                 title: '',
