@@ -1,10 +1,10 @@
 <template>
     <div class="TasksWindow" @mousemove="dragContinue($event)" @mouseup="dragStop">
         <div class="DragGhost"
-             :style="'left: ' + drag.nowAt[0] + 'px; top: ' + (drag.nowAt[1] - 16) + 'px;'"
+             :style="'left: ' + drag.nowAt[0] + 'px; top: ' + (drag.nowAt[1] - 20) + 'px;'"
              v-if="drag.active && drag.distance > 20"
         >
-            <span v-if="drag.minutes > 0">{{ drag.minutes }}m</span>
+            <span v-if="drag.minutes > 0">{{ drag.minutes }}m (of {{ drag.taskFromMinutes }}m)</span>
             <span v-else>cancel</span>
         </div>
         <div class="TRow --header">
@@ -79,7 +79,7 @@
                               :class="{ ellipsis: !tasks_ui.tasksShowAsReport }"><span>{{task.notes}}</span></span>
                     </div>
                     <div class="TCol --timespan"
-                         @click="drag.readyToDrop ? dropTime($event, task) : editTask($event, task)"
+                         @click="dropTime($event, task)"
                          @mousedown.prevent.stop="dragStart($event, task)"
                          :title="'Final charge: ' + task.time_charge_text + '\n' + 'Recorded: ' + task.time_recorded_text + '\n' + 'Not recorded: ' + task.time_unrecorded_text"
                     >
@@ -115,7 +115,7 @@
         </div>
 
         <div>
-            <a href="#" @click="drag.active = drag.readyToDrop = false" v-if="drag.readyToDrop" style="float: right;">cancel</a>
+            <a href="#" @click="dragClear" v-if="drag.readyToDrop" style="float: right;">cancel</a>
             <span class="label--checkbox label--checkbox--with-text"
                   @click.prevent="toggleShowAsReport()">
                 <input type="checkbox" :checked="tasks_ui.tasksShowAsReport"><span></span> show as report
@@ -172,6 +172,7 @@
             startedAt: [0, 0],
             nowAt: [0, 0],
             taskFrom: 0,
+            taskFromMinutes: 0,
             taskTo: 0,
         };
 
@@ -265,6 +266,7 @@
             this.drag.startedAt = [0, 0];
             this.drag.nowAt = [0, 0];
             this.drag.taskFrom = 0;
+            this.drag.taskFromMinutes = 0;
             this.drag.taskTo = 0;
         }
 
@@ -278,6 +280,7 @@
             this.drag.startedAt = [$event.clientX, $event.clientY];
             this.drag.nowAt = [$event.clientX, $event.clientY];
             this.drag.taskFrom = task.id;
+            this.drag.taskFromMinutes = Math.round(task.time_charge_seconds / 60);
         }
 
         dragContinue($event) {
@@ -292,7 +295,13 @@
             );
             if (!this.drag.readyToDrop) {
                 this.drag.distance = distance;
-                this.drag.minutes = Math.max(0, Math.round(distance / 8.0) - 5);
+                let coefficient = 10.0 / Math.log10(distance);
+                this.drag.minutes = Math.max(0, Math.round(distance / coefficient) - 5);
+                this.drag.minutes = Math.min(this.drag.minutes, this.drag.taskFromMinutes);
+
+                if (this.drag.nowAt[0] < 80) {
+                    this.drag.minutes = 0;
+                }
             }
         }
 
@@ -345,6 +354,9 @@
             background: white;
             padding: 0 4px;
             border-radius: 3px;
+            z-index: 10000;
+            font-size: 12px;
+            border: 1px solid lightgrey;
         }
 
         .TRow.distributed,
