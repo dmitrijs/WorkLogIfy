@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+### [1.17.1](https://github.com/dmitrijs/WorkLogIfy/compare/v1.17.0...v1.17.1) (2020-04-01)
+
+
+### UI/UX
+
+* drag&drop improvements ([bc274e9](https://github.com/dmitrijs/WorkLogIfy/commit/bc274e9f12a15c396cd66dacbdab79ee2298203c))
+
 ## [1.17.0](https://github.com/dmitrijs/WorkLogIfy/compare/v1.16.0...v1.17.0) (2020-03-31)
 
 
