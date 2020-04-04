@@ -332,7 +332,11 @@
             }
             this.drag.readyToDrop = this.drag.active = false;
             this.drag.taskTo = task.id;
-            if (this.drag.minutes > 0 && this.drag.taskFrom && this.drag.taskTo) {
+
+            if (this.drag.minutes > 0 &&
+                this.drag.taskFrom &&
+                this.drag.taskTo &&
+                this.drag.taskFrom !== this.drag.taskTo) {
                 store.commit.taskAddSession([this.drag.taskFrom, -this.drag.minutes, 'drag']);
                 store.commit.taskAddSession([this.drag.taskTo, this.drag.minutes, 'drop']);
             }
