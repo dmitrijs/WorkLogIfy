@@ -4,12 +4,12 @@
              :style="'left: ' + (drag.nowAt[0] + 6) + 'px; top: ' + (drag.nowAt[1] - 24) + 'px;'"
              v-if="drag.active && drag.distance > 20"
         >
-            <span v-if="drag.minutes > 0">{{ drag.minutes }}m (of {{ drag.taskFromMinutes }}m)</span>
+            <span v-if="drag.minutes > 0">{{ drag.minutes_text }}</span>
             <span v-else>cancel</span>
             <LineChart class="progress-bar--no-transition"
                        v-if="drag.minutes > 0"
                        :height="5"
-                       :total="drag.taskFromMinutes"
+                       :total="drag.taskFrom_minutes"
                        :progress_info="drag.minutes"></LineChart>
         </div>
         <div class="TRow --header">
@@ -162,6 +162,7 @@
     import store from "../Store/Store";
     import timer from "../Timer";
     import {Store_MergeSameCodes} from "../Store/Store_GetGroupedTasks";
+    import {timespanToText} from "../Utils/Utils";
 
     @Component({
         components: {
@@ -174,10 +175,12 @@
             readyToDrop: false,
             distance: 0,
             minutes: 0,
+            minutes_text: '',
             startedAt: [0, 0],
             nowAt: [0, 0],
             taskFrom: 0,
-            taskFromMinutes: 0,
+            taskFrom_minutes: 0,
+            taskFrom_minutes_text: '',
             taskTo: 0,
         };
 
@@ -268,10 +271,12 @@
             this.drag.active = false;
             this.drag.readyToDrop = false;
             this.drag.minutes = 0;
+            this.drag.minutes_text = '';
             this.drag.startedAt = [0, 0];
             this.drag.nowAt = [0, 0];
             this.drag.taskFrom = 0;
-            this.drag.taskFromMinutes = 0;
+            this.drag.taskFrom_minutes = 0;
+            this.drag.taskFrom_minutes_text = '';
             this.drag.taskTo = 0;
         }
 
@@ -285,7 +290,8 @@
             this.drag.startedAt = [$event.clientX, $event.clientY];
             this.drag.nowAt = [$event.clientX, $event.clientY];
             this.drag.taskFrom = task.id;
-            this.drag.taskFromMinutes = Math.round(task.time_spent_seconds / 60);
+            this.drag.taskFrom_minutes = Math.round(task.time_spent_seconds / 60);
+            this.drag.taskFrom_minutes_text = task.time_spent_seconds_text;
         }
 
         dragContinue($event) {
@@ -302,11 +308,12 @@
                 this.drag.distance = distance;
                 let coefficient = 10.0 / Math.log10(distance);
                 this.drag.minutes = Math.max(0, Math.round(distance / coefficient) - 5);
-                this.drag.minutes = Math.min(this.drag.minutes, this.drag.taskFromMinutes);
+                this.drag.minutes = Math.min(this.drag.minutes, this.drag.taskFrom_minutes);
 
                 if (this.drag.nowAt[0] < 80) {
                     this.drag.minutes = 0;
                 }
+                this.drag.minutes_text = timespanToText(this.drag.minutes * 60);
             }
         }
 
@@ -362,6 +369,8 @@
             z-index: 10000;
             font-size: 12px;
             border: 1px solid lightgrey;
+            min-width: 64px;
+            text-align: center;
 
             .LineChart {
                 margin: 0 -4px;
