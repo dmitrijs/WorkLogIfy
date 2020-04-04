@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented in this file.
 
+### [1.17.2](https://github.com/dmitrijs/WorkLogIfy/compare/v1.17.1...v1.17.2) (2020-04-04)
+
+
+### Features
+
+* **drag&drop:** show progress bar in the ghost ([018e565](https://github.com/dmitrijs/WorkLogIfy/commit/018e565241a4c52ce2b376ade15b7b18ff71c82e))
+
+
+### Bug Fixes
+
+* **drag&drop:** drag the spent (not charge) time ([5064d0a](https://github.com/dmitrijs/WorkLogIfy/commit/5064d0af360063281f93dbdcdea3b3091684c229))
+* **drag&drop:** ignore drag&drop of time from a task to itself ([8d9b647](https://github.com/dmitrijs/WorkLogIfy/commit/8d9b6473166d507801d0be7d254867f13d1f0a3c))
+
+
+### UI/UX
+
+* **drag&drop:** only show the moved time ([b363df3](https://github.com/dmitrijs/WorkLogIfy/commit/b363df3cb0989cac11b73ce5d8d2323401451362))
+
 ### [1.17.1](https://github.com/dmitrijs/WorkLogIfy/compare/v1.17.0...v1.17.1) (2020-04-01)
 
 
