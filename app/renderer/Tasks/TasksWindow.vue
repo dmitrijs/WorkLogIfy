@@ -1,11 +1,16 @@
 <template>
     <div class="TasksWindow" @mousemove="dragContinue($event)" @mouseup="dragStop">
         <div class="DragGhost"
-             :style="'left: ' + drag.nowAt[0] + 'px; top: ' + (drag.nowAt[1] - 20) + 'px;'"
+             :style="'left: ' + (drag.nowAt[0] + 6) + 'px; top: ' + (drag.nowAt[1] - 24) + 'px;'"
              v-if="drag.active && drag.distance > 20"
         >
             <span v-if="drag.minutes > 0">{{ drag.minutes }}m (of {{ drag.taskFromMinutes }}m)</span>
             <span v-else>cancel</span>
+            <LineChart class="progress-bar--no-transition"
+                       v-if="drag.minutes > 0"
+                       :height="5"
+                       :total="drag.taskFromMinutes"
+                       :progress_info="drag.minutes"></LineChart>
         </div>
         <div class="TRow --header">
             <div class="TCol --selected">
@@ -357,6 +362,10 @@
             z-index: 10000;
             font-size: 12px;
             border: 1px solid lightgrey;
+
+            .LineChart {
+                margin: 0 -4px;
+            }
         }
 
         .TRow.distributed,
