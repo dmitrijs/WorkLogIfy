@@ -280,7 +280,7 @@
             this.drag.startedAt = [$event.clientX, $event.clientY];
             this.drag.nowAt = [$event.clientX, $event.clientY];
             this.drag.taskFrom = task.id;
-            this.drag.taskFromMinutes = Math.round(task.time_charge_seconds / 60);
+            this.drag.taskFromMinutes = Math.round(task.time_spent_seconds / 60);
         }
 
         dragContinue($event) {
