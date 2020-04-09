@@ -6,9 +6,11 @@
   "scripts": {
     "standard-version": "npx standard-version",
     "standard-version-patch": "npx standard-version --release-as patch",
+    "standard-version-prerelease": "npx standard-version --prerelease local",
     "start": "run-s main:build watch",
     "release": "run-s parcel:build \"electron:build {@}\" --",
     "release-win": "run-s parcel:build \"electron:build-win {@}\" --",
+    "release-win-local-branch": "run-s standard-version-prerelease parcel:build \"electron:build-win {@}\" --",
     "watch": "run-p -r parcel:watch electron:start",
     "electron:start": "nodemon --watch app/main/.parcel --exec \"npx electron .\"",
     "electron:build": "npx electron-builder build {@} --x64 --publish=never",
