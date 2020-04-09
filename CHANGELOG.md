@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+### [1.17.3](https://github.com/dmitrijs/WorkLogIfy/compare/v1.17.2...v1.17.3) (2020-04-09)
+
+
+### UI/UX
+
+* **tasks:** show full notes by default ([b9d923b](https://github.com/dmitrijs/WorkLogIfy/commit/b9d923ba3b248bf2ce3f1ca5286345793fb9c603))
+
 ### [1.17.2](https://github.com/dmitrijs/WorkLogIfy/compare/v1.17.1...v1.17.2) (2020-04-04)
 
 
