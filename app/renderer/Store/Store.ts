@@ -253,7 +253,7 @@ const {store} = createDirectStore({
 
             saveTasks(state);
         },
-        copySelected(state: AppState) {
+        clipboardCopySelected(state: AppState) {
             console.log('state.tasksSelectedIds.size', state.tasksSelectedIds.size);
             if (!state.tasksSelectedIds.size) {
                 return;
@@ -267,8 +267,28 @@ const {store} = createDirectStore({
             state.taskCopied = state.tasks.get(taskId);
 
             state.tasksSelectedIds = state.tasksSelectedIds.clear();
+            state.tasksHoveredId = null;
         },
-        pasteCopied(state: AppState) {
+        clipboardCutSelected(state: AppState) {
+            console.log('state.tasksSelectedIds.size', state.tasksSelectedIds.size);
+            if (!state.tasksSelectedIds.size) {
+                return;
+            }
+            if (state.tasksSelectedIds.size > 1) {
+                alert('Cutting multiple tasks is not yet supported');
+                return;
+            }
+
+            let taskId = state.tasksSelectedIds.keySeq().first();
+            state.taskCopied = state.tasks.get(taskId);
+
+            state.tasks = state.tasks.remove(taskId);
+            state.tasksSelectedIds = state.tasksSelectedIds.clear();
+            state.tasksHoveredId = null;
+
+            saveTasks(state);
+        },
+        clipboardPaste(state: AppState) {
             if (!state.taskCopied) {
                 return;
             }

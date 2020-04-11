@@ -1,4 +1,3 @@
-import timer from "../Timer";
 import store from "../Store/Store";
 
 const remote = window.remote;
@@ -22,13 +21,21 @@ menu.append(new MenuItem({
     },
 }));
 menu.append(new MenuItem({
+    type: 'separator',
+}));
+menu.append(new MenuItem({
     label: 'Copy tasks', click() {
-        store.commit.copySelected();
+        store.commit.clipboardCopySelected();
+    },
+}));
+menu.append(new MenuItem({
+    label: 'Cut tasks', click() {
+        store.commit.clipboardCutSelected();
     },
 }));
 menu.append(new MenuItem({
     label: 'Paste tasks', click() {
-        store.commit.pasteCopied();
+        store.commit.clipboardPaste();
     },
 }));
 
