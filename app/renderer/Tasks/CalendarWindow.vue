@@ -11,8 +11,14 @@
                     <span class="TimeCharged">{{ day.charged_seconds_text }}</span>
                 </div>
                 <span class="MonthTimeCharged" v-if="months[week_key] && months[week_key].month_charged_seconds">
-                    <span class="_Week" v-if="week.week_charged">&Sigma; {{ week.week_charged_text }}</span><br />
-                    <span class="_Month">{{ months[week_key].month_title }}: {{ months[week_key].month_charged_seconds_text }}</span>
+                    <span class="_Week" v-if="week.week_charged">&Sigma; {{ week.week_charged_text }}</span><br/>
+                    <span class="_Month">{{ months[week_key].month_title }}:
+                        <span
+                                :class="{ MonthOvertime: months[week_key].month_overtime_seconds > 0, MonthOvertimeWarning: months[week_key].month_overtime_seconds >= 7200 }"
+                                :title="months[week_key].month_overtime_text">
+                            {{ months[week_key].month_charged_seconds_text }}
+                        </span>
+                    </span>
                 </span>
                 <span class="WeekTimeCharged" v-if="!months[week_key] && week.week_charged">&Sigma; {{ week.week_charged_text }}</span>
             </div>
@@ -94,6 +100,8 @@
                     this.$set(month, 'month_charged_seconds', month_charged_seconds);
                     this.$set(month, 'month_charged_seconds_text', timespanToText(month_charged_seconds, ''));
                     this.$set(month, 'month_title', month.month_title || moment(day).format('MMM'));
+                    let month_official_seconds = (month.month_official_seconds || 0) + (dow < 6 && charged_seconds > 0 ? 8 * 3600 : 0);
+                    this.$set(month, 'month_official_seconds', month_official_seconds);
                     this.$set(months, monthCode, month);
                 }
                 this.$set(weeks, weekCode, week);
@@ -114,6 +122,22 @@
                     week_charged: sumCharged,
                     week_charged_text: timespanToText(sumCharged, ''),
                 });
+            }
+
+            for (let month_code of Object.keys(months)) {
+                let month = months[month_code];
+
+                let month_seconds_diff = months[month_code].month_charged_seconds - months[month_code].month_official_seconds;
+                if (month_seconds_diff != 0) {
+                    this.$set(month, 'month_overtime_seconds', Math.abs(month_seconds_diff));
+                    this.$set(month, 'month_overtime_text',
+                        timespanToText(Math.abs(month_seconds_diff)) +
+                        ' ' +
+                        (month_seconds_diff > 0 ? 'overtime' : 'missing')
+                    );
+                }
+
+                this.$set(months, month_code, month);
             }
 
             this.data = {weeks, months};
@@ -143,7 +167,16 @@
                 ._Month {
                     color: #bebebe;
                 }
+
+                .MonthOvertime {
+                    color: #8a4444;
+                }
+
+                .MonthOvertimeWarning {
+                    color: #b30e0d;
+                }
             }
+
             .WeekTimeCharged {
                 line-height: 29px;
                 padding-left: 5px;
@@ -178,6 +211,7 @@
             &.is_today {
                 border-color: #00c4ff;
             }
+
             &.is01 {
                 border-left-color: #8e8e8e !important;
                 border-bottom-color: #8e8e8e !important;
