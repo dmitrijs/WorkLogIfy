@@ -61,6 +61,26 @@ const state = {
 };
 state.screen = state.tasksScreen;
 
+function convertJsTasksToMap(js_tasks): Map<string, Map<string, any>> {
+    let tasks = Map<string, Map<string, any>>();
+
+    if (typeof js_tasks === 'object') {
+        let keys = Object.keys(js_tasks);
+
+        for (let key of keys) {
+            let js_task = js_tasks[key];
+
+            let task = Map<string, any>(js_task);
+            task = task.set('sessions', List(task.get('sessions')));
+            task = task.set('records', List(task.get('records')));
+
+            tasks = tasks.set(key, task);
+        }
+    }
+
+    return tasks;
+}
+
 const {store} = createDirectStore({
     state: state,
     getters: {
@@ -99,26 +119,6 @@ const {store} = createDirectStore({
     },
 
     mutations: {
-        loadTasks(state: AppState, js_tasks) {
-            let tasks = Map<string, Map<string, any>>();
-
-            if (typeof js_tasks === 'object') {
-                let keys = Object.keys(js_tasks);
-
-                for (let key of keys) {
-                    let js_task = js_tasks[key];
-
-                    let task = Map<string, any>(js_task);
-                    task = task.set('sessions', List(task.get('sessions')));
-                    task = task.set('records', List(task.get('records')));
-
-                    tasks = tasks.set(key, task);
-                }
-            }
-
-            state.tasks = tasks;
-        },
-
         tasksUiHoveredId(state: AppState, id: string) {
             state.tasksHoveredId = id;
         },
@@ -222,7 +222,8 @@ const {store} = createDirectStore({
             }
             state.day_key = day;
             let tasks = window.ipc.sendSync('tasks.load', state.day_key);
-            this.commit('loadTasks', tasks);
+
+            state.tasks = convertJsTasksToMap(tasks);
         },
         openNextDay(state: AppState) {
             let today = moment(state.day_key, 'YYYY-MM-DD');
