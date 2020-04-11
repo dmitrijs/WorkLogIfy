@@ -29,6 +29,7 @@
         </div>
         <div class="TasksTable"
              :class="{ ShowAsReport: tasks_ui.tasksShowAsReport }"
+             :key="forceUpdateKey"
              @click.self="$store.direct.commit.deselectAll()">
             <template class="TGroup" v-for="(group, date) of tasksGrouped">
                 <div class="TRowDate">
@@ -43,54 +44,55 @@
                     <div class="TCol --timespan --timespan-spent" title="Spent">{{ group.time_spent_text }}</div>
                 </div>
 
-                <div class="TRow"
-                     v-for="task of group.tasks"
-                     @mouseenter="$store.direct.commit.tasksUiHoveredId(task.id)"
-                     @mouseleave="$store.direct.commit.tasksUiHoveredId(null)"
-                     :key="task.id + forceUpdateKey"
-                     :class="{
+                <transition-group name="fade" mode="out-in">
+                    <div class="TRow"
+                         v-for="task of group.tasks"
+                         @mouseenter="$store.direct.commit.tasksUiHoveredId(task.id)"
+                         @mouseleave="$store.direct.commit.tasksUiHoveredId(null)"
+                         :key="task.id"
+                         :class="{
                          selected: task._selected, logged: task.logged, distributed: task.distributed, notchargeable: !task.chargeable,
                          hovered: tasks_ui.hoveredId === task.id,
                          timered: tasks_ui.timeredId === task.id,
                          hasRecords: !!task.time_recorded_seconds,
                      }"
-                     @click="rowOnClick($event, task)"
-                >
-                    <div class="TCol --selected">
-                        <div class="label-checkbox" @click="$store.direct.commit.tasksUiToggle(task.id)">
-                            <input type="checkbox" :checked="task._selected"><span></span></div>
-                    </div>
-                    <div class="TCol --chargeable">
-                        <i class="IconAsInput icofont-not-allowed" :class="{ active: !task.chargeable }"
-                           @click="$store.direct.commit.updateTask([task.id, 'chargeable', !task.chargeable])"></i>
-                    </div>
-                    <div class="TCol --distributed">
-                        <i class="IconAsInput icofont-exchange" :class="{ active: task.distributed }"
-                           @click="$store.direct.commit.updateTask([task.id, 'distributed', !task.distributed])"></i>
-                    </div>
-                    <div class="TCol --frozen">
-                        <i class="IconAsInput icofont-unlock" :class="{ active: task.frozen }"
-                           @click="$store.direct.commit.updateTask([task.id, 'frozen', !task.frozen])"></i>
-                    </div>
-                    <div class="TCol --code"
-                         @click="tasks_ui.tasksShowAsReport ? copyToClipboard($event, task.code) : editTask($event, task)">
-                        {{task.code}}
-                        <div class="--edit-button">
-                            <a href="#" @click.stop="editTask($event, task)" v-if="!task.grouped">edit</a>
+                         @click="rowOnClick($event, task)"
+                    >
+                        <div class="TCol --selected">
+                            <div class="label-checkbox" @click="$store.direct.commit.tasksUiToggle(task.id)">
+                                <input type="checkbox" :checked="task._selected"><span></span></div>
                         </div>
-                    </div>
-                    <div class="TCol --title"
-                         @click="tasks_ui.tasksShowAsReport ? copyToClipboard($event, task.notes) : editTask($event, task)">
+                        <div class="TCol --chargeable">
+                            <i class="IconAsInput icofont-not-allowed" :class="{ active: !task.chargeable }"
+                               @click="$store.direct.commit.updateTask([task.id, 'chargeable', !task.chargeable])"></i>
+                        </div>
+                        <div class="TCol --distributed">
+                            <i class="IconAsInput icofont-exchange" :class="{ active: task.distributed }"
+                               @click="$store.direct.commit.updateTask([task.id, 'distributed', !task.distributed])"></i>
+                        </div>
+                        <div class="TCol --frozen">
+                            <i class="IconAsInput icofont-unlock" :class="{ active: task.frozen }"
+                               @click="$store.direct.commit.updateTask([task.id, 'frozen', !task.frozen])"></i>
+                        </div>
+                        <div class="TCol --code"
+                             @click="tasks_ui.tasksShowAsReport ? copyToClipboard($event, task.code) : editTask($event, task)">
+                            {{task.code}}
+                            <div class="--edit-button">
+                                <a href="#" @click.stop="editTask($event, task)" v-if="!task.grouped">edit</a>
+                            </div>
+                        </div>
+                        <div class="TCol --title"
+                             @click="tasks_ui.tasksShowAsReport ? copyToClipboard($event, task.notes) : editTask($event, task)">
                         <span class="Title--Content"
                               :class="{ ellipsis: !tasks_ui.tasksShowAsReport }"><span>{{task.title}}</span></span>
-                        <span class="Note--Content "
-                              :class="{ ellipsis: !tasks_ui.tasksShowAsReport && !tasks_ui.tasksShowFullNotes }"><span>{{task.notes}}</span></span>
-                    </div>
-                    <div class="TCol --timespan"
-                         @click="dropTime($event, task)"
-                         @mousedown.prevent.stop="dragStart($event, task)"
-                         :title="'Final charge: ' + task.time_charge_text + '\n' + 'Recorded: ' + task.time_recorded_text + '\n' + 'Not recorded: ' + task.time_unrecorded_text"
-                    >
+                            <span class="Note--Content "
+                                  :class="{ ellipsis: !tasks_ui.tasksShowAsReport && !tasks_ui.tasksShowFullNotes }"><span>{{task.notes}}</span></span>
+                        </div>
+                        <div class="TCol --timespan"
+                             @click="dropTime($event, task)"
+                             @mousedown.prevent.stop="dragStart($event, task)"
+                             :title="'Final charge: ' + task.time_charge_text + '\n' + 'Recorded: ' + task.time_recorded_text + '\n' + 'Not recorded: ' + task.time_unrecorded_text"
+                        >
                         <span class="--timespan-spent">
                             {{task.time_spent_text}}
                             <LineChart class="bg-warning"
@@ -104,21 +106,22 @@
                                        :total="task.time_charge_seconds"
                                        :progress_success="task.time_recorded_seconds"></LineChart>
                         </span>
-                        <span class="--timespan-charge"
-                              v-if="task.time_charge_extra_seconds > 0">
+                            <span class="--timespan-charge"
+                                  v-if="task.time_charge_extra_seconds > 0">
                             {{task.time_unrecorded_text}}
                         </span>
-                        <span class="--timespan-final-charge">
+                            <span class="--timespan-final-charge">
                             {{task.time_charge_text}}
                         </span>
+                        </div>
+                        <div class="TCol --playback">
+                            <i class="IconAsInput icofont-ui-play-stop" v-if="tasks_ui.timeredId === task.id"
+                               @click="stopTimer()"></i>
+                            <i class="IconAsInput icofont-ui-play" v-if="tasks_ui.timeredId !== task.id"
+                               @click="startTimer($event, task)"></i>
+                        </div>
                     </div>
-                    <div class="TCol --playback">
-                        <i class="IconAsInput icofont-ui-play-stop" v-if="tasks_ui.timeredId === task.id"
-                           @click="stopTimer()"></i>
-                        <i class="IconAsInput icofont-ui-play" v-if="tasks_ui.timeredId !== task.id"
-                           @click="startTimer($event, task)"></i>
-                    </div>
-                </div>
+                </transition-group>
             </template>
         </div>
 
