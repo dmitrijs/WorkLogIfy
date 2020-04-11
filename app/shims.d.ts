@@ -51,3 +51,39 @@ declare type RecordObj = {
     method: string;
     created_at: string;
 }
+
+declare type CalendarStatistics = {
+    days: { [key: string]: CalendarDayStatistics },
+    months: { [key: string]: CalendarMonthStatistics },
+    weeks: { [key: string]: CalendarWeekStatistics },
+}
+
+declare type CalendarDayStatistics = {
+    dayCode: string,
+    weekCode: string,
+    monthLastWeekCode: string,
+    monthName: string,
+    title: string,
+    isOpened: boolean,
+    isFirstDayOfTheMonth: boolean,
+    isToday: boolean,
+    isWeekend: boolean,
+    isCurrentMonth: boolean,
+    charged_seconds: any,
+    charged_seconds_text: any,
+}
+
+declare type CalendarWeekStatistics = {
+    days: string[],
+    week_charged: number,
+    week_charged_text: string,
+}
+
+declare type CalendarMonthStatistics = {
+    month_charged_seconds: number,
+    month_charged_seconds_text: string,
+    month_title: string,
+    month_official_seconds: number,
+    month_overtime_seconds: number,
+    month_overtime_text: string,
+}

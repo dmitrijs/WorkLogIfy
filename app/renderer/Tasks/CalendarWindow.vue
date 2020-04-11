@@ -3,12 +3,12 @@
         <br/>
         <div>
             <div v-for="(week, week_key) of weeks" class="Week" :data-week="week_key">
-                <div v-for="(day) of week.days" class="Day"
-                     @click="open(day.dayCode)"
-                     :title="day.dayCode"
-                     :class="{ is_today: day.isToday, is_current_month: day.isCurrentMonth, is_opened: day.isOpened, is01: day.isFirstDayOfTheMonth, is_weekend: day.isWeekend }">
-                    <span class="DayTitle">{{ day.title }}</span>
-                    <span class="TimeCharged">{{ day.charged_seconds_text }}</span>
+                <div v-for="(dayCode) of week.days" class="Day"
+                     @click="open(dayCode)"
+                     :title="days[dayCode].dayCode"
+                     :class="{ is_today: days[dayCode].isToday, is_current_month: days[dayCode].isCurrentMonth, is_opened: days[dayCode].isOpened, is01: days[dayCode].isFirstDayOfTheMonth, is_weekend: days[dayCode].isWeekend }">
+                    <span class="DayTitle">{{ days[dayCode].title }}</span>
+                    <span class="TimeCharged">{{ days[dayCode].charged_seconds_text }}</span>
                 </div>
                 <span class="MonthTimeCharged" v-if="months[week_key] && months[week_key].month_charged_seconds">
                     <span class="_Week" v-if="week.week_charged">&Sigma; {{ week.week_charged_text }}</span><br/>
@@ -30,9 +30,7 @@
     import Vue from "vue";
     import Component from "vue-class-component";
     import store from "../Store/Store";
-    import {timespanToText} from "../Utils/Utils";
-
-    const moment = require("moment");
+    import Store_GetCalendarStatistics from "../Store/Store_GetCalendarStatistics";
 
     @Component({
         created() {
@@ -55,92 +53,18 @@
             return this.data.months;
         }
 
+        get days() {
+            this.collect_data();
+
+            return this.data.days;
+        }
+
         collect_data() {
             if (this.data) {
                 return;
             }
 
-            let weeks = {};
-            let months = {};
-            let today = moment.utc();
-            let endOfThisMonth = moment(today).endOf('month').endOf('day');
-            let startOfMonthBeforePrevious = moment(today).subtract(2, 'months').startOf('month');
-
-            let totals = store.getters.getFileTotals;
-
-            let todayCode = moment().format('YYYY-MM-DD');
-            let currentMonthCode = moment().format('YYYY-MM');
-            let day = moment(endOfThisMonth).endOf('isoWeek');
-            do {
-                // make sure it's NEXT_YEAR-01 on December 31
-                let weekCode = moment(day).endOf('isoWeek').format('YYYY-WW');
-                let week = weeks[weekCode] || {};
-                let dayCode = day.format('YYYY-MM-DD');
-
-                let monthCode = moment(day).endOf('month').endOf('isoWeek').format('YYYY-WW');
-                let month = months[monthCode] || {};
-
-                {
-                    let charged_seconds = (totals[dayCode] ? totals[dayCode].time_charge_rounded_seconds : 0);
-                    let dow = day.format('E');
-
-                    this.$set(week, dayCode, {
-                        dayCode: dayCode,
-                        title: (day.format('DD') === '01' ? day.format('MMM DD') : day.format('DD')),
-                        isOpened: (store.state.day_key === dayCode),
-                        isFirstDayOfTheMonth: (day.format('DD') === '01'),
-                        isToday: (todayCode === dayCode),
-                        isWeekend: (dow >= 6),
-                        isCurrentMonth: (currentMonthCode === day.format('YYYY-MM')),
-                        charged_seconds: charged_seconds,
-                        charged_seconds_text: timespanToText(charged_seconds, ''),
-                    });
-
-                    let month_charged_seconds = (month.month_charged_seconds || 0) + charged_seconds;
-                    this.$set(month, 'month_charged_seconds', month_charged_seconds);
-                    this.$set(month, 'month_charged_seconds_text', timespanToText(month_charged_seconds, ''));
-                    this.$set(month, 'month_title', month.month_title || moment(day).format('MMM'));
-                    let month_official_seconds = (month.month_official_seconds || 0) + (dow < 6 && charged_seconds > 0 ? 8 * 3600 : 0);
-                    this.$set(month, 'month_official_seconds', month_official_seconds);
-                    this.$set(months, monthCode, month);
-                }
-                this.$set(weeks, weekCode, week);
-
-                day.subtract(1, 'day');
-            } while (day.isAfter(startOfMonthBeforePrevious));
-
-            for (let week_code of Object.keys(weeks)) {
-                let sumCharged = 0;
-                let daysSorted = {};
-                for (let day_code of Object.keys(weeks[week_code]).reverse()) {
-                    let day = weeks[week_code][day_code];
-                    sumCharged += day.charged_seconds;
-                    daysSorted[day_code] = day;
-                }
-                this.$set(weeks, week_code, {
-                    days: daysSorted,
-                    week_charged: sumCharged,
-                    week_charged_text: timespanToText(sumCharged, ''),
-                });
-            }
-
-            for (let month_code of Object.keys(months)) {
-                let month = months[month_code];
-
-                let month_seconds_diff = months[month_code].month_charged_seconds - months[month_code].month_official_seconds;
-                if (month_seconds_diff != 0) {
-                    this.$set(month, 'month_overtime_seconds', Math.abs(month_seconds_diff));
-                    this.$set(month, 'month_overtime_text',
-                        timespanToText(Math.abs(month_seconds_diff)) +
-                        ' ' +
-                        (month_seconds_diff > 0 ? 'overtime' : 'missing')
-                    );
-                }
-
-                this.$set(months, month_code, month);
-            }
-
-            this.data = {weeks, months};
+            this.data = Store_GetCalendarStatistics();
         }
 
         open(day) {
