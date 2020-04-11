@@ -10,7 +10,7 @@ const moment = require("moment");
 Vue.use(Vuex);
 
 function saveTasks(state: AppState) {
-    window.ipc.sendSync('tasks.save', state.day_key, state.tasks.toJS(), store.getters.getTasksGrouped.toJS());
+    window.ipc.sendSync('tasks.save', state.day_key, state.tasks.toJS(), storeDirect.getters.getTasksGrouped.toJS());
 }
 
 function saveTaskTemplates(state: AppState) {
@@ -81,7 +81,7 @@ function convertJsTasksToMap(js_tasks): Map<string, Map<string, any>> {
     return tasks;
 }
 
-const {store} = createDirectStore({
+const {store: storeDirect} = createDirectStore({
     state: state,
     getters: {
         getTasksGrouped(state: AppState): Map<string, any> {
@@ -122,7 +122,7 @@ const {store} = createDirectStore({
         tasksUiHoveredId(state: AppState, id: string) {
             state.tasksHoveredId = id;
         },
-        tasksUiToggle(state: AppState, id) {
+        tasksUiToggle(state: AppState, id: string) {
             console.log(id);
             if (state.tasksSelectedIds.get(id)) {
                 state.tasksSelectedIds = state.tasksSelectedIds.delete(id);
@@ -359,10 +359,10 @@ const {store} = createDirectStore({
 });
 
 // Export the direct-store instead of the classic Vuex store.
-export default store;
+export default storeDirect;
 
 // The following lines enable types in the injected store '$store'.
-export type AppStore = typeof store;
+export type AppStore = typeof storeDirect;
 export type AppState = typeof state;
 
 declare module "vuex" {

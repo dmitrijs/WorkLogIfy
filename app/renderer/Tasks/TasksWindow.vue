@@ -24,13 +24,13 @@
             <div class="TCol --title">Title</div>
             <div class="TCol --timespan">Time</div>
             <div class="TCol --timespan">
-                <i class="IconAsInput icofont-arrow-right" @click="$store.direct.commit.openNextDay()"></i>
+                <i class="IconAsInput icofont-arrow-right" @click="store.commit.openNextDay"></i>
             </div>
         </div>
         <div class="TasksTable"
              :class="{ ShowAsReport: tasks_ui.tasksShowAsReport }"
              :key="forceUpdateKey"
-             @click.self="$store.direct.commit.deselectAll()">
+             @click.self="store.commit.deselectAll">
             <template class="TGroup" v-for="(group, date) of tasksGrouped">
                 <div class="TRowDate">
                     <div class="TCol --selected"></div>
@@ -47,8 +47,8 @@
                 <transition-group name="fade" mode="out-in">
                     <div class="TRow"
                          v-for="task of group.tasks"
-                         @mouseenter="$store.direct.commit.tasksUiHoveredId(task.id)"
-                         @mouseleave="$store.direct.commit.tasksUiHoveredId(null)"
+                         @mouseenter="store.commit.tasksUiHoveredId(task.id)"
+                         @mouseleave="store.commit.tasksUiHoveredId(null)"
                          :key="task.id"
                          :class="{
                          selected: task._selected, logged: task.logged, distributed: task.distributed, notchargeable: !task.chargeable,
@@ -59,20 +59,20 @@
                          @click="rowOnClick($event, task)"
                     >
                         <div class="TCol --selected">
-                            <div class="label-checkbox" @click="$store.direct.commit.tasksUiToggle(task.id)">
+                            <div class="label-checkbox" @click="store.commit.tasksUiToggle(task.id)">
                                 <input type="checkbox" :checked="task._selected"><span></span></div>
                         </div>
                         <div class="TCol --chargeable">
                             <i class="IconAsInput icofont-not-allowed" :class="{ active: !task.chargeable }"
-                               @click="$store.direct.commit.updateTask([task.id, 'chargeable', !task.chargeable])"></i>
+                               @click="store.commit.updateTask([task.id, 'chargeable', !task.chargeable])"></i>
                         </div>
                         <div class="TCol --distributed">
                             <i class="IconAsInput icofont-exchange" :class="{ active: task.distributed }"
-                               @click="$store.direct.commit.updateTask([task.id, 'distributed', !task.distributed])"></i>
+                               @click="store.commit.updateTask([task.id, 'distributed', !task.distributed])"></i>
                         </div>
                         <div class="TCol --frozen">
                             <i class="IconAsInput icofont-unlock" :class="{ active: task.frozen }"
-                               @click="$store.direct.commit.updateTask([task.id, 'frozen', !task.frozen])"></i>
+                               @click="store.commit.updateTask([task.id, 'frozen', !task.frozen])"></i>
                         </div>
                         <div class="TCol --code"
                              @click="tasks_ui.tasksShowAsReport ? copyToClipboard($event, task.code) : editTask($event, task)">
@@ -129,7 +129,7 @@
             <a href="#" @click="dragClear" v-if="drag.readyToDrop" style="float: right;">cancel</a>
             Show:
             <span class="label--checkbox label--checkbox--with-text"
-                  @click.prevent="$store.direct.commit.toggleTasksShowFullNotes()">
+                  @click.prevent="store.commit.toggleTasksShowFullNotes">
                 <input type="checkbox" :checked="tasks_ui.tasksShowFullNotes"><span></span> full notes
             </span>
             <span class="label--checkbox label--checkbox--with-text"
@@ -195,10 +195,10 @@
             taskTo: 0,
         };
 
+        forceUpdateKey = 1;
+
         data() {
-            return {
-                forceUpdateKey: 1,
-            };
+            return {};
         }
 
         get tasksGrouped() {
@@ -217,6 +217,10 @@
 
         get tasks_ui() {
             return store.getters.getTasksUi;
+        }
+
+        get store() {
+            return store;
         }
 
         created() {
@@ -328,7 +332,7 @@
             }
         }
 
-        dragStop($event) {
+        dragStop() {
             this.drag.readyToDrop = this.drag.minutes > 0;
             this.drag.active = this.drag.minutes > 0;
 

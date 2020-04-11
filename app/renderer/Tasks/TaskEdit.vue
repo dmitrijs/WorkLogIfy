@@ -25,7 +25,8 @@
                     <td class="Complex">
                         <div>
                             <span><input type="text" v-model="task.date"/></span>
-                            <span>Recorded: <input type="text" class="narrow" v-model="task.time_record_minutes">m</span>
+                            <span>Recorded: <input type="text" class="narrow"
+                                                   v-model="task.time_record_minutes">m</span>
                         </div>
                     </td>
                 </tr>
@@ -37,7 +38,8 @@
                     <td colspan="2" class="text-right">
                         <button class="btn btn-outline-secondary btn-sm" type="button" @click="back">&lt; back</button>
                         <div class="btn-group" role="group">
-                            <button class="btn btn-secondary btn-sm" :class="{ 'btn-primary': $store.state.taskTimeredId === task.id }">
+                            <button class="btn btn-secondary btn-sm"
+                                    :class="{ 'btn-primary': store.state.taskTimeredId === task.id }">
                                 {{ mode === 'edit' ? 'update' : 'create' }}
                             </button>
                             <button type="button" class="btn btn-primary btn-sm"
@@ -75,7 +77,8 @@
                     <td>Fill in from a template:</td>
                     <td>
                         <div v-for="template of templates" class="Template" @click="fill(template)">
-                            {{ template.notes }} <span class="TemplateCode">(<span v-if="template.title">{{ template.title }} / </span>{{ template.code }}<span v-if="template.frozen"> <i class="IconAsInput icofont-unlock"></i></span>)</span>
+                            {{ template.notes }} <span class="TemplateCode">(<span v-if="template.title">{{ template.title }} / </span>{{ template.code }}<span
+                                v-if="template.frozen"> <i class="IconAsInput icofont-unlock"></i></span>)</span>
                         </div>
                     </td>
                 </tr>
@@ -105,6 +108,10 @@
         };
 
         @Prop({type: String}) mode;
+
+        get store() {
+            return store;
+        }
 
         get editedTask() {
             return store.getters.getEditedTask.toJS();
