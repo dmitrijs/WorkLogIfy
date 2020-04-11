@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+### [1.17.4](https://github.com/dmitrijs/WorkLogIfy/compare/v1.17.3...v1.17.4) (2020-04-11)
+
+
+### Features
+
+* **calendar:** calculate overtime; show a warning if overtime exceeds 2 hours ([b5ddf88](https://github.com/dmitrijs/WorkLogIfy/commit/b5ddf886dc5014f15a165e32b4dae6f38645a7a0))
+
 ### [1.17.3](https://github.com/dmitrijs/WorkLogIfy/compare/v1.17.2...v1.17.3) (2020-04-09)
 
 
