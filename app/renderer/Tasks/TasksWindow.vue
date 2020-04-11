@@ -44,6 +44,7 @@
                 <div class="TRow"
                      v-for="task of group.tasks"
                      @mouseenter="$store.direct.commit.tasksUiHoveredId(task.id)"
+                     @mouseleave="$store.direct.commit.tasksUiHoveredId(null)"
                      :key="task.id + forceUpdateKey"
                      :class="{
                          selected: task._selected, logged: task.logged, distributed: task.distributed, notchargeable: !task.chargeable,
