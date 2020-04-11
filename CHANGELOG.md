@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.18.0](https://github.com/dmitrijs/WorkLogIfy/compare/v1.17.4...v1.18.0) (2020-04-11)
+
+
+### Features
+
+* **tasks:** support task copy&paste ([72fb156](https://github.com/dmitrijs/WorkLogIfy/commit/72fb156385d8961642078ab2422ae97e200a16c0))
+* **tasks:** support task cut&paste ([42daa53](https://github.com/dmitrijs/WorkLogIfy/commit/42daa535dbe175fe7ee814d35b7db822a77a51fb))
+
+
+### Bug Fixes
+
+* **tasks:** do not select the bottom task when right clicking on empty area ([32a58d7](https://github.com/dmitrijs/WorkLogIfy/commit/32a58d7765ed5f4bf40cb9a62889ca7e75f0c221))
+
+
+### UI/UX
+
+* **tasks:** clear selection when empty area is clicked ([f622215](https://github.com/dmitrijs/WorkLogIfy/commit/f62221524e0d9599aa57451e029f20520d0e4509))
+
 ### [1.17.4](https://github.com/dmitrijs/WorkLogIfy/compare/v1.17.3...v1.17.4) (2020-04-11)
 
 
