@@ -236,6 +236,9 @@ const {store} = createDirectStore({
             }
             state.tasksSelectedIds = state.tasksSelectedIds.set(state.tasksHoveredId, true);
         },
+        deselectAll(state: AppState) {
+            state.tasksSelectedIds = state.tasksSelectedIds.clear();
+        },
         deleteSelected(state: AppState) {
             console.log('state.tasksSelectedIds.size', state.tasksSelectedIds.size);
             if (!state.tasksSelectedIds.size) {

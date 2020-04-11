@@ -27,7 +27,9 @@
                 <i class="IconAsInput icofont-arrow-right" @click="$store.direct.commit.openNextDay()"></i>
             </div>
         </div>
-        <div class="TasksTable" :class="{ ShowAsReport: tasks_ui.tasksShowAsReport }">
+        <div class="TasksTable"
+             :class="{ ShowAsReport: tasks_ui.tasksShowAsReport }"
+             @click.self="$store.direct.commit.deselectAll()">
             <template class="TGroup" v-for="(group, date) of tasksGrouped">
                 <div class="TRowDate">
                     <div class="TCol --selected"></div>
