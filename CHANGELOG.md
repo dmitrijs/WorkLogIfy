@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+### [1.18.1](https://github.com/dmitrijs/WorkLogIfy/compare/v1.18.0...v1.18.1) (2020-04-11)
+
+
+### UI/UX
+
+* **tasks:** animate tasks list ([327bffc](https://github.com/dmitrijs/WorkLogIfy/commit/327bffcdd29cbb96e6169f73ca162d72a4e7fad3))
+
 ## [1.18.0](https://github.com/dmitrijs/WorkLogIfy/compare/v1.17.4...v1.18.0) (2020-04-11)
 
 
