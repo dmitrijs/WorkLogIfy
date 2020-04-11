@@ -57,6 +57,7 @@ const state = {
     fileTotals: {},
     templates: [],
     createdTaskId: '',
+    taskCopied: null as Map<string, any>,
 };
 state.screen = state.tasksScreen;
 
@@ -79,6 +80,7 @@ const {store} = createDirectStore({
                 day_key: state.day_key,
                 tasksShowAsReport: state.tasksShowAsReport,
                 tasksShowFullNotes: state.tasksShowFullNotes,
+                taskCopied: state.taskCopied,
             }
         },
 
@@ -247,6 +249,33 @@ const {store} = createDirectStore({
 
             state.tasks = state.tasksSelectedIds.keySeq().reduce((map, key) => map.delete(key), state.tasks);
             state.tasksSelectedIds = Map();
+
+            saveTasks(state);
+        },
+        copySelected(state: AppState) {
+            console.log('state.tasksSelectedIds.size', state.tasksSelectedIds.size);
+            if (!state.tasksSelectedIds.size) {
+                return;
+            }
+            if (state.tasksSelectedIds.size > 1) {
+                alert('Copying multiple tasks is not yet supported');
+                return;
+            }
+
+            let taskId = state.tasksSelectedIds.keySeq().first();
+            state.taskCopied = state.tasks.get(taskId);
+
+            state.tasksSelectedIds = state.tasksSelectedIds.clear();
+        },
+        pasteCopied(state: AppState) {
+            if (!state.taskCopied) {
+                return;
+            }
+
+            const id = 'task_' + moment.utc();
+            let newTask = state.taskCopied.set('id', id);
+
+            state.tasks = state.tasks.set(id, newTask);
 
             saveTasks(state);
         },

@@ -21,5 +21,15 @@ menu.append(new MenuItem({
         store.commit.deleteSelected();
     },
 }));
+menu.append(new MenuItem({
+    label: 'Copy tasks', click() {
+        store.commit.copySelected();
+    },
+}));
+menu.append(new MenuItem({
+    label: 'Paste tasks', click() {
+        store.commit.pasteCopied();
+    },
+}));
 
 export default menu;
