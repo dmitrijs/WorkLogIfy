@@ -84,9 +84,13 @@
                         <div class="TCol --title"
                              @click="tasks_ui.tasksShowAsReport ? copyToClipboard($event, task.notes) : editTask($event, task)">
                         <span class="Title--Content"
-                              :class="{ ellipsis: !tasks_ui.tasksShowAsReport }"><span>{{task.title}}</span></span>
+                              :class="{ ellipsis: !tasks_ui.tasksShowAsReport }"><span>{{task.title || '&nbsp;'}}</span></span>
                             <span class="Note--Content "
-                                  :class="{ ellipsis: !tasks_ui.tasksShowAsReport && !tasks_ui.tasksShowFullNotes }"><span>{{task.notes}}</span></span>
+                                  :class="{ ellipsis: !tasks_ui.tasksShowAsReport && !tasks_ui.tasksShowFullNotes }">
+                                <span class="EmptyNotesError" v-if="tasks_ui.tasksShowAsReport && !task.notes">[empty notes]</span>
+                                <span v-else>{{task.notes || '&nbsp;'}}</span>
+
+                            </span>
                         </div>
                         <div class="TCol --timespan"
                              @click="dropTime($event, task)"
@@ -394,6 +398,10 @@
             .LineChart {
                 margin: 0 -4px;
             }
+        }
+
+        .EmptyNotesError {
+            color: #b30e0d;
         }
 
         .TRow.distributed,
