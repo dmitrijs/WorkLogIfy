@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+### [1.18.2](https://github.com/dmitrijs/WorkLogIfy/compare/v1.18.1...v1.18.2) (2020-04-12)
+
+
+### UI/UX
+
+* **tasks:** show an error message in the report if task has empty notes ([4e9bbd8](https://github.com/dmitrijs/WorkLogIfy/commit/4e9bbd8c9bdca6ef7f74b25b561f09f5fb69c53c))
+
 ### [1.18.1](https://github.com/dmitrijs/WorkLogIfy/compare/v1.18.0...v1.18.1) (2020-04-11)
 
 
