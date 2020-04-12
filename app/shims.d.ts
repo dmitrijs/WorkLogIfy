@@ -32,6 +32,11 @@ declare type TaskObj = {
     records: RecordObj[];
 }
 
+declare type TaskEditedObj = TaskObj & {
+    time_add_minutes: string;
+    time_record_minutes: string;
+}
+
 declare type TemplateObj = {
     code?: string;
     title?: string;

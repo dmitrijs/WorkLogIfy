@@ -104,9 +104,21 @@ const {store: storeDirect} = createDirectStore({
             }
         },
 
-        getEditedTask(state: AppState) {
+        getEditedTask(state: AppState): TaskEditedObj {
             console.log('getEditedTask', state.taskEditedId);
-            return state.tasks.get(state.taskEditedId);
+            return state.tasks.get(state.taskEditedId).toJS();
+        },
+
+        getEmptyTask(state: AppState): TaskEditedObj {
+            return {
+                code: '',
+                title: '',
+                frozen: false,
+                time_spent_seconds: 0,
+                date: state.day_key,
+                time_add_minutes: '',
+                time_record_minutes: '',
+            } as TaskEditedObj;
         },
 
         getFileTotals(state: AppState) {
@@ -160,7 +172,7 @@ const {store: storeDirect} = createDirectStore({
 
             saveTasks(state);
         },
-        saveTask(state: AppState, task) {
+        saveTask(state: AppState, task: TaskEditedObj) {
             console.log('save', task);
 
             state.tasks = state.tasks.setIn([task.id, 'code'], task.code);

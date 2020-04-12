@@ -8,15 +8,17 @@
                     <td><input type="text" v-model="task.title" ref="focused"/></td>
                 </tr>
                 <tr>
-                    <td width="100">Code:</td>
-                    <td><input type="text" placeholder="TSKS-0000" v-model="task.code" @keyup="codeChanged()"/></td>
+                    <td style="width: 100px">Code:</td>
+                    <td><input type="text" placeholder="TSKS-0000" v-model="task.code" @keyup="codeChanged()"/>
+                    </td>
                 </tr>
                 <tr>
                     <td>Time Spent:</td>
                     <td class="Complex">
                         <div>
                             <span><strong>{{ task_time_spent_text }}</strong> ({{ task.time_spent_seconds }})</span>
-                            <span>Adjust: <input type="text" class="narrow" v-model="task.time_add_minutes">m</span>
+                            <span>Adjust: <input type="text" class="narrow"
+                                                 v-model="task.time_add_minutes">m</span>
                         </div>
                     </td>
                 </tr>
@@ -99,22 +101,12 @@
 
     @Component({})
     export default class TaskEdit extends Vue {
-        task = {
-            code: '',
-            title: '',
-            frozen: false,
-            time_spent_seconds: 0,
-            date: '',
-        };
+        task = {} as TaskEditedObj;
 
         @Prop({type: String}) mode;
 
         get store() {
             return store;
-        }
-
-        get editedTask() {
-            return store.getters.getEditedTask.toJS();
         }
 
         get templates() {
@@ -127,16 +119,16 @@
 
         created() {
             if (this.mode === 'new') {
-                this.task.date = store.state.day_key;
+                this.task = store.getters.getEmptyTask;
             } else {
-                this.task = this.editedTask;
+                this.task = store.getters.getEditedTask;
             }
             this.$set(this.task, 'time_add_minutes', '');
             this.$set(this.task, 'time_record_minutes', '');
         }
 
         mounted() {
-            this.$refs.focused.focus();
+            (this.$refs.focused as HTMLElement).focus();
         }
 
         save(autostart = false) {
