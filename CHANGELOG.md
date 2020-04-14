@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+### [1.18.3](https://github.com/dmitrijs/WorkLogIfy/compare/v1.18.2...v1.18.3) (2020-04-14)
+
+
+### Bug Fixes
+
+* **task edit:** clear new task form after submit ([6907ca0](https://github.com/dmitrijs/WorkLogIfy/commit/6907ca0d155597cb4da4b93e04a30dece8515a35))
+
 ### [1.18.2](https://github.com/dmitrijs/WorkLogIfy/compare/v1.18.1...v1.18.2) (2020-04-12)
 
 
