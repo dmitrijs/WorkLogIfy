@@ -119,7 +119,7 @@
 
         created() {
             if (this.mode === 'new') {
-                this.task = store.getters.getEmptyTask;
+                this.task = Object.create(store.getters.getEmptyTask);
             } else {
                 this.task = store.getters.getEditedTask;
             }
