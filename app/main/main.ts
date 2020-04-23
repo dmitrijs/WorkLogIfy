@@ -119,9 +119,9 @@ app.on('ready', async () => {
             event.returnValue = 'ok'
         });
 
-        ipcMain.on('tasks.save', (event, day_key, arg1, arg2) => {
+        ipcMain.on('tasks.save', (event, day_key, arg1, arg2, arg3) => {
             console.log('saving tasks');
-            Filesystem.saveWorkLog(day_key, arg1, arg2);
+            Filesystem.saveWorkLog(day_key, arg1, arg2, arg3);
             event.returnValue = 'ok'
         });
 
@@ -133,6 +133,10 @@ app.on('ready', async () => {
 
         ipcMain.on('tasks.load', (event, arg) => {
             event.returnValue = Filesystem.getWorkLog(arg);
+        });
+
+        ipcMain.on('settings.load', (event) => {
+            event.returnValue = Filesystem.getSettings();
         });
 
         ipcMain.on('tasks.getFileTotals', (event) => {

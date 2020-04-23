@@ -19,6 +19,7 @@ const moment = require("moment");
 timer.init();
 
 Vue.prototype.$store = store.original;
+store.commit.loadSettings();
 store.commit.setDay(moment().format("YYYY-MM-DD"));
 store.commit.setTaskTemplates(window.ipc.sendSync('tasks.getTaskTemplates'));
 

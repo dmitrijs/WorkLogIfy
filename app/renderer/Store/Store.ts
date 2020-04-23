@@ -10,7 +10,7 @@ const moment = require("moment");
 Vue.use(Vuex);
 
 function saveTasks(state: AppState) {
-    window.ipc.sendSync('tasks.save', state.day_key, state.tasks.toJS(), storeDirect.getters.getTasksGrouped.toJS());
+    window.ipc.sendSync('tasks.save', state.day_key, state.tasks.toJS(), storeDirect.getters.getTasksGrouped.toJS(), state.settings.toJS());
 }
 
 function saveTaskTemplates(state: AppState) {
@@ -58,6 +58,8 @@ const state = {
     templates: [],
     createdTaskId: '',
     taskCopied: null as Map<string, any>,
+
+    settings: null as Map<string, any>,
 };
 state.screen = state.tasksScreen;
 
@@ -236,6 +238,15 @@ const {store: storeDirect} = createDirectStore({
             let tasks = window.ipc.sendSync('tasks.load', state.day_key);
 
             state.tasks = convertJsTasksToMap(tasks);
+        },
+        loadSettings(state: AppState) {
+            let settings_json = window.ipc.sendSync('settings.load');
+
+            state.settings = Map<string, any>(settings_json);
+        },
+        updateSettings(state: AppState, settings) {
+            state.settings = Map(settings);
+            saveTasks(state);
         },
         openNextDay(state: AppState) {
             let today = moment(state.day_key, 'YYYY-MM-DD');

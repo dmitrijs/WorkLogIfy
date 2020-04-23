@@ -39,6 +39,12 @@ export default function createMainMenu(mainWindow) {
             }
         },
         {
+            label: 'Settings', click: function () {
+                mainWindow.show();
+                mainWindow.webContents.send('change.screen', 'settings');
+            }
+        },
+        {
             label: '...',
             submenu: [
                 {

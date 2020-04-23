@@ -27,9 +27,21 @@ class Filesystem {
         return worklog;
     }
 
-    public static saveWorkLog(day_key, worklog, worklogProcessed) {
+    public static getSettings() {
+        const dir = this.getDir();
+
+        if (fs.existsSync(dir + '/settings.json')) {
+            let contents = fs.readFileSync(dir + '/settings.json', 'utf8');
+            return JSON.parse(contents);
+        }
+
+        return {};
+    }
+
+    public static saveWorkLog(day_key, worklog, worklogProcessed, settings) {
         const dir = this.getDir();
         fs.writeFileSync(dir + '/worklog-' + day_key + '.json', JSON.stringify(worklog));
+        fs.writeFileSync(dir + '/settings.json', JSON.stringify(settings));
 
         {
             let time_charge_rounded_seconds = 0;
