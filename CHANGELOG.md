@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.19.0](https://github.com/dmitrijs/WorkLogIfy/compare/v1.18.3...v1.19.0) (2020-04-24)
+
+
+### Features
+
+* **settings:** added Settings screen ([84cb281](https://github.com/dmitrijs/WorkLogIfy/commit/84cb281ac9bfc91d1750a260f1d316e4f345df55))
+* **tasks:** added View in JIRA link to the task context menu ([d04b268](https://github.com/dmitrijs/WorkLogIfy/commit/d04b268cb39d0dd6a1b649fd1853351e133a1c09))
+
 ### [1.18.3](https://github.com/dmitrijs/WorkLogIfy/compare/v1.18.2...v1.18.3) (2020-04-14)
 
 
