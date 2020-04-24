@@ -14,7 +14,7 @@ const {resolve} = require('app-root-path');
 const path = require('path');
 
 let tray;
-const {BrowserWindow, app} = electron;
+const {BrowserWindow, shell, app} = electron;
 
 if (isDev) {
     process.env.ELECTRON_DISABLE_SECURITY_WARNINGS = 'true';
@@ -53,6 +53,11 @@ app.on('ready', async () => {
         } else {
             toggleDebug(mainWindow);
         }
+    });
+
+    mainWindow.webContents.on("new-window", function(event, url) {
+        event.preventDefault();
+        shell.openExternal(url);
     });
 
     Shortcuts.registerOnReady();
