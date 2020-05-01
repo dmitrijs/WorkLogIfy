@@ -6,7 +6,7 @@
   "scripts": {
     "standard-version": "npx standard-version",
     "standard-version-patch": "npx standard-version --release-as patch",
-    "standard-version-prerelease": "npx standard-version --prerelease local",
+    "standard-version-prerelease": "npx standard-version --prerelease local --skip.tag",
     "start": "run-s main:build watch",
     "release": "run-s parcel:build \"electron:build {@}\" --",
     "release-win": "run-s parcel:build \"electron:build-win {@}\" --",
