@@ -1,9 +1,8 @@
 <template>
     <div class="SettingsWindow">
-        <label>JIRA Host:</label> <input type="text" v-model="settings.jira_host" placeholder="https://example.atlassian.net"><br/>
-        <label>JIRA Username:</label> <input type="text" v-model="settings.jira_username" placeholder="you@example.com"><br/>
-        <label>JIRA Password:</label> <input type="password" v-model="settings.jira_password" placeholder="***********"><br/>
-        <!--<button @click="jiraValidate()" class="btn btn-xs btn-secondary">validate</button><br />-->
+        <label>JIRA Host:</label> <input type="text" v-model="settings.jira_host" placeholder="example.atlassian.net"><br/>
+        <label>JIRA Email:</label> <input type="text" v-model="settings.jira_username" placeholder="you@example.com"><br/>
+        <label>JIRA API Token:</label> <input type="password" v-model="settings.jira_password" placeholder="***********"> <a target="_blank" href="https://id.atlassian.com/manage-profile/security/api-tokens">API tokens</a><br/>
         <br/>
         <button type="button" class="btn btn-xs btn-primary" @click="store.commit.updateSettings(settings)">save
         </button>
