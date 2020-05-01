@@ -97,26 +97,24 @@
                              @mousedown.prevent.stop="dragStart($event, task)"
                              :title="'Final charge: ' + task.time_charge_text + '\n' + 'Recorded: ' + task.time_recorded_text + '\n' + 'Not recorded: ' + task.time_unrecorded_text"
                         >
-                        <span class="--timespan-spent">
-                            {{task.time_spent_text}}
-                            <LineChart class="bg-warning"
-                                       v-if="task.time_charge_extra_seconds > 0"
-                                       :height="3"
-                                       :total="task.time_charge_seconds"
-                                       :progress_normal="task.time_spent_seconds"></LineChart>
-                            <LineChart class="bg-dark"
-                                       v-if="task.time_recorded_seconds > 0"
+                            <span class="--timespan-spent">
+                                {{task.time_spent_text}}
+                            </span>
+                            <span class="--timespan-charge"
+                                  v-if="task.time_charge_extra_seconds > 0">
+                                {{task.time_unrecorded_text}}
+                            </span>
+                            <span class="--timespan-final-charge">
+                                {{task.time_charge_text}}
+                            </span>
+                            <LineChart class="ChartRecorded bg-dark"
                                        :height="3"
                                        :total="task.time_charge_seconds"
                                        :progress_success="task.time_recorded_seconds"></LineChart>
-                        </span>
-                            <span class="--timespan-charge"
-                                  v-if="task.time_charge_extra_seconds > 0">
-                            {{task.time_unrecorded_text}}
-                        </span>
-                            <span class="--timespan-final-charge">
-                            {{task.time_charge_text}}
-                        </span>
+                            <LineChart class="ChartSpent bg-warning"
+                                       :height="3"
+                                       :total="task.time_charge_seconds"
+                                       :progress_normal="task.time_spent_seconds"></LineChart>
                         </div>
                         <div class="TCol --playback">
                             <i class="IconAsInput icofont-ui-play-stop" v-if="tasks_ui.timeredId === task.id"
@@ -409,6 +407,8 @@
             height: 18px;
 
             .TCol {
+                .ChartRecorded,
+                .ChartSpent,
                 .Note--Content,
                 .--edit-button,
                 .--timespan-charge {
@@ -443,21 +443,17 @@
             }
         }
 
-        .TRow.hasRecords {
+        .TRow {
             .TCol {
-                .--timespan-spent-total {
-                    display: none !important;
+                .ChartSpent {
+                    opacity: 0 !important;
                 }
             }
 
             &:hover {
                 .TCol {
-                    .--timespan-spent-unrecorded {
-                        display: none;
-                    }
-
-                    .--timespan-spent-total {
-                        display: inline !important;
+                    .ChartSpent {
+                        opacity: 1 !important;
                     }
                 }
             }
