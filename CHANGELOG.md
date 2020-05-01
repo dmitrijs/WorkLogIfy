@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file.
 
+### [1.19.1](https://github.com/dmitrijs/WorkLogIfy/compare/v1.19.0...v1.19.1) (2020-05-01)
+
+
+### Features
+
+* **tasks:** added "Record To JIRA" action to the context menu ([de3638b](https://github.com/dmitrijs/WorkLogIfy/commit/de3638b2c118de185f176405989c6cd7b1fb6012))
+
+
+### UI/UX
+
+* **settings:** added link to "API tokens" page ([f7d01b8](https://github.com/dmitrijs/WorkLogIfy/commit/f7d01b87ef378fb84048ae1a12f7d2f3c110f847))
+* **tasks:** bring recorded time charts to spotlight ([0ad9722](https://github.com/dmitrijs/WorkLogIfy/commit/0ad97224b4467762a13c7e317f8bdff9c1f6237e))
+
 ## [1.19.0](https://github.com/dmitrijs/WorkLogIfy/compare/v1.18.3...v1.19.0) (2020-04-24)
 
 
