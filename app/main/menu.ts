@@ -8,7 +8,7 @@ export function toggleDebug(mainWindow) {
         mainWindow.setContentSize(800, size[1]);
     } else {
         mainWindow.webContents.send('debug.toggle', 0);
-        mainWindow.setContentSize(500, Math.min(500, size[1]));
+        mainWindow.setContentSize(500, size[1]);//test
     }
 }
 

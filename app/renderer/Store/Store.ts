@@ -51,7 +51,7 @@ const state = {
     timerElapsedText: null,
     timerElapsed: 0,
     screen: null,
-    is_debug: true,
+    is_debug: false,
     day_key: '',
     allFiles: [],
     fileTotals: {},

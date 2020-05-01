@@ -3,7 +3,7 @@ import IdleUser from "./idle";
 // @ts-ignore
 import taskbarPng from './assets/taskbar.png';
 import Filesystem from "./filesystem";
-import createMainMenu, {toggleDebug} from "./menu";
+import createMainMenu from "./menu";
 import createTray, {setTrayIconActive, setTrayIconIdle} from "./tray";
 
 const {format} = require('url');
@@ -24,8 +24,8 @@ if (isDev) {
 app.on('ready', async () => {
 
     const mainWindow = new BrowserWindow({
-        width: 800,
-        height: 800,
+        width: 500,
+        height: 500,
         useContentSize: true,
         x: 10,
         y: 10,
@@ -48,11 +48,11 @@ app.on('ready', async () => {
     mainWindow.once('ready-to-show', () => {
         mainWindow.show();
         if (isDev) {
+            mainWindow.setContentSize(800, 800);
+
             mainWindow.webContents.openDevTools({
                 mode: "bottom"
-            })
-        } else {
-            toggleDebug(mainWindow);
+            });
         }
     });
 
@@ -137,6 +137,10 @@ app.on('ready', async () => {
             win2.loadURL(url);
 
             event.returnValue = 'ok'
+        });
+
+        ipcMain.on('debug.state', (event, arg) => {
+            event.returnValue = isDev;
         });
 
         ipcMain.on('tasks.save', (event, day_key, arg1, arg2, arg3) => {
