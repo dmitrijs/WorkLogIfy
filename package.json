@@ -141,6 +141,7 @@
     "app-root-path": "^2.2.1",
     "electron-is-dev": "^1.2.0",
     "glob": "^7.1.6",
+    "request": "^2.88.2",
     "request-promise": "^4.2.5",
     "vue-hot-reload-api": "^2.3.4",
     "vue-property-decorator": "^8.4.1"
