@@ -19,8 +19,8 @@
     "main:watch": "parcel watch app/main/main.ts app/main/preload.ts --no-autoinstall --out-dir app/main/.parcel --out-file main --target electron",
     "renderer:watch": "parcel app/renderer/index.html --no-autoinstall --port 1124 --out-dir app/renderer/.parcel/development",
     "parcel:build": "run-s main:build renderer:build",
-    "main:build": "parcel build app/main/main.ts app/main/preload.ts --out-dir app/main/.parcel --out-file main --target electron",
-    "renderer:build": "parcel build app/renderer/index.html --public-url ./ --out-dir app/renderer/.parcel/production",
+    "main:build": "parcel build app/main/main.ts app/main/preload.ts --no-autoinstall --out-dir app/main/.parcel --out-file main --target electron",
+    "renderer:build": "parcel build app/renderer/index.html --no-autoinstall --public-url ./ --out-dir app/renderer/.parcel/production",
     "test": "run-s parcel:build \"test:jest {@}\" --",
     "test:jest": "jest",
     "lint": "tslint app/**/*.ts{,x}"
