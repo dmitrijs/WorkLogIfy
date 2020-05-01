@@ -207,6 +207,11 @@ const {store: storeDirect} = createDirectStore({
 
             saveTasks(state);
         },
+        taskAddRecordedSeconds(state: AppState, [task_id, recordSeconds]) {
+            state.tasks = addRecord(state.tasks, task_id, recordSeconds, 'quick');
+
+            saveTasks(state);
+        },
         setScreen(state: AppState, screen) {
             state.screen = screen;
             if (screen === 'tasks' || screen === 'DayLog') {

@@ -12,6 +12,7 @@ const electron = require('electron');
 const isDev = require('electron-is-dev');
 const {resolve} = require('app-root-path');
 const path = require('path');
+const request = require('request-promise');
 
 let tray;
 const {BrowserWindow, shell, app} = electron;
@@ -55,7 +56,7 @@ app.on('ready', async () => {
         }
     });
 
-    mainWindow.webContents.on("new-window", function(event, url) {
+    mainWindow.webContents.on("new-window", function (event, url) {
         event.preventDefault();
         shell.openExternal(url);
     });
@@ -101,6 +102,20 @@ app.on('ready', async () => {
 
         ipcMain.on('show.error', (event, title, content) => {
             electron.dialog.showErrorBox(title, content);
+        });
+
+        ipcMain.on('jira.request', (event, options) => {
+            console.log('options', options);
+
+            request(options)
+                .then(issue => {
+                    console.log('jira.request succeeded', issue);
+                    event.returnValue = 'success';
+                })
+                .catch(err => {
+                    alert(err.message);
+                    event.returnValue = err.message;
+                });
         });
 
         ipcMain.on('window.open', (event, arg) => {
