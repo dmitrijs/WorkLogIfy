@@ -24,7 +24,7 @@
                     <template v-if="prop === 'tasks'">
                         <div style="padding-left: 10px;" v-for="(task) of val">
                             <strong>{{task.id}}</strong>
-                            {{task}}
+                            <div style="white-space: pre;">{{task}}</div>
                         </div>
                     </template>
                     <div v-else>

@@ -14,6 +14,18 @@ export function sort_tasks(tasks) {
         if (sess2 && sess2.length > 0) {
             text2 = sess2[0].started_at;
         }
+        if (task1.is_on_hold) {
+            text1 = '0200-' + task1.is_on_hold_at;
+        }
+        if (task2.is_on_hold) {
+            text2 = '0200-' + task2.is_on_hold_at;
+        }
+        if (task1.is_done) {
+            text1 = '0100-' + task1.is_done_at;
+        }
+        if (task2.is_done) {
+            text2 = '0100-' + task2.is_done_at;
+        }
         // if (!task1.chargeable) {
         //     text1 = '0000-unimportant-in-bottom-' + text1;
         // }

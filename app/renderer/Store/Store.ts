@@ -203,6 +203,11 @@ const {store: storeDirect} = createDirectStore({
         updateTask(state: AppState, [task_id, field, value]) {
             console.log(state.tasks.get(task_id));
             state.tasks = state.tasks.setIn([task_id, field], value);
+            if (value === true) {
+                state.tasks = state.tasks.setIn([task_id, field + '_at'], moment().toISOString());
+            } else if (value === false) {
+                state.tasks = state.tasks.setIn([task_id, field + '_at'], null);
+            }
             console.log(state.tasks.toJS());
 
             saveTasks(state);

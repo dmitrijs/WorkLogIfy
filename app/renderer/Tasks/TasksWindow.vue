@@ -13,15 +13,18 @@
                        :progress_info="drag.minutes"></LineChart>
         </div>
         <div class="TRow --header">
+            <!--
             <div class="TCol --selected">
                 <div class="label-checkbox">
                     <input type="checkbox"><span></span></div>
             </div>
+            -->
             <div class="TCol --chargeable"><i class="icofont-not-allowed"></i></div>
             <div class="TCol --distributed"><i class="icofont-exchange"></i></div>
             <div class="TCol --frozen"><i class="icofont-unlock"></i></div>
             <div class="TCol --code">Code</div>
             <div class="TCol --title">Title</div>
+            <div class="TCol --frozen"><i class="icofont-unlock"></i></div>
             <div class="TCol --timespan">Time</div>
             <div class="TCol --timespan">
                 <i class="IconAsInput icofont-arrow-right" @click="store.commit.openNextDay"></i>
@@ -55,13 +58,17 @@
                          hovered: tasks_ui.hoveredId === task.id,
                          timered: tasks_ui.timeredId === task.id,
                          hasRecords: !!task.time_recorded_seconds,
+                         isDone: !!task.is_done,
+                         isOnHold: !!task.is_on_hold,
                      }"
                          @click="rowOnClick($event, task)"
                     >
+                        <!--
                         <div class="TCol --selected">
                             <div class="label-checkbox" @click="store.commit.tasksUiToggle(task.id)">
                                 <input type="checkbox" :checked="task._selected"><span></span></div>
                         </div>
+                        -->
                         <div class="TCol --chargeable">
                             <i class="IconAsInput icofont-not-allowed" :class="{ active: !task.chargeable }"
                                @click="store.commit.updateTask([task.id, 'chargeable', !task.chargeable])"></i>
@@ -92,6 +99,12 @@
 
                             </span>
                         </div>
+                        <div class="TCol --status">
+                            <i class="IconAsInput IconDone icofont-ui-check" :class="{ active: task.is_done }"
+                               @click="store.commit.updateTask([task.id, 'is_done', !task.is_done])"></i>
+                            <i class="IconAsInput IconOnHold icofont-sand-clock" :class="{ active: task.is_on_hold }"
+                               @click="store.commit.updateTask([task.id, 'is_on_hold', !task.is_on_hold])"></i>
+                        </div>
                         <div class="TCol --timespan"
                              @click="dropTime($event, task)"
                              @mousedown.prevent.stop="dragStart($event, task)"
@@ -101,7 +114,7 @@
                                 {{task.time_spent_text}}
                             </span>
                             <span class="--timespan-charge"
-                                  v-if="task.time_charge_extra_seconds > 0">
+                                  v-if="task.time_recorded_seconds > 0">
                                 {{task.time_unrecorded_text}}
                             </span>
                             <span class="--timespan-final-charge">
@@ -409,6 +422,7 @@
             .TCol {
                 .ChartRecorded,
                 .ChartSpent,
+                .IconOnHold,
                 .Note--Content,
                 .--edit-button,
                 .--timespan-charge {
@@ -417,6 +431,14 @@
 
                 .--timespan-spent {
                     opacity: 0.35 !important;
+                }
+            }
+        }
+
+        .TRow.isDone {
+            .TCol {
+                .IconOnHold {
+                    display: none;
                 }
             }
         }

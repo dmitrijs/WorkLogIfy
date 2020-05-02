@@ -12,6 +12,10 @@ declare type TaskObj = {
     chargeable: boolean;
     distributed: boolean;
     frozen: boolean;
+    is_done: boolean;
+    is_done_at: string;
+    is_on_hold: boolean;
+    is_on_hold_at: boolean;
     _selected: boolean;
 
     time_spent_text: string;
