@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+### [1.19.3](https://github.com/dmitrijs/WorkLogIfy/compare/v1.19.2...v1.19.3) (2020-05-05)
+
+
+### UI/UX
+
+* **tasks:** show recorded time in the group header ([2932cc0](https://github.com/dmitrijs/WorkLogIfy/commit/2932cc029293e52d2d560b21a0d123012c727048))
+
 ### [1.19.2](https://github.com/dmitrijs/WorkLogIfy/compare/v1.19.1...v1.19.2) (2020-05-05)
 
 
