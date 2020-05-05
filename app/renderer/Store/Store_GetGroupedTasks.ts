@@ -135,6 +135,7 @@ export default function Store_GetGroupedTasks(state: AppState): Map<string, any>
         let charge = 0;
         let distributed = 0;
         let not_distributed = 0;
+        let time_recorded = 0;
 
         tasks.forEach((task) => {
             const seconds = parseInt(String(task.time_spent_seconds));
@@ -150,6 +151,7 @@ export default function Store_GetGroupedTasks(state: AppState): Map<string, any>
                     }
                 }
             }
+            time_recorded += task.time_recorded_seconds;
         });
 
         return Map({
@@ -160,6 +162,7 @@ export default function Store_GetGroupedTasks(state: AppState): Map<string, any>
             time_not_distributed_seconds: not_distributed,
             time_charge_text: timespanToText(charge),
             time_spent_text: timespanToText(spent),
+            time_recorded_text: timespanToText(time_recorded),
         });
     }).toMap();
 

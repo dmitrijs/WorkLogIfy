@@ -133,7 +133,7 @@
 
     .TRowDate {
         display: grid;
-        grid-template-columns: 22px 22px 1fr 114px 63px 22px;
+        grid-template-columns: 22px 1fr 114px 63px 22px;
         grid-template-rows: auto;
 
         padding: 2px 0px;
@@ -142,6 +142,9 @@
         .TCol {
             padding: 1px 3px;
 
+            &.--timespan {
+                text-align: right;
+            }
             &.--group-date {
                 position: relative;
 
