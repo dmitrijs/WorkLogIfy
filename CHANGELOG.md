@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+### [1.19.2](https://github.com/dmitrijs/WorkLogIfy/compare/v1.19.1...v1.19.2) (2020-05-05)
+
+
+### Features
+
+* **tasks:** support 'Done' and 'On Hold' task statuses ([ce8b5a9](https://github.com/dmitrijs/WorkLogIfy/commit/ce8b5a9ccdb9604126b62ea81d493087473a4916))
+
 ### [1.19.1](https://github.com/dmitrijs/WorkLogIfy/compare/v1.19.0...v1.19.1) (2020-05-01)
 
 
