@@ -57,17 +57,9 @@
             }
         }
 
-        &.isDone {
-            background-color: #f7fff7;
-
-            .IconDone {
-                color: green;
-            }
-        }
-
         &.isOnHold {
             .IconOnHold {
-                color: #e0bc57;
+                color: #E9D086;
             }
         }
 
@@ -132,9 +124,14 @@
     }
 
     .TasksTable:not(.ShowAsReport) {
+        .TRow.isOnHold {
+            background: #fffef2;
+        }
         .TRow.isDone {
-            .TRowContent {
-                opacity: 0.4;
+            background-color: #f7fff7;
+
+            .IconDone.active {
+                color: #94CC94;
             }
         }
     }
