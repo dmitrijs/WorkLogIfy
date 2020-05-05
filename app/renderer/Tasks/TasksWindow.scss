@@ -11,59 +11,16 @@
 
 & {
     .TRow {
-        display: grid;
-        grid-template-columns: 22px 22px 22px 73px 1fr 22px 63px 22px;
-        grid-template-rows: auto;
-
-        &.--header {
-            padding: 1px 0 3px 0;
-
-            .TCol {
-                font-weight: bold;
-            }
-        }
-
-        .TCol {
-            padding: 1px 3px;
-
-            &.--code {
-                white-space: nowrap;
-            }
-            &.--time {
-                color: #364abc;
-            }
-            &.--selected,
-            &.--distributed,
-            &.--chargeable,
-            &.--frozen {
-                align-self: center;
-                text-align: center;
-            }
-            &.--timespan {
-                align-self: center;
-
-                .--timespan-charge {
-                    opacity: 0.5;
-                }
-            }
-            &.--title {
-                .Note--Content,
-                .Title--Content {
-                    display: block;
-                }
-            }
-            &.--timespan {
-                span {
-                    display: block;
-                }
-            }
-            &.--playback {
-                align-self: center;
-            }
-        }
-
         &:nth-child(2n) {
             background: #fcfcfc;
+        }
+
+        &:hover {
+            background-color: #f5f5f5;
+
+            .TCol.--playback .IconAsInput.icofont-ui-play {
+                display: block;
+            }
         }
 
         &.selected {
@@ -78,9 +35,19 @@
             }
         }
 
+        &.--header {
+            padding: 1px 0 3px 0;
+
+            .TCol {
+                font-weight: bold;
+            }
+        }
+
         &.notchargeable,
         &.distributed {
-            opacity: 0.4;
+            .TRowContent {
+                opacity: 0.4;
+            }
         }
 
         &.distributed,
@@ -102,11 +69,54 @@
             }
         }
 
-        &:hover {
-            background-color: #f5f5f5;
+        .TRowContent {
+            display: grid;
+            grid-template-columns: 22px 22px 22px 73px 1fr 22px 63px 22px;
+            grid-template-rows: auto;
 
-            .TCol.--playback .IconAsInput.icofont-ui-play {
-                display: block;
+            .TCol {
+                padding: 1px 3px;
+
+                &.--code {
+                    white-space: nowrap;
+                }
+
+                &.--time {
+                    color: #364abc;
+                }
+
+                &.--selected,
+                &.--distributed,
+                &.--chargeable,
+                &.--frozen {
+                    align-self: center;
+                    text-align: center;
+                }
+
+                &.--timespan {
+                    align-self: center;
+
+                    .--timespan-charge {
+                        opacity: 0.5;
+                    }
+                }
+
+                &.--title {
+                    .Note--Content,
+                    .Title--Content {
+                        display: block;
+                    }
+                }
+
+                &.--timespan {
+                    span {
+                        display: block;
+                    }
+                }
+
+                &.--playback {
+                    align-self: center;
+                }
             }
         }
     }
@@ -119,17 +129,19 @@
         }
     }
 
-	.TasksTable:not(.ShowAsReport) {
-		.TRow.isDone {
-			opacity: 0.4;
-		}
-	}
+    .TasksTable:not(.ShowAsReport) {
+        .TRow.isDone {
+            .TRowContent {
+                opacity: 0.4;
+            }
+        }
+    }
 
-	.TasksTable.ShowAsReport {
-		.TCol.--status {
-			opacity: 0;
-		}
-	}
+    .TasksTable.ShowAsReport {
+        .TCol.--status {
+            opacity: 0;
+        }
+    }
 
     .TRowDate {
         display: grid;
@@ -145,6 +157,7 @@
             &.--timespan {
                 text-align: right;
             }
+
             &.--group-date {
                 position: relative;
 
@@ -159,11 +172,13 @@
                     right: 5px;
                 }
             }
+
             &.--timespan-charge {
                 .original-time {
                     opacity: 0.5;
                 }
             }
+
             &.--timespan-spent {
                 opacity: 0.5;
             }
@@ -184,28 +199,34 @@
 }
 
 .TRow.logged {
-    .TCol {
-        color: darkgrey !important;
+    .TRowContent {
+        .TCol {
+            color: darkgrey !important;
+        }
     }
 }
 
 .TRow {
-    .IconAsInput {
-        opacity: 0.1;
-        cursor: pointer;
+    .TRowContent {
+        .IconAsInput {
+            opacity: 0.1;
+            cursor: pointer;
 
-        &.active {
-            opacity: 1 !important;
+            &.active {
+                opacity: 1 !important;
+            }
         }
     }
 }
 
 .TRow:hover {
-    .IconAsInput {
-        opacity: 0.3;
+    .TRowContent {
+        .IconAsInput {
+            opacity: 0.3;
 
-        &:hover {
-            opacity: 0.5;
+            &:hover {
+                opacity: 0.5;
+            }
         }
     }
 }

@@ -13,21 +13,23 @@
                        :progress_info="drag.minutes"></LineChart>
         </div>
         <div class="TRow --header">
-            <!--
-            <div class="TCol --selected">
-                <div class="label-checkbox">
-                    <input type="checkbox"><span></span></div>
-            </div>
-            -->
-            <div class="TCol --chargeable"><i class="icofont-not-allowed"></i></div>
-            <div class="TCol --distributed"><i class="icofont-exchange"></i></div>
-            <div class="TCol --frozen"><i class="icofont-unlock"></i></div>
-            <div class="TCol --code">Code</div>
-            <div class="TCol --title">Title</div>
-            <div class="TCol --frozen"><i class="icofont-unlock"></i></div>
-            <div class="TCol --timespan">Time</div>
-            <div class="TCol --timespan">
-                <i class="IconAsInput icofont-arrow-right" @click="store.commit.openNextDay"></i>
+            <div class="TRowContent">
+                <!--
+                <div class="TCol --selected">
+                    <div class="label-checkbox">
+                        <input type="checkbox"><span></span></div>
+                </div>
+                -->
+                <div class="TCol --chargeable"><i class="icofont-not-allowed"></i></div>
+                <div class="TCol --distributed"><i class="icofont-exchange"></i></div>
+                <div class="TCol --frozen"><i class="icofont-unlock"></i></div>
+                <div class="TCol --code">Code</div>
+                <div class="TCol --title">Title</div>
+                <div class="TCol --frozen"><i class="icofont-unlock"></i></div>
+                <div class="TCol --timespan">Time</div>
+                <div class="TCol --timespan">
+                    <i class="IconAsInput icofont-arrow-right" @click="store.commit.openNextDay"></i>
+                </div>
             </div>
         </div>
         <div class="TasksTable"
@@ -65,77 +67,80 @@
                      }"
                          @click="rowOnClick($event, task)"
                     >
-                        <!--
-                        <div class="TCol --selected">
-                            <div class="label-checkbox" @click="store.commit.tasksUiToggle(task.id)">
-                                <input type="checkbox" :checked="task._selected"><span></span></div>
-                        </div>
-                        -->
-                        <div class="TCol --chargeable">
-                            <i class="IconAsInput icofont-not-allowed" :class="{ active: !task.chargeable }"
-                               @click="store.commit.updateTask([task.id, 'chargeable', !task.chargeable])"></i>
-                        </div>
-                        <div class="TCol --distributed">
-                            <i class="IconAsInput icofont-exchange" :class="{ active: task.distributed }"
-                               @click="store.commit.updateTask([task.id, 'distributed', !task.distributed])"></i>
-                        </div>
-                        <div class="TCol --frozen">
-                            <i class="IconAsInput icofont-unlock" :class="{ active: task.frozen }"
-                               @click="store.commit.updateTask([task.id, 'frozen', !task.frozen])"></i>
-                        </div>
-                        <div class="TCol --code"
-                             @click="tasks_ui.tasksShowAsReport ? copyToClipboard($event, task.code) : editTask($event, task)">
-                            {{task.code}}
-                            <div class="--edit-button">
-                                <a href="#" @click.stop="editTask($event, task)" v-if="!task.grouped">edit</a>
+                        <div class="TRowContent">
+                            <!--
+                            <div class="TCol --selected">
+                                <div class="label-checkbox" @click="store.commit.tasksUiToggle(task.id)">
+                                    <input type="checkbox" :checked="task._selected"><span></span></div>
                             </div>
-                        </div>
-                        <div class="TCol --title"
-                             @click="tasks_ui.tasksShowAsReport ? copyToClipboard($event, task.notes) : editTask($event, task)">
+                            -->
+                            <div class="TCol --chargeable">
+                                <i class="IconAsInput icofont-not-allowed" :class="{ active: !task.chargeable }"
+                                   @click="store.commit.updateTask([task.id, 'chargeable', !task.chargeable])"></i>
+                            </div>
+                            <div class="TCol --distributed">
+                                <i class="IconAsInput icofont-exchange" :class="{ active: task.distributed }"
+                                   @click="store.commit.updateTask([task.id, 'distributed', !task.distributed])"></i>
+                            </div>
+                            <div class="TCol --frozen">
+                                <i class="IconAsInput icofont-unlock" :class="{ active: task.frozen }"
+                                   @click="store.commit.updateTask([task.id, 'frozen', !task.frozen])"></i>
+                            </div>
+                            <div class="TCol --code"
+                                 @click="tasks_ui.tasksShowAsReport ? copyToClipboard($event, task.code) : editTask($event, task)">
+                                {{task.code}}
+                                <div class="--edit-button">
+                                    <a href="#" @click.stop="editTask($event, task)" v-if="!task.grouped">edit</a>
+                                </div>
+                            </div>
+                            <div class="TCol --title"
+                                 @click="tasks_ui.tasksShowAsReport ? copyToClipboard($event, task.notes) : editTask($event, task)">
                         <span class="Title--Content"
                               :class="{ ellipsis: !tasks_ui.tasksShowAsReport }"><span>{{task.title || '&nbsp;'}}</span></span>
-                            <span class="Note--Content "
-                                  :class="{ ellipsis: !tasks_ui.tasksShowAsReport && !tasks_ui.tasksShowFullNotes }">
+                                <span class="Note--Content "
+                                      :class="{ ellipsis: !tasks_ui.tasksShowAsReport && !tasks_ui.tasksShowFullNotes }">
                                 <span class="EmptyNotesError" v-if="tasks_ui.tasksShowAsReport && !task.notes">[empty notes]</span>
                                 <span v-else>{{task.notes || '&nbsp;'}}</span>
 
                             </span>
-                        </div>
-                        <div class="TCol --status">
-                            <i class="IconAsInput IconDone icofont-ui-check" :class="{ active: task.is_done }"
-                               @click="store.commit.updateTask([task.id, 'is_done', !task.is_done])"></i>
-                            <i class="IconAsInput IconOnHold icofont-sand-clock" :class="{ active: task.is_on_hold }"
-                               @click="store.commit.updateTask([task.id, 'is_on_hold', !task.is_on_hold])"></i>
-                        </div>
-                        <div class="TCol --timespan"
-                             @click="dropTime($event, task)"
-                             @mousedown.prevent.stop="dragStart($event, task)"
-                             :title="'Final charge: ' + task.time_charge_text + '\n' + 'Recorded: ' + task.time_recorded_text + '\n' + 'Not recorded: ' + task.time_unrecorded_text"
-                        >
+                            </div>
+                            <div class="TCol --status">
+                                <i class="IconAsInput IconDone icofont-ui-check" :class="{ active: task.is_done }"
+                                   @click="store.commit.updateTask([task.id, 'is_done', !task.is_done])"></i>
+                                <i class="IconAsInput IconOnHold icofont-sand-clock"
+                                   :class="{ active: task.is_on_hold }"
+                                   @click="store.commit.updateTask([task.id, 'is_on_hold', !task.is_on_hold])"></i>
+                            </div>
+                            <div class="TCol --timespan"
+                                 @click="dropTime($event, task)"
+                                 @mousedown.prevent.stop="dragStart($event, task)"
+                                 :title="'Final charge: ' + task.time_charge_text + '\n' + 'Recorded: ' + task.time_recorded_text + '\n' + 'Not recorded: ' + task.time_unrecorded_text"
+                            >
                             <span class="--timespan-spent">
                                 {{task.time_spent_text}}
                             </span>
-                            <span class="--timespan-charge"
-                                  v-if="task.time_recorded_seconds > 0">
+                                <span class="--timespan-charge"
+                                      v-if="task.time_recorded_seconds > 0">
                                 {{task.time_unrecorded_text}}
                             </span>
-                            <span class="--timespan-final-charge">
+                                <span class="--timespan-final-charge">
                                 {{task.time_charge_text}}
                             </span>
-                            <LineChart class="ChartRecorded bg-dark"
-                                       :height="3"
-                                       :total="task.time_charge_seconds"
-                                       :progress_success="task.time_recorded_seconds"></LineChart>
-                            <LineChart class="ChartSpent bg-warning"
-                                       :height="3"
-                                       :total="task.time_charge_seconds"
-                                       :progress_normal="task.time_spent_seconds"></LineChart>
-                        </div>
-                        <div class="TCol --playback">
-                            <i class="IconAsInput icofont-ui-play-stop" v-if="tasks_ui.timeredId === task.id"
-                               @click="stopTimer()"></i>
-                            <i class="IconAsInput icofont-ui-play" v-if="tasks_ui.timeredId !== task.id"
-                               @click="startTimer($event, task)"></i>
+                                <LineChart class="ChartRecorded bg-dark"
+                                           :height="3"
+                                           :total="task.time_charge_seconds"
+                                           :progress_success="task.time_recorded_seconds"></LineChart>
+                                <LineChart class="ChartSpent bg-warning"
+                                           :height="3"
+                                           :total="task.time_charge_seconds"
+                                           :progress_normal="task.time_spent_seconds"></LineChart>
+                            </div>
+                            <div class="TCol --playback">
+                                <i class="IconAsInput icofont-ui-play-stop" v-if="tasks_ui.timeredId === task.id"
+                                   @click="stopTimer()"></i>
+                                <i class="IconAsInput icofont-ui-play" v-if="tasks_ui.timeredId !== task.id"
+                                   @click="startTimer($event, task)"></i>
+                            </div>
                         </div>
                     </div>
                 </transition-group>
@@ -419,36 +424,42 @@
 
         .TRow.distributed,
         .TRow.notchargeable {
-            height: 18px;
+            .TRowContent {
+                height: 18px;
 
-            .TCol {
-                .ChartRecorded,
-                .ChartSpent,
-                .IconOnHold,
-                .Note--Content,
-                .--edit-button,
-                .--timespan-charge {
-                    display: none;
-                }
+                .TCol {
+                    .ChartRecorded,
+                    .ChartSpent,
+                    .IconOnHold,
+                    .Note--Content,
+                    .--edit-button,
+                    .--timespan-charge {
+                        display: none;
+                    }
 
-                .--timespan-spent {
-                    opacity: 0.35 !important;
+                    .--timespan-spent {
+                        opacity: 0.35 !important;
+                    }
                 }
             }
         }
 
         .TRow.isDone {
-            .TCol {
-                .IconOnHold {
-                    display: none;
+            .TRowContent {
+                .TCol {
+                    .IconOnHold {
+                        display: none;
+                    }
                 }
             }
         }
 
         .TRow.notchargeable {
-            .TCol {
-                .--timespan-spent {
-                    text-decoration: line-through;
+            .TRowContent {
+                .TCol {
+                    .--timespan-spent {
+                        text-decoration: line-through;
+                    }
                 }
             }
         }
@@ -456,28 +467,32 @@
         .TRow {
             transition: all 200ms;
 
-            .TCol.--timespan {
-                .--timespan-spent-unrecorded {
-                    display: none;
-                }
+            .TRowContent {
+                .TCol.--timespan {
+                    .--timespan-spent-unrecorded {
+                        display: none;
+                    }
 
-                .--timespan-final-charge {
-                    display: none;
+                    .--timespan-final-charge {
+                        display: none;
+                    }
                 }
             }
         }
 
         .TRow {
-            .TCol {
-                .ChartSpent {
-                    opacity: 0 !important;
-                }
-            }
-
-            &:hover {
+            .TRowContent {
                 .TCol {
                     .ChartSpent {
-                        opacity: 1 !important;
+                        opacity: 0 !important;
+                    }
+                }
+
+                &:hover {
+                    .TCol {
+                        .ChartSpent {
+                            opacity: 1 !important;
+                        }
                     }
                 }
             }
@@ -490,25 +505,27 @@
             }
 
             .TRow {
-                margin-bottom: 5px;
+                .TRowContent {
+                    margin-bottom: 5px;
 
-                .Title--Content {
-                    opacity: 0.5;
-                }
-
-                .TCol.--timespan {
-                    .--timespan-spent,
-                    .--timespan-charge {
-                        display: none;
+                    .Title--Content {
+                        opacity: 0.5;
                     }
 
-                    .--timespan-final-charge {
-                        display: block;
-                    }
-                }
+                    .TCol.--timespan {
+                        .--timespan-spent,
+                        .--timespan-charge {
+                            display: none;
+                        }
 
-                &.notchargeable {
-                    opacity: 0.12;
+                        .--timespan-final-charge {
+                            display: block;
+                        }
+                    }
+
+                    &.notchargeable {
+                        opacity: 0.12;
+                    }
                 }
             }
         }
