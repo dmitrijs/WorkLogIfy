@@ -58,6 +58,8 @@
         }
 
         &.isDone {
+            background-color: #f7fff7;
+
             .IconDone {
                 color: green;
             }
