@@ -47,7 +47,7 @@
                             <button type="button" class="btn btn-primary btn-sm"
                                     @click="save(true)"
                                     v-if="mode !== 'edit'">
-                                <i class="IconAsInput icofont-ui-play"></i>
+                                <i class="IconAsInput icofont-play"></i>
                             </button>
                         </div>
                     </td>

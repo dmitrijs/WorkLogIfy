@@ -136,9 +136,9 @@
                                            :progress_normal="task.time_spent_seconds"></LineChart>
                             </div>
                             <div class="TCol --playback">
-                                <i class="IconAsInput icofont-ui-play-stop" v-if="tasks_ui.timeredId === task.id"
+                                <i class="IconAsInput icofont-square" v-if="tasks_ui.timeredId === task.id"
                                    @click="stopTimer()"></i>
-                                <i class="IconAsInput icofont-ui-play" v-if="tasks_ui.timeredId !== task.id"
+                                <i class="IconAsInput icofont-play" v-if="tasks_ui.timeredId !== task.id"
                                    @click="startTimer($event, task)"></i>
                             </div>
                         </div>

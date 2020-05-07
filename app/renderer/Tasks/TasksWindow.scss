@@ -18,21 +18,13 @@
         &:hover {
             background-color: #f5f5f5;
 
-            .TCol.--playback .IconAsInput.icofont-ui-play {
+            .TCol.--playback .IconAsInput.icofont-play {
                 display: block;
             }
         }
 
         &.selected {
             background-color: #f0f0f0 !important;
-        }
-
-        &.timered {
-            background-color: #ebffeb !important;
-
-            .TCol.--playback {
-                color: green;
-            }
         }
 
         &.--header {
@@ -52,7 +44,7 @@
 
         &.distributed,
         &.notchargeable {
-            .TCol.--playback .IconAsInput.icofont-ui-play {
+            .TCol.--playback .IconAsInput.icofont-play {
                 display: none;
             }
         }
@@ -65,8 +57,11 @@
 
         .TRowContent {
             display: grid;
-            grid-template-columns: 22px 22px 22px 73px 1fr 22px 63px 22px;
+            grid-template-columns: 22px 22px 22px 73px 1fr 22px 63px 34px;
             grid-template-rows: auto;
+
+            margin: 0px 1px;
+            padding: 1px;
 
             .TCol {
                 padding: 1px 3px;
@@ -113,6 +108,12 @@
                 }
             }
         }
+
+        &.timered .TRowContent {
+            background-color: #ebffeb !important;
+            border: 1px solid #2fbb26;
+            padding: 0;
+        }
     }
 
     .TasksTable { // not header
@@ -127,8 +128,9 @@
         .TRow.isOnHold {
             background: #fffef2;
         }
+
         .TRow.isDone {
-            background-color: #f7fff7;
+            background-color: #fafffa;
 
             .IconDone.active {
                 color: #94CC94;
@@ -183,6 +185,7 @@
             }
         }
     }
+
 }
 
 .SelectionStatistics {
@@ -213,6 +216,34 @@
 
             &.active {
                 opacity: 1 !important;
+            }
+        }
+
+        .TCol.--playback {
+            .IconAsInput {
+                background: #e2e2e2;
+                opacity: 1 !important;
+                font-size: 13px;
+                border-radius: 14px;
+                color: white;
+                display: inline-block;
+                width: 28px;
+                height: 28px;
+                text-align: center;
+                padding-top: 9px;
+
+                &.icofont-square {
+                    background: #4db34d !important;
+                    color: white !important;
+                }
+            }
+        }
+    }
+
+    &:not(.timered) {
+        .TCol.--playback {
+            .IconAsInput:hover {
+                background: #74b874;
             }
         }
     }
