@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.20.0](https://github.com/dmitrijs/WorkLogIfy/compare/v1.19.3...v1.20.0) (2020-05-09)
+
+
+### Features
+
+* **report:** show current week calendar in the report ([882425a](https://github.com/dmitrijs/WorkLogIfy/commit/882425a0801ae2f933383a219235aa971fa3389b))
+
 ### [1.19.3](https://github.com/dmitrijs/WorkLogIfy/compare/v1.19.2...v1.19.3) (2020-05-05)
 
 
