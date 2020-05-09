@@ -220,7 +220,7 @@ const {store: storeDirect} = createDirectStore({
         },
         setScreen(state: AppState, screen) {
             state.screen = screen;
-            if (screen === 'tasks' || screen === 'DayLog') {
+            if (screen === 'tasks') {
                 state.tasksScreen = screen;
             }
         },

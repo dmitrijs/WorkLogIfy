@@ -64,13 +64,6 @@ export default function createMainMenu(mainWindow) {
                 },
                 {type: 'separator'},
                 {
-                    label: 'Report (deprecated)', click: function () {
-                        mainWindow.show();
-                        mainWindow.webContents.send('change.screen', 'DayLog');
-                    }
-                },
-                {type: 'separator'},
-                {
                     label: 'Quit', click: function () {
                         mainWindow.destroy();
                         app.quit();

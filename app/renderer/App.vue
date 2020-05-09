@@ -4,7 +4,6 @@
             <TasksWindow v-if="tasks_ui.screen === 'tasks'"></TasksWindow>
             <TaskEdit v-if="tasks_ui.screen === 'task.edit'" mode="edit" key="task.edit"></TaskEdit>
             <TaskEdit v-if="tasks_ui.screen === 'task.new'" mode="new" key="task.new"></TaskEdit>
-            <DayLog v-if="tasks_ui.screen === 'DayLog'"></DayLog>
             <CalendarWindow v-if="tasks_ui.screen === 'calendar'"></CalendarWindow>
             <TemplatesWindow v-if="tasks_ui.screen === 'task.templates'"></TemplatesWindow>
             <SettingsWindow v-if="tasks_ui.screen === 'settings'"></SettingsWindow>
@@ -40,7 +39,6 @@
     import Vue from "vue";
     import Component from "vue-class-component";
     import TasksWindow from "./Tasks/TasksWindow.vue";
-    import DayLog from "./Tasks/DayLog.vue";
     import TaskEdit from "./Tasks/TaskEdit.vue";
     import timer from "./Timer";
     import CalendarWindow from "./Tasks/CalendarWindow.vue";
@@ -53,7 +51,6 @@
             TemplatesWindow,
             CalendarWindow,
             TaskEdit,
-            DayLog,
             TasksWindow,
             SettingsWindow,
         },
