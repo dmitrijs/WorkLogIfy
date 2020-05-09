@@ -12,6 +12,11 @@
                        :total="drag.taskFrom_minutes"
                        :progress_info="drag.minutes"></LineChart>
         </div>
+        <CalendarWindow
+                v-if="tasks_ui.tasksShowAsReport"
+                :key="store.state.day_key"
+                :week-key="store.state.week_key"
+        ></CalendarWindow>
         <div class="TRow --header">
             <div class="TRowContent">
                 <!--
@@ -28,7 +33,6 @@
                 <div class="TCol --frozen"><i class="icofont-unlock"></i></div>
                 <div class="TCol --timespan">Time</div>
                 <div class="TCol --timespan">
-                    <i class="IconAsInput icofont-arrow-right" @click="store.commit.openNextDay"></i>
                 </div>
             </div>
         </div>
@@ -196,10 +200,12 @@
     import timer from "../Timer";
     import {Store_MergeSameCodes} from "../Store/Store_GetGroupedTasks";
     import {timespanToText} from "../Utils/Utils";
+    import CalendarWindow from "./CalendarWindow.vue";
 
     @Component({
         components: {
             LineChart,
+            CalendarWindow,
         }
     })
     export default class TasksWindow extends Vue {
@@ -528,6 +534,11 @@
                     }
                 }
             }
+        }
+
+        .CalendarWindow {
+            overflow: initial !important;
+            max-height: initial !important;
         }
     }
 </style>

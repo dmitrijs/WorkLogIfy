@@ -1,6 +1,6 @@
 <template>
     <div class="CalendarWindow">
-        <br/>
+        <br v-if="!weekKey"/>
         <div>
             <div v-for="(week, week_key) of weeks" class="Week" :data-week="week_key">
                 <div v-for="(dayCode) of week.days" class="Day"
@@ -31,6 +31,7 @@
     import Component from "vue-class-component";
     import store from "../Store/Store";
     import Store_GetCalendarStatistics from "../Store/Store_GetCalendarStatistics";
+    import {Prop} from "vue-property-decorator";
 
     @Component({
         created() {
@@ -39,32 +40,42 @@
     })
     export default class CalendarWindow extends Vue {
 
-        data = null;
+        cache = null;
+
+        @Prop({type: String}) weekKey;
 
         get weeks() {
             this.collect_data();
 
-            return this.data.weeks;
+            if (this.weekKey) {
+                if (this.cache.weeks[this.weekKey]) {
+                    return {
+                        weekKey: this.cache.weeks[this.weekKey],
+                    }
+                }
+                return {}; // do not show anything if week was requested but not found
+            }
+            return this.cache.weeks;
         }
 
         get months() {
             this.collect_data();
 
-            return this.data.months;
+            return this.cache.months;
         }
 
         get days() {
             this.collect_data();
 
-            return this.data.days;
+            return this.cache.days;
         }
 
         collect_data() {
-            if (this.data) {
+            if (this.cache) {
                 return;
             }
 
-            this.data = Store_GetCalendarStatistics();
+            this.cache = Store_GetCalendarStatistics();
         }
 
         open(day) {

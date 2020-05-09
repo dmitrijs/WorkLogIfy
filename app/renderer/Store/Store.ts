@@ -53,6 +53,7 @@ const state = {
     screen: null,
     is_debug: false,
     day_key: '',
+    week_key: '',
     allFiles: [],
     fileTotals: {},
     templates: [],
@@ -245,6 +246,7 @@ const {store: storeDirect} = createDirectStore({
                 return;
             }
             state.day_key = day;
+            state.week_key = moment(day, "YYYY-MM-DD").endOf('isoWeek').format('YYYY-WW');
             let tasks = window.ipc.sendSync('tasks.load', state.day_key);
 
             state.tasks = convertJsTasksToMap(tasks);
