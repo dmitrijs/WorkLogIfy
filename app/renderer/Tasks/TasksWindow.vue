@@ -12,11 +12,6 @@
                        :total="drag.taskFrom_minutes"
                        :progress_info="drag.minutes"></LineChart>
         </div>
-        <CalendarWindow
-                v-if="tasks_ui.tasksShowAsReport"
-                :key="store.state.day_key"
-                :week-key="store.state.week_key"
-        ></CalendarWindow>
         <div class="TRow --header">
             <div class="TRowContent">
                 <!--
@@ -150,8 +145,13 @@
                 </transition-group>
             </template>
         </div>
+        <CalendarWindow
+                v-if="tasks_ui.tasksShowAsReport"
+                :key="store.state.day_key"
+                :week-key="store.state.week_key"
+        ></CalendarWindow>
 
-        <div>
+        <div class="ViewOptions">
             <a href="#" @click="dragClear" v-if="drag.readyToDrop" style="float: right;">cancel</a>
             Show:
             <span class="label--checkbox label--checkbox--with-text"
