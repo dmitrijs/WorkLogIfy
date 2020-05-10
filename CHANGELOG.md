@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
+### [1.20.1](https://github.com/dmitrijs/WorkLogIfy/compare/v1.20.0...v1.20.1) (2020-05-10)
+
+
+### UI/UX
+
+* **report:** show calendar below the tasks ([cf47541](https://github.com/dmitrijs/WorkLogIfy/commit/cf47541a05e69562073c2a165a5de93d916bc93a))
+* **tasks:** changed task sorting order ([f9e2427](https://github.com/dmitrijs/WorkLogIfy/commit/f9e242704cf69e7a9fd8429d73a7ad2c43261b29))
+* **tasks:** removed "full notes" view option ([9164f1f](https://github.com/dmitrijs/WorkLogIfy/commit/9164f1f7def55b8b64afe53d9bb6ecfcd66a8ad6))
+
 ## [1.20.0](https://github.com/dmitrijs/WorkLogIfy/compare/v1.19.3...v1.20.0) (2020-05-09)
 
 
