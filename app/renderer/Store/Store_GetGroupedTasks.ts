@@ -3,42 +3,27 @@ import {comparatorLt, timespanToText} from "../Utils/Utils";
 import {AppState} from "./Store";
 
 export function sort_tasks(tasks) {
+    function build_sort_value(task: TaskObj) {
+        let task_not_started = true;
+        let first_session = null;
+        if (task.sessions && task.sessions.length > 0) {
+            task_not_started = false;
+            first_session = task.sessions[0];
+        }
+
+        return '' // 9 - higher, 0 - lower
+            + (task.is_done ? '0' : '9')
+            + (task_not_started ? '9' : '0')
+            + (task.time_charge_seconds ? '9' : '0')
+            + (task.is_done ? task.is_done_at : '')
+            + (task.is_on_hold ? '0' : '9')
+            + (task.is_on_hold ? task.is_on_hold_at : '')
+            + (first_session ? first_session.started_at : '')
+            + '';
+    }
+
     return tasks.sort((task1: TaskObj, task2: TaskObj) => {
-        let sess1 = task1.sessions;
-        let sess2 = task2.sessions;
-        let text1 = '9999-new-on-top-' + task1.id;
-        let text2 = '9999-new-on-top-' + task2.id;
-        if (sess1 && sess1.length > 0) {
-            text1 = sess1[0].started_at;
-        }
-        if (sess2 && sess2.length > 0) {
-            text2 = sess2[0].started_at;
-        }
-        if (task1.is_on_hold) {
-            text1 = '0200-' + task1.is_on_hold_at;
-        }
-        if (task2.is_on_hold) {
-            text2 = '0200-' + task2.is_on_hold_at;
-        }
-        if (task1.is_done) {
-            text1 = '0100-' + task1.is_done_at;
-            if (!task1.time_charge_seconds) {
-                text1 = '0050-' + text1;
-            }
-        }
-        if (task2.is_done) {
-            text2 = '0100-' + task2.is_done_at;
-            if (!task2.time_charge_seconds) {
-                text2 = '0050-' + text2;
-            }
-        }
-        // if (!task1.chargeable) {
-        //     text1 = '0000-unimportant-in-bottom-' + text1;
-        // }
-        // if (!task2.chargeable) {
-        //     text2 = '0000-unimportant-in-bottom-' + text2;
-        // }
-        return comparatorLt(text1, text2);
+        return comparatorLt(build_sort_value(task1), build_sort_value(task2));
     });
 }
 
