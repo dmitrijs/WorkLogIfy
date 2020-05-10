@@ -22,9 +22,15 @@ export function sort_tasks(tasks) {
         }
         if (task1.is_done) {
             text1 = '0100-' + task1.is_done_at;
+            if (!task1.time_charge_seconds) {
+                text1 = '0050-' + text1;
+            }
         }
         if (task2.is_done) {
             text2 = '0100-' + task2.is_done_at;
+            if (!task2.time_charge_seconds) {
+                text2 = '0050-' + text2;
+            }
         }
         // if (!task1.chargeable) {
         //     text1 = '0000-unimportant-in-bottom-' + text1;
