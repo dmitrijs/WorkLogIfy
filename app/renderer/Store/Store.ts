@@ -47,7 +47,6 @@ const state = {
     tasksScreen: 'tasks',
     taskTimeredId: null,
     tasksShowAsReport: false,
-    tasksShowFullNotes: true,
     timerElapsedText: null,
     timerElapsed: 0,
     screen: null,
@@ -102,7 +101,6 @@ const {store: storeDirect} = createDirectStore({
                 is_debug: state.is_debug,
                 day_key: state.day_key,
                 tasksShowAsReport: state.tasksShowAsReport,
-                tasksShowFullNotes: state.tasksShowFullNotes,
                 taskCopied: state.taskCopied,
             }
         },
@@ -232,9 +230,6 @@ const {store: storeDirect} = createDirectStore({
         },
         toggleTasksShowAsReport(state: AppState) {
             state.tasksShowAsReport = !state.tasksShowAsReport;
-        },
-        toggleTasksShowFullNotes(state: AppState) {
-            state.tasksShowFullNotes = !state.tasksShowFullNotes;
         },
         taskEdit(state: AppState, key) {
             state.taskEditedId = key;

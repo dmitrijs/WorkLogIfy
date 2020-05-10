@@ -97,7 +97,7 @@
                         <span class="Title--Content"
                               :class="{ ellipsis: !tasks_ui.tasksShowAsReport }"><span>{{task.title || '&nbsp;'}}</span></span>
                                 <span class="Note--Content "
-                                      :class="{ ellipsis: !tasks_ui.tasksShowAsReport && !tasks_ui.tasksShowFullNotes }">
+                                      :class="{ ellipsis: !tasks_ui.tasksShowAsReport }">
                                 <span class="EmptyNotesError" v-if="tasks_ui.tasksShowAsReport && !task.notes">[empty notes]</span>
                                 <span v-else>{{task.notes || '&nbsp;'}}</span>
 
@@ -154,10 +154,6 @@
         <div class="ViewOptions">
             <a href="#" @click="dragClear" v-if="drag.readyToDrop" style="float: right;">cancel</a>
             Show:
-            <span class="label--checkbox label--checkbox--with-text"
-                  @click.prevent="store.commit.toggleTasksShowFullNotes">
-                <input type="checkbox" :checked="tasks_ui.tasksShowFullNotes"><span></span> full notes
-            </span>
             <span class="label--checkbox label--checkbox--with-text"
                   @click.prevent="toggleShowAsReport()">
                 <input type="checkbox" :checked="tasks_ui.tasksShowAsReport"><span></span> as a report
