@@ -53,7 +53,14 @@ menu.append(new MenuItem({
             let timeSpentSeconds = Math.ceil(sum / step) * step; // round up
 
             let taskCode = task.get('code');
-            let timeNow = moment().format(JIRA_TIME_FORMAT);
+            let timeStarted = moment(task.get('sessions').started_at)
+            let taskDate = moment(task.get('date'), 'YYYY-MM-DD');
+            if (taskDate.format('YYYY-MM-DD') === task.get('date')) { // valid date
+                timeStarted.year(taskDate.year());
+                timeStarted.month(taskDate.month());
+                timeStarted.date(taskDate.date());
+            }
+            let workLogTime = timeStarted.format(JIRA_TIME_FORMAT);
 
             let options = {
                 url: 'https://' + store.state.settings.get('jira_host') + '/rest/api/2/issue/' + taskCode + '/worklog?notifyUsers=false&adjustEstimate=auto',
@@ -64,13 +71,13 @@ menu.append(new MenuItem({
                 method: 'POST',
                 json: true,
                 body: {
-                    started: timeNow,
+                    started: workLogTime,
                     timeSpentSeconds: timeSpentSeconds,
                 },
             };
             let jiraResponse;
             if (store.state.is_debug) {
-                jiraResponse = 'Would be recorded: ' + timespanToText(timeSpentSeconds) + ' at ' + timeNow;
+                jiraResponse = 'Would be recorded: ' + timespanToText(timeSpentSeconds) + ' at ' + workLogTime;
             } else {
                 jiraResponse = window.ipc.sendSync('jira.request', options);
             }
