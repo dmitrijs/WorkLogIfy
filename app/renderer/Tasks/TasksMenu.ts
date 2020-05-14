@@ -53,7 +53,7 @@ menu.append(new MenuItem({
             let timeSpentSeconds = Math.ceil(sum / step) * step; // round up
 
             let taskCode = task.get('code');
-            let timeStarted = moment(task.get('sessions').started_at)
+            let timeStarted = moment(task.get('sessions').get(0).started_at)
             let taskDate = moment(task.get('date'), 'YYYY-MM-DD');
             if (taskDate.format('YYYY-MM-DD') === task.get('date')) { // valid date
                 timeStarted.year(taskDate.year());
