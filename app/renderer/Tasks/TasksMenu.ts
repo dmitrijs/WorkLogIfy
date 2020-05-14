@@ -38,7 +38,7 @@ menu.append(new MenuItem({
         if (task && task.get('code') && task.get('chargeable') && !task.get('distributed')) {
             let sum = task.get('sessions', []).reduce((sum, obj) => sum + obj.spent_seconds, 0);
             let recorded = task.get('records', []).reduce((sum, obj) => sum + obj.recorded_seconds, 0);
-            let step = 10 * 60;
+            let step = 6 * 60;
 
             sum -= recorded;
 
