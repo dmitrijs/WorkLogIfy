@@ -96,8 +96,7 @@
                                  @click="tasks_ui.tasksShowAsReport ? copyToClipboard($event, task.notes) : editTask($event, task)">
                         <span class="Title--Content"
                               :class="{ ellipsis: !tasks_ui.tasksShowAsReport }"><span>{{task.title || '&nbsp;'}}</span></span>
-                                <span class="Note--Content "
-                                      :class="{ ellipsis: !tasks_ui.tasksShowAsReport }">
+                                <span class="Note--Content">
                                 <span class="EmptyNotesError" v-if="tasks_ui.tasksShowAsReport && !task.notes">[empty notes]</span>
                                 <span v-else>{{task.notes || '&nbsp;'}}</span>
 
