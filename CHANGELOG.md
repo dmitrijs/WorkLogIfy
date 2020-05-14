@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file.
 
+### [1.20.2](https://github.com/dmitrijs/WorkLogIfy/compare/v1.20.1...v1.20.2) (2020-05-14)
+
+
+### Bug Fixes
+
+* **jira:** record time with task date and first session time, not current date and time ([72e187e](https://github.com/dmitrijs/WorkLogIfy/commit/72e187e0751958241d482b33c6667db1a500b745))
+
+
+### UI/UX
+
+* **tasks:** show full notes by default ([adf010b](https://github.com/dmitrijs/WorkLogIfy/commit/adf010b5443cebbf79c607437437943163349b62))
+
 ### [1.20.1](https://github.com/dmitrijs/WorkLogIfy/compare/v1.20.0...v1.20.1) (2020-05-10)
 
 
