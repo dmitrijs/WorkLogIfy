@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+### [1.20.3](https://github.com/dmitrijs/WorkLogIfy/compare/v1.20.2...v1.20.3) (2020-05-15)
+
+
+### Bug Fixes
+
+* **jira:** use correct time for work logs ([f1bdb16](https://github.com/dmitrijs/WorkLogIfy/commit/f1bdb1683130f925787fc982caf8ba4f1e2f71a8))
+
 ### [1.20.2](https://github.com/dmitrijs/WorkLogIfy/compare/v1.20.1...v1.20.2) (2020-05-14)
 
 
