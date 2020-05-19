@@ -57,7 +57,8 @@ const state = {
     fileTotals: {},
     templates: [],
     createdTaskId: '',
-    taskCopied: null as Map<string, any>,
+    taskInClipboard: null as Map<string, any>,
+    taskIsCloned: false,
 
     settings: null as Map<string, any>,
 };
@@ -101,7 +102,7 @@ const {store: storeDirect} = createDirectStore({
                 is_debug: state.is_debug,
                 day_key: state.day_key,
                 tasksShowAsReport: state.tasksShowAsReport,
-                taskCopied: state.taskCopied,
+                taskInClipboard: state.taskInClipboard,
             }
         },
 
@@ -297,7 +298,8 @@ const {store: storeDirect} = createDirectStore({
             }
 
             let taskId = state.tasksSelectedIds.keySeq().first();
-            state.taskCopied = state.tasks.get(taskId);
+            state.taskInClipboard = state.tasks.get(taskId);
+            state.taskIsCloned = true;
 
             state.tasksSelectedIds = state.tasksSelectedIds.clear();
             state.tasksHoveredId = null;
@@ -313,7 +315,8 @@ const {store: storeDirect} = createDirectStore({
             }
 
             let taskId = state.tasksSelectedIds.keySeq().first();
-            state.taskCopied = state.tasks.get(taskId);
+            state.taskInClipboard = state.tasks.get(taskId);
+            state.taskIsCloned = false;
 
             state.tasks = state.tasks.remove(taskId);
             state.tasksSelectedIds = state.tasksSelectedIds.clear();
@@ -322,12 +325,17 @@ const {store: storeDirect} = createDirectStore({
             saveTasks(state);
         },
         clipboardPaste(state: AppState) {
-            if (!state.taskCopied) {
+            if (!state.taskInClipboard) {
                 return;
             }
 
             const id = 'task_' + moment.utc();
-            let newTask = state.taskCopied.set('id', id);
+            let newTask = state.taskInClipboard.set('id', id);
+
+            if (state.taskIsCloned) {
+                newTask = newTask.set('sessions', List());
+                newTask = newTask.set('records', List());
+            }
 
             state.tasks = state.tasks.set(id, newTask);
 
