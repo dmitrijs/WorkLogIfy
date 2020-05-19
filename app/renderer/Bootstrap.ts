@@ -44,8 +44,21 @@ let vue = new Vue({
 
 window.ipc.on('user-is-idle', function (emitter, secondsIdle, secondsToBecomeIdle) {
     if (timer.isActive()) {
+        let timeredTask = store.state.tasks.get(store.state.taskTimeredId);
+        if (timeredTask && timeredTask.get('code') === 'idle') {
+            return; // already idle
+        }
         timer.stop(secondsToBecomeIdle);
-        window.ipc.send('show.error', "Timer stopped", `Timer stopped because of inactivity.`);
+
+        let idleTask = Object.create(store.getters.getEmptyTask);
+        idleTask.code = 'idle';
+        idleTask.time_add_idle_seconds = secondsToBecomeIdle;
+        idleTask.time_add_minutes = '';
+        idleTask.time_record_minutes = '';
+        store.commit.createTask(idleTask);
+
+        timer.start(store.state.createdTaskId);
+        window.ipc.send('show.error', "Idle task", `Idle task was started because of inactivity.`);
     }
 });
 

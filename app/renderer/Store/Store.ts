@@ -167,6 +167,10 @@ const {store: storeDirect} = createDirectStore({
 
                 state.tasks = addSession(state.tasks, id, spentSeconds, 'manual');
             }
+            if (task.time_add_idle_seconds) {
+                let seconds = parseInt(task.time_add_idle_seconds) || 0;
+                state.tasks = addSession(state.tasks, id, seconds, 'idle');
+            }
 
             console.log(state.tasks.toJS());
 
