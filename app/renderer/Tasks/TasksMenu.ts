@@ -46,10 +46,6 @@ menu.append(new MenuItem({
                 return;
             }
 
-            if (!task.get('frozen')) {
-                sum *= 1.12; // add 12%
-            }
-
             let timeSpentSeconds = Math.ceil(sum / step) * step; // round up
 
             let taskCode = task.get('code');
