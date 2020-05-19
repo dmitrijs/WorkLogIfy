@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+### [1.20.4](https://github.com/dmitrijs/WorkLogIfy/compare/v1.20.3...v1.20.4) (2020-05-19)
+
+
+### Features
+
+* **copy&paste:** remove sessions and records from duplicated tasks on paste ([f28f791](https://github.com/dmitrijs/WorkLogIfy/commit/f28f7914aefe745ebba603a60aff2d98f19285ae))
+* **tasks:** disable context menu items that can not be used ([0b52742](https://github.com/dmitrijs/WorkLogIfy/commit/0b52742bf3f1966c9cf913cbfa3da76ef33c98ab))
+
 ### [1.20.3](https://github.com/dmitrijs/WorkLogIfy/compare/v1.20.2...v1.20.3) (2020-05-15)
 
 
