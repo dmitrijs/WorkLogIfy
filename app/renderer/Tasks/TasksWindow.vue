@@ -189,7 +189,7 @@
     import Vue from "vue";
     import Component from "vue-class-component";
     import horizontal_scroller from "../library/horizontal_scroller";
-    import menu from './TasksMenu';
+    import createMenu from './TasksMenu';
     import LineChart from '../Components/LineChart.vue';
     import store from "../Store/Store";
     import timer from "../Timer";
@@ -267,7 +267,7 @@
             console.log('in context menu');
             store.commit.selectHovered();
             e.preventDefault();
-            menu.popup({window: remote.getCurrentWindow()})
+            createMenu().popup({window: remote.getCurrentWindow()})
         }
 
         rowOnClick($event, task) {
