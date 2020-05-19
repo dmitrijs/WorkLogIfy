@@ -48,11 +48,11 @@ window.ipc.on('user-is-idle', function (emitter, secondsIdle, secondsToBecomeIdl
         if (timeredTask && timeredTask.get('code') === 'idle') {
             return; // already idle
         }
-        timer.stop(secondsToBecomeIdle);
+        timer.stop(secondsIdle);
 
         let idleTask = Object.create(store.getters.getEmptyTask);
         idleTask.code = 'idle';
-        idleTask.time_add_idle_seconds = secondsToBecomeIdle;
+        idleTask.time_add_idle_seconds = secondsIdle;
         idleTask.time_add_minutes = '';
         idleTask.time_record_minutes = '';
         store.commit.createTask(idleTask);

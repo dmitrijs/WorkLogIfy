@@ -62,7 +62,7 @@ app.on('ready', async () => {
     });
 
     Shortcuts.registerOnReady();
-    IdleUser.registerOnReady(mainWindow, 'user-is-idle');
+    IdleUser.registerOnReady(mainWindow);
 
     const devPath = 'http://localhost:1124';
     const prodPath = format({
