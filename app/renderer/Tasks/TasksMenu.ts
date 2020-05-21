@@ -12,6 +12,26 @@ export default function createMenu() {
     const menu = new Menu();
     menu.append(new MenuItem({
         enabled: (store.state.tasksSelectedIds.size === 1),
+        label: 'Copy the ID', click() {
+            if (store.state.tasksSelectedIds.size !== 1) {
+                return;
+            }
+
+            let taskId = store.state.tasksSelectedIds.keySeq().first();
+            let code = store.state.tasks.get(taskId).get('code');
+
+            if (code) {
+                navigator.clipboard.writeText(code).then(function () {
+                }, function () {
+                    /* clipboard write failed */
+                });
+            }
+
+            store.commit.deselectAll();
+        },
+    }));
+    menu.append(new MenuItem({
+        enabled: (store.state.tasksSelectedIds.size === 1),
         label: 'View in JIRA', click() {
             if (store.state.tasksSelectedIds.size !== 1) {
                 return;
