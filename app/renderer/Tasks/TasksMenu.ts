@@ -49,6 +49,7 @@ export default function createMenu() {
             sum -= recorded;
 
             if (sum < step) {
+                alert('Time to record is too little. At least ' + timespanToText(step) + ' are required.');
                 return;
             }
 
