@@ -76,13 +76,15 @@ export default function createMenu() {
                 };
                 let jiraResponse;
                 if (store.state.is_debug) {
-                    jiraResponse = 'Would be recorded: ' + timespanToText(timeSpentSeconds) + ' at ' + workLogTime;
+                    alert('Would be sent to JIRA: ' + timespanToText(timeSpentSeconds) + ' at ' + workLogTime);
+                    jiraResponse = 'success';
                 } else {
                     jiraResponse = window.ipc.sendSync('jira.request', options);
                 }
 
                 if (jiraResponse === 'success') {
                     store.commit.taskAddRecordedSeconds([taskId, timeSpentSeconds]);
+                    store.commit.updateTask([taskId, 'is_done', true])
                 } else {
                     alert(jiraResponse);
                 }
