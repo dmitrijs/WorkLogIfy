@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
+### [1.20.6](https://github.com/dmitrijs/WorkLogIfy/compare/v1.20.5...v1.20.6) (2020-05-21)
+
+
+### UI/UX
+
+* **tasks:** disable 'Record to JIRA' context menu item if task can not be recorded ([1ef5853](https://github.com/dmitrijs/WorkLogIfy/commit/1ef585389b3e497de08f80f7eca2331264412b7f))
+* **tasks:** disable context menu items that are not available if task does not have an ID (Code) ([2cc2d6c](https://github.com/dmitrijs/WorkLogIfy/commit/2cc2d6cdca7e0055d62b6c8efbcc3f24192df9ea))
+* **tasks:** show an alert if time to record to jira is too little ([d676715](https://github.com/dmitrijs/WorkLogIfy/commit/d6767150c8e96aaefab7fb81a6818aad942f9f36))
+
 ### [1.20.5](https://github.com/dmitrijs/WorkLogIfy/compare/v1.20.4...v1.20.5) (2020-05-21)
 
 
