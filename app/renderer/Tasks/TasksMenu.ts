@@ -9,53 +9,38 @@ const moment = require("moment");
 const JIRA_TIME_FORMAT = 'YYYY-MM-DDTHH:mm:ss.SSSZZ';
 
 export default function createMenu() {
+    let theOnlySelectedTaskId = null;
+    let theOnlySelectedTaskCode = null;
+    if (store.state.tasksSelectedIds.size === 1) {
+        theOnlySelectedTaskId = store.state.tasksSelectedIds.keySeq().first();
+        theOnlySelectedTaskCode = store.state.tasks.get(theOnlySelectedTaskId).get('code');
+    }
+
     const menu = new Menu();
     menu.append(new MenuItem({
-        enabled: (store.state.tasksSelectedIds.size === 1),
+        enabled: (!!theOnlySelectedTaskCode),
         label: 'Copy the ID', click() {
-            if (store.state.tasksSelectedIds.size !== 1) {
-                return;
-            }
-
-            let taskId = store.state.tasksSelectedIds.keySeq().first();
-            let code = store.state.tasks.get(taskId).get('code');
-
-            if (code) {
-                navigator.clipboard.writeText(code).then(function () {
-                }, function () {
-                    /* clipboard write failed */
-                });
-            }
+            navigator.clipboard.writeText(theOnlySelectedTaskCode).then(function () {
+            }, function () {
+                /* clipboard write failed */
+            });
 
             store.commit.deselectAll();
         },
     }));
     menu.append(new MenuItem({
-        enabled: (store.state.tasksSelectedIds.size === 1),
+        enabled: (!!theOnlySelectedTaskCode),
         label: 'View in JIRA', click() {
-            if (store.state.tasksSelectedIds.size !== 1) {
-                return;
-            }
-
-            let taskId = store.state.tasksSelectedIds.keySeq().first();
-            let code = store.state.tasks.get(taskId).get('code');
-
-            if (code) {
-                let url = 'https://' + store.state.settings.get('jira_host') + '/browse/' + code;
-                window.open(url);
-            }
+            let url = 'https://' + store.state.settings.get('jira_host') + '/browse/' + theOnlySelectedTaskCode;
+            window.open(url);
 
             store.commit.deselectAll();
         },
     }));
     menu.append(new MenuItem({
-        enabled: (store.state.tasksSelectedIds.size === 1),
+        enabled: (!!theOnlySelectedTaskCode),
         label: 'Record to JIRA', click() {
-            if (store.state.tasksSelectedIds.size !== 1) {
-                return;
-            }
-
-            let taskId = store.state.tasksSelectedIds.keySeq().first();
+            let taskId = theOnlySelectedTaskId;
             let task = store.state.tasks.get(taskId);
 
             if (task && task.get('code') && task.get('chargeable') && !task.get('distributed')) {
