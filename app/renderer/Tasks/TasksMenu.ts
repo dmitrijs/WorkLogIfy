@@ -9,18 +9,20 @@ const moment = require("moment");
 const JIRA_TIME_FORMAT = 'YYYY-MM-DDTHH:mm:ss.SSSZZ';
 
 export default function createMenu() {
-    let theOnlySelectedTaskId = null;
-    let theOnlySelectedTaskCode = null;
+    let task = null;
     if (store.state.tasksSelectedIds.size === 1) {
-        theOnlySelectedTaskId = store.state.tasksSelectedIds.keySeq().first();
-        theOnlySelectedTaskCode = store.state.tasks.get(theOnlySelectedTaskId).get('code');
+        let taskId = store.state.tasksSelectedIds.keySeq().first();
+        task = store.state.tasks.get(taskId);
     }
+
+    console.log('task', task);
+    console.log('task && task.get(\'code\')', (task && task.get('code')));
 
     const menu = new Menu();
     menu.append(new MenuItem({
-        enabled: (!!theOnlySelectedTaskCode),
+        enabled: (!!(task && task.get('code'))),
         label: 'Copy the ID', click() {
-            navigator.clipboard.writeText(theOnlySelectedTaskCode).then(function () {
+            navigator.clipboard.writeText(task.get('code')).then(function () {
             }, function () {
                 /* clipboard write failed */
             });
@@ -29,70 +31,65 @@ export default function createMenu() {
         },
     }));
     menu.append(new MenuItem({
-        enabled: (!!theOnlySelectedTaskCode),
+        enabled: (!!(task && task.get('code'))),
         label: 'View in JIRA', click() {
-            let url = 'https://' + store.state.settings.get('jira_host') + '/browse/' + theOnlySelectedTaskCode;
+            let url = 'https://' + store.state.settings.get('jira_host') + '/browse/' + task.get('code');
             window.open(url);
 
             store.commit.deselectAll();
         },
     }));
     menu.append(new MenuItem({
-        enabled: (!!theOnlySelectedTaskCode),
+        enabled: (!!(task && task.get('code') && task.get('chargeable') && !task.get('distributed'))),
         label: 'Record to JIRA', click() {
-            let taskId = theOnlySelectedTaskId;
-            let task = store.state.tasks.get(taskId);
+            let sum = task.get('sessions', []).reduce((sum, obj) => sum + obj.spent_seconds, 0);
+            let recorded = task.get('records', []).reduce((sum, obj) => sum + obj.recorded_seconds, 0);
+            let step = 6 * 60;
 
-            if (task && task.get('code') && task.get('chargeable') && !task.get('distributed')) {
-                let sum = task.get('sessions', []).reduce((sum, obj) => sum + obj.spent_seconds, 0);
-                let recorded = task.get('records', []).reduce((sum, obj) => sum + obj.recorded_seconds, 0);
-                let step = 6 * 60;
+            sum -= recorded;
 
-                sum -= recorded;
+            if (sum < step) {
+                return;
+            }
 
-                if (sum < step) {
-                    return;
-                }
+            let timeSpentSeconds = Math.ceil(sum / step) * step; // round up
 
-                let timeSpentSeconds = Math.ceil(sum / step) * step; // round up
+            let taskCode = task.get('code');
+            let timeStarted = moment(task.get('sessions').get(0).started_at)
+            let taskDate = moment(task.get('date'), 'YYYY-MM-DD');
+            if (taskDate.format('YYYY-MM-DD') === task.get('date')) { // valid date
+                timeStarted.year(taskDate.year());
+                timeStarted.month(taskDate.month());
+                timeStarted.date(taskDate.date());
+            }
+            let workLogTime = timeStarted.format(JIRA_TIME_FORMAT);
 
-                let taskCode = task.get('code');
-                let timeStarted = moment(task.get('sessions').get(0).started_at)
-                let taskDate = moment(task.get('date'), 'YYYY-MM-DD');
-                if (taskDate.format('YYYY-MM-DD') === task.get('date')) { // valid date
-                    timeStarted.year(taskDate.year());
-                    timeStarted.month(taskDate.month());
-                    timeStarted.date(taskDate.date());
-                }
-                let workLogTime = timeStarted.format(JIRA_TIME_FORMAT);
+            let options = {
+                url: 'https://' + store.state.settings.get('jira_host') + '/rest/api/2/issue/' + taskCode + '/worklog?notifyUsers=false&adjustEstimate=auto',
+                auth: {
+                    user: store.state.settings.get('jira_username'),
+                    pass: store.state.settings.get('jira_password'),
+                },
+                method: 'POST',
+                json: true,
+                body: {
+                    started: workLogTime,
+                    timeSpentSeconds: timeSpentSeconds,
+                },
+            };
+            let jiraResponse;
+            if (store.state.is_debug) {
+                alert('Would be sent to JIRA: ' + timespanToText(timeSpentSeconds) + ' at ' + workLogTime);
+                jiraResponse = 'success';
+            } else {
+                jiraResponse = window.ipc.sendSync('jira.request', options);
+            }
 
-                let options = {
-                    url: 'https://' + store.state.settings.get('jira_host') + '/rest/api/2/issue/' + taskCode + '/worklog?notifyUsers=false&adjustEstimate=auto',
-                    auth: {
-                        user: store.state.settings.get('jira_username'),
-                        pass: store.state.settings.get('jira_password'),
-                    },
-                    method: 'POST',
-                    json: true,
-                    body: {
-                        started: workLogTime,
-                        timeSpentSeconds: timeSpentSeconds,
-                    },
-                };
-                let jiraResponse;
-                if (store.state.is_debug) {
-                    alert('Would be sent to JIRA: ' + timespanToText(timeSpentSeconds) + ' at ' + workLogTime);
-                    jiraResponse = 'success';
-                } else {
-                    jiraResponse = window.ipc.sendSync('jira.request', options);
-                }
-
-                if (jiraResponse === 'success') {
-                    store.commit.taskAddRecordedSeconds([taskId, timeSpentSeconds]);
-                    store.commit.updateTask([taskId, 'is_done', true])
-                } else {
-                    alert(jiraResponse);
-                }
+            if (jiraResponse === 'success') {
+                store.commit.taskAddRecordedSeconds([task.get('id'), timeSpentSeconds]);
+                store.commit.updateTask([task.get('id'), 'is_done', true])
+            } else {
+                alert(jiraResponse);
             }
 
             store.commit.deselectAll();
