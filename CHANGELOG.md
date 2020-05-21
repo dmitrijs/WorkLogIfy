@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
+### [1.20.5](https://github.com/dmitrijs/WorkLogIfy/compare/v1.20.4...v1.20.5) (2020-05-21)
+
+
+### Features
+
+* **tasks:** added "Copy the ID" context menu item ([f0afdf4](https://github.com/dmitrijs/WorkLogIfy/commit/f0afdf447fe777959dec37e39afda83b6bab866d))
+* **tasks:** auto start 'idle' task on inactivity ([6c09c1f](https://github.com/dmitrijs/WorkLogIfy/commit/6c09c1f0b2e14e16e1a4c208284bb87d468920b2))
+* **tasks:** auto stop idle timer ([345d412](https://github.com/dmitrijs/WorkLogIfy/commit/345d4128df97d0b709d54c6cfa3c21f375c2dca2))
+* **tasks:** mark task as done after time was recorded to jira ([81750db](https://github.com/dmitrijs/WorkLogIfy/commit/81750dbddfad4a8cac5ae4c5b7e1c8013156e8dc))
+
 ### [1.20.4](https://github.com/dmitrijs/WorkLogIfy/compare/v1.20.3...v1.20.4) (2020-05-19)
 
 
