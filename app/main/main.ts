@@ -108,13 +108,13 @@ app.on('ready', async () => {
             console.log('options', options);
 
             request(options)
-                .then(issue => {
-                    console.log('jira.request succeeded', issue);
-                    event.returnValue = 'success';
+                .then(response => {
+                    console.log('jira.request succeeded', response);
+                    event.returnValue = {response: response};
                 })
                 .catch(err => {
                     alert(err.message);
-                    event.returnValue = err.message;
+                    event.returnValue = {error: err.message};
                 });
         });
 

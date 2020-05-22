@@ -78,19 +78,19 @@ export default function createMenu() {
                     timeSpentSeconds: timeSpentSeconds,
                 },
             };
-            let jiraResponse;
+            let jiraResponseWorkLog;
             if (store.state.is_debug) {
                 alert('Would be sent to JIRA: ' + timespanToText(timeSpentSeconds) + ' at ' + workLogTime);
-                jiraResponse = 'success';
+                jiraResponseWorkLog = {response: {}};
             } else {
-                jiraResponse = window.ipc.sendSync('jira.request', options);
+                jiraResponseWorkLog = window.ipc.sendSync('jira.request', options);
             }
 
-            if (jiraResponse === 'success') {
-                store.commit.taskAddRecordedSeconds([task.get('id'), timeSpentSeconds]);
-                store.commit.updateTask([task.get('id'), 'is_done', true])
+            if (jiraResponseWorkLog.error) {
+                alert(jiraResponseWorkLog.error);
             } else {
-                alert(jiraResponse);
+                store.commit.taskAddRecordedSeconds([task.get('id'), timeSpentSeconds, (jiraResponseWorkLog.response.id || null)]);
+                store.commit.updateTask([task.get('id'), 'is_done', true])
             }
 
             store.commit.deselectAll();

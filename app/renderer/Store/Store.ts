@@ -28,13 +28,17 @@ function addSession(tasks, task_id, spentSeconds, method, idleSeconds = 0) {
     return tasks.setIn([task_id, 'sessions'], sessions);
 }
 
-function addRecord(tasks, task_id, recordedSeconds, method) {
+function addRecord(tasks, task_id, recordedSeconds, method, jiraWorkLogId = null) {
     let records = tasks.get(task_id).get('records');
-    records = records.push({
+    let record = {
         created_at: moment().toISOString(),
         recorded_seconds: recordedSeconds,
         method: method,
-    });
+    };
+    if (jiraWorkLogId) {
+        record['jiraWorkLogId'] = jiraWorkLogId;
+    }
+    records = records.push(record);
     return tasks.setIn([task_id, 'records'], records);
 }
 
@@ -216,8 +220,8 @@ const {store: storeDirect} = createDirectStore({
 
             saveTasks(state);
         },
-        taskAddRecordedSeconds(state: AppState, [task_id, recordSeconds]) {
-            state.tasks = addRecord(state.tasks, task_id, recordSeconds, 'quick');
+        taskAddRecordedSeconds(state: AppState, [task_id, recordSeconds, jiraWorkLogId]) {
+            state.tasks = addRecord(state.tasks, task_id, recordSeconds, 'quick', jiraWorkLogId);
 
             saveTasks(state);
         },
