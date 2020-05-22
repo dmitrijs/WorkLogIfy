@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+### [1.20.7](https://github.com/dmitrijs/WorkLogIfy/compare/v1.20.6...v1.20.7) (2020-05-22)
+
+
+### Features
+
+* **records:** show links to jira work logs ([e56181d](https://github.com/dmitrijs/WorkLogIfy/commit/e56181d36b434c63310634329343dae5e0b669b6))
+
 ### [1.20.6](https://github.com/dmitrijs/WorkLogIfy/compare/v1.20.5...v1.20.6) (2020-05-21)
 
 
