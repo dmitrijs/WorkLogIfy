@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+### [1.20.8](https://github.com/dmitrijs/WorkLogIfy/compare/v1.20.7...v1.20.8) (2020-06-02)
+
+
+### UI/UX
+
+* make sure only one task can be selected at a time ([76f9ec9](https://github.com/dmitrijs/WorkLogIfy/commit/76f9ec96a48b6cbaec4c23280525b3f9486c649b))
+* mark task as done if it is distributed or unchargeable; remove "on hold" flag if task is worked on ([643a797](https://github.com/dmitrijs/WorkLogIfy/commit/643a79743f3b00b149c63ac83d446ebda535d1da))
+
 ### [1.20.7](https://github.com/dmitrijs/WorkLogIfy/compare/v1.20.6...v1.20.7) (2020-05-22)
 
 
