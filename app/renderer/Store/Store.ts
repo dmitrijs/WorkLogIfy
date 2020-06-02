@@ -214,7 +214,7 @@ const {store: storeDirect} = createDirectStore({
             if (value === true) {
                 state.tasks = state.tasks.setIn([task_id, field + '_at'], moment().toISOString());
             } else if (value === false) {
-                state.tasks = state.tasks.setIn([task_id, field + '_at'], null);
+                state.tasks = state.tasks.deleteIn([task_id, field + '_at']);
             }
             console.log(state.tasks.toJS());
 
