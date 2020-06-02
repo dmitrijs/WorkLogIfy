@@ -126,6 +126,9 @@ export default function createMenu() {
             store.commit.clipboardPaste();
         },
     }));
+    menu.addListener('menu-will-close', function () {
+        store.commit.deselectAll();
+    });
 
     return menu;
 }
