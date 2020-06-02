@@ -88,6 +88,17 @@ function convertJsTasksToMap(js_tasks): Map<string, Map<string, any>> {
     return tasks;
 }
 
+function updateTaskField(tasks: any, task_id: any, field: any, value: any) {
+    console.log(tasks.get(task_id));
+    tasks = tasks.setIn([task_id, field], value);
+    if (value === true) {
+        tasks = tasks.setIn([task_id, field + '_at'], moment().toISOString());
+    } else if (value === false) {
+        tasks = tasks.deleteIn([task_id, field + '_at']);
+    }
+    return tasks;
+}
+
 const {store: storeDirect} = createDirectStore({
     state: state,
     getters: {
@@ -209,15 +220,10 @@ const {store: storeDirect} = createDirectStore({
             saveTasks(state);
         },
         updateTask(state: AppState, [task_id, field, value]) {
-            console.log(state.tasks.get(task_id));
-            state.tasks = state.tasks.setIn([task_id, field], value);
-            if (value === true) {
-                state.tasks = state.tasks.setIn([task_id, field + '_at'], moment().toISOString());
-            } else if (value === false) {
-                state.tasks = state.tasks.deleteIn([task_id, field + '_at']);
+            state.tasks = updateTaskField(state.tasks, task_id, field, value);
+            if ((field === 'chargeable' && !value) || (field === 'distributed' && value)) {
+                state.tasks = updateTaskField(state.tasks, task_id, 'is_done', true);
             }
-            console.log(state.tasks.toJS());
-
             saveTasks(state);
         },
         taskAddRecordedSeconds(state: AppState, [task_id, recordSeconds, jiraWorkLogId]) {
@@ -355,6 +361,9 @@ const {store: storeDirect} = createDirectStore({
             }
             state.taskTimeredId = taskId;
             state.tasksSelectedIds = Map();
+
+            state.tasks = updateTaskField(state.tasks, taskId, 'is_on_hold', false);
+            saveTasks(state);
         },
         activeTimer(state: AppState, secondsElapsed) {
             state.timerElapsedText = '+' + timespanToText(secondsElapsed, '+');
