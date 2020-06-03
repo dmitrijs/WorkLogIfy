@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file.
 
+### [1.20.9](https://github.com/dmitrijs/WorkLogIfy/compare/v1.20.8...v1.20.9) (2020-06-03)
+
+
+### Bug Fixes
+
+* fix task copy&paste ([84f6a10](https://github.com/dmitrijs/WorkLogIfy/commit/84f6a10f4f7ed09d178270b60cc10144a199b94a))
+
+
+### UI/UX
+
+* removed Delete context menu action ([38628df](https://github.com/dmitrijs/WorkLogIfy/commit/38628df98bb0f8ebb21996a4206b8266f40a174f))
+* updated context menu items' text ([5d018e5](https://github.com/dmitrijs/WorkLogIfy/commit/5d018e5a2343a18908fe3d0a5a2d15c0d9d02c2d))
+
 ### [1.20.8](https://github.com/dmitrijs/WorkLogIfy/compare/v1.20.7...v1.20.8) (2020-06-02)
 
 
