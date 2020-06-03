@@ -100,15 +100,6 @@ export default function createMenu() {
         type: 'separator',
     }));
     menu.append(new MenuItem({
-        enabled: (store.state.tasksSelectedIds.size > 0),
-        label: 'Delete', click() {
-            store.commit.deleteSelected();
-        },
-    }));
-    menu.append(new MenuItem({
-        type: 'separator',
-    }));
-    menu.append(new MenuItem({
         enabled: (!!task),
         label: 'Copy tasks', click() {
             store.commit.clipboardCopy(task.get('id'));

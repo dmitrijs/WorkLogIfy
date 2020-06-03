@@ -284,23 +284,6 @@ const {store: storeDirect} = createDirectStore({
         deselectAll(state: AppState) {
             state.tasksSelectedIds = state.tasksSelectedIds.clear();
         },
-        deleteSelected(state: AppState) {
-            console.log('state.tasksSelectedIds.size', state.tasksSelectedIds.size);
-            if (!state.tasksSelectedIds.size) {
-                return;
-            }
-
-            if (!confirm('Delete ' + state.tasksSelectedIds.size + ' tasks?')) {
-                return;
-            }
-
-            console.log('state.tasks', state.tasks);
-
-            state.tasks = state.tasksSelectedIds.keySeq().reduce((map, key) => map.delete(key), state.tasks);
-            state.tasksSelectedIds = Map();
-
-            saveTasks(state);
-        },
         clipboardCopy(state: AppState, taskId) {
             state.taskInClipboard = state.tasks.get(taskId);
             state.taskIsCloned = true;
