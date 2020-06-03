@@ -109,15 +109,15 @@ export default function createMenu() {
         type: 'separator',
     }));
     menu.append(new MenuItem({
-        enabled: (store.state.tasksSelectedIds.size === 1),
+        enabled: (!!task),
         label: 'Copy tasks', click() {
-            store.commit.clipboardCopySelected();
+            store.commit.clipboardCopy(task.get('id'));
         },
     }));
     menu.append(new MenuItem({
-        enabled: (store.state.tasksSelectedIds.size === 1),
+        enabled: (!!task),
         label: 'Cut tasks', click() {
-            store.commit.clipboardCutSelected();
+            store.commit.clipboardCut(task.get('id'));
         },
     }));
     menu.append(new MenuItem({

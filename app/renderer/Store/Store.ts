@@ -301,40 +301,15 @@ const {store: storeDirect} = createDirectStore({
 
             saveTasks(state);
         },
-        clipboardCopySelected(state: AppState) {
-            console.log('state.tasksSelectedIds.size', state.tasksSelectedIds.size);
-            if (!state.tasksSelectedIds.size) {
-                return;
-            }
-            if (state.tasksSelectedIds.size > 1) {
-                alert('Copying multiple tasks is not yet supported');
-                return;
-            }
-
-            let taskId = state.tasksSelectedIds.keySeq().first();
+        clipboardCopy(state: AppState, taskId) {
             state.taskInClipboard = state.tasks.get(taskId);
             state.taskIsCloned = true;
-
-            state.tasksSelectedIds = state.tasksSelectedIds.clear();
-            state.tasksHoveredId = null;
         },
-        clipboardCutSelected(state: AppState) {
-            console.log('state.tasksSelectedIds.size', state.tasksSelectedIds.size);
-            if (!state.tasksSelectedIds.size) {
-                return;
-            }
-            if (state.tasksSelectedIds.size > 1) {
-                alert('Cutting multiple tasks is not yet supported');
-                return;
-            }
-
-            let taskId = state.tasksSelectedIds.keySeq().first();
+        clipboardCut(state: AppState, taskId) {
             state.taskInClipboard = state.tasks.get(taskId);
             state.taskIsCloned = false;
 
             state.tasks = state.tasks.remove(taskId);
-            state.tasksSelectedIds = state.tasksSelectedIds.clear();
-            state.tasksHoveredId = null;
 
             saveTasks(state);
         },
