@@ -31,6 +31,9 @@ export default function createMenu() {
         },
     }));
     menu.append(new MenuItem({
+        type: 'separator',
+    }));
+    menu.append(new MenuItem({
         enabled: (!!(task && task.get('code'))),
         label: 'View in JIRA', click() {
             let url = 'https://' + store.state.settings.get('jira_host') + '/browse/' + task.get('code');
@@ -101,19 +104,19 @@ export default function createMenu() {
     }));
     menu.append(new MenuItem({
         enabled: (!!task),
-        label: 'Copy tasks', click() {
+        label: 'Copy', click() {
             store.commit.clipboardCopy(task.get('id'));
         },
     }));
     menu.append(new MenuItem({
         enabled: (!!task),
-        label: 'Cut tasks', click() {
+        label: 'Cut', click() {
             store.commit.clipboardCut(task.get('id'));
         },
     }));
     menu.append(new MenuItem({
         enabled: !!store.state.taskInClipboard,
-        label: 'Paste tasks', click() {
+        label: 'Paste', click() {
             store.commit.clipboardPaste();
         },
     }));
