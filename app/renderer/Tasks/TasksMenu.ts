@@ -26,8 +26,6 @@ export default function createMenu() {
             }, function () {
                 /* clipboard write failed */
             });
-
-            store.commit.deselectAll();
         },
     }));
     menu.append(new MenuItem({
@@ -38,8 +36,6 @@ export default function createMenu() {
         label: 'View in JIRA', click() {
             let url = 'https://' + store.state.settings.get('jira_host') + '/browse/' + task.get('code');
             window.open(url);
-
-            store.commit.deselectAll();
         },
     }));
     menu.append(new MenuItem({
@@ -95,8 +91,6 @@ export default function createMenu() {
                 store.commit.taskAddRecordedSeconds([task.get('id'), timeSpentSeconds, (jiraResponseWorkLog.response.id || null)]);
                 store.commit.updateTask([task.get('id'), 'is_done', true])
             }
-
-            store.commit.deselectAll();
         },
     }));
     menu.append(new MenuItem({
@@ -120,6 +114,7 @@ export default function createMenu() {
             store.commit.clipboardPaste();
         },
     }));
+
     menu.addListener('menu-will-close', function () {
         store.commit.deselectAll();
     });
