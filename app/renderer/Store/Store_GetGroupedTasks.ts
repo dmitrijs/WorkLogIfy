@@ -1,27 +1,30 @@
 import {Iterable, List, Map, OrderedMap} from "immutable";
 import {comparatorLt, timespanToText} from "../Utils/Utils";
 import {AppState} from "./Store";
+import store from "../Store/Store";
+
+export function build_sort_value(task: TaskObj) {
+    let task_not_started = true;
+    let last_session = null;
+    if (task.sessions && task.sessions.length > 0) {
+        task_not_started = false;
+        last_session = task.sessions[task.sessions.length - 1];
+    }
+    let is_timered = (store.state.taskTimeredId === task.id);
+
+    return '' // 9 - higher, 0 - lower
+        + (task.is_done ? '0' : '9')
+        + (task_not_started ? '9' : '0')
+        + (is_timered ? '9' : '0')
+        + (task.time_spent_seconds ? '9' : '0')
+        + (task.is_done ? task.is_done_at : '')
+        + (task.is_on_hold ? '0' : '9')
+        + (task.is_on_hold ? task.is_on_hold_at : '')
+        + (last_session ? last_session.finished_at : '')
+        + '';
+}
 
 export function sort_tasks(tasks) {
-    function build_sort_value(task: TaskObj) {
-        let task_not_started = true;
-        let first_session = null;
-        if (task.sessions && task.sessions.length > 0) {
-            task_not_started = false;
-            first_session = task.sessions[0];
-        }
-
-        return '' // 9 - higher, 0 - lower
-            + (task.is_done ? '0' : '9')
-            + (task_not_started ? '9' : '0')
-            + (task.time_charge_seconds ? '9' : '0')
-            + (task.is_done ? task.is_done_at : '')
-            + (task.is_on_hold ? '0' : '9')
-            + (task.is_on_hold ? task.is_on_hold_at : '')
-            + (first_session ? first_session.started_at : '')
-            + '';
-    }
-
     return tasks.sort((task1: TaskObj, task2: TaskObj) => {
         return comparatorLt(build_sort_value(task1), build_sort_value(task2));
     });
