@@ -18,7 +18,6 @@
 
     @Component({
         created() {
-            store.commit.setFileTotals(window.ipc.sendSync('tasks.getFileTotals'));
         },
     })
     export default class SettingsWindow extends Vue {
