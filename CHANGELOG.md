@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.21.0](https://github.com/dmitrijs/WorkLogIfy/compare/v1.20.10...v1.21.0) (2020-06-27)
+
+
+### Features
+
+* support special day statuses (holiday, vacation) ([c123c1e](https://github.com/dmitrijs/WorkLogIfy/commit/c123c1eb7850611be79d0529ccd9828f4858bfc1))
+
 ### [1.20.10](https://github.com/dmitrijs/WorkLogIfy/compare/v1.20.9...v1.20.10) (2020-06-27)
 
 
