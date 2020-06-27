@@ -22,7 +22,7 @@
     })
     export default class SettingsWindow extends Vue {
         get settings() {
-            return store.state.settings.toJS();
+            return store.state.settings;
         }
 
         get store() {
