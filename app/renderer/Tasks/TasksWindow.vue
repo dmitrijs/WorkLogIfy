@@ -35,8 +35,20 @@
              :class="{ ShowAsReport: tasks_ui.tasksShowAsReport }"
              :key="forceUpdateKey"
              @click.self="store.commit.deselectAll">
+            <div class="TRowDate Total" v-if="tasksGroupedLength > 1">
+                <!--
+                <div class="TCol --selected"></div>
+                -->
+                <div class="TCol --frozen"></div>
+                <div class="TCol --group-date">Total</div>
+                <div class="TCol --timespan --timespan-charge">
+                    <span title="Charge (Rounded)">{{ total.time_charge_rounded_text }}</span>
+                    <span title="Recorded" class="original-time">({{ total.time_recorded_text }})</span>
+                </div>
+                <div class="TCol --timespan --timespan-spent" title="Spent">{{ total.time_spent_text }}</div>
+            </div>
             <template class="TGroup" v-for="(group, date) of tasksGrouped">
-                <div class="TRowDate">
+                <div class="TRowDate" :class="{ SubTotal: tasksGroupedLength > 1 }">
                     <!--
                     <div class="TCol --selected"></div>
                     -->
@@ -222,6 +234,30 @@
 
         data() {
             return {};
+        }
+
+        get total() {
+            let total = {
+                time_charge_rounded_seconds: 0,
+                time_recorded_seconds: 0,
+                time_spent_seconds: 0,
+                time_charge_rounded_text: '',
+                time_recorded_text: '',
+                time_spent_text: '',
+            };
+            for (let group of Object.values(this.tasksGrouped)) {
+                total.time_charge_rounded_seconds += group.time_charge_rounded_seconds;
+                total.time_recorded_seconds += group.time_recorded_seconds;
+                total.time_spent_seconds += group.time_spent_seconds;
+            }
+            total.time_charge_rounded_text = timespanToText(total.time_charge_rounded_seconds);
+            total.time_recorded_text = timespanToText(total.time_recorded_seconds);
+            total.time_spent_text = timespanToText(total.time_spent_seconds);
+            return total;
+        }
+
+        get tasksGroupedLength() {
+            return Object.keys(this.tasksGrouped).length;
         }
 
         get tasksGrouped() {

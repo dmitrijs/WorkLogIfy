@@ -187,6 +187,18 @@
                 opacity: 0.5;
             }
         }
+
+        &.Total {
+            .TCol.--group-date {
+                &:after {
+                    width: 82%;
+                }
+            }
+        }
+
+        &.SubTotal {
+            color: #a9b5f1;
+        }
     }
 
 }
