@@ -367,6 +367,9 @@ const {store: storeDirect} = createDirectStore({
 
             saveTaskTemplates(state);
         },
+        calendarHoveredDayCode(state: AppState, dayCode: string) {
+            state.calendarHoveredDayCode = dayCode;
+        },
     },
 });
 

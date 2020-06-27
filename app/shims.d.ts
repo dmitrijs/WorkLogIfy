@@ -78,6 +78,8 @@ declare type CalendarDayStatistics = {
     isToday: boolean,
     isWeekend: boolean,
     isCurrentMonth: boolean,
+    expectedHours: number,
+    paid: boolean,
     charged_seconds: any,
     charged_seconds_text: any,
 }

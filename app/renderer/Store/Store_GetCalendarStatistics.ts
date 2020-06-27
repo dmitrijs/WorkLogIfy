@@ -1,6 +1,7 @@
 import store from "./Store";
 import {timespanToText} from "../Utils/Utils";
 import {Moment} from "moment";
+import {SPECIAL_DAYS} from "../Tasks/CalendarMenu";
 
 const moment = require("moment");
 
@@ -36,6 +37,7 @@ export default function Store_GetCalendarStatistics(): CalendarStatistics {
             currentDay.isToday = (todayCode === dayCode);
             currentDay.isWeekend = (dow >= 6);
             currentDay.isCurrentMonth = (currentMonthCode === day.format('YYYY-MM'));
+            currentDay.paid = true;
 
             if (day.isAfter(startOfMonthBeforePrevious)) {
                 let charged_seconds = (totals[dayCode] ? totals[dayCode].time_charge_rounded_seconds : 0);
@@ -44,6 +46,33 @@ export default function Store_GetCalendarStatistics(): CalendarStatistics {
             } else {
                 // show empty cells if month is outside the range
                 currentDay.title = '';
+            }
+
+            currentDay.expectedHours = (currentDay.isWeekend ? 0 : 8);
+
+            if (store.state.settings['special_days'] && store.state.settings['special_days'][dayCode]) {
+                switch (store.state.settings['special_days'][dayCode]) {
+                    case SPECIAL_DAYS.WORKDAY:
+                        currentDay.expectedHours = 8;
+                        break;
+
+                    case SPECIAL_DAYS.SHORTDAY:
+                        currentDay.expectedHours = 7;
+                        break;
+
+                    case SPECIAL_DAYS.VACATION:
+                    case SPECIAL_DAYS.HOLIDAY:
+                        currentDay.expectedHours = 0;
+                        break;
+
+                    case SPECIAL_DAYS.UNPAID:
+                        currentDay.expectedHours = 0;
+                        currentDay.paid = false;
+                        break;
+                }
+            }
+            if (dayCode > todayCode) {
+                currentDay.expectedHours = 0;
             }
 
             days[dayCode] = currentDay;
@@ -70,7 +99,7 @@ export default function Store_GetCalendarStatistics(): CalendarStatistics {
             weeks[weekCode].days = weeks[weekCode].days.reverse();
             // sum up seconds
             weeks[weekCode].week_charged = weeks[weekCode].days.reduceRight((sum, dayCode) => {
-                return sum + days[dayCode].charged_seconds;
+                return sum + (days[dayCode].paid ? days[dayCode].charged_seconds : 0);
             }, 0);
             weeks[weekCode].week_charged_text = timespanToText(weeks[weekCode].week_charged, '');
         }
@@ -85,12 +114,12 @@ export default function Store_GetCalendarStatistics(): CalendarStatistics {
 
             let currentMonth = (months[day.monthLastWeekCode] || {}) as CalendarMonthStatistics;
 
-            let month_charged_seconds = (currentMonth.month_charged_seconds || 0) + day.charged_seconds;
+            let month_charged_seconds = (currentMonth.month_charged_seconds || 0) + (days[dayCode].paid ? days[dayCode].charged_seconds : 0);
             currentMonth.month_charged_seconds = month_charged_seconds;
             currentMonth.month_charged_seconds_text = timespanToText(month_charged_seconds, '');
             currentMonth.month_title = currentMonth.month_title || day.monthName;
 
-            currentMonth.month_official_seconds = (currentMonth.month_official_seconds || 0) + (!day.isWeekend && day.charged_seconds > 0 ? 8 * 3600 : 0);
+            currentMonth.month_official_seconds = (currentMonth.month_official_seconds || 0) + (days[dayCode].expectedHours * 3600);
             months[day.monthLastWeekCode] = currentMonth;
         });
 

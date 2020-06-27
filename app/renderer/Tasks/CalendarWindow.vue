@@ -5,8 +5,17 @@
             <div v-for="(week, week_key) of weeks" class="Week" :data-week="week_key">
                 <div v-for="(dayCode) of week.days" class="Day"
                      @click="open(dayCode)"
+                     @mouseenter="store.commit.calendarHoveredDayCode(dayCode)"
+                     @mouseleave="store.commit.calendarHoveredDayCode(null)"
                      :title="days[dayCode].dayCode"
-                     :class="{ is_today: days[dayCode].isToday, is_current_month: days[dayCode].isCurrentMonth, is_opened: days[dayCode].isOpened, is01: days[dayCode].isFirstDayOfTheMonth, is_weekend: days[dayCode].isWeekend }">
+                     :class="{
+                         is_today: days[dayCode].isToday,
+                         is_current_month: days[dayCode].isCurrentMonth,
+                         is_opened: days[dayCode].isOpened,
+                         is01: days[dayCode].isFirstDayOfTheMonth,
+                         is_weekend: days[dayCode].isWeekend,
+                         ['is_special_day_' + specialDays[dayCode]]: !!specialDays[dayCode],
+                    }">
                     <span class="DayTitle">{{ days[dayCode].title }}</span>
                     <span class="TimeCharged">{{ days[dayCode].charged_seconds_text }}</span>
                 </div>
@@ -32,6 +41,7 @@
     import store from "../Store/Store";
     import Store_GetCalendarStatistics from "../Store/Store_GetCalendarStatistics";
     import {Prop} from "vue-property-decorator";
+    import createCalendarMenu from "./CalendarMenu";
 
     @Component({
         created() {
@@ -43,6 +53,10 @@
         cache = null;
 
         @Prop({type: String}) weekKey;
+
+        get store() {
+            return store;
+        }
 
         get weeks() {
             this.collect_data();
@@ -70,6 +84,10 @@
             return this.cache.days;
         }
 
+        get specialDays() {
+            return store.state.settings['special_days'] || {};
+        }
+
         collect_data() {
             if (this.cache) {
                 return;
@@ -81,6 +99,19 @@
         open(day) {
             store.commit.setDay(day);
             store.commit.returnToTasksScreen();
+        }
+
+        mounted() {
+            window.addEventListener('contextmenu', this.calendarMenuShow, false);
+        }
+
+        beforeDestroy() {
+            window.removeEventListener('contextmenu', this.calendarMenuShow);
+        }
+
+        calendarMenuShow(e) {
+            e.preventDefault();
+            createCalendarMenu(() => this.cache = null).popup({window: remote.getCurrentWindow()})
         }
     }
 </script>
@@ -123,7 +154,7 @@
             border: 1px solid #f5f5f5;
             width: 54px;
             height: 30px;
-            padding: 0 3px;
+            padding: 1px 4px;
             position: relative;
             cursor: pointer;
 
@@ -152,9 +183,52 @@
                 border-bottom-color: #8e8e8e !important;
             }
 
-            &.is_opened,
+            &.is_special_day_vacation {
+                color: #8b26b6 !important;
+                background-color: #f9ecff;
+            }
+
+            &.is_special_day_holiday {
+                color: green !important;
+                background-color: #f2fff3;
+            }
+
+            &.is_special_day_shortday,
+            &.is_special_day_workday {
+                color: black !important;
+
+                &.is_special_day_shortday {
+                    color: green !important;
+                }
+
+                &.is_current_month {
+                    border-color: #bdbdbd;
+                }
+            }
+
+            &.is_special_day_unpaid {
+                background-color: #efefef;
+                text-decoration: line-through;
+            }
+
             &:hover {
                 background-color: #e6faff;
+                border-color: #b6c8ca !important;
+            }
+
+            &.is_opened {
+                border-color: black !important;
+            }
+
+            &:hover,
+            &.is_opened {
+                border-width: 2px;
+                padding: 0 3px;
+
+                .TimeCharged {
+                    right: 1px;
+                    bottom: -2px;
+                }
             }
 
             .DayTitle {
