@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+### [1.20.10](https://github.com/dmitrijs/WorkLogIfy/compare/v1.20.9...v1.20.10) (2020-06-27)
+
+
+### UI/UX
+
+* **tasks:** improved sorting (put timered and recent tasks on top) ([3891f29](https://github.com/dmitrijs/WorkLogIfy/commit/3891f299a0a50a0bc4fcf8b5106b965e2c76de77))
+
 ### [1.20.9](https://github.com/dmitrijs/WorkLogIfy/compare/v1.20.8...v1.20.9) (2020-06-03)
 
 
