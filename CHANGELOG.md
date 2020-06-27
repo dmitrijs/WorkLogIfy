@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+### [1.21.1](https://github.com/dmitrijs/WorkLogIfy/compare/v1.21.0...v1.21.1) (2020-06-27)
+
+
+### Features
+
+* calculate total hours if day contains several groups ([dab721d](https://github.com/dmitrijs/WorkLogIfy/commit/dab721d4067cd7fadc1a214ec2a434882a6230a3))
+
 ## [1.21.0](https://github.com/dmitrijs/WorkLogIfy/compare/v1.20.10...v1.21.0) (2020-06-27)
 
 
