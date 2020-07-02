@@ -59,7 +59,7 @@
                             <a target="_blank"
                                v-if="rec.jiraWorkLogId"
                                v-html="formatRecord(rec)"
-                               :href="'https://' + store.state.settings.get('jira_host') + '/browse/' + task.code + '?focusedWorklogId=' + rec.jiraWorkLogId"></a>
+                               :href="'https://' + store.state.settings.jira_host + '/browse/' + task.code + '?focusedWorklogId=' + rec.jiraWorkLogId"></a>
                             <span v-else v-html="formatRecord(rec)"></span>
                         </div>
                         <div v-if="!task.records || !task.records.length">none</div>

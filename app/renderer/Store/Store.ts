@@ -65,7 +65,7 @@ const state = {
     taskIsCloned: false,
     calendarHoveredDayCode: null,
 
-    settings: null as Map<string, any>,
+    settings: {} as SettingsObj,
 };
 state.screen = state.tasksScreen;
 

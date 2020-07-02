@@ -61,6 +61,13 @@ declare type RecordObj = {
     created_at: string;
 }
 
+declare type SettingsObj = {
+    jira_host: string;
+    jira_username: string;
+    jira_password: string;
+    special_days: [];
+}
+
 declare type CalendarStatistics = {
     days: { [key: string]: CalendarDayStatistics },
     months: { [key: string]: CalendarMonthStatistics },

@@ -34,7 +34,7 @@ export default function createMenu() {
     menu.append(new MenuItem({
         enabled: (!!(task && task.get('code'))),
         label: 'View in JIRA', click() {
-            let url = 'https://' + store.state.settings.get('jira_host') + '/browse/' + task.get('code');
+            let url = 'https://' + store.state.settings.jira_host + '/browse/' + task.get('code');
             window.open(url);
         },
     }));
@@ -65,10 +65,10 @@ export default function createMenu() {
             let workLogTime = timeStarted.format(JIRA_TIME_FORMAT);
 
             let options = {
-                url: 'https://' + store.state.settings.get('jira_host') + '/rest/api/2/issue/' + taskCode + '/worklog?notifyUsers=false&adjustEstimate=auto',
+                url: 'https://' + store.state.settings.jira_host + '/rest/api/2/issue/' + taskCode + '/worklog?notifyUsers=false&adjustEstimate=auto',
                 auth: {
-                    user: store.state.settings.get('jira_username'),
-                    pass: store.state.settings.get('jira_password'),
+                    user: store.state.settings.jira_username,
+                    pass: store.state.settings.jira_password,
                 },
                 method: 'POST',
                 json: true,
