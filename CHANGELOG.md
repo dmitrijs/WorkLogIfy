@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+### [1.21.2](https://github.com/dmitrijs/WorkLogIfy/compare/v1.21.1...v1.21.2) (2020-07-02)
+
+
+### Bug Fixes
+
+* fixed broken Jira integration ([e352a7c](https://github.com/dmitrijs/WorkLogIfy/commit/e352a7c7ace872406c43cccb748ec7c65fd18229))
+
 ### [1.21.1](https://github.com/dmitrijs/WorkLogIfy/compare/v1.21.0...v1.21.1) (2020-06-27)
 
 
