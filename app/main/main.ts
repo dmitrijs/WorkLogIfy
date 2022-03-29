@@ -35,6 +35,8 @@ app.on('ready', async () => {
             nodeIntegration: false,
             preload: path.resolve(__dirname, 'preload.js'),
             spellcheck: true,
+            enableRemoteModule: true, // to work in Electron 10+
+            contextIsolation: false, // to work in Electron 12+
         }
     });
 
