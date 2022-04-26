@@ -1,3 +1,3 @@
 # WorkLogIfy
 
-Track you work.
+Track your work.
