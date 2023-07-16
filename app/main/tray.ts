@@ -1,8 +1,5 @@
 import * as path from "path";
 // @ts-ignore
-import trayPng from './assets/tray.png';
-// @ts-ignore
-import trayInactivePng from './assets/trayInactive.png';
 
 const electron = require('electron');
 const {Menu, Tray, app} = electron;
@@ -10,15 +7,15 @@ const {Menu, Tray, app} = electron;
 let tray;
 
 export function setTrayIconIdle() {
-    tray.setImage(path.join(__dirname, trayInactivePng));
+    tray.setImage(path.join(process.env.PUBLIC, '/assets/trayInactive.png'));
 }
 
 export function setTrayIconActive() {
-    tray.setImage(path.join(__dirname, trayPng));
+    tray.setImage(path.join(process.env.PUBLIC, '/assets/tray.png'));
 }
 
 export default function createTray(mainWindow) {
-    tray = new Tray(path.join(__dirname, trayInactivePng));
+    tray = new Tray(path.join(process.env.PUBLIC, '/assets/trayInactive.png'));
 
     var contextMenu = Menu.buildFromTemplate([
         {

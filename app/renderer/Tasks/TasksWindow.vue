@@ -62,7 +62,7 @@
                     <div class="TCol --timespan --timespan-spent" title="Spent">{{ group.time_spent_text }}</div>
                 </div>
 
-                <transition-group name="fade" mode="out-in">
+                <transition-group name="fade">
                     <div class="TRow"
                          v-for="task of group.tasks"
                          @mouseenter="store.commit.tasksUiHoveredId(task.id)"
@@ -197,9 +197,9 @@
     </div>
 </template>
 
-<script type="ts">
-    import Vue from "vue";
-    import Component from "vue-class-component";
+<script lang="ts">
+    // @ts-nocheck
+    import {Component, Vue} from "vue-facing-decorator";
     import horizontal_scroller from "../library/horizontal_scroller";
     import createMenu from './TasksMenu';
     import LineChart from '../Components/LineChart.vue';

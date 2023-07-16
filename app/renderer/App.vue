@@ -2,11 +2,11 @@
     <div class="App" :class="{ isDebug: tasks_ui.is_debug }">
         <transition name="fade" mode="out-in">
             <TasksWindow v-if="tasks_ui.screen === 'tasks'"></TasksWindow>
-            <TaskEdit v-if="tasks_ui.screen === 'task.edit'" mode="edit" key="task.edit"></TaskEdit>
-            <TaskEdit v-if="tasks_ui.screen === 'task.new'" mode="new" key="task.new"></TaskEdit>
-            <CalendarWindow v-if="tasks_ui.screen === 'calendar'"></CalendarWindow>
-            <TemplatesWindow v-if="tasks_ui.screen === 'task.templates'"></TemplatesWindow>
-            <SettingsWindow v-if="tasks_ui.screen === 'settings'"></SettingsWindow>
+            <TaskEdit v-else-if="tasks_ui.screen === 'task.edit'" mode="edit" key="task.edit"></TaskEdit>
+            <TaskEdit v-else-if="tasks_ui.screen === 'task.new'" mode="new" key="task.new"></TaskEdit>
+            <CalendarWindow v-else-if="tasks_ui.screen === 'calendar'"></CalendarWindow>
+            <TemplatesWindow v-else-if="tasks_ui.screen === 'task.templates'"></TemplatesWindow>
+            <SettingsWindow v-else-if="tasks_ui.screen === 'settings'"></SettingsWindow>
         </transition>
 
         <div class="Debug" v-if="tasks_ui.is_debug">
@@ -36,8 +36,8 @@
 </template>
 
 <script lang="ts">
-    import Vue from "vue";
-    import Component from "vue-class-component";
+// @ts-nocheck
+    import {Component, Vue} from "vue-facing-decorator";
     import TasksWindow from "./Tasks/TasksWindow.vue";
     import TaskEdit from "./Tasks/TaskEdit.vue";
     import timer from "./Timer";
@@ -45,6 +45,7 @@
     import store from "./Store/Store";
     import TemplatesWindow from "./Tasks/TemplatesWindow.vue";
     import SettingsWindow from "./Tasks/SettingsWindow.vue";
+import _ from "lodash";
 
     @Component({
         components: {
@@ -65,7 +66,7 @@
         }
 
         save() {
-            window.ipc.sendSync('tasks.save', store.state.day_key, store.state.tasks.toJS(), store.getters.getTasksGrouped.toJS());
+            window.ipc.sendSync('tasks.save', store.state.day_key, _.cloneDeep(store.state.tasks.toJS()), _.cloneDeep(store.getters.getTasksGrouped.toJS()));
         }
 
         timerStop() {

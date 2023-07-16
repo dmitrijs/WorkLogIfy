@@ -35,12 +35,11 @@
     </div>
 </template>
 
-<script type="ts">
-    import Vue from "vue";
-    import Component from "vue-class-component";
+<script lang="ts">
+    // @ts-nocheck
+    import {Component, Vue, Prop} from "vue-facing-decorator";
     import store from "../Store/Store";
     import Store_GetCalendarStatistics from "../Store/Store_GetCalendarStatistics";
-    import {Prop} from "vue-property-decorator";
     import createCalendarMenu from "./CalendarMenu";
 
     @Component({

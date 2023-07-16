@@ -7,6 +7,7 @@
 </template>
 
 <script lang="ts">
+// @ts-nocheck
     import Vue from "vue";
 
     export default class Win2 extends Vue {

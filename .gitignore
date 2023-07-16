@@ -4,6 +4,8 @@
 /app/renderer/.parcel
 /app/main/.parcel
 /release
+/dist
+/dist-electron
 
 # dependencies
 /node_modules

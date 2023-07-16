@@ -1,11 +1,11 @@
-import Vue from 'vue/dist/vue.min'
+// @ts-nocheck
 import store from './Store/Store'
 
 import './../style.scss';
 import './../../external/icofont/icofont.min.css';
 import './../../external/checkbox.scss';
-import App from "./App.vue";
 import timer from "./Timer";
+import {createApp} from "vue";
 
 declare global {
     interface Window {
@@ -18,7 +18,7 @@ const moment = require("moment");
 
 timer.init();
 
-Vue.prototype.$store = store.original;
+// Vue.prototype.$store = store.original;
 store.commit.loadSettings();
 
 store.commit.toggleDebug(window.ipc.sendSync('debug.state'));
@@ -38,9 +38,11 @@ window.ipc.on('debug.toggle', function ($event, value) {
     store.commit.toggleDebug(value);
 });
 
-let vue = new Vue({
-    render: h => h(App),
-}).$mount('#root');
+import App from './App.vue'
+
+const app = createApp(App);
+app.use(store);
+app.mount("#root");
 
 window.ipc.on('user-is-idle', function (emitter, secondsIdle, secondsToBecomeIdle) {
     if (timer.isActive()) {

@@ -1,46 +1,53 @@
 import Shortcuts from "./shortcuts";
 import IdleUser from "./idle";
 // @ts-ignore
-import taskbarPng from './assets/taskbar.png';
 import Filesystem from "./filesystem";
 import createMainMenu from "./menu";
 import createTray, {setTrayIconActive, setTrayIconIdle} from "./tray";
 
-const {format} = require('url');
-
 const electron = require('electron');
 const isDev = require('electron-is-dev');
-const {resolve} = require('app-root-path');
 const path = require('path');
 const request = require('request-promise');
 
-let tray;
-const {BrowserWindow, shell, app} = electron;
+import { BrowserWindow, shell, app } from 'electron'
+
+process.env.DIST_ELECTRON = path.join(__dirname, '..')
+process.env.DIST = path.join(process.env.DIST_ELECTRON, '../dist')
+process.env.PUBLIC = process.env.VITE_DEV_SERVER_URL
+    ? path.join(process.env.DIST_ELECTRON, '../public')
+    : process.env.DIST
+
+const url = process.env.VITE_DEV_SERVER_URL
+const indexHtml = path.join(process.env.DIST, 'index.html')
 
 if (isDev) {
     process.env.ELECTRON_DISABLE_SECURITY_WARNINGS = 'true';
 }
 
+require('@electron/remote/main').initialize()
+
+let mainWindow = null;
 app.on('ready', async () => {
 
-    const mainWindow = new BrowserWindow({
+    mainWindow = new BrowserWindow({
         width: 500,
         height: 500,
         useContentSize: true,
         x: 10,
         y: 10,
         show: false,
-        icon: path.join(__dirname, taskbarPng),
+        icon: path.join(process.env.PUBLIC, '/assets/app_icon.png'),
         webPreferences: {
-            nodeIntegration: false,
-            preload: path.resolve(__dirname, 'preload.js'),
+            preload: path.resolve(__dirname, '../preload/preload.js'),
             spellcheck: true,
-            enableRemoteModule: true, // to work in Electron 10+
             contextIsolation: false, // to work in Electron 12+
+            nodeIntegration: true, // to work in Electron 20+
         }
     });
+    require("@electron/remote/main").enable(mainWindow.webContents)
 
-    tray = createTray(mainWindow);
+    createTray(mainWindow);
 
     mainWindow.on('close', function (event) {
         event.preventDefault();
@@ -66,15 +73,11 @@ app.on('ready', async () => {
     Shortcuts.registerOnReady();
     IdleUser.registerOnReady(mainWindow);
 
-    const devPath = 'http://localhost:1124';
-    const prodPath = format({
-        pathname: resolve('app/renderer/.parcel/production/index.html'),
-        protocol: 'file:',
-        slashes: true
-    });
-    const url = isDev ? devPath : prodPath;
-
-    mainWindow.loadURL(url);
+    if (process.env.VITE_DEV_SERVER_URL) {
+        mainWindow.loadURL(url);
+    } else {
+        mainWindow.loadFile(indexHtml);
+    }
 
     const {ipcMain} = require('electron');
 
@@ -183,4 +186,7 @@ app.on('ready', async () => {
     });
 });
 
-app.on('window-all-closed', app.quit);
+app.on('window-all-closed', () => {
+    mainWindow = null
+    if (process.platform !== 'darwin') app.quit()
+});

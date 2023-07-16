@@ -1,7 +1,9 @@
 // NOTE: Restart "npm start" after any changes to this file
 /* tslint:disable:no-string-literal */
 
-const {ipcRenderer, remote} = require('electron');
+const {ipcRenderer} = require('electron');
+
+const remote = require('@electron/remote');
 
 window['ipc'] = ipcRenderer;
 

@@ -1,0 +1,42 @@
+/**
+ * @see https://www.electron.build/configuration/configuration
+ */
+{
+  "$schema": "https://raw.githubusercontent.com/electron-userland/electron-builder/master/packages/app-builder-lib/scheme.json",
+  productName: "WorkLogIfy",
+  "appId": "lv.ify.worklog",
+  "asar": true,
+  "directories": {
+    "output": "release"
+  },
+  "files": [
+    "app/**",
+    "!app/main/main.ts",
+    "!app/main/tests/**",
+    "!app/renderer/**",
+    "app/renderer/.parcel/production/**",
+    "!app/**/*.map",
+    "public",
+    "./dist-electron/**/*",
+    "./dist/**/*"
+  ],
+  "mac": {
+    "artifactName": "${productName}-mac-v${version}.${ext}",
+    "target": [
+      "dmg"
+    ]
+  },
+  "win": {
+    "target": [
+      "zip"
+    ],
+    "icon": "public/assets/app_icon.png",
+    "artifactName": "${productName}-win-v${version}.${ext}"
+  },
+  "nsis": {
+    "oneClick": false,
+    "perMachine": false,
+    "allowToChangeInstallationDirectory": true,
+    "deleteAppDataOnUninstall": false
+  }
+}

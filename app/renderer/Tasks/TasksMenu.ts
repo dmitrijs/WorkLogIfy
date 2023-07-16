@@ -1,5 +1,6 @@
 import store from "../Store/Store";
 import {timespanToText} from "../Utils/Utils";
+import _ from "lodash";
 
 const remote = window.remote;
 const {Menu, MenuItem} = remote;
@@ -82,7 +83,7 @@ export default function createMenu() {
                 alert('Would be sent to JIRA: ' + timespanToText(timeSpentSeconds) + ' at ' + workLogTime);
                 jiraResponseWorkLog = {response: {}};
             } else {
-                jiraResponseWorkLog = window.ipc.sendSync('jira.request', options);
+                jiraResponseWorkLog = window.ipc.sendSync('jira.request', _.cloneDeep(options));
             }
 
             if (jiraResponseWorkLog.error) {

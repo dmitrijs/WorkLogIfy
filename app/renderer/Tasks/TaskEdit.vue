@@ -93,11 +93,10 @@
     </div>
 </template>
 
-<script type="ts">
-    import Vue from "vue";
-    import Component from "vue-class-component";
+<script lang="ts">
+    // @ts-nocheck
+    import {Component, Prop, Vue} from "vue-facing-decorator";
     import {timespanToText} from "../Utils/Utils";
-    import {Prop} from "vue-property-decorator";
     import store from "../Store/Store";
     import timer from "../Timer";
 
@@ -127,8 +126,7 @@
             } else {
                 this.task = store.getters.getEditedTask;
             }
-            this.$set(this.task, 'time_add_minutes', '');
-            this.$set(this.task, 'time_record_minutes', '');
+            this.task = {...this.task, time_add_minutes: '', time_record_minutes: ''};
         }
 
         mounted() {
@@ -152,14 +150,14 @@
                 forced = true;
             }
             if (template.title) {
-                this.$set(this.task, 'title', template.title);
+                this.task = {...this.task, title: template.title};
             }
             if (template.code) {
-                this.$set(this.task, 'code', template.code);
+              this.task = {...this.task, code: template.code};
             }
-            this.$set(this.task, 'frozen', !!template.frozen);
+            this.task = {...this.task, frozen: !!template.frozen};
             if (!this.task.notes || forced) {
-                this.$set(this.task, 'notes', template.notes);
+                this.task = {...this.task, notes: template.notes};
             }
         }
 
@@ -184,7 +182,7 @@
 
             let matches = this.task.code.match(/(?:https:\/\/)?[^.]+\.atlassian\.net\/browse\/(\S+-\d+).*?/);
             if (matches) {
-                this.$set(this.task, 'code', matches[1]);
+                this.task = {...this.task, code: matches[1]};
             }
         }
     }

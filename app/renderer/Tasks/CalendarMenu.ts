@@ -1,3 +1,4 @@
+// @ts-nocheck
 import store from "../Store/Store";
 
 const remote = window.remote;

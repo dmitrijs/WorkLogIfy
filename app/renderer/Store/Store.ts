@@ -1,20 +1,18 @@
-import Vue from 'vue'
-import Vuex, {Store} from 'vuex'
+// @ts-nocheck
 import {timespanToText} from '../Utils/Utils';
 import {List, Map} from 'immutable';
 import Store_GetGroupedTasks from "./Store_GetGroupedTasks";
 import {createDirectStore} from "direct-vuex";
+import _ from "lodash";
 
 const moment = require("moment");
 
-Vue.use(Vuex);
-
 function saveTasks(state: AppState) {
-    window.ipc.sendSync('tasks.save', state.day_key, state.tasks.toJS(), storeDirect.getters.getTasksGrouped.toJS(), state.settings);
+    window.ipc.sendSync('tasks.save', state.day_key, _.cloneDeep(state.tasks.toJS()), _.cloneDeep(storeDirect.getters.getTasksGrouped.toJS()), _.cloneDeep(state.settings));
 }
 
 function saveTaskTemplates(state: AppState) {
-    window.ipc.sendSync('tasks.templates.save', state.templates);
+    window.ipc.sendSync('tasks.templates.save', _.cloneDeep(state.templates));
 }
 
 function addSession(tasks, task_id, spentSeconds, method, idleSeconds = 0) {

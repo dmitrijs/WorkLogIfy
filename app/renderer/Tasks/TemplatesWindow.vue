@@ -20,9 +20,9 @@
     </div>
 </template>
 
-<script type="ts">
-    import Vue from "vue";
-    import Component from "vue-class-component";
+<script lang="ts">
+    // @ts-nocheck
+    import {Component, Vue} from "vue-facing-decorator";
     import store from "../Store/Store";
 
     @Component({

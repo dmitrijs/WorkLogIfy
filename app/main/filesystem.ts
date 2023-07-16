@@ -1,7 +1,7 @@
+// @ts-nocheck
 const fs = require('fs');
-var glob = require("glob");
 
-const {app, dialog} = require('electron');
+const {app} = require('electron');
 
 class Filesystem {
     public static getDir() {
