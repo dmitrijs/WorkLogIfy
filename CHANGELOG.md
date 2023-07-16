@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+### [1.22.1](https://github.com/dmitrijs/WorkLogIfy/compare/v1.22.0...v1.22.1) (2023-07-16)
+
+
+### Bug Fixes
+
+* fixed blank screen ([c9ba94f](https://github.com/dmitrijs/WorkLogIfy/commit/c9ba94f5d33503719ab674640b0bbd63a96a8cbb))
+
 ## [1.22.0](https://github.com/dmitrijs/WorkLogIfy/compare/v1.21.3...v1.22.0) (2023-07-16)
 
 
