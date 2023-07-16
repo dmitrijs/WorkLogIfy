@@ -22,7 +22,7 @@
         "section": "Features"
       },
       {
-        "type": "fix",
+        "type": "patch",
         "section": "Bug Fixes"
       },
       {
@@ -36,7 +36,8 @@
     "@electron/remote": "^2.0.10",
     "electron-is-dev": "^1.2.0",
     "request": "^2.88.2",
-    "request-promise": "^4.2.5"
+    "request-promise": "^4.2.5",
+    "moment": "^2.24.0"
   },
   "devDependencies": {
     "@babel/types": "*",
@@ -47,7 +48,6 @@
     "electron": "^25.0",
     "electron-builder": "^24.0",
     "immutable": "^3.8.2",
-    "moment": "^2.24.0",
     "sass": "^1.26.3",
     "standard-version": "^9.3.2",
     "tslint": "^5.20.1",
