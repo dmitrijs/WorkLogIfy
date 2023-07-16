@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+### [1.21.3](https://github.com/dmitrijs/WorkLogIfy/compare/v1.21.2...v1.21.3) (2023-07-16)
+
+
+### Bug Fixes
+
+* **readme:** typo ([2accd5b](https://github.com/dmitrijs/WorkLogIfy/commit/2accd5bb468fe21707633e498b26d583f4fefab2))
+
 ### [1.21.2](https://github.com/dmitrijs/WorkLogIfy/compare/v1.21.1...v1.21.2) (2020-07-02)
 
 
