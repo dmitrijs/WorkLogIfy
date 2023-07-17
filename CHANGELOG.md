@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+### [1.24.1](https://github.com/dmitrijs/WorkLogIfy/compare/v1.24.0...v1.24.1) (2023-07-17)
+
+
+### Improvements
+
+* **tasks:** exclude non-active tasks from the report ([94220d2](https://github.com/dmitrijs/WorkLogIfy/commit/94220d2883ab1e494166ec7a67a42038d0ccce69))
+
 ## [1.24.0](https://github.com/dmitrijs/WorkLogIfy/compare/v1.23.1...v1.24.0) (2023-07-17)
 
 
