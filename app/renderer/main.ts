@@ -52,7 +52,7 @@ window.ipc.on('user-is-idle', function (emitter, secondsIdle, secondsToBecomeIdl
         }
         timer.stop(secondsIdle);
 
-        let idleTask = Object.create(store.getters.getEmptyTask);
+        let idleTask = {...store.getters.getEmptyTask};
         idleTask.code = 'idle';
         idleTask.time_add_idle_seconds = secondsIdle;
         idleTask.time_add_minutes = '';
