@@ -10,12 +10,12 @@
         </transition>
 
         <div class="Debug" v-if="tasks_ui.is_debug">
-            <button onclick="document.location.reload()" style="padding: 10px 20px; float: right">reload</button>
-            <button type="button" @click="save()">save</button>
+            <button onclick="document.location.reload()" class="btn btn-secondary" style="padding: 10px 20px; float: right">reload</button>
+            <button type="button" class="btn btn-secondary btn-xs" @click="save()">save</button>
             <div v-for="(value, key) of tasks_ui"><strong>{{key}}:</strong> {{value}}</div>
             <hr/>
             Timer
-            <button type="button" @click="timerStop" :disabled="!tasks_ui.timeredId">stop</button>
+            <button type="button" class="btn btn-secondary btn-xs" @click="timerStop" :disabled="!tasks_ui.timeredId">stop</button>
             <hr/>
             <div v-for="(day, dayId) of tasksGrouped">
                 <strong>{{dayId}}</strong><br />

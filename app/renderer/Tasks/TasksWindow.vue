@@ -169,7 +169,7 @@
                   @click.prevent="toggleShowAsReport()">
                 <label><input type="checkbox" :checked="tasks_ui.tasksShowAsReport"><span></span> as a report</label>
             </span>
-            <button type="button" class="btn btn-secondary btn-xs" style="margin-left: 6px"
+            <button type="button" class="btn btn-secondary btn-xs" style="margin-left: 6px; line-height: 0.6rem"
                     v-if="tasks_ui.tasksShowAsReport"
                     @click="copyToClipboardAllTasks($event)">
                 Copy for Slack
@@ -350,10 +350,13 @@
         copyToClipboardAllTasks(ev) {
             let s = '*' + moment(store.state.day_key + ' 12:00:00').format('ddd, MMM D') + "*\n";
             for (let group of Object.values(this.tasksGrouped)) {
-                for (let task of group.tasks) {
+                for (let task:TaskObj of group.tasks) {
+                    if (!task.chargeable || task.distributed) {
+                        continue;
+                    }
                     let title = task.title;
                     if (title) {
-                        title = title.replace('[combined] ', '');
+                        title = title.replaceAll('[combined]', '').trim();
                     }
                     s += title + "\n" + "> " + task.notes + "\n" + "> ~" + task.time_charge_text + "\n";
                 }
