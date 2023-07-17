@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+### [1.22.2](https://github.com/dmitrijs/WorkLogIfy/compare/v1.22.1...v1.22.2) (2023-07-17)
+
+
+### Features
+
+* provide nsis installer ([07a5a12](https://github.com/dmitrijs/WorkLogIfy/commit/07a5a128519816a0aa693f3685dda058fe794441))
+
 ### [1.22.1](https://github.com/dmitrijs/WorkLogIfy/compare/v1.22.0...v1.22.1) (2023-07-16)
 
 
