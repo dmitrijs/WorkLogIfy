@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+### [1.22.4](https://github.com/dmitrijs/WorkLogIfy/compare/v1.22.3...v1.22.4) (2023-07-17)
+
+
+### Bug Fixes
+
+* fixed icons layout in tasks list ([a70441c](https://github.com/dmitrijs/WorkLogIfy/commit/a70441c20d07335c162a3e78ce8e537ef021694b))
+
 ### [1.22.3](https://github.com/dmitrijs/WorkLogIfy/compare/v1.22.2...v1.22.3) (2023-07-17)
 
 
