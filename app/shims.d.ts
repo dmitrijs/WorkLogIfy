@@ -35,6 +35,7 @@ declare type TaskObj = {
 
     sessions: SessionObj[];
     records: RecordObj[];
+    activeApps: ActiveAppObj[];
 }
 
 declare type TaskEditedObj = TaskObj & {
@@ -60,6 +61,11 @@ declare type RecordObj = {
     recorded_seconds: number;
     method: string;
     created_at: string;
+}
+
+declare type ActiveAppObj = {
+    noticed_at: string;
+    description: string;
 }
 
 declare type SettingsObj = {

@@ -64,6 +64,14 @@ window.ipc.on('user-is-idle', function (emitter, secondsIdle, secondsToBecomeIdl
     }
 });
 
+window.ipc.on('user-active-app', function (emitter, activeAppDescription) {
+    if (timer.isActive()) {
+        let timeredTask = store.state.tasks.get(store.state.taskTimeredId);
+        console.log("[timeredTask.get('id'), activeAppDescription]", [timeredTask.get('id'), activeAppDescription]);
+        store.commit.taskAddActiveApp([timeredTask.get('id'), activeAppDescription]);
+    }
+});
+
 window.ipc.on('timer-stop', function (emitter, secondsIdle, secondsToBecomeIdle) {
     if (timer.isActive()) {
         timer.stop();

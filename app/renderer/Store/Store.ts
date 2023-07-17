@@ -26,6 +26,15 @@ function addSession(tasks, task_id, spentSeconds, method, idleSeconds = 0) {
     return tasks.setIn([task_id, 'sessions'], sessions);
 }
 
+function addActiveApp(tasks, task_id, activeAppDescription = 0) {
+    let activeApps = tasks.get(task_id).get('activeApps');
+    activeApps = activeApps.push({
+        noticed_at: moment().toISOString(),
+        description: activeAppDescription,
+    });
+    return tasks.setIn([task_id, 'activeApps'], activeApps);
+}
+
 function addRecord(tasks, task_id, recordedSeconds, method, jiraWorkLogId = null) {
     let records = tasks.get(task_id).get('records');
     let record = {
@@ -77,8 +86,10 @@ function convertJsTasksToMap(js_tasks): Map<string, Map<string, any>> {
             let js_task = js_tasks[key];
 
             let task = Map<string, any>(js_task);
+            let activeApps = task.get('activeApps');
             task = task.set('sessions', List(task.get('sessions')));
             task = task.set('records', List(task.get('records')));
+            task = task.set('activeApps', List(activeApps));
 
             tasks = tasks.set(key, task);
         }
@@ -173,6 +184,7 @@ const {store: storeDirect} = createDirectStore({
                 created_at: moment().toISOString(),
                 sessions: List(),
                 records: List(),
+                activeApps: List(),
             }));
             state.createdTaskId = id;
 
@@ -304,6 +316,7 @@ const {store: storeDirect} = createDirectStore({
             if (state.taskIsCloned) {
                 newTask = newTask.set('sessions', List());
                 newTask = newTask.set('records', List());
+                newTask = newTask.set('activeApps', List());
             }
 
             state.tasks = state.tasks.set(id, newTask);
@@ -344,6 +357,10 @@ const {store: storeDirect} = createDirectStore({
         },
         taskAddSession(state: AppState, [taskId, minutes, method]) {
             state.tasks = addSession(state.tasks, taskId, minutes * 60, method);
+            saveTasks(state);
+        },
+        taskAddActiveApp(state: AppState, [taskId, activeAppDescription]) {
+            state.tasks = addActiveApp(state.tasks, taskId, activeAppDescription);
             saveTasks(state);
         },
         templateNew(state: AppState) {

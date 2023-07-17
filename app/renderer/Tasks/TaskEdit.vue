@@ -68,10 +68,23 @@
                 <tr>
                     <td>Sessions:</td>
                     <td>
-                        <div v-for="sess of task.sessions">
-                            {{ formatSession(sess) }}
+                        <div style="max-height: 100px; overflow: auto;">
+                            <div v-for="sess of task.sessions">
+                                {{ formatSession(sess) }}
+                            </div>
                         </div>
                         <div v-if="!task.sessions || !task.sessions.length">none</div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Active apps:</td>
+                    <td>
+                        <div style="max-height: 100px; overflow: auto;">
+                            <div v-for="activeApp of task.activeApps">
+                                {{ formatActiveApp(activeApp) }}
+                            </div>
+                        </div>
+                        <div v-if="!task.activeApps?.length">none</div>
                     </td>
                 </tr>
                 <tr>
@@ -173,6 +186,10 @@
         formatRecord(rec) {
             let timespan = timespanToText(rec.recorded_seconds);
             return `<strong>${timespan}</strong> (${rec.method} at ${moment(rec.created_at).format('HH:mm')})`;
+        }
+
+        formatActiveApp(activeApp) {
+            return `[${moment(activeApp.noticed_at).format('HH:mm:ss')}] ${activeApp.description}`;
         }
 
         codeChanged() {
