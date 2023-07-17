@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+### [1.22.5](https://github.com/dmitrijs/WorkLogIfy/compare/v1.22.4...v1.22.5) (2023-07-17)
+
+
+### Improvements
+
+* distribute as a one-click installer ([6c6b657](https://github.com/dmitrijs/WorkLogIfy/commit/6c6b65728097e70fdd31325fdc4972c5e404716a))
+
 ### [1.22.4](https://github.com/dmitrijs/WorkLogIfy/compare/v1.22.3...v1.22.4) (2023-07-17)
 
 
