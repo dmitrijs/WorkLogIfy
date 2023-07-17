@@ -21,6 +21,14 @@ export default function createMenu() {
 
     const menu = new Menu();
     menu.append(new MenuItem({
+        label: 'New Task', click() {
+            store.commit.setScreen('task.new');
+        },
+    }));
+    menu.append(new MenuItem({
+        type: 'separator',
+    }));
+    menu.append(new MenuItem({
         enabled: (!!(task && task.get('code'))),
         label: 'Copy the ID', click() {
             navigator.clipboard.writeText(task.get('code')).then(function () {
