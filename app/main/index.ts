@@ -8,7 +8,6 @@ import createTray, {setTrayIconActive, setTrayIconIdle} from "./tray";
 const electron = require('electron');
 const isDev = require('electron-is-dev');
 const path = require('path');
-const request = require('request-promise');
 
 import { BrowserWindow, shell, app } from 'electron'
 
@@ -112,7 +111,8 @@ app.on('ready', async () => {
         ipcMain.on('jira.request', (event, options) => {
             console.log('options', options);
 
-            request(options)
+            // TODO: `request-promise` was replaced with `fetch`, code was not adjusted
+            fetch(options)
                 .then(response => {
                     console.log('jira.request succeeded', response);
                     event.returnValue = {response: response};

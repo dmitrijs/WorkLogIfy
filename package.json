@@ -33,23 +33,17 @@
     "releaseCommitMessageFormat": "chore(release): v{{currentTag}} [ci skip]"
   },
   "dependencies": {
-    "@electron/remote": "^2.0.10",
-    "active-win": "^8.1.0",
-    "electron-is-dev": "^1.2.0",
-    "moment": "^2.24.0",
-    "request": "^2.88.2",
-    "request-promise": "^4.2.5"
-  },
-  "devDependencies": {
     "@babel/types": "*",
+    "@electron/remote": "^2.0.10",
     "@types/lodash": "*",
     "@types/node": "*",
     "@vitejs/plugin-vue": "^4.2.3",
+    "active-win": "^8.1.0",
     "direct-vuex": "^1.0.0-rc3",
-    "electron": "^25.0",
-    "electron-builder": "^24.0",
+    "electron-is-dev": "^1.2.0",
     "immutable": "^3.8.2",
     "lodash": "^4.17.21",
+    "moment": "^2.24.0",
     "sass": "^1.26.3",
     "standard-version": "^9.3.2",
     "tslint": "^5.20.1",
@@ -61,5 +55,9 @@
     "vue-facing-decorator": "^2.1.20",
     "vue-tsc": "^1.8.5",
     "vuex": "^4.1.0"
+  },
+  "devDependencies": {
+    "electron": "^25.0",
+    "electron-builder": "^24.0"
   }
 }
