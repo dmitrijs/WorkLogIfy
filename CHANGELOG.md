@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.23.0](https://github.com/dmitrijs/WorkLogIfy/compare/v1.22.5...v1.23.0) (2023-07-17)
+
+
+### Features
+
+* record active window title ([185bb59](https://github.com/dmitrijs/WorkLogIfy/commit/185bb5948c0642f94590da0750995ee6a6e3802f))
+
 ### [1.22.5](https://github.com/dmitrijs/WorkLogIfy/compare/v1.22.4...v1.22.5) (2023-07-17)
 
 
