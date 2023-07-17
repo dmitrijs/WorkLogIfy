@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+### [1.22.3](https://github.com/dmitrijs/WorkLogIfy/compare/v1.22.2...v1.22.3) (2023-07-17)
+
+
+### Bug Fixes
+
+* fixed Date missing when creating a new task ([0ebac30](https://github.com/dmitrijs/WorkLogIfy/commit/0ebac30dc7bc1b72fc1ada27b2621d7e5ef5a877))
+
 ### [1.22.2](https://github.com/dmitrijs/WorkLogIfy/compare/v1.22.1...v1.22.2) (2023-07-17)
 
 
