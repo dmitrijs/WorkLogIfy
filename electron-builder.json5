@@ -28,7 +28,8 @@
   },
   "win": {
     "target": [
-      "zip"
+      "zip",
+      "nsis"
     ],
     "icon": "public/assets/app_icon.png",
     "artifactName": "${productName}-win-v${version}.${ext}"

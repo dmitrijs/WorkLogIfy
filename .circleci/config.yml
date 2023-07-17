@@ -38,7 +38,7 @@ jobs:
       - run: npm run build
 
       - run: mkdir circleci_workspace && mkdir circleci_workspace/artifacts && mkdir circleci_workspace/metadata
-      - run: cp release/*.zip circleci_workspace/artifacts/
+      - run: cp release/*.zip release/*.exe circleci_workspace/artifacts/
       - run: git describe --abbrev=0 --tags > circleci_workspace/metadata/version.txt
       - run: awk -v start=1 '/\/compare\//{n++;next};n==start;n==start+1{exit}' CHANGELOG.md > circleci_workspace/metadata/changelog.txt
 
