@@ -514,6 +514,10 @@
                         display: none;
                     }
                 }
+                .TCol.--status {
+                    display: flex;
+                    flex-direction: column;
+                }
             }
         }
 
