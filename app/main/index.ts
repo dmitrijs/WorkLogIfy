@@ -186,6 +186,10 @@ app.on('ready', async () => {
     });
 });
 
+app.on('before-quit', () => {
+    mainWindow.removeAllListeners('close');
+    mainWindow.close();
+});
 app.on('window-all-closed', () => {
     mainWindow = null
     if (process.platform !== 'darwin') app.quit()
