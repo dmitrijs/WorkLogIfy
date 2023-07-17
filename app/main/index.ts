@@ -9,7 +9,7 @@ const electron = require('electron');
 const isDev = require('electron-is-dev');
 const path = require('path');
 
-import { BrowserWindow, shell, app } from 'electron'
+import { BrowserWindow, shell, app, Menu } from 'electron'
 
 process.env.DIST_ELECTRON = path.join(__dirname, '..')
 process.env.DIST = path.join(process.env.DIST_ELECTRON, '../dist')
@@ -177,7 +177,9 @@ app.on('ready', async () => {
         });
     }
 
-    mainWindow.setMenu(createMainMenu(mainWindow));
+    const mainMenu = createMainMenu(mainWindow);
+    Menu.setApplicationMenu(mainMenu);
+    mainWindow.setMenu(mainMenu);
 
     mainWindow.on('session-end', () => {
         console.log('session-end');

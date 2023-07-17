@@ -13,15 +13,17 @@ export function toggleDebug(mainWindow) {
 }
 
 export default function createMainMenu(mainWindow) {
-    return Menu.buildFromTemplate([
+    const isMac = process.platform === 'darwin'
+
+    const menuItems = [
         {
             label: 'New', click: function () {
                 mainWindow.show();
                 mainWindow.webContents.send('change.screen', 'task.new');
-            }
+            },
         },
         {
-            label: 'My Tasks', click: function () {
+            label: 'Tasks', click: function () {
                 mainWindow.show();
                 mainWindow.webContents.send('change.screen', 'tasks');
             }
@@ -44,6 +46,12 @@ export default function createMainMenu(mainWindow) {
                 mainWindow.webContents.send('change.screen', 'settings');
             }
         },
+    ];
+    return Menu.buildFromTemplate([
+        ...(isMac ? [{
+            label: 'WorkLogIfy',
+            submenu: menuItems,
+        }] : menuItems),
         {
             label: '...',
             submenu: [
