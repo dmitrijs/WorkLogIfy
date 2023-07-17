@@ -99,7 +99,7 @@
                             </div>
                             <div class="TCol --code"
                                  @click="tasks_ui.tasksShowAsReport ? copyToClipboard($event, task.code) : editTask($event, task)">
-                                {{task.code}}
+                                {{ task.code }}
                                 <div class="--edit-button">
                                     <a href="#" @click.stop="editTask($event, task)" v-if="!task.grouped">edit</a>
                                 </div>
@@ -107,10 +107,10 @@
                             <div class="TCol --title"
                                  @click="tasks_ui.tasksShowAsReport ? copyToClipboard($event, task.notes) : editTask($event, task)">
                         <span class="Title--Content"
-                              :class="{ ellipsis: !tasks_ui.tasksShowAsReport }"><span>{{task.title || '&nbsp;'}}</span></span>
+                              :class="{ ellipsis: !tasks_ui.tasksShowAsReport }"><span>{{ task.title || '&nbsp;' }}</span></span>
                                 <span class="Note--Content">
                                 <span class="EmptyNotesError" v-if="tasks_ui.tasksShowAsReport && !task.notes">[empty notes]</span>
-                                <span v-else>{{task.notes || '&nbsp;'}}</span>
+                                <span v-else>{{ task.notes || '&nbsp;' }}</span>
 
                             </span>
                             </div>
@@ -127,14 +127,14 @@
                                  :title="'Final charge: ' + task.time_charge_text + '\n' + 'Recorded: ' + task.time_recorded_text + '\n' + 'Not recorded: ' + task.time_unrecorded_text"
                             >
                             <span class="--timespan-spent">
-                                {{task.time_spent_text}}
+                                {{ task.time_spent_text }}
                             </span>
                                 <span class="--timespan-charge"
                                       v-if="task.time_recorded_seconds > 0">
-                                {{task.time_unrecorded_text}}
+                                {{ task.time_unrecorded_text }}
                             </span>
                                 <span class="--timespan-final-charge">
-                                {{task.time_charge_text}}
+                                {{ task.time_charge_text }}
                             </span>
                                 <LineChart class="ChartRecorded bg-dark"
                                            :height="3"
@@ -157,9 +157,9 @@
             </template>
         </div>
         <CalendarWindow
-                v-if="tasks_ui.tasksShowAsReport"
-                :key="store.state.day_key"
-                :week-key="store.state.week_key"
+            v-if="tasks_ui.tasksShowAsReport"
+            :key="store.state.day_key"
+            :week-key="store.state.week_key"
         ></CalendarWindow>
 
         <div class="ViewOptions">
@@ -167,8 +167,13 @@
             Show:
             <span class="label--checkbox label--checkbox--with-text"
                   @click.prevent="toggleShowAsReport()">
-                <input type="checkbox" :checked="tasks_ui.tasksShowAsReport"><span></span> as a report
+                <label><input type="checkbox" :checked="tasks_ui.tasksShowAsReport"><span></span> as a report</label>
             </span>
+            <button type="button" class="btn btn-secondary btn-xs" style="margin-left: 6px"
+                    v-if="tasks_ui.tasksShowAsReport"
+                    @click="copyToClipboardAllTasks($event)">
+                Copy for Slack
+            </button>
         </div>
 
         <div class="SelectionStatistics">
@@ -208,6 +213,7 @@
     import {Store_MergeSameCodes} from "../Store/Store_GetGroupedTasks";
     import {timespanToText} from "../Utils/Utils";
     import CalendarWindow from "./CalendarWindow.vue";
+    const moment = require("moment");
 
     @Component({
         components: {
@@ -335,6 +341,26 @@
 
         copyToClipboard(ev, text) {
             navigator.clipboard.writeText(text).then(function () {
+                ev.target.classList.add('AnimationPulseOnceAndHide');
+            }, function () {
+                /* clipboard write failed */
+            });
+        }
+
+        copyToClipboardAllTasks(ev) {
+            let s = '*' + moment(store.state.day_key + ' 12:00:00').format('ddd, MMM D') + "*\n";
+            for (let group of Object.values(this.tasksGrouped)) {
+                for (let task of group.tasks) {
+                    let title = task.title;
+                    if (title) {
+                        title = title.replace('[combined] ', '');
+                    }
+                    s += title + "\n" + "> " + task.notes + "\n" + "> ~" + task.time_charge_text + "\n";
+                }
+            }
+            console.log(s);
+
+            navigator.clipboard.writeText(s).then(function () {
                 ev.target.classList.add('AnimationPulseOnceAndHide');
             }, function () {
                 /* clipboard write failed */
@@ -514,6 +540,7 @@
                         display: none;
                     }
                 }
+
                 .TCol.--status {
                     display: flex;
                     flex-direction: column;

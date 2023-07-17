@@ -58,8 +58,8 @@ export function Store_MergeSameCodes(tasks: Map<string, any>) {
         if (!title) {
             title = '';
         }
-        if (task.title) {
-            title += (title ? '; ' : '') + task.title;
+        if (task.title && task.title !== title) {
+            title += (title ? ', ' : '') + task.title;
         }
         if (title.indexOf('[combined] ') !== 0) {
             title = '[combined] ' + title;
@@ -71,7 +71,10 @@ export function Store_MergeSameCodes(tasks: Map<string, any>) {
             notes = '';
         }
         if (task.notes) {
-            notes += (notes ? '; ' : '') + task.notes;
+            if (notes && !notes.match(/[.;]$/)) {
+                notes += '.';
+            }
+            notes += (notes ? ' ' : '') + task.notes;
         }
         existing.notes = notes.trim();
 
