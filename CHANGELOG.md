@@ -2,6 +2,25 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.24.0](https://github.com/dmitrijs/WorkLogIfy/compare/v1.23.1...v1.24.0) (2023-07-17)
+
+
+### Features
+
+* **tasks:** support exporting tasks report as a Slack message ([c8d5813](https://github.com/dmitrijs/WorkLogIfy/commit/c8d58136c8260876412801eca1d9d51e047fb3ec))
+
+
+### UI/UX
+
+* **menu:** added 'New Task' option to context menu ([460776f](https://github.com/dmitrijs/WorkLogIfy/commit/460776f01d53575df9f3bdf05ee8fdfce8c8c4a1))
+
+
+### Improvements
+
+* **osx:** make sure application terminates correctly ([7bb0ecb](https://github.com/dmitrijs/WorkLogIfy/commit/7bb0ecb25c87ef7036d7688bdd64470684a93d02))
+* **osx:** show application menu ([14b7e89](https://github.com/dmitrijs/WorkLogIfy/commit/14b7e8969e07c7514aa640f0a67f3c5ce792cef9))
+* **tasks:** handle case when active app could not be determined ([ddf8167](https://github.com/dmitrijs/WorkLogIfy/commit/ddf816736bd5c97410d3b1ce5a5eb86e938a5ba1))
+
 ### [1.23.1](https://github.com/dmitrijs/WorkLogIfy/compare/v1.23.0...v1.23.1) (2023-07-17)
 
 
