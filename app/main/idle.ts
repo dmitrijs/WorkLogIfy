@@ -11,6 +11,9 @@ export default class IdleUser {
         setInterval(() => {
             (async () => {
                 let obj = await activeWindow();
+                if (!obj) {
+                    return;
+                }
                 mainWindow.webContents.send('user-active-app', `[${obj.owner?.name || obj.owner?.path || obj.title}] "${obj.title}"`);
             })();
         }, 30 * 1000);
