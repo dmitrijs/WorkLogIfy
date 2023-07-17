@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+### [1.23.1](https://github.com/dmitrijs/WorkLogIfy/compare/v1.23.0...v1.23.1) (2023-07-17)
+
+
+### Improvements
+
+* fixed app not starting ([d84377d](https://github.com/dmitrijs/WorkLogIfy/commit/d84377d9e4704ee96bbb5b75d50835cc9873f5d6))
+
 ## [1.23.0](https://github.com/dmitrijs/WorkLogIfy/compare/v1.22.5...v1.23.0) (2023-07-17)
 
 
