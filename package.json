@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vue-tsc --noEmit && vite build && electron-builder --windows --publish never",
+    "build-mac": "vue-tsc --noEmit && vite build && electron-builder --mac --publish never",
     "standard-version": "npx standard-version",
     "standard-version-minor": "npx standard-version --release-as minor",
     "standard-version-patch": "npx standard-version --release-as patch",

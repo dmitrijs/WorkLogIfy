@@ -21,7 +21,9 @@
     "./dist/**/*"
   ],
   "mac": {
+    "category": 'public.app-category.productivity',
     "artifactName": "${productName}-mac-v${version}.${ext}",
+    "icon": "public/assets/app_icon_512x512.png",
     "target": [
       "dmg"
     ]
