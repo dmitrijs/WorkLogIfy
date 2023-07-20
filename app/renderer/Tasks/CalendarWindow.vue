@@ -42,6 +42,8 @@
     import Store_GetCalendarStatistics from "../Store/Store_GetCalendarStatistics";
     import createCalendarMenu from "./CalendarMenu";
 
+    const remote = window.remote;
+
     @Component({
         created() {
             store.commit.setFileTotals(window.ipc.sendSync('tasks.getFileTotals'));
@@ -104,11 +106,12 @@
             window.addEventListener('contextmenu', this.calendarMenuShow, false);
         }
 
-        beforeDestroy() {
+        beforeUnmount() {
             window.removeEventListener('contextmenu', this.calendarMenuShow);
         }
 
         calendarMenuShow(e) {
+            console.log('tasks context menu');
             e.preventDefault();
             createCalendarMenu(() => this.cache = null).popup({window: remote.getCurrentWindow()})
         }

@@ -216,6 +216,8 @@
     import CalendarWindow from "./CalendarWindow.vue";
     const moment = require("moment");
 
+    const remote = window.remote;
+
     @Component({
         components: {
             LineChart,
@@ -298,7 +300,7 @@
             window.addEventListener('contextmenu', this.contextMenuShow, false);
         }
 
-        beforeDestroy() {
+        beforeUnmount() {
             window.removeEventListener('contextmenu', this.contextMenuShow);
         }
 
@@ -307,7 +309,7 @@
         }
 
         contextMenuShow(e) {
-            console.log('in context menu');
+            console.log('tasks context menu');
             store.commit.selectHovered();
             e.preventDefault();
             createMenu().popup({window: remote.getCurrentWindow()})
