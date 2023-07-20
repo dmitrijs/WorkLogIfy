@@ -170,6 +170,7 @@
                 <label><input type="checkbox" :checked="tasks_ui.tasksShowAsReport"><span></span> as a report</label>
             </span>
             <button type="button" class="btn btn-secondary btn-xs" style="margin-left: 6px; line-height: 0.6rem"
+                    title="Ctrl+F applies formatting in Slack"
                     v-if="tasks_ui.tasksShowAsReport"
                     @click="copyToClipboardAllTasks($event)">
                 Copy for Slack
