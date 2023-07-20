@@ -19,6 +19,7 @@ jobs:
       - run: git push --follow-tags
 
   build_windows:
+    resource_class: large
     docker:
       - image: electronuserland/builder:18-wine
 
