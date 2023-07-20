@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file.
 
+### [1.24.2](https://github.com/dmitrijs/WorkLogIfy/compare/v1.24.1...v1.24.2) (2023-07-20)
+
+
+### UI/UX
+
+* **report:** added note how to apply formatting in Slack ([575a5ed](https://github.com/dmitrijs/WorkLogIfy/commit/575a5edfad5ac6a09d730880d354fc965449fc47))
+
+
+### Improvements
+
+* **tasks:** fixed context menu not appearing ([91d6b01](https://github.com/dmitrijs/WorkLogIfy/commit/91d6b01600b826974856ca9725a261f6575a9d4a))
+
 ### [1.24.1](https://github.com/dmitrijs/WorkLogIfy/compare/v1.24.0...v1.24.1) (2023-07-17)
 
 
