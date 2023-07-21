@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file.
 
+### [1.24.3](https://github.com/dmitrijs/WorkLogIfy/compare/v1.24.2...v1.24.3) (2023-07-21)
+
+
+### UI/UX
+
+* **tasks:** always show week overview in the footer ([97ca29e](https://github.com/dmitrijs/WorkLogIfy/commit/97ca29ea922a31a91eb1818fe13851e3f7cbb234))
+
+
+### Improvements
+
+* **tasks:** fixed tasks context menu  not working when week calendar is displayed ([8073dd8](https://github.com/dmitrijs/WorkLogIfy/commit/8073dd835934f5ee9d419009d64ed9da5f64a7af))
+
 ### [1.24.2](https://github.com/dmitrijs/WorkLogIfy/compare/v1.24.1...v1.24.2) (2023-07-20)
 
 
