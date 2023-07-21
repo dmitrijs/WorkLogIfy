@@ -23,8 +23,8 @@
                     <span class="_Week" v-if="week.week_charged">&Sigma; {{ week.week_charged_text }}</span><br/>
                     <span class="_Month">{{ months[week_key].month_title }}:
                         <span
-                                :class="{ MonthOvertime: months[week_key].month_overtime_seconds > 0, MonthOvertimeWarning: months[week_key].month_overtime_seconds >= 7200 }"
-                                :title="months[week_key].month_overtime_text">
+                            :class="{ MonthOvertime: months[week_key].month_overtime_seconds > 0, MonthOvertimeWarning: months[week_key].month_overtime_seconds >= 7200 }"
+                            :title="months[week_key].month_overtime_text">
                             {{ months[week_key].month_charged_seconds_text }}
                         </span>
                     </span>
@@ -37,7 +37,7 @@
 
 <script lang="ts">
     // @ts-nocheck
-    import {Component, Vue, Prop} from "vue-facing-decorator";
+    import {Component, Prop, Vue} from "vue-facing-decorator";
     import store from "../Store/Store";
     import Store_GetCalendarStatistics from "../Store/Store_GetCalendarStatistics";
     import createCalendarMenu from "./CalendarMenu";
@@ -103,10 +103,16 @@
         }
 
         mounted() {
+            if (this.weekKey) {
+                return;
+            }
             window.addEventListener('contextmenu', this.calendarMenuShow, false);
         }
 
         beforeUnmount() {
+            if (this.weekKey) {
+                return;
+            }
             window.removeEventListener('contextmenu', this.calendarMenuShow);
         }
 
