@@ -132,7 +132,7 @@ const {store: storeDirect} = createDirectStore({
 
         getEditedTask(state: AppState): TaskEditedObj {
             console.log('getEditedTask', state.taskEditedId);
-            return state.tasks.get(state.taskEditedId).toJS();
+            return <TaskEditedObj>state.tasks.get(state.taskEditedId).toJS();
         },
 
         getEmptyTask(state: AppState): TaskEditedObj {

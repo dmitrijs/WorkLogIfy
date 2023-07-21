@@ -1,4 +1,4 @@
-import {Iterable, List, Map, OrderedMap} from "immutable";
+import {Collection, List, Map, OrderedMap} from "immutable";
 import {comparatorLt, timespanToText} from "../Utils/Utils";
 import {AppState} from "./Store";
 import store from "../Store/Store";
@@ -102,7 +102,7 @@ export default function Store_GetGroupedTasks(state: AppState): Map<string, any>
     state.tasks.forEach((taskMap, key) => {
         let task: TaskObj;
         if (Map.isMap(taskMap)) {
-            task = taskMap.toJS();
+            task = <TaskObj>taskMap.toJS();
         } else {
             task = <any>taskMap;
         }
@@ -122,7 +122,7 @@ export default function Store_GetGroupedTasks(state: AppState): Map<string, any>
         tasksList = tasksList.push(task);
     });
 
-    let tasks: OrderedMap<string, Iterable<number, TaskObj>>;
+    let tasks: OrderedMap<string, Collection<number, TaskObj>>;
     tasks = tasksList.groupBy((x) => x.date).toOrderedMap();
 
     let groups: Map<string, any>;
