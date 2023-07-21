@@ -1,4 +1,3 @@
-// @ts-nocheck
 import {timespanToText} from '../Utils/Utils';
 import {List, Map} from 'immutable';
 import Store_GetGroupedTasks from "./Store_GetGroupedTasks";

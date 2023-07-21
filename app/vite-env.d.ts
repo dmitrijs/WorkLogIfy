@@ -1,5 +1,4 @@
 /// <reference types="vite/client" />
-// @ts-nocheck
 
 declare module '*.vue' {
   import type { DefineComponent } from 'vue'

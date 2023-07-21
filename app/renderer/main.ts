@@ -1,4 +1,3 @@
-// @ts-nocheck
 import store from './Store/Store'
 
 import './../style.scss';
@@ -10,7 +9,7 @@ import {createApp} from "vue";
 declare global {
     interface Window {
         ipc: Electron.IpcRenderer,
-        remote: Electron.Remote,
+        remote: any,
     }
 }
 
@@ -41,7 +40,7 @@ window.ipc.on('debug.toggle', function ($event, value) {
 import App from './App.vue'
 
 const app = createApp(App);
-app.use(store);
+app.use((<any>store));
 app.mount("#root");
 
 window.ipc.on('user-is-idle', function (emitter, secondsIdle, secondsToBecomeIdle) {

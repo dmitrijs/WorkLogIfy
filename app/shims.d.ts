@@ -1,9 +1,3 @@
-// @ts-nocheck
-declare module '*.vue' {
-    import Vue from 'vue';
-    export default Vue;
-}
-
 declare type TaskObj = {
     id: string;
     code: string;
@@ -30,6 +24,7 @@ declare type TaskObj = {
     time_unrecorded_seconds: number;
     time_charge_seconds: number;
     time_charge_extra_seconds: number;
+    time_add_idle_seconds: number;
 
     timer_elapsed_seconds_text: string;
 
@@ -61,6 +56,7 @@ declare type RecordObj = {
     recorded_seconds: number;
     method: string;
     created_at: string;
+    jiraWorkLogId: string;
 }
 
 declare type ActiveAppObj = {
@@ -72,7 +68,7 @@ declare type SettingsObj = {
     jira_host: string;
     jira_username: string;
     jira_password: string;
-    special_days: [];
+    special_days: Object;
 }
 
 declare type CalendarStatistics = {

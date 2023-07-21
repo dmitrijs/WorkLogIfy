@@ -7,8 +7,7 @@
 </template>
 
 <script lang="ts">
-// @ts-nocheck
-    import Vue from "vue";
+    import {Vue} from "vue-facing-decorator";
 
     export default class Win2 extends Vue {
         run() {

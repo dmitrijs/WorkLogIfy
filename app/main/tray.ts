@@ -1,5 +1,4 @@
 import * as path from "path";
-// @ts-ignore
 
 const electron = require('electron');
 const {Menu, Tray, app} = electron;

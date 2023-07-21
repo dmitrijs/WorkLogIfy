@@ -1,4 +1,3 @@
-// @ts-nocheck
 import store from "../Store/Store";
 
 const remote = window.remote;
@@ -17,11 +16,11 @@ export default function createCalendarMenu(callback) {
 
     function update_special_day_status(dayCode, status) {
         let settings = store.state.settings;
-        settings['special_days'] = settings['special_days'] || {};
+        settings.special_days = settings.special_days || {};
         if (status) {
-            settings['special_days'][dayCode] = status;
+            settings.special_days[dayCode] = status;
         } else {
-            delete settings['special_days'][dayCode];
+            delete settings.special_days[dayCode];
         }
         store.commit.updateSettings(settings);
         callback();

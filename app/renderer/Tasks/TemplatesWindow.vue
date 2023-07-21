@@ -21,15 +21,10 @@
 </template>
 
 <script lang="ts">
-    // @ts-nocheck
     import {Component, Vue} from "vue-facing-decorator";
     import store from "../Store/Store";
 
-    @Component({
-        created() {
-            store.commit.setTaskTemplates(window.ipc.sendSync('tasks.getTaskTemplates'));
-        },
-    })
+    @Component({})
     export default class TemplatesWindow extends Vue {
         data() {
             return {}
@@ -39,7 +34,8 @@
             return store.getters.getTaskTemplates;
         }
 
-        mounted() {
+        created() {
+            store.commit.setTaskTemplates(window.ipc.sendSync('tasks.getTaskTemplates'));
         }
 
         add() {

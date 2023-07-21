@@ -12,14 +12,10 @@
 </template>
 
 <script lang="ts">
-// @ts-nocheck
     import {Component, Vue} from "vue-facing-decorator";
     import store from "../Store/Store";
 
-    @Component({
-        created() {
-        },
-    })
+    @Component({})
     export default class SettingsWindow extends Vue {
         get settings() {
             return store.state.settings;

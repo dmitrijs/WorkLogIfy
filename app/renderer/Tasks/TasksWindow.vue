@@ -203,7 +203,6 @@
 </template>
 
 <script lang="ts">
-    // @ts-nocheck
     import {Component, Vue} from "vue-facing-decorator";
     import horizontal_scroller from "../library/horizontal_scroller";
     import createMenu from './TasksMenu';
@@ -254,9 +253,9 @@
                 time_spent_text: '',
             };
             for (let group of Object.values(this.tasksGrouped)) {
-                total.time_charge_rounded_seconds += group.time_charge_rounded_seconds;
-                total.time_recorded_seconds += group.time_recorded_seconds;
-                total.time_spent_seconds += group.time_spent_seconds;
+                total.time_charge_rounded_seconds += (<any>group).time_charge_rounded_seconds;
+                total.time_recorded_seconds += (<any>group).time_recorded_seconds;
+                total.time_spent_seconds += (<any>group).time_spent_seconds;
             }
             total.time_charge_rounded_text = timespanToText(total.time_charge_rounded_seconds);
             total.time_recorded_text = timespanToText(total.time_recorded_seconds);
@@ -352,7 +351,7 @@
         copyToClipboardAllTasks(ev) {
             let s = '*' + moment(store.state.day_key + ' 12:00:00').format('ddd, MMM D') + "*\n";
             for (let group of Object.values(this.tasksGrouped)) {
-                for (let task:TaskObj of group.tasks) {
+                for (let task of (<any>group).tasks) {
                     if (!task.chargeable || task.distributed) {
                         continue;
                     }

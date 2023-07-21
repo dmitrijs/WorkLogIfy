@@ -1,4 +1,3 @@
-// @ts-nocheck
 const fs = require('fs');
 
 const {app} = require('electron');
@@ -46,7 +45,7 @@ class Filesystem {
         {
             let time_charge_rounded_seconds = 0;
             for (let group of Object.values(worklogProcessed)) {
-                time_charge_rounded_seconds += group.time_charge_rounded_seconds;
+                time_charge_rounded_seconds += (<any>group).time_charge_rounded_seconds;
             }
             console.log('worklog_totals: sum for', day_key, 'is', time_charge_rounded_seconds);
 

@@ -20,7 +20,7 @@
             <div v-for="(day, dayId) of tasksGrouped">
                 <strong>{{dayId}}</strong><br />
                 <div v-for="(val, prop) of day">
-                    <template v-if="prop === 'tasks'">
+                    <template v-if="(<any>prop) === 'tasks'">
                         <div style="padding-left: 10px;" v-for="(task) of val">
                             <strong>{{task.id}}</strong>
                             <div style="white-space: pre;">{{task}}</div>
@@ -36,7 +36,6 @@
 </template>
 
 <script lang="ts">
-// @ts-nocheck
     import {Component, Vue} from "vue-facing-decorator";
     import TasksWindow from "./Tasks/TasksWindow.vue";
     import TaskEdit from "./Tasks/TaskEdit.vue";
@@ -45,7 +44,7 @@
     import store from "./Store/Store";
     import TemplatesWindow from "./Tasks/TemplatesWindow.vue";
     import SettingsWindow from "./Tasks/SettingsWindow.vue";
-import _ from "lodash";
+    import _ from "lodash";
 
     @Component({
         components: {

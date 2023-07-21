@@ -8,38 +8,23 @@
 </template>
 
 <script lang="ts">
-    // @ts-nocheck
-    import {Component, Vue} from "vue-facing-decorator";
+    import {Component, Prop, Vue} from "vue-facing-decorator";
 
-    @Component({
-        props: {
-            total: {
-                type: Number,
-                default: 100,
-            },
-            progress_normal: {
-                type: Number,
-                default: 0,
-            },
-            progress_info: {
-                type: Number,
-                default: 0,
-            },
-            progress_warning: {
-                type: Number,
-                default: 0,
-            },
-            progress_success: {
-                type: Number,
-                default: 0,
-            },
-            height: {
-                type: Number,
-                default: 2,
-            },
-        },
-    })
+    @Component({})
     export default class LineChart extends Vue {
+        @Prop
+        total = 100;
+        @Prop
+        progress_normal = 0;
+        @Prop
+        progress_info = 0;
+        @Prop
+        progress_warning = 0;
+        @Prop
+        progress_success = 0;
+        @Prop
+        height = 2;
+
         get percent_normal() {
             return Math.round(this.progress_normal * 100.0 / this.total);
         }

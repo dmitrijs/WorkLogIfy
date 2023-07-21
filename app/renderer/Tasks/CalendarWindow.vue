@@ -36,7 +36,6 @@
 </template>
 
 <script lang="ts">
-    // @ts-nocheck
     import {Component, Prop, Vue} from "vue-facing-decorator";
     import store from "../Store/Store";
     import Store_GetCalendarStatistics from "../Store/Store_GetCalendarStatistics";
@@ -44,11 +43,7 @@
 
     const remote = window.remote;
 
-    @Component({
-        created() {
-            store.commit.setFileTotals(window.ipc.sendSync('tasks.getFileTotals'));
-        },
-    })
+    @Component({})
     export default class CalendarWindow extends Vue {
 
         cache = null;
@@ -100,6 +95,10 @@
         open(day) {
             store.commit.setDay(day);
             store.commit.returnToTasksScreen();
+        }
+
+        created() {
+            store.commit.setFileTotals(window.ipc.sendSync('tasks.getFileTotals'));
         }
 
         mounted() {

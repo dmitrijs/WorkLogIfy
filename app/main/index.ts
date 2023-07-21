@@ -1,6 +1,5 @@
 import Shortcuts from "./shortcuts";
 import IdleUser from "./idle";
-// @ts-ignore
 import Filesystem from "./filesystem";
 import createMainMenu from "./menu";
 import createTray, {setTrayIconActive, setTrayIconIdle} from "./tray";

@@ -107,7 +107,6 @@
 </template>
 
 <script lang="ts">
-    // @ts-nocheck
     import {Component, Prop, Vue} from "vue-facing-decorator";
     import {timespanToText} from "../Utils/Utils";
     import store from "../Store/Store";
