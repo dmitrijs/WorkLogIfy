@@ -157,7 +157,6 @@
             </template>
         </div>
         <CalendarWindow
-            v-if="tasks_ui.tasksShowAsReport"
             :key="store.state.day_key"
             :week-key="store.state.week_key"
         ></CalendarWindow>
