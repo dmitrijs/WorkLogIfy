@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.25.0](https://github.com/dmitrijs/WorkLogIfy/compare/v1.24.3...v1.25.0) (2023-07-22)
+
+
+### Features
+
+* **report:** make rounding minutes configurable ([67ce0e6](https://github.com/dmitrijs/WorkLogIfy/commit/67ce0e688086d4d96a95f5d0493d549292d183cf))
+
 ### [1.24.3](https://github.com/dmitrijs/WorkLogIfy/compare/v1.24.2...v1.24.3) (2023-07-21)
 
 
