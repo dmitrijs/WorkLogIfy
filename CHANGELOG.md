@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+### [1.25.1](https://github.com/dmitrijs/WorkLogIfy/compare/v1.25.0...v1.25.1) (2023-07-22)
+
+
+### Improvements
+
+* **report:** default rounding to 10 minutes ([3566501](https://github.com/dmitrijs/WorkLogIfy/commit/35665016ae16808b75ee7f0088b03674e84dbc08))
+
 ## [1.25.0](https://github.com/dmitrijs/WorkLogIfy/compare/v1.24.3...v1.25.0) (2023-07-22)
 
 
