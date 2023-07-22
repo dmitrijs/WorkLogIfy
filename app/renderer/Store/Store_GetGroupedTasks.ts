@@ -195,7 +195,7 @@ export default function Store_GetGroupedTasks(state: AppState): Map<string, any>
         // round times
         let time_charge_rounded_seconds = 0;
         tasks = tasks.map((task) => {
-            let timeBlockLengthSeconds = 60 * store.state.settings.rounding_minutes;
+            let timeBlockLengthSeconds = 60 * (store.state.settings.rounding_minutes || 10);
             let blockCount = Math.round(task.time_charge_seconds / timeBlockLengthSeconds);
             task.time_charge_seconds = blockCount * timeBlockLengthSeconds;
             task.time_charge_text = timespanToText(task.time_charge_seconds);
