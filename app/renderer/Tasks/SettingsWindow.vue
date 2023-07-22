@@ -4,6 +4,8 @@
         <label>JIRA Email:</label> <input type="text" v-model="settings.jira_username" placeholder="you@example.com"><br/>
         <label>JIRA API Token:</label> <input type="password" v-model="settings.jira_password" placeholder="***********"> <a target="_blank" href="https://id.atlassian.com/manage-profile/security/api-tokens">API tokens</a><br/>
         <br/>
+        <label>Round to nearest:</label> <input type="number" step="10" v-model="settings.rounding_minutes"> minutes<br/>
+        <br/>
         <button type="button" class="btn btn-xs btn-primary" @click="store.commit.updateSettings(settings)">save
         </button>
         <br />
@@ -39,6 +41,9 @@
         input[type=text],
         input[type=password] {
             width: 300px;
+        }
+        input[type=number] {
+            width: 60px;
         }
     }
 </style>

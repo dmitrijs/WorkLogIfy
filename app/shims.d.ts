@@ -68,6 +68,7 @@ declare type SettingsObj = {
     jira_host: string;
     jira_username: string;
     jira_password: string;
+    rounding_minutes: number;
     special_days: Object;
 }
 
