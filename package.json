@@ -30,7 +30,7 @@
         "section": "UI/UX"
       }
     ],
-    "releaseCommitMessageFormat": "chore(release): v{{currentTag}} [ci skip]"
+    "releaseCommitMessageFormat": "chore(release): v{{currentTag}}"
   },
   "dependencies": {
     "@babel/types": "*",

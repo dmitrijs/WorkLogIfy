@@ -1,3 +1,5 @@
+# Either tag manually or push 'release' branch to create new version tag.
+# Push version tag to create a new release.
 version: 2
 jobs:
 
@@ -11,7 +13,7 @@ jobs:
           if [ -n "$(git tag --points-at HEAD)" ]; then
             circleci-agent step halt
           fi
-      - run: git branch -u "origin/$CIRCLE_BRANCH" $CIRCLE_BRANCH
+      - run: git branch -u "origin/master" master
       - run: git config user.email "sdo@inbox.lv"
       - run: git config user.name "Dmitrijs Sadovskis"
       - run: git config push.default simple
@@ -73,7 +75,7 @@ workflows:
           filters:
             branches:
               only:
-                - master
+                - release
 
       - build_windows:
           filters:
