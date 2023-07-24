@@ -2,6 +2,7 @@ const electron = require('electron');
 const activeWindow = require('active-win');
 
 export default class IdleUser {
+    private static seconds_to_log_active_window = 30;
     private static seconds_to_become_idle = 16 * 60;
     private static seconds_to_become_offline = 2 * 60 * 60;
     private static isIdle = false;
@@ -9,14 +10,19 @@ export default class IdleUser {
 
     public static registerOnReady(mainWindow) {
         setInterval(() => {
+            const secondsIdle = electron.powerMonitor.getSystemIdleTime();
             (async () => {
+                if (secondsIdle > this.seconds_to_log_active_window) {
+                    mainWindow.webContents.send('user-active-app', '-"-');
+                    return;
+                }
                 let obj = await activeWindow();
                 if (!obj) {
                     return;
                 }
                 mainWindow.webContents.send('user-active-app', `[${obj.owner?.name || obj.owner?.path || obj.title}] "${obj.title}"`);
             })();
-        }, 30 * 1000);
+        }, this.seconds_to_log_active_window * 1000);
 
         setInterval(() => {
             const time = electron.powerMonitor.getSystemIdleTime();
