@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+### [1.25.2](https://github.com/dmitrijs/WorkLogIfy/compare/v1.25.1...v1.25.2) (2023-07-24)
+
+
+### Improvements
+
+* **active window:** do not log active window if user has been idle ([5e395cd](https://github.com/dmitrijs/WorkLogIfy/commit/5e395cd4d29eb4d747ace20ed18b38e2a919142e))
+
 ### [1.25.1](https://github.com/dmitrijs/WorkLogIfy/compare/v1.25.0...v1.25.1) (2023-07-22)
 
 
