@@ -2,8 +2,7 @@ import store from "./Store";
 import {timespanToText} from "../Utils/Utils";
 import {Moment} from "moment";
 import {SPECIAL_DAYS} from "../Tasks/CalendarMenu";
-
-const moment = require("moment");
+import moment from "moment";
 
 export default function Store_GetCalendarStatistics(): CalendarStatistics {
     let days = {} as { [key: string]: CalendarDayStatistics };
@@ -24,7 +23,7 @@ export default function Store_GetCalendarStatistics(): CalendarStatistics {
             let weekCode = moment(day).endOf('isoWeek').format('YYYY-WW'); // make sure it's NEXT_YEAR-01 on December 31
             let monthLastWeekCode = moment(day).endOf('month').endOf('isoWeek').format('YYYY-WW');
 
-            let dow = day.format('E');
+            let dow = day.isoWeekday();
 
             let currentDay = {} as CalendarDayStatistics;
             currentDay.dayCode = dayCode;

@@ -1,6 +1,6 @@
 import * as path from "path";
+import electron from "electron";
 
-const electron = require('electron');
 const {Menu, Tray, app} = electron;
 
 let tray;

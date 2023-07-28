@@ -1,11 +1,10 @@
 import store from "../Store/Store";
 import {timespanToText} from "../Utils/Utils";
 import _ from "lodash";
+import moment from "moment";
 
 const remote = window.remote;
 const {Menu, MenuItem} = remote;
-
-const moment = require("moment");
 
 const JIRA_TIME_FORMAT = 'YYYY-MM-DDTHH:mm:ss.SSSZZ';
 

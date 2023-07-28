@@ -1,4 +1,4 @@
-const {app, globalShortcut} = require('electron')
+import {app, globalShortcut} from "electron";
 
 export default class Shortcuts {
     public static registerOnReady() {

@@ -1,4 +1,4 @@
-const moment = require("moment");
+import moment from "moment";
 
 export function timespanToText(seconds, emptyValue = '-'): string {
     let sign = '';

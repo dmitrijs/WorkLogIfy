@@ -111,8 +111,7 @@
     import {timespanToText} from "../Utils/Utils";
     import store from "../Store/Store";
     import timer from "../Timer";
-
-    const moment = require("moment");
+    import moment from "moment";
 
     @Component({})
     export default class TaskEdit extends Vue {

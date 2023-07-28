@@ -85,14 +85,11 @@ export function Store_MergeSameCodes(tasks: Map<string, any>) {
         unique = unique.set(task.code, existing);
     });
 
-    console.log('unique', unique.toJS());
-
     let tasksList = unique.toList();
     return sort_tasks(tasksList);
 }
 
 export default function Store_GetGroupedTasks(): Map<string, any> {
-    console.log('getTasksGrouped');
     if (!store.state.tasks) {
         return Map<string, any>();
     }
@@ -208,8 +205,6 @@ export default function Store_GetGroupedTasks(): Map<string, any> {
             let microTimeBlockSeconds = 60 * 5;
             let blockCount = Math.round((secondsMissing + 60) / microTimeBlockSeconds);
             let secondsMissingRounded = blockCount * microTimeBlockSeconds;
-            console.log('minutesMissing', secondsMissing / 60);
-            console.log('minutesMissingRounded', secondsMissingRounded / 60);
 
             // chargest task
             let chargest_task_seconds = 100000000;
@@ -224,7 +219,6 @@ export default function Store_GetGroupedTasks(): Map<string, any> {
                     chargest_task_id = task.id;
                 }
             });
-            console.log('chargest_task_id', chargest_task_id);
 
             if (Math.abs(secondsMissing) > 60) {
                 tasks.map((task) => {
@@ -266,6 +260,5 @@ export default function Store_GetGroupedTasks(): Map<string, any> {
         return group;
     });
 
-    console.log(groups.toJS());
     return groups;
 }

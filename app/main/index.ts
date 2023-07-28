@@ -3,12 +3,10 @@ import IdleUser from "./idle";
 import Filesystem from "./filesystem";
 import createMainMenu from "./menu";
 import createTray, {setTrayIconActive, setTrayIconIdle} from "./tray";
-
-const electron = require('electron');
-const isDev = require('electron-is-dev');
-const path = require('path');
-
-import { BrowserWindow, shell, app, Menu } from 'electron'
+import electron, {BrowserWindow, shell, app, Menu, ipcMain} from 'electron'
+import {enable, initialize} from "@electron/remote/main";
+import path from "path";
+import isDev from "electron-is-dev";
 
 process.env.DIST_ELECTRON = path.join(__dirname, '..')
 process.env.DIST = path.join(process.env.DIST_ELECTRON, '../dist')
@@ -23,7 +21,7 @@ if (isDev) {
     process.env.ELECTRON_DISABLE_SECURITY_WARNINGS = 'true';
 }
 
-require('@electron/remote/main').initialize()
+initialize()
 
 let mainWindow = null;
 app.on('ready', async () => {
@@ -43,7 +41,7 @@ app.on('ready', async () => {
             nodeIntegration: true, // to work in Electron 20+
         }
     });
-    require("@electron/remote/main").enable(mainWindow.webContents)
+    enable(mainWindow.webContents)
 
     createTray(mainWindow);
 
@@ -76,8 +74,6 @@ app.on('ready', async () => {
     } else {
         mainWindow.loadFile(indexHtml);
     }
-
-    const {ipcMain} = require('electron');
 
     {
         ipcMain.on('timer-state', (event, arg) => {

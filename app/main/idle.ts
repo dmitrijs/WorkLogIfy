@@ -1,5 +1,5 @@
-const electron = require('electron');
-const activeWindow = require('active-win');
+import electron from "electron";
+import activeWindow from "active-win";
 
 export default class IdleUser {
     private static seconds_to_log_active_window = 30;

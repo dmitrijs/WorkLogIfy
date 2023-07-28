@@ -5,6 +5,7 @@ import './../../external/icofont/icofont.min.css';
 import './../../external/checkbox.scss';
 import timer from "./Timer";
 import {createApp} from "vue";
+import moment from "moment";
 
 declare global {
     interface Window {
@@ -12,8 +13,6 @@ declare global {
         remote: any,
     }
 }
-
-const moment = require("moment");
 
 timer.init();
 

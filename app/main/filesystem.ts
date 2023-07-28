@@ -1,6 +1,5 @@
-const fs = require('fs');
-
-const {app} = require('electron');
+import fs from "fs";
+import {app} from "electron";
 
 class Filesystem {
     public static getDir() {
@@ -64,7 +63,7 @@ class Filesystem {
 
         let contents = {};
         if (fs.existsSync(dir + '/worklog_totals.json')) {
-            contents = JSON.parse(fs.readFileSync(dir + '/worklog_totals.json'));
+            contents = JSON.parse(fs.readFileSync(dir + '/worklog_totals.json').toString());
             contents = contents || {};
         }
         return contents;
@@ -80,7 +79,7 @@ class Filesystem {
 
         let contents = [];
         if (fs.existsSync(dir + '/worklog_templates.json')) {
-            contents = JSON.parse(fs.readFileSync(dir + '/worklog_templates.json'));
+            contents = JSON.parse(fs.readFileSync(dir + '/worklog_templates.json').toString());
             contents = contents || [];
         }
         return contents;

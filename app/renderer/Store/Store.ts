@@ -3,8 +3,7 @@ import {List, Map} from 'immutable';
 import Store_GetGroupedTasks from "./Store_GetGroupedTasks";
 import _ from "lodash";
 import {reactive} from "vue";
-
-const moment = require("moment");
+import moment from "moment";
 
 function saveTasks() {
     window.ipc.sendSync('tasks.save', state.day_key, _.cloneDeep(state.tasks.toJS()), _.cloneDeep(store.getTasksGrouped.toJS()), _.cloneDeep(state.settings));

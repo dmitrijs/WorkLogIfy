@@ -212,8 +212,7 @@
     import {timespanToText} from "../Utils/Utils";
     import CalendarWindow from "./CalendarWindow.vue";
     import {computed, onBeforeUnmount, onMounted, reactive, ref} from "vue";
-
-    const moment = require("moment");
+    import moment from "moment";
 
     const remote = window.remote;
 

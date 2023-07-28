@@ -1,8 +1,7 @@
 // NOTE: Restart "npm start" after any changes to this file
 
-const {ipcRenderer} = require('electron');
-
-const remote = require('@electron/remote');
+import {ipcRenderer} from "electron";
+import remote from "@electron/remote";
 
 window['ipc'] = ipcRenderer;
 

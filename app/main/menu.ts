@@ -1,4 +1,5 @@
-const electron = require('electron');
+import electron from "electron";
+
 const {Menu, app} = electron;
 
 export function toggleDebug(mainWindow) {

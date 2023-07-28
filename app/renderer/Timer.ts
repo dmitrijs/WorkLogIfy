@@ -1,7 +1,7 @@
 import store from "./Store/Store";
+import moment, {Moment} from "moment";
 
-const moment = require("moment");
-const {app} = remote;
+const {app} = window.remote;
 
 let baseTitle;
 
@@ -12,8 +12,8 @@ function setTitle(timerActive = true) {
 class Timer {
 
     handle: any = 0;
-    timeStart = 0;
-    timeEnd = 0;
+    timeStart: Moment = null;
+    timeEnd: Moment = null;
 
     init() {
         baseTitle = document.title;
@@ -44,8 +44,6 @@ class Timer {
 
     tick() {
         store.activeTimer(this.getSecondsElapsed(moment.utc()));
-
-        console.log('timer tick');
     }
 
     stop(idleSeconds = 0, sendEvent = true) {
@@ -62,9 +60,9 @@ class Timer {
         }
     }
 
-    getSecondsElapsed(timeEnd) {
-        let timeElapsed = timeEnd - this.timeStart;
-        return Math.round(timeElapsed / 1000) * (store.state.is_debug ? 60 : 1);
+    getSecondsElapsed(timeEnd: Moment) {
+        let timeElapsed = timeEnd.unix() - this.timeStart.unix();
+        return timeElapsed * (store.state.is_debug ? 60 : 1);
     }
 }
 
