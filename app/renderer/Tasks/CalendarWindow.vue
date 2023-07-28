@@ -5,8 +5,8 @@
             <div v-for="(week, week_key) of weeks" class="Week" :data-week="week_key">
                 <div v-for="(dayCode) of week.days" class="Day"
                      @click="open(dayCode)"
-                     @mouseenter="store.commit.calendarHoveredDayCode(dayCode)"
-                     @mouseleave="store.commit.calendarHoveredDayCode(null)"
+                     @mouseenter="store.calendarHoveredDayCode(dayCode)"
+                     @mouseleave="store.calendarHoveredDayCode(null)"
                      :title="days[dayCode].dayCode"
                      :class="{
                          is_today: days[dayCode].isToday,
@@ -93,12 +93,12 @@
         }
 
         open(day) {
-            store.commit.setDay(day);
-            store.commit.returnToTasksScreen();
+            store.setDay(day);
+            store.returnToTasksScreen();
         }
 
         created() {
-            store.commit.setFileTotals(window.ipc.sendSync('tasks.getFileTotals'));
+            store.setFileTotals(window.ipc.sendSync('tasks.getFileTotals'));
         }
 
         mounted() {

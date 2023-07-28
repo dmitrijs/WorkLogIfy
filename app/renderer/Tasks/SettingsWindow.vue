@@ -6,7 +6,7 @@
         <br/>
         <label>Round to nearest:</label> <input type="number" step="10" v-model="settings.rounding_minutes"> minutes<br/>
         <br/>
-        <button type="button" class="btn btn-xs btn-primary" @click="store.commit.updateSettings(settings)">save
+        <button type="button" class="btn btn-xs btn-primary" @click="store.updateSettings(settings)">save
         </button>
         <br />
         <div v-if="store.state.is_debug">{{ settings }}</div>

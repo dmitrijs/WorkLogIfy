@@ -22,7 +22,7 @@ export default function createMenu() {
     const menu = new Menu();
     menu.append(new MenuItem({
         label: 'New Task', click() {
-            store.commit.setScreen('task.new');
+            store.setScreen('task.new');
         },
     }));
     menu.append(new MenuItem({
@@ -97,8 +97,8 @@ export default function createMenu() {
             if (jiraResponseWorkLog.error) {
                 alert(jiraResponseWorkLog.error);
             } else {
-                store.commit.taskAddRecordedSeconds([task.get('id'), timeSpentSeconds, (jiraResponseWorkLog.response.id || null)]);
-                store.commit.updateTask([task.get('id'), 'is_done', true])
+                store.taskAddRecordedSeconds([task.get('id'), timeSpentSeconds, (jiraResponseWorkLog.response.id || null)]);
+                store.updateTask([task.get('id'), 'is_done', true])
             }
         },
     }));
@@ -108,24 +108,24 @@ export default function createMenu() {
     menu.append(new MenuItem({
         enabled: (!!task),
         label: 'Copy', click() {
-            store.commit.clipboardCopy(task.get('id'));
+            store.clipboardCopy(task.get('id'));
         },
     }));
     menu.append(new MenuItem({
         enabled: (!!task),
         label: 'Cut', click() {
-            store.commit.clipboardCut(task.get('id'));
+            store.clipboardCut(task.get('id'));
         },
     }));
     menu.append(new MenuItem({
         enabled: !!store.state.taskInClipboard,
         label: 'Paste', click() {
-            store.commit.clipboardPaste();
+            store.clipboardPaste();
         },
     }));
 
     menu.addListener('menu-will-close', function () {
-        store.commit.deselectAll();
+        store.deselectAll();
     });
 
     return menu;

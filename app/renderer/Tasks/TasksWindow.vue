@@ -34,7 +34,7 @@
         <div class="TasksTable"
              :class="{ ShowAsReport: tasks_ui.tasksShowAsReport }"
              :key="forceUpdateKey"
-             @click.self="store.commit.deselectAll">
+             @click.self="store.deselectAll">
             <div class="TRowDate Total" v-if="tasksGroupedLength > 1">
                 <!--
                 <div class="TCol --selected"></div>
@@ -65,8 +65,8 @@
                 <transition-group name="fade">
                     <div class="TRow"
                          v-for="task of group.tasks"
-                         @mouseenter="store.commit.tasksUiHoveredId(task.id)"
-                         @mouseleave="store.commit.tasksUiHoveredId(null)"
+                         @mouseenter="store.tasksUiHoveredId(task.id)"
+                         @mouseleave="store.tasksUiHoveredId(null)"
                          :key="task.id"
                          :class="{
                          selected: task._selected, logged: task.logged, distributed: task.distributed, notchargeable: !task.chargeable,
@@ -81,21 +81,21 @@
                         <div class="TRowContent">
                             <!--
                             <div class="TCol --selected">
-                                <div class="label-checkbox" @click="store.commit.tasksUiToggle(task.id)">
+                                <div class="label-checkbox" @click="store.tasksUiToggle(task.id)">
                                     <input type="checkbox" :checked="task._selected"><span></span></div>
                             </div>
                             -->
                             <div class="TCol --chargeable">
                                 <i class="IconAsInput icofont-not-allowed" :class="{ active: !task.chargeable }"
-                                   @click="store.commit.updateTask([task.id, 'chargeable', !task.chargeable])"></i>
+                                   @click="store.updateTask([task.id, 'chargeable', !task.chargeable])"></i>
                             </div>
                             <div class="TCol --distributed">
                                 <i class="IconAsInput icofont-exchange" :class="{ active: task.distributed }"
-                                   @click="store.commit.updateTask([task.id, 'distributed', !task.distributed])"></i>
+                                   @click="store.updateTask([task.id, 'distributed', !task.distributed])"></i>
                             </div>
                             <div class="TCol --frozen">
                                 <i class="IconAsInput icofont-unlock" :class="{ active: task.frozen }"
-                                   @click="store.commit.updateTask([task.id, 'frozen', !task.frozen])"></i>
+                                   @click="store.updateTask([task.id, 'frozen', !task.frozen])"></i>
                             </div>
                             <div class="TCol --code"
                                  @click="tasks_ui.tasksShowAsReport ? copyToClipboard($event, task.code) : editTask($event, task)">
@@ -116,10 +116,10 @@
                             </div>
                             <div class="TCol --status">
                                 <i class="IconAsInput IconDone icofont-ui-check" :class="{ active: task.is_done }"
-                                   @click="store.commit.updateTask([task.id, 'is_done', !task.is_done])"></i>
+                                   @click="store.updateTask([task.id, 'is_done', !task.is_done])"></i>
                                 <i class="IconAsInput IconOnHold icofont-sand-clock"
                                    :class="{ active: task.is_on_hold }"
-                                   @click="store.commit.updateTask([task.id, 'is_on_hold', !task.is_on_hold])"></i>
+                                   @click="store.updateTask([task.id, 'is_on_hold', !task.is_on_hold])"></i>
                             </div>
                             <div class="TCol --timespan"
                                  @click="dropTime($event, task)"
@@ -202,8 +202,7 @@
     </div>
 </template>
 
-<script lang="ts">
-    import {Component, Vue} from "vue-facing-decorator";
+<script setup lang="ts">
     import horizontal_scroller from "../library/horizontal_scroller";
     import createMenu from './TasksMenu';
     import LineChart from '../Components/LineChart.vue';
@@ -212,240 +211,220 @@
     import {Store_MergeSameCodes} from "../Store/Store_GetGroupedTasks";
     import {timespanToText} from "../Utils/Utils";
     import CalendarWindow from "./CalendarWindow.vue";
+    import {computed, onBeforeUnmount, onMounted, reactive, ref} from "vue";
+
     const moment = require("moment");
 
     const remote = window.remote;
 
-    @Component({
-        components: {
-            LineChart,
-            CalendarWindow,
-        }
-    })
-    export default class TasksWindow extends Vue {
-        drag = {
-            active: false,
-            readyToDrop: false,
-            distance: 0,
-            minutes: 0,
-            minutes_text: '',
-            startedAt: [0, 0],
-            nowAt: [0, 0],
-            taskFrom: 0,
-            taskFrom_minutes: 0,
-            taskFrom_minutes_text: '',
-            taskTo: 0,
+    const drag = reactive({
+        active: false,
+        readyToDrop: false,
+        distance: 0,
+        minutes: 0,
+        minutes_text: '',
+        startedAt: [0, 0],
+        nowAt: [0, 0],
+        taskFrom: 0,
+        taskFrom_minutes: 0,
+        taskFrom_minutes_text: '',
+        taskTo: 0,
+    });
+
+    const forceUpdateKey = ref(1);
+    const timeline = ref(null);
+
+    const total = computed(() => {
+        let total = {
+            time_charge_rounded_seconds: 0,
+            time_recorded_seconds: 0,
+            time_spent_seconds: 0,
+            time_charge_rounded_text: '',
+            time_recorded_text: '',
+            time_spent_text: '',
         };
-
-        forceUpdateKey = 1;
-
-        data() {
-            return {};
+        for (let group of Object.values(tasksGrouped.value)) {
+            total.time_charge_rounded_seconds += (<any>group).time_charge_rounded_seconds;
+            total.time_recorded_seconds += (<any>group).time_recorded_seconds;
+            total.time_spent_seconds += (<any>group).time_spent_seconds;
         }
+        total.time_charge_rounded_text = timespanToText(total.time_charge_rounded_seconds);
+        total.time_recorded_text = timespanToText(total.time_recorded_seconds);
+        total.time_spent_text = timespanToText(total.time_spent_seconds);
+        return total;
+    });
 
-        get total() {
-            let total = {
-                time_charge_rounded_seconds: 0,
-                time_recorded_seconds: 0,
-                time_spent_seconds: 0,
-                time_charge_rounded_text: '',
-                time_recorded_text: '',
-                time_spent_text: '',
-            };
-            for (let group of Object.values(this.tasksGrouped)) {
-                total.time_charge_rounded_seconds += (<any>group).time_charge_rounded_seconds;
-                total.time_recorded_seconds += (<any>group).time_recorded_seconds;
-                total.time_spent_seconds += (<any>group).time_spent_seconds;
-            }
-            total.time_charge_rounded_text = timespanToText(total.time_charge_rounded_seconds);
-            total.time_recorded_text = timespanToText(total.time_recorded_seconds);
-            total.time_spent_text = timespanToText(total.time_spent_seconds);
-            return total;
-        }
+    const tasksGroupedLength = computed(() => {
+        return Object.keys(tasksGrouped.value).length;
+    });
 
-        get tasksGroupedLength() {
-            return Object.keys(this.tasksGrouped).length;
-        }
+    const tasksGrouped = computed(() => {
+        let groups = store.getTasksGrouped;
 
-        get tasksGrouped() {
-            let groups = store.getters.getTasksGrouped;
-
-            let result = groups;
-            if (store.state.tasksShowAsReport) {
-                groups.map((group, group_id) => {
-                    let tasks = Store_MergeSameCodes(group.get('tasks'));
-                    result = result.setIn([group_id, 'tasks'], tasks);
-                });
-            }
-
-            return result.toJS();
-        }
-
-        get tasks_ui() {
-            return store.getters.getTasksUi;
-        }
-
-        get store() {
-            return store;
-        }
-
-        created() {
-        }
-
-        mounted() {
-            horizontal_scroller(this.$refs.timeline);
-
-            window.addEventListener('contextmenu', this.contextMenuShow, false);
-        }
-
-        beforeUnmount() {
-            window.removeEventListener('contextmenu', this.contextMenuShow);
-        }
-
-        run() {
-            console.log(window.ipc.sendSync('window.open', 'Title 1')) // prints "pong"
-        }
-
-        contextMenuShow(e) {
-            console.log('tasks context menu');
-            store.commit.selectHovered();
-            e.preventDefault();
-            createMenu().popup({window: remote.getCurrentWindow()})
-        }
-
-        rowOnClick($event, task) {
-            if ($event.ctrlKey) {
-                store.commit.tasksUiToggle(task.id);
-            }
-        }
-
-        editTask($event, task) {
-            store.commit.taskEdit(task.id);
-        }
-
-        startTimer($event, task) {
-            timer.start(task.id);
-        }
-
-        stopTimer() {
-            timer.stop();
-        }
-
-        toggleShowAsReport() {
-            if (this.tasks_ui.tasksShowAsReport) {
-                setTimeout(function () {
-                    this.forceUpdateKey++; // force reload to remove animation classes
-                }.bind(this), 200/* transition 200ms */);
-            }
-            store.commit.toggleTasksShowAsReport();
-        }
-
-        copyToClipboard(ev, text) {
-            navigator.clipboard.writeText(text).then(function () {
-                ev.target.classList.add('AnimationPulseOnceAndHide');
-            }, function () {
-                /* clipboard write failed */
+        let result = groups;
+        if (store.state.tasksShowAsReport) {
+            groups.map((group, group_id) => {
+                let tasks = Store_MergeSameCodes(group.get('tasks'));
+                result = result.setIn([group_id, 'tasks'], tasks);
             });
         }
 
-        copyToClipboardAllTasks(ev) {
-            let s = '*' + moment(store.state.day_key + ' 12:00:00').format('ddd, MMM D') + "*\n";
-            for (let group of Object.values(this.tasksGrouped)) {
-                for (let task of (<any>group).tasks) {
-                    if (!task.chargeable || task.distributed) {
-                        continue;
-                    }
-                    let title = task.title;
-                    if (title) {
-                        title = title.replaceAll('[combined]', '').trim();
-                    }
-                    s += title + "\n" + "> " + task.notes + "\n" + "> ~" + task.time_charge_text + "\n";
+        return result.toJS();
+    });
+
+    const tasks_ui = computed(() => {
+        return store.getTasksUi;
+    })
+
+    onMounted(() => {
+        horizontal_scroller(timeline.value);
+
+        window.addEventListener('contextmenu', contextMenuShow, false);
+    });
+
+    onBeforeUnmount(() => {
+        window.removeEventListener('contextmenu', contextMenuShow);
+    });
+
+    function contextMenuShow(e) {
+        console.log('tasks context menu');
+        store.selectHovered();
+        e.preventDefault();
+        createMenu().popup({window: remote.getCurrentWindow()})
+    }
+
+    function rowOnClick($event, task) {
+        if ($event.ctrlKey) {
+            store.tasksUiToggle(task.id);
+        }
+    }
+
+    function editTask($event, task) {
+        store.taskEdit(task.id);
+    }
+
+    function startTimer($event, task) {
+        timer.start(task.id);
+    }
+
+    function stopTimer() {
+        timer.stop();
+    }
+
+    function toggleShowAsReport() {
+        if (tasks_ui.value.tasksShowAsReport) {
+            setTimeout(function () {
+                forceUpdateKey.value++; // force reload to remove animation classes
+            }.bind(this), 200/* transition 200ms */);
+        }
+        store.toggleTasksShowAsReport();
+    }
+
+    function copyToClipboard(ev, text) {
+        navigator.clipboard.writeText(text).then(function () {
+            ev.target.classList.add('AnimationPulseOnceAndHide');
+        }, function () {
+            /* clipboard write failed */
+        });
+    }
+
+    function copyToClipboardAllTasks(ev) {
+        let s = '*' + moment(store.state.day_key + ' 12:00:00').format('ddd, MMM D') + "*\n";
+        for (let group of Object.values(tasksGrouped.value)) {
+            for (let task of (<any>group).tasks) {
+                if (!task.chargeable || task.distributed) {
+                    continue;
                 }
-            }
-            console.log(s);
-
-            navigator.clipboard.writeText(s).then(function () {
-                ev.target.classList.add('AnimationPulseOnceAndHide');
-            }, function () {
-                /* clipboard write failed */
-            });
-        }
-
-        dragClear() {
-            this.drag.active = false;
-            this.drag.readyToDrop = false;
-            this.drag.minutes = 0;
-            this.drag.minutes_text = '';
-            this.drag.startedAt = [0, 0];
-            this.drag.nowAt = [0, 0];
-            this.drag.taskFrom = 0;
-            this.drag.taskFrom_minutes = 0;
-            this.drag.taskFrom_minutes_text = '';
-            this.drag.taskTo = 0;
-        }
-
-        dragStart($event, task) {
-            if (this.drag.readyToDrop) {
-                return;
-            }
-            this.dragClear();
-
-            this.drag.active = true;
-            this.drag.startedAt = [$event.clientX, $event.clientY];
-            this.drag.nowAt = [$event.clientX, $event.clientY];
-            this.drag.taskFrom = task.id;
-            this.drag.taskFrom_minutes = Math.round(task.time_spent_seconds / 60);
-            this.drag.taskFrom_minutes_text = task.time_spent_seconds_text;
-        }
-
-        dragContinue($event) {
-            if (!this.drag.active) {
-                return;
-            }
-            this.drag.nowAt = [$event.clientX, $event.clientY];
-
-            let distance = Math.sqrt(
-                Math.pow(this.drag.startedAt[0] - this.drag.nowAt[0], 2) +
-                Math.pow(this.drag.startedAt[1] - this.drag.nowAt[1], 2)
-            );
-            if (!this.drag.readyToDrop) {
-                this.drag.distance = distance;
-                let coefficient = 10.0 / Math.log10(distance);
-                this.drag.minutes = Math.max(0, Math.round(distance / coefficient) - 5);
-                this.drag.minutes = Math.min(this.drag.minutes, this.drag.taskFrom_minutes);
-
-                if (this.drag.nowAt[0] < 80) {
-                    this.drag.minutes = 0;
+                let title = task.title;
+                if (title) {
+                    title = title.replaceAll('[combined]', '').trim();
                 }
-                this.drag.minutes_text = timespanToText(this.drag.minutes * 60);
+                s += title + "\n" + "> " + task.notes + "\n" + "> ~" + task.time_charge_text + "\n";
             }
         }
+        console.log(s);
 
-        dragStop() {
-            this.drag.readyToDrop = this.drag.minutes > 0;
-            this.drag.active = this.drag.minutes > 0;
+        navigator.clipboard.writeText(s).then(function () {
+            ev.target.classList.add('AnimationPulseOnceAndHide');
+        }, function () {
+            /* clipboard write failed */
+        });
+    }
 
-            if (!this.drag.active) {
-                this.dragClear();
-            }
+    function dragClear() {
+        drag.active = false;
+        drag.readyToDrop = false;
+        drag.minutes = 0;
+        drag.minutes_text = '';
+        drag.startedAt = [0, 0];
+        drag.nowAt = [0, 0];
+        drag.taskFrom = 0;
+        drag.taskFrom_minutes = 0;
+        drag.taskFrom_minutes_text = '';
+        drag.taskTo = 0;
+    }
+
+    function dragStart($event, task) {
+        if (drag.readyToDrop) {
+            return;
         }
+        dragClear();
 
-        dropTime($event, task = null) {
-            if (!this.drag.active || !this.drag.readyToDrop) {
-                return;
-            }
-            this.drag.readyToDrop = this.drag.active = false;
-            this.drag.taskTo = task.id;
+        drag.active = true;
+        drag.startedAt = [$event.clientX, $event.clientY];
+        drag.nowAt = [$event.clientX, $event.clientY];
+        drag.taskFrom = task.id;
+        drag.taskFrom_minutes = Math.round(task.time_spent_seconds / 60);
+        drag.taskFrom_minutes_text = task.time_spent_seconds_text;
+    }
 
-            if (this.drag.minutes > 0 &&
-                this.drag.taskFrom &&
-                this.drag.taskTo &&
-                this.drag.taskFrom !== this.drag.taskTo) {
-                store.commit.taskAddSession([this.drag.taskFrom, -this.drag.minutes, 'drag']);
-                store.commit.taskAddSession([this.drag.taskTo, this.drag.minutes, 'drop']);
-            }
-            this.dragClear();
+    function dragContinue($event) {
+        if (!drag.active) {
+            return;
         }
+        drag.nowAt = [$event.clientX, $event.clientY];
+
+        let distance = Math.sqrt(
+            Math.pow(drag.startedAt[0] - drag.nowAt[0], 2) +
+            Math.pow(drag.startedAt[1] - drag.nowAt[1], 2)
+        );
+        if (!drag.readyToDrop) {
+            drag.distance = distance;
+            let coefficient = 10.0 / Math.log10(distance);
+            drag.minutes = Math.max(0, Math.round(distance / coefficient) - 5);
+            drag.minutes = Math.min(drag.minutes, drag.taskFrom_minutes);
+
+            if (drag.nowAt[0] < 80) {
+                drag.minutes = 0;
+            }
+            drag.minutes_text = timespanToText(drag.minutes * 60);
+        }
+    }
+
+    function dragStop() {
+        drag.readyToDrop = drag.minutes > 0;
+        drag.active = drag.minutes > 0;
+
+        if (!drag.active) {
+            dragClear();
+        }
+    }
+
+    function dropTime($event, task = null) {
+        if (!drag.active || !drag.readyToDrop) {
+            return;
+        }
+        drag.readyToDrop = drag.active = false;
+        drag.taskTo = task.id;
+
+        if (drag.minutes > 0 &&
+            drag.taskFrom &&
+            drag.taskTo &&
+            drag.taskFrom !== drag.taskTo) {
+            store.taskAddSession([drag.taskFrom, -drag.minutes, 'drag']);
+            store.taskAddSession([drag.taskTo, drag.minutes, 'drop']);
+        }
+        dragClear();
     }
 </script>
 

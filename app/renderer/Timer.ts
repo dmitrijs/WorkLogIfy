@@ -31,7 +31,7 @@ class Timer {
         }
         if (!this.handle) {
             this.timeStart = moment.utc();
-            store.commit.activateTimer(taskId);
+            store.activateTimer(taskId);
 
             this.handle = setInterval(this.tick.bind(this), 1000);
             this.tick();
@@ -43,7 +43,7 @@ class Timer {
     }
 
     tick() {
-        store.commit.activeTimer(this.getSecondsElapsed(moment.utc()));
+        store.activeTimer(this.getSecondsElapsed(moment.utc()));
 
         console.log('timer tick');
     }
@@ -51,7 +51,7 @@ class Timer {
     stop(idleSeconds = 0, sendEvent = true) {
         if (this.handle) {
             this.timeEnd = moment.utc();
-            store.commit.stopTimer([this.getSecondsElapsed(this.timeEnd), idleSeconds * (store.state.is_debug ? 60 : 1)]);
+            store.stopTimer([this.getSecondsElapsed(this.timeEnd), idleSeconds * (store.state.is_debug ? 60 : 1)]);
 
             clearInterval(this.handle);
             this.handle = 0;

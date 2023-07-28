@@ -1,6 +1,5 @@
 import {Collection, List, Map, OrderedMap} from "immutable";
 import {comparatorLt, timespanToText} from "../Utils/Utils";
-import {AppState} from "./Store";
 import store from "../Store/Store";
 
 export function build_sort_value(task: TaskObj) {
@@ -92,28 +91,28 @@ export function Store_MergeSameCodes(tasks: Map<string, any>) {
     return sort_tasks(tasksList);
 }
 
-export default function Store_GetGroupedTasks(state: AppState): Map<string, any> {
+export default function Store_GetGroupedTasks(): Map<string, any> {
     console.log('getTasksGrouped');
-    if (!state.tasks) {
+    if (!store.state.tasks) {
         return Map<string, any>();
     }
 
     let tasksList = List<TaskObj>();
-    state.tasks.forEach((taskMap, key) => {
+    store.state.tasks.forEach((taskMap, key) => {
         let task: TaskObj;
         if (Map.isMap(taskMap)) {
             task = <TaskObj>taskMap.toJS();
         } else {
             task = <any>taskMap;
         }
-        task._selected = !!state.tasksSelectedIds.get(key);
+        task._selected = !!store.state.tasksSelectedIds.get(key);
 
         task.time_charge_text = 'error';
 
         task.time_spent_seconds = task.sessions.reduce((sum, obj: SessionObj) => sum + obj.spent_seconds, 0);
-        if (state.taskTimeredId === task.id) {
-            task.time_spent_seconds += state.timerElapsed;
-            task.timer_elapsed_seconds_text = timespanToText(state.timerElapsed);
+        if (store.state.taskTimeredId === task.id) {
+            task.time_spent_seconds += store.state.timerElapsed;
+            task.timer_elapsed_seconds_text = timespanToText(store.state.timerElapsed);
         }
         task.time_spent_text = timespanToText(task.time_spent_seconds);
 

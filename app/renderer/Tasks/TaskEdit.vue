@@ -125,7 +125,7 @@
         }
 
         get templates() {
-            return store.getters.getTaskTemplates;
+            return store.getTaskTemplates;
         }
 
         get task_time_spent_text() {
@@ -134,9 +134,9 @@
 
         created() {
             if (this.mode === 'new') {
-                this.task = {...store.getters.getEmptyTask};
+                this.task = {...store.getEmptyTask};
             } else {
-                this.task = store.getters.getEditedTask;
+                this.task = store.getEditedTask;
             }
             this.task = {...this.task, time_add_minutes: '', time_record_minutes: ''};
         }
@@ -147,9 +147,9 @@
 
         save(autostart = false) {
             if (this.mode === 'edit') {
-                store.commit.saveTask(this.task);
+                store.saveTask(this.task);
             } else {
-                store.commit.createTask(this.task);
+                store.createTask(this.task);
                 if (autostart) {
                     timer.start(store.state.createdTaskId);
                 }
@@ -174,7 +174,7 @@
         }
 
         back() {
-            store.commit.returnToTasksScreen();
+            store.returnToTasksScreen();
         }
 
         formatSession(sess) {

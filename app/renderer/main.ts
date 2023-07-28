@@ -18,23 +18,23 @@ const moment = require("moment");
 timer.init();
 
 // Vue.prototype.$store = store.original;
-store.commit.loadSettings();
+store.loadSettings();
 
-store.commit.toggleDebug(window.ipc.sendSync('debug.state'));
+store.toggleDebug(window.ipc.sendSync('debug.state'));
 let today = moment();
 if (store.state.is_debug) {
     today.startOf('month').endOf('isoWeek');
 }
-store.commit.setDay(today.format("YYYY-MM-DD"));
+store.setDay(today.format("YYYY-MM-DD"));
 
-store.commit.setTaskTemplates(window.ipc.sendSync('tasks.getTaskTemplates'));
+store.setTaskTemplates(window.ipc.sendSync('tasks.getTaskTemplates'));
 
 window.ipc.on('change.screen', function ($event, where) {
-    store.commit.setScreen(where);
+    store.setScreen(where);
 });
 
 window.ipc.on('debug.toggle', function ($event, value) {
-    store.commit.toggleDebug(value);
+    store.toggleDebug(value);
 });
 
 import App from './App.vue'
@@ -51,12 +51,12 @@ window.ipc.on('user-is-idle', function (emitter, secondsIdle, secondsToBecomeIdl
         }
         timer.stop(secondsIdle);
 
-        let idleTask = {...store.getters.getEmptyTask};
+        let idleTask = {...store.getEmptyTask};
         idleTask.code = 'idle';
         idleTask.time_add_idle_seconds = secondsIdle;
         idleTask.time_add_minutes = '';
         idleTask.time_record_minutes = '';
-        store.commit.createTask(idleTask);
+        store.createTask(idleTask);
 
         timer.start(store.state.createdTaskId);
         window.ipc.send('show.error', "Idle task", `Idle task was started because of inactivity.`);
@@ -67,7 +67,7 @@ window.ipc.on('user-active-app', function (emitter, activeAppDescription) {
     if (timer.isActive()) {
         let timeredTask = store.state.tasks.get(store.state.taskTimeredId);
         console.log("[timeredTask.get('id'), activeAppDescription]", [timeredTask.get('id'), activeAppDescription]);
-        store.commit.taskAddActiveApp([timeredTask.get('id'), activeAppDescription]);
+        store.taskAddActiveApp([timeredTask.get('id'), activeAppDescription]);
     }
 });
 

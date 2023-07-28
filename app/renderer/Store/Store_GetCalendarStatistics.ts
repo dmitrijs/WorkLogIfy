@@ -14,7 +14,7 @@ export default function Store_GetCalendarStatistics(): CalendarStatistics {
         let startOfMonthBeforePrevious: Moment = moment(today).subtract(2, 'months').startOf('month');
         let startOfWeekOfStartOfMonthBeforePrevious = startOfMonthBeforePrevious.clone().startOf('isoWeek');
 
-        let totals = store.getters.getFileTotals;
+        let totals = store.getFileTotals;
 
         let todayCode = moment().format('YYYY-MM-DD');
         let currentMonthCode = moment().format('YYYY-MM');

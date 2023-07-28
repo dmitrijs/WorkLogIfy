@@ -31,23 +31,24 @@
         }
 
         get templates() {
-            return store.getters.getTaskTemplates;
+            return store.getTaskTemplates;
         }
 
         created() {
-            store.commit.setTaskTemplates(window.ipc.sendSync('tasks.getTaskTemplates'));
+            store.setTaskTemplates(window.ipc.sendSync('tasks.getTaskTemplates'));
+            store.setTaskTemplates(window.ipc.sendSync('tasks.getTaskTemplates'));
         }
 
         add() {
-            store.commit.templateNew();
+            store.templateNew();
         }
 
         update(idx, obj) {
-            store.commit.templateUpdate([idx, obj]);
+            store.templateUpdate([idx, obj]);
         }
 
         del(idx) {
-            store.commit.templateDelete([idx]);
+            store.templateDelete([idx]);
         }
 
         swap(idx1, idx2) {
@@ -55,8 +56,8 @@
             let a = templates[idx1];
             let b = templates[idx2];
 
-            store.commit.templateUpdate([idx2, a]);
-            store.commit.templateUpdate([idx1, b]);
+            store.templateUpdate([idx2, a]);
+            store.templateUpdate([idx1, b]);
         }
     }
 </script>

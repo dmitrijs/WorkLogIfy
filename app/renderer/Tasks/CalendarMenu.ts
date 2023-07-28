@@ -22,7 +22,7 @@ export default function createCalendarMenu(callback) {
         } else {
             delete settings.special_days[dayCode];
         }
-        store.commit.updateSettings(settings);
+        store.updateSettings(settings);
         callback();
     }
 
