@@ -209,7 +209,7 @@
     import store from "../Store/Store";
     import timer from "../Timer";
     import {Store_MergeSameCodes} from "../Store/Store_GetGroupedTasks";
-    import {timespanToText} from "../Utils/Utils";
+    import {timespanToText, timespanToTextHours} from "../Utils/Utils";
     import CalendarWindow from "./CalendarWindow.vue";
     import {computed, onBeforeUnmount, onMounted, reactive, ref} from "vue";
     import moment from "moment";
@@ -338,7 +338,7 @@
                 if (title) {
                     title = title.replaceAll('[combined]', '').trim();
                 }
-                s += title + "\n" + "> " + task.notes + "\n" + "> ~" + task.time_charge_text + "\n";
+                s += title + "\n" + "> " + task.notes + "\n" + "> ~" + timespanToTextHours(task.time_charge_seconds) + "\n";
             }
         }
         console.log(s);
