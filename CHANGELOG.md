@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+### [1.25.3](https://github.com/dmitrijs/WorkLogIfy/compare/v1.25.2...v1.25.3) (2023-07-28)
+
+
+### Improvements
+
+* **report:** format time for Slack as decimal hours ([6c28a26](https://github.com/dmitrijs/WorkLogIfy/commit/6c28a265b86fa96b97bad2a9b15ad8709c72f67b))
+
 ### [1.25.2](https://github.com/dmitrijs/WorkLogIfy/compare/v1.25.1...v1.25.2) (2023-07-24)
 
 
