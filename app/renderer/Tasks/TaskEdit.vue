@@ -79,7 +79,7 @@
                 <tr>
                     <td>Active apps:</td>
                     <td>
-                        <div style="max-height: 100px; overflow: auto;">
+                        <div style="max-height: 100px; overflow: auto; max-width: 400px; white-space: nowrap;">
                             <div v-for="activeApp of task.activeApps">
                                 {{ formatActiveApp(activeApp) }}
                             </div>
