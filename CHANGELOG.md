@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+### [1.25.4](https://github.com/dmitrijs/WorkLogIfy/compare/v1.25.3...v1.25.4) (2023-08-01)
+
+
+### Improvements
+
+* **tasks:** handle long active app titles ([891158d](https://github.com/dmitrijs/WorkLogIfy/commit/891158d13a573111e0f86206668fca3091b8a772))
+
 ### [1.25.3](https://github.com/dmitrijs/WorkLogIfy/compare/v1.25.2...v1.25.3) (2023-07-28)
 
 
