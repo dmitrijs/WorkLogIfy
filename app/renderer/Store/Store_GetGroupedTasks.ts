@@ -1,6 +1,6 @@
 import {Collection, List, Map, OrderedMap} from "immutable";
-import {comparatorLt, timespanToText} from "../Utils/Utils";
 import store from "../Store/Store";
+import {comparatorLt, timespanToText} from "../Utils/Utils";
 
 export function build_sort_value(task: TaskObj) {
     let task_not_started = true;
@@ -193,6 +193,9 @@ export default function Store_GetGroupedTasks(): Map<string, any> {
         tasks = tasks.map((task) => {
             let timeBlockLengthSeconds = 60 * (store.state.settings.rounding_minutes || 10);
             let blockCount = Math.round(task.time_charge_seconds / timeBlockLengthSeconds);
+            if (task.time_charge_seconds >= 60 && blockCount < 1) {
+                blockCount = 1;
+            }
             task.time_charge_seconds = blockCount * timeBlockLengthSeconds;
             task.time_charge_text = timespanToText(task.time_charge_seconds);
 
