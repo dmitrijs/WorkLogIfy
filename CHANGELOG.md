@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+### [1.25.5](https://github.com/dmitrijs/WorkLogIfy/compare/v1.25.4...v1.25.5) (2023-08-02)
+
+
+### Improvements
+
+* **osx:** disabled active app tracking on mac (permissions issue) ([7060e58](https://github.com/dmitrijs/WorkLogIfy/commit/7060e58f9f429f54301278fd43a20989746fff5e))
+* **osx:** set application icon on mac ([e30c0e7](https://github.com/dmitrijs/WorkLogIfy/commit/e30c0e78b76d88978cedde884bec8f1c268de898))
+
 ### [1.25.4](https://github.com/dmitrijs/WorkLogIfy/compare/v1.25.3...v1.25.4) (2023-08-01)
 
 
