@@ -470,17 +470,17 @@
         .TRow.distributed,
         .TRow.notchargeable {
             .TRowContent {
-                height: 18px;
+                //height: 18px;
 
                 .TCol {
-                    .ChartRecorded,
-                    .ChartSpent,
-                    .IconOnHold,
-                    .Note--Content,
-                    .--edit-button,
-                    .--timespan-charge {
-                        display: none;
-                    }
+                    //.ChartRecorded,
+                    //.ChartSpent,
+                    //.IconOnHold,
+                    //.Note--Content,
+                    //.--edit-button,
+                    //.--timespan-charge {
+                    //    display: none;
+                    //}
 
                     .--timespan-spent {
                         opacity: 0.35 !important;
