@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+### [1.25.6](https://github.com/dmitrijs/WorkLogIfy/compare/v1.25.5...v1.25.6) (2023-08-03)
+
+
+### Improvements
+
+* **report:** make sure non-empty tasks are included in the report ([b25433d](https://github.com/dmitrijs/WorkLogIfy/commit/b25433df70d9ece78bd2e09af41a7f71c138694c))
+* **ux:** do not collapse distributed/notchargeable tasks ([305e914](https://github.com/dmitrijs/WorkLogIfy/commit/305e91466679956a78d5eb8d1e6dd2fe0ab341d2))
+
 ### [1.25.5](https://github.com/dmitrijs/WorkLogIfy/compare/v1.25.4...v1.25.5) (2023-08-02)
 
 
