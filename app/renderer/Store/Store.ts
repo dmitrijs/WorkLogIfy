@@ -270,6 +270,34 @@ const store = {
 
         state.tasks = convertJsTasksToMap(tasks);
     },
+    setDayFromJson(tasksJson: string) {
+        if (state.taskTimeredId) {
+            alert('Cannot import if some task is active.');
+            return;
+        }
+        let added = 0, replaced = 0;
+        let tasks = null;
+        try {
+            tasks = JSON.parse(tasksJson);
+        } catch (ex) {
+        }
+        if (!tasks || !Object.keys(tasks).length || !Object.keys(tasks)[0].match(/^task_\d+$/)) {
+            alert(`ERROR: Invalid clipboard contents:\n\n${tasksJson}`);
+            return;
+        }
+        for (let taskId of Object.keys(tasks)) {
+            if (state.tasks.get(taskId)) {
+                replaced++;
+            } else {
+                added++;
+            }
+            state.tasks = state.tasks.set(taskId, convertJsTaskToMap(tasks[taskId]));
+        }
+        saveTasks();
+        if (replaced + added > 0) {
+            alert(`${added} task(s) added, ${replaced} existing task(s) replaced`);
+        }
+    },
     loadSettings() {
         state.settings = window.ipc.sendSync('settings.load');
     },

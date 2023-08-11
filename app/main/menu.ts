@@ -71,6 +71,18 @@ export default function createMainMenu(mainWindow) {
                         mainWindow.reload();
                     }
                 },
+                {
+                    label: 'Export today to clipboard', click: function () {
+                        mainWindow.show();
+                        mainWindow.webContents.send('migration', 'export');
+                    }
+                },
+                {
+                    label: 'Import today from clipboard', click: function () {
+                        mainWindow.show();
+                        mainWindow.webContents.send('migration', 'import');
+                    }
+                },
                 {type: 'separator'},
                 {
                     label: 'Quit', click: function () {

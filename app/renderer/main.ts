@@ -36,6 +36,20 @@ window.ipc.on('debug.toggle', function ($event, value) {
     store.toggleDebug(value);
 });
 
+window.ipc.on('migration', function ($event, what) {
+    if (what === 'export') {
+        navigator.clipboard.writeText(JSON.stringify(store.state.tasks.toJS())).then(function () {
+        }, function () {
+            /* clipboard write failed */
+        });
+    }
+    if (what === 'import') {
+        navigator.clipboard.readText().then((text) => {
+            store.setDayFromJson(text);
+        });
+    }
+});
+
 import App from './App.vue'
 
 const app = createApp(App);
