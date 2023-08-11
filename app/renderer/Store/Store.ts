@@ -74,6 +74,16 @@ const state = reactive({
 });
 state.screen = state.tasksScreen;
 
+function convertJsTaskToMap(js_task: any): Map<string, any> {
+    let task = Map<string, any>(js_task);
+    let activeApps = task.get('activeApps');
+    task = task.set('sessions', List(task.get('sessions')));
+    task = task.set('records', List(task.get('records')));
+    task = task.set('activeApps', List(activeApps));
+
+    return task;
+}
+
 function convertJsTasksToMap(js_tasks): Map<string, Map<string, any>> {
     let tasks = Map<string, Map<string, any>>();
 
@@ -81,15 +91,7 @@ function convertJsTasksToMap(js_tasks): Map<string, Map<string, any>> {
         let keys = Object.keys(js_tasks);
 
         for (let key of keys) {
-            let js_task = js_tasks[key];
-
-            let task = Map<string, any>(js_task);
-            let activeApps = task.get('activeApps');
-            task = task.set('sessions', List(task.get('sessions')));
-            task = task.set('records', List(task.get('records')));
-            task = task.set('activeApps', List(activeApps));
-
-            tasks = tasks.set(key, task);
+            tasks = tasks.set(key, convertJsTaskToMap(js_tasks[key]));
         }
     }
 
