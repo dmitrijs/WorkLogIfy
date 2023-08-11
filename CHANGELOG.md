@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.26.0](https://github.com/dmitrijs/WorkLogIfy/compare/v1.25.6...v1.26.0) (2023-08-11)
+
+
+### Features
+
+* **tasks:** support tasks export and import via clipboard ([e34892f](https://github.com/dmitrijs/WorkLogIfy/commit/e34892f41851490437d4d47bc75088bb1868bb43))
+
 ### [1.25.6](https://github.com/dmitrijs/WorkLogIfy/compare/v1.25.5...v1.25.6) (2023-08-03)
 
 
