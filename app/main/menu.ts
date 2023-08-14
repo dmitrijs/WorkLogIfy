@@ -100,7 +100,8 @@ export default function createMainMenu(mainWindow) {
                     label: 'Quit', click: function () {
                         mainWindow.destroy();
                         app.quit();
-                    }
+                    },
+                    ...(isMac && {accelerator: "CmdOrCtrl+Q"}),
                 },
             ],
         },
