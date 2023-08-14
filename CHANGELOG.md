@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+### [1.26.2](https://github.com/dmitrijs/WorkLogIfy/compare/v1.26.1...v1.26.2) (2023-08-14)
+
+
+### Improvements
+
+* **osx:** added Cmd+Q shortcut to quit the application ([77e3e70](https://github.com/dmitrijs/WorkLogIfy/commit/77e3e70d12a3c25264471407f3008e181a310d93))
+
 ### [1.26.1](https://github.com/dmitrijs/WorkLogIfy/compare/v1.26.0...v1.26.1) (2023-08-14)
 
 
