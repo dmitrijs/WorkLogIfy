@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+### [1.26.1](https://github.com/dmitrijs/WorkLogIfy/compare/v1.26.0...v1.26.1) (2023-08-14)
+
+
+### Improvements
+
+* **tasks:** enable copy&paste in text areas ([3f7a3c7](https://github.com/dmitrijs/WorkLogIfy/commit/3f7a3c7558cf3118b8a6c6aecf568a9b89d46caa))
+
 ## [1.26.0](https://github.com/dmitrijs/WorkLogIfy/compare/v1.25.6...v1.26.0) (2023-08-11)
 
 
