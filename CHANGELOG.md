@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+### [1.26.3](https://github.com/dmitrijs/WorkLogIfy/compare/v1.26.2...v1.26.3) (2023-08-15)
+
+
+### Improvements
+
+* **ux:** added 'idle' quick-action button, added task 'source' field ([5542ef8](https://github.com/dmitrijs/WorkLogIfy/commit/5542ef84fb841a685491798dc120d9924288fe5a))
+* **ux:** fixed missing menu on Windows ([27dc810](https://github.com/dmitrijs/WorkLogIfy/commit/27dc81022e1ce7fb55ab797167656b831098d73e))
+
 ### [1.26.2](https://github.com/dmitrijs/WorkLogIfy/compare/v1.26.1...v1.26.2) (2023-08-14)
 
 
