@@ -14,6 +14,7 @@
                             <span>
                                 <input type="text" placeholder="TSKS-0000" v-model="task.code" @keyup="codeChanged()"/>
                                 <button class="btn btn-xs"
+                                        type="button"
                                         :class="{
                                             ['btn-outline-secondary']: task.code !== 'idle',
                                             ['btn-secondary']: task.code === 'idle',
