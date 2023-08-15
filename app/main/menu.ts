@@ -27,25 +27,25 @@ export default function createMainMenu(mainWindow) {
             label: 'Tasks', click: function () {
                 mainWindow.show();
                 mainWindow.webContents.send('change.screen', 'tasks');
-            }
+            },
         },
         {
             label: 'Calendar', click: function () {
                 mainWindow.show();
                 mainWindow.webContents.send('change.screen', 'calendar');
-            }
+            },
         },
         {
             label: 'Templates', click: function () {
                 mainWindow.show();
                 mainWindow.webContents.send('change.screen', 'task.templates');
-            }
+            },
         },
         {
             label: 'Settings', click: function () {
                 mainWindow.show();
                 mainWindow.webContents.send('change.screen', 'settings');
-            }
+            },
         },
     ];
     return Menu.buildFromTemplate([
@@ -53,7 +53,7 @@ export default function createMainMenu(mainWindow) {
             label: 'WorkLogIfy',
             submenu: menuItems,
         }] : menuItems),
-        ...(isMac && [{
+        ...(isMac ? [{
             label: "Edit",
             submenu: [
                 {label: "Undo", accelerator: "CmdOrCtrl+Z", role: "undo"},
@@ -62,38 +62,38 @@ export default function createMainMenu(mainWindow) {
                 {label: "Cut", accelerator: "CmdOrCtrl+X", role: "cut"},
                 {label: "Copy", accelerator: "CmdOrCtrl+C", role: "copy"},
                 {label: "Paste", accelerator: "CmdOrCtrl+V", role: "paste"},
-                {label: "Select All", accelerator: "CmdOrCtrl+A", role: "selectAll"}
+                {label: "Select All", accelerator: "CmdOrCtrl+A", role: "selectAll"},
             ],
-        } as any]),
+        } as any] : []),
         {
             label: '...',
             submenu: [
                 {
                     label: 'Toggle Debug', click: function () {
                         toggleDebug(mainWindow);
-                    }
+                    },
                 },
                 {
                     label: 'Dev Tools', click: function () {
                         mainWindow.openDevTools();
-                    }
+                    },
                 },
                 {
                     label: 'Reload', click: function () {
                         mainWindow.reload();
-                    }
+                    },
                 },
                 {
                     label: 'Export today to clipboard', click: function () {
                         mainWindow.show();
                         mainWindow.webContents.send('migration', 'export');
-                    }
+                    },
                 },
                 {
                     label: 'Import today from clipboard', click: function () {
                         mainWindow.show();
                         mainWindow.webContents.send('migration', 'import');
-                    }
+                    },
                 },
                 {type: 'separator'},
                 {
