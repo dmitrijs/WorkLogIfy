@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+### [1.26.4](https://github.com/dmitrijs/WorkLogIfy/compare/v1.26.3...v1.26.4) (2023-08-15)
+
+
+### Improvements
+
+* **ux:** fixed 'enter' key behaviour in edit screen ([3150fa8](https://github.com/dmitrijs/WorkLogIfy/commit/3150fa8653e2760a77abbb62543d60d863db8539))
+
 ### [1.26.3](https://github.com/dmitrijs/WorkLogIfy/compare/v1.26.2...v1.26.3) (2023-08-15)
 
 
