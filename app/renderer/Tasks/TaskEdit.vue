@@ -9,7 +9,22 @@
                 </tr>
                 <tr>
                     <td style="width: 100px">Code:</td>
-                    <td><input type="text" placeholder="TSKS-0000" v-model="task.code" @keyup="codeChanged()"/>
+                    <td class="Complex">
+                        <div style="margin-right: 11px;">
+                            <span>
+                                <input type="text" placeholder="TSKS-0000" v-model="task.code" @keyup="codeChanged()"/>
+                                <button class="btn btn-xs"
+                                        :class="{
+                                            ['btn-outline-secondary']: task.code !== 'idle',
+                                            ['btn-secondary']: task.code === 'idle',
+                                        }"
+                                        style="padding: 1px 8px;display: block;float: right;position: relative;top: 1px;"
+                                        @click.prevent="task.code = 'idle'"
+                                >idle</button>
+                            </span>
+                            <span>From: <input type="text" class="narrow"
+                                                   v-model="task.source"></span>
+                        </div>
                     </td>
                 </tr>
                 <tr>

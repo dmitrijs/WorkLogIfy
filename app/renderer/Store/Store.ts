@@ -178,6 +178,7 @@ const store = {
             logged: false,
             frozen: !!task.frozen,
             notes: task.notes,
+            source: task.source,
             date: task.date,
             created_at: moment().toISOString(),
             sessions: List(),
@@ -210,6 +211,7 @@ const store = {
         state.tasks = state.tasks.setIn([task.id, 'date'], task.date);
         state.tasks = state.tasks.setIn([task.id, 'frozen'], !!task.frozen);
         state.tasks = state.tasks.setIn([task.id, 'notes'], task.notes);
+        state.tasks = state.tasks.setIn([task.id, 'source'], task.source);
 
         if (task.time_add_minutes) {
             let spentSeconds = parseInt(task.time_add_minutes) * 60 || 0;

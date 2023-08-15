@@ -3,6 +3,7 @@ declare type TaskObj = {
     code: string;
     title: string;
     notes: string;
+    source: string;
     date: string;
     chargeable: boolean;
     distributed: boolean;
