@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+### [1.26.5](https://github.com/dmitrijs/WorkLogIfy/compare/v1.26.4...v1.26.5) (2023-08-16)
+
+
+### Improvements
+
+* **tasks:** stop the timer and save tasks before app quits ([960066e](https://github.com/dmitrijs/WorkLogIfy/commit/960066e3eac1187aae78ca82e86c2ccf9b7fd44b))
+
 ### [1.26.4](https://github.com/dmitrijs/WorkLogIfy/compare/v1.26.3...v1.26.4) (2023-08-15)
 
 
