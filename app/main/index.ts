@@ -3,7 +3,7 @@ import IdleUser from "./idle";
 import Filesystem from "./filesystem";
 import createMainMenu from "./menu";
 import createTray, {setTrayIconActive, setTrayIconIdle} from "./tray";
-import electron, {BrowserWindow, shell, app, Menu, ipcMain} from 'electron'
+import electron, {app, BrowserWindow, ipcMain, Menu, shell} from 'electron'
 import {enable, initialize} from "@electron/remote/main";
 import path from "path";
 import isDev from "electron-is-dev";
@@ -20,6 +20,8 @@ const indexHtml = path.join(process.env.DIST, 'index.html')
 if (isDev) {
     process.env.ELECTRON_DISABLE_SECURITY_WARNINGS = 'true';
 }
+
+let quitConfirmed = false;
 
 initialize()
 
@@ -39,7 +41,7 @@ app.on('ready', async () => {
             spellcheck: true,
             contextIsolation: false, // to work in Electron 12+
             nodeIntegration: true, // to work in Electron 20+
-        }
+        },
     });
     enable(mainWindow.webContents)
 
@@ -56,7 +58,7 @@ app.on('ready', async () => {
             mainWindow.setContentSize(800, 800);
 
             mainWindow.webContents.openDevTools({
-                mode: "bottom"
+                mode: "bottom",
             });
         }
     });
@@ -170,6 +172,11 @@ app.on('ready', async () => {
         ipcMain.on('tasks.getTaskTemplates', (event) => {
             event.returnValue = Filesystem.getTaskTemplates();
         });
+
+        ipcMain.on('quit.confirmed', (event) => {
+            quitConfirmed = true;
+            app.quit();
+        });
     }
 
     const mainMenu = createMainMenu(mainWindow);
@@ -183,7 +190,13 @@ app.on('ready', async () => {
     });
 });
 
-app.on('before-quit', () => {
+app.on('before-quit', async (e) => {
+    if (!quitConfirmed) {
+        e.preventDefault();
+        mainWindow.webContents.send('confirm-app-quit');
+        return;
+    }
+
     mainWindow.removeAllListeners('close');
     mainWindow.close();
 });

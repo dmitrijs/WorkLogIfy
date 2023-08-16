@@ -24,7 +24,6 @@ export default function createTray(mainWindow) {
         },
         {
             label: 'Quit', click: function () {
-                mainWindow.destroy();
                 app.quit();
             }
         }

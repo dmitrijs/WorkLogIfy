@@ -51,6 +51,7 @@ window.ipc.on('migration', function ($event, what) {
 });
 
 import App from './App.vue'
+import IpcRendererEvent = Electron.IpcRendererEvent;
 
 const app = createApp(App);
 app.use((<any>store));
@@ -88,4 +89,11 @@ window.ipc.on('timer-stop', function (emitter, secondsIdle, secondsToBecomeIdle)
     if (timer.isActive()) {
         timer.stop();
     }
+});
+
+window.ipc.on('confirm-app-quit', function (event: IpcRendererEvent) {
+    if (timer.isActive()) {
+        timer.stop();
+    }
+    window.ipc.send('quit.confirmed');
 });
