@@ -200,6 +200,11 @@ app.on('before-quit', async (e) => {
     mainWindow.removeAllListeners('close');
     mainWindow.close();
 });
+
+app.on('activate', () => {
+    mainWindow.show();
+});
+
 app.on('window-all-closed', () => {
     mainWindow = null
     if (process.platform !== 'darwin') app.quit()
