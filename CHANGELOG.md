@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+### [1.26.6](https://github.com/dmitrijs/WorkLogIfy/compare/v1.26.5...v1.26.6) (2023-08-17)
+
+
+### Improvements
+
+* **osx:** fixed un-hiding main window when clicking on the tray icon ([26c68c6](https://github.com/dmitrijs/WorkLogIfy/commit/26c68c63b5a7b136ef2bcdf7dfe04d4381053f43))
+
 ### [1.26.5](https://github.com/dmitrijs/WorkLogIfy/compare/v1.26.4...v1.26.5) (2023-08-16)
 
 
