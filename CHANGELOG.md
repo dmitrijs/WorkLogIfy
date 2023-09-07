@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+### [1.26.8](https://github.com/dmitrijs/WorkLogIfy/compare/v1.26.7...v1.26.8) (2023-09-07)
+
+
+### Improvements
+
+* **idle:** adjusted idle timer ([5467dd9](https://github.com/dmitrijs/WorkLogIfy/commit/5467dd99b730ea185c06dbfd97efe4284d3dcbc9))
+
 ### [1.26.7](https://github.com/dmitrijs/WorkLogIfy/compare/v1.26.6...v1.26.7) (2023-09-01)
 
 ### [1.26.6](https://github.com/dmitrijs/WorkLogIfy/compare/v1.26.5...v1.26.6) (2023-08-17)
