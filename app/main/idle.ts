@@ -1,10 +1,15 @@
-import electron from "electron";
 import activeWindow from "active-win";
+import electron from "electron";
+import moment from "moment";
+
+const MINUTES = 60;
+const HOURS = 60 * 60;
 
 export default class IdleUser {
     private static seconds_to_log_active_window = 30;
-    private static seconds_to_become_idle = 16 * 60;
-    private static seconds_to_become_offline = 2 * 60 * 60;
+    private static seconds_to_become_idle = 16 * MINUTES;
+    private static seconds_to_become_offline = 2 * HOURS;
+    private static seconds_to_become_offline_hard = 6 * HOURS;
     private static isIdle = false;
     private static isOffline = false;
 
@@ -42,11 +47,15 @@ export default class IdleUser {
                 }
                 this.isIdle = true;
             }
-            if (time >= this.seconds_to_become_offline) {
-                if (!this.isOffline) {
+            if (!this.isOffline) {
+                const shouldStop =
+                    time >= this.seconds_to_become_offline_hard
+                    || (time >= this.seconds_to_become_offline && moment.utc().hour() === 2); // end of the night
+
+                if (shouldStop) {
                     mainWindow.webContents.send('timer-stop');
+                    this.isOffline = true;
                 }
-                this.isOffline = true;
             }
         }, 30 * 1000);
     }
