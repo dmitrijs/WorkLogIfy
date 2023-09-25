@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+### [1.26.9](https://github.com/dmitrijs/WorkLogIfy/compare/v1.26.8...v1.26.9) (2023-09-25)
+
+
+### Improvements
+
+* **tasks:** allow sorting tasks by first session start time ([801ac74](https://github.com/dmitrijs/WorkLogIfy/commit/801ac74e414a85da3a9a5766f28a379b3e0288d0))
+
 ### [1.26.8](https://github.com/dmitrijs/WorkLogIfy/compare/v1.26.7...v1.26.8) (2023-09-07)
 
 
