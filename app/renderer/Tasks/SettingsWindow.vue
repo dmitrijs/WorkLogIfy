@@ -5,6 +5,11 @@
         <label>JIRA API Token:</label> <input type="password" v-model="settings.jira_password" placeholder="***********"> <a target="_blank" href="https://id.atlassian.com/manage-profile/security/api-tokens">API tokens</a><br/>
         <br/>
         <label>Round to nearest:</label> <input type="number" step="10" v-model="settings.rounding_minutes"> minutes<br/>
+        <label>Sort by:</label>
+        <select v-model="settings.sorting_order">
+            <option :value="undefined">Default (status, time spent, etc.)</option>
+            <option value="first_session">First session start time</option>
+        </select>
         <br/>
         <button type="button" class="btn btn-xs btn-primary" @click="store.updateSettings(settings)">save
         </button>
@@ -44,6 +49,10 @@
         }
         input[type=number] {
             width: 60px;
+        }
+        select {
+            height: 22px;
+            margin-left: 4px;
         }
     }
 </style>

@@ -5,11 +5,20 @@ import {comparatorLt, timespanToText} from "../Utils/Utils";
 export function build_sort_value(task: TaskObj) {
     let task_not_started = true;
     let last_session = null;
+    let first_session = null;
     if (task.sessions && task.sessions.length > 0) {
         task_not_started = false;
         last_session = task.sessions[task.sessions.length - 1];
+        first_session = task.sessions[0];
     }
     let is_timered = (store.state.taskTimeredId === task.id);
+
+    if (store.state.settings.sorting_order === 'first_session') {
+        return '' // 9 - higher, 0 - lower
+            + (task_not_started ? '9' : '0')
+            + (first_session ? first_session.started_at : '')
+            + '';
+    }
 
     return '' // 9 - higher, 0 - lower
         + (task.is_done ? '0' : '9')
