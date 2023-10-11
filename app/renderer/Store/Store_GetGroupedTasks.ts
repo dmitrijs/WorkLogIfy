@@ -41,7 +41,7 @@ export function sort_tasks(tasks) {
 export function Store_MergeSameCodes(tasks: Map<string, any>) {
     let unique = Map<string, any>();
     let idx = 0;
-    tasks.map((task: TaskObj) => {
+    tasks.reverse().map((task: TaskObj) => {
         idx++;
         let existing = unique.get(task.code);
         if (!existing) {
