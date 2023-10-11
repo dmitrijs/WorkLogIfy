@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+### [1.27.1](https://github.com/dmitrijs/WorkLogIfy/compare/v1.27.0...v1.27.1) (2023-10-11)
+
+
+### Improvements
+
+* **reports:** reverse entries order when preparing the report ([de0a633](https://github.com/dmitrijs/WorkLogIfy/commit/de0a633b969951ccd1449fc78a365bc7a1b71cce))
+
 ## [1.27.0](https://github.com/dmitrijs/WorkLogIfy/compare/v1.26.9...v1.27.0) (2023-10-11)
 
 
