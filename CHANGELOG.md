@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.27.0](https://github.com/dmitrijs/WorkLogIfy/compare/v1.26.9...v1.27.0) (2023-10-11)
+
+
+### Features
+
+* **tasks:** added 'Comment' field ([37cddae](https://github.com/dmitrijs/WorkLogIfy/commit/37cddaed72796eadc7249e36e3d784e19d3286d6))
+
 ### [1.26.9](https://github.com/dmitrijs/WorkLogIfy/compare/v1.26.8...v1.26.9) (2023-09-25)
 
 
