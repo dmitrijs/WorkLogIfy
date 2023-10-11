@@ -3,6 +3,7 @@ declare type TaskObj = {
     code: string;
     title: string;
     notes: string;
+    comment: string;
     source: string;
     date: string;
     chargeable: boolean;
@@ -43,6 +44,7 @@ declare type TemplateObj = {
     code?: string;
     title?: string;
     notes?: string;
+    comment?: string;
     frozen?: boolean;
 }
 

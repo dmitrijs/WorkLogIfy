@@ -178,6 +178,7 @@ const store = {
             logged: false,
             frozen: !!task.frozen,
             notes: task.notes,
+            comment: task.comment,
             source: task.source,
             date: task.date,
             created_at: moment().toISOString(),
@@ -211,6 +212,7 @@ const store = {
         state.tasks = state.tasks.setIn([task.id, 'date'], task.date);
         state.tasks = state.tasks.setIn([task.id, 'frozen'], !!task.frozen);
         state.tasks = state.tasks.setIn([task.id, 'notes'], task.notes);
+        state.tasks = state.tasks.setIn([task.id, 'comment'], task.comment);
         state.tasks = state.tasks.setIn([task.id, 'source'], task.source);
 
         if (task.time_add_minutes) {
@@ -396,6 +398,7 @@ const store = {
             title: '',
             code: '',
             notes: '',
+            comment: '',
         });
 
         saveTaskTemplates();

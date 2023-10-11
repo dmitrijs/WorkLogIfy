@@ -86,6 +86,18 @@ export function Store_MergeSameCodes(tasks: Map<string, any>) {
         }
         existing.notes = notes.trim();
 
+        let comment = existing.comment;
+        if (!comment) {
+            comment = '';
+        }
+        if (task.comment) {
+            if (comment && !comment.match(/[.;]$/)) {
+                comment += '.';
+            }
+            comment += (comment ? ' ' : '') + task.comment;
+        }
+        existing.comment = comment.trim();
+
         existing.id = 'group_' + idx;
         existing.grouped = true;
 

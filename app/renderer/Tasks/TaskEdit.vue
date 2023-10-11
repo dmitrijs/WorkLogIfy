@@ -53,6 +53,10 @@
                     <td><textarea v-model="task.notes"></textarea></td>
                 </tr>
                 <tr>
+                    <td>Comment:</td>
+                    <td><input type="text" v-model="task.comment" /></td>
+                </tr>
+                <tr>
                     <td colspan="2" class="text-right">
                         <button class="btn btn-outline-secondary btn-sm" type="button" @click="back">&lt; back</button>
                         <div class="btn-group" role="group">
