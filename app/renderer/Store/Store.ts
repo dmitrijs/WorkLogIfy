@@ -51,6 +51,7 @@ const state = reactive({
     tasks: null as Map<string, Map<string, any>>,
 
     tasksSelectedIds: Map<string, Boolean>({}),
+    taskLastSelected: '',
     tasksHoveredId: null,
     taskEditedId: null,
     tasksScreen: 'tasks',
@@ -137,7 +138,7 @@ const store = {
     },
 
     get getEmptyTask(): TaskEditedObj {
-        return {
+        let task = {
             code: '',
             title: '',
             frozen: false,
@@ -146,6 +147,17 @@ const store = {
             time_add_minutes: '',
             time_record_minutes: '',
         } as TaskEditedObj;
+
+        let refTask = null;
+        if (state.taskLastSelected && (refTask = state.tasks.get(state.taskLastSelected))) {
+            if (refTask.date != state.day_key) {
+                task.date = refTask.get('date');
+                task.code = refTask.get('code');
+            }
+        }
+        state.taskLastSelected = '';
+
+        return task;
     },
 
     get getFileTotals() {
@@ -318,6 +330,7 @@ const store = {
         if (!state.tasksHoveredId) {
             return;
         }
+        state.taskLastSelected = state.tasksHoveredId;
         state.tasksSelectedIds = state.tasksSelectedIds.set(state.tasksHoveredId, true);
     },
     deselectAll() {
