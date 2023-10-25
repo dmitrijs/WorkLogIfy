@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+### [1.27.2](https://github.com/dmitrijs/WorkLogIfy/compare/v1.27.1...v1.27.2) (2023-10-25)
+
+
+### Features
+
+* **tasks:** copy over date and code when creating new task from the context menu ([3094985](https://github.com/dmitrijs/WorkLogIfy/commit/309498515aede14871c29b7c49f08691f3157035))
+
 ### [1.27.1](https://github.com/dmitrijs/WorkLogIfy/compare/v1.27.0...v1.27.1) (2023-10-11)
 
 
