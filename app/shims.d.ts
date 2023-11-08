@@ -79,6 +79,11 @@ declare type SettingsObj = {
     jira_host: string;
     jira_username: string;
     jira_password: string;
+    asana_token: string;
+    asana_assignee_id: string;
+    asana_assignee_name: string;
+    asana_workspace_id: string;
+    asana_workspace_name: string;
     rounding_minutes: number;
     sorting_order: string;
     special_days: Object;
@@ -120,4 +125,9 @@ declare type CalendarMonthStatistics = {
     month_official_seconds: number,
     month_overtime_seconds: number,
     month_overtime_text: string,
+}
+
+declare type AsanaWorkspaceObj = {
+    gid: string;
+    name: string;
 }
