@@ -72,6 +72,7 @@ export default function createMenu() {
             }
             let workLogTime = timeStarted.format(JIRA_TIME_FORMAT);
 
+            // TODO: `request-promise` was replaced with `fetch`, these options were not adjusted
             let options = {
                 url: 'https://' + store.state.settings.jira_host + '/rest/api/2/issue/' + taskCode + '/worklog?notifyUsers=false&adjustEstimate=auto',
                 auth: {
