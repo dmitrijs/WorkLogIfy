@@ -9,6 +9,9 @@ import timer from "./Timer";
 import {createApp} from "vue";
 import moment from "moment";
 
+import App from './App.vue'
+import IpcRendererEvent = Electron.IpcRendererEvent;
+
 declare global {
     interface Window {
         ipc: StrictIpcRenderer<IpcChannelMap>,
@@ -51,9 +54,6 @@ window.ipc.on('migration', function ($event, what) {
         });
     }
 });
-
-import App from './App.vue'
-import IpcRendererEvent = Electron.IpcRendererEvent;
 
 const app = createApp(App);
 app.use((<any>store));
