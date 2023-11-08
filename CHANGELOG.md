@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.28.0](https://github.com/dmitrijs/WorkLogIfy/compare/v1.27.3...v1.28.0) (2023-11-08)
+
+
+### Features
+
+* **tasks:** track active apps while app is running ([e1c4576](https://github.com/dmitrijs/WorkLogIfy/commit/e1c4576851ac51e80e0cba9d52224054250ce85c))
+* **ux:** flash frame instead of showing alert when idle task starts ([654d51b](https://github.com/dmitrijs/WorkLogIfy/commit/654d51b77b4da928535613f736acc987f4cc44db))
+
 ### [1.27.3](https://github.com/dmitrijs/WorkLogIfy/compare/v1.27.2...v1.27.3) (2023-10-29)
 
 ### [1.27.2](https://github.com/dmitrijs/WorkLogIfy/compare/v1.27.1...v1.27.2) (2023-10-25)
