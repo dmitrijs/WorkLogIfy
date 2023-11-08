@@ -432,6 +432,9 @@ const store = {
     calendarHoveredDayCode(dayCode: string) {
         state.calendarHoveredDayCode = dayCode;
     },
+    saveTasks() {
+        saveTasks();
+    },
 }
 
 export default store;

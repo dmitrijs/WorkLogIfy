@@ -65,11 +65,7 @@
         }
 
         save() {
-            window.ipc.sendSync('tasks.save', {
-                day_key: store.state.day_key,
-                arg1: _.cloneDeep(store.state.tasks.toJS()),
-                arg2: _.cloneDeep(store.getTasksGrouped.toJS()),
-            });
+            store.saveTasks();
         }
 
         timerStop() {
