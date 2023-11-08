@@ -16,10 +16,11 @@ export interface IpcChannelMap {
         arg1: object,
         arg2: object,
         arg3?: object,
+        activeApps: object,
     }];
     'tasks.templates.save': [object];
 
-    'tasks.load': [string, object];
+    'tasks.load': [string, WorkDayObj];
     'settings.load': [void, SettingsObj];
     'tasks.getFileTotals': [void, object];
     'tasks.getTaskTemplates': [void, object];

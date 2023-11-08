@@ -1,5 +1,5 @@
-import fs from "fs";
 import {app} from "electron";
+import fs from "fs";
 
 class Filesystem {
     public static getDir() {
@@ -36,9 +36,13 @@ class Filesystem {
         return {};
     }
 
-    public static saveWorkLog(day_key, worklog, worklogProcessed, settings) {
+    public static saveWorkLog(day_key, worklog, worklogProcessed, settings, activeApps) {
         const dir = this.getDir();
-        fs.writeFileSync(dir + '/worklog-' + day_key + '.json', JSON.stringify(worklog));
+        fs.writeFileSync(dir + '/worklog-' + day_key + '.json', JSON.stringify({
+            version: 1,
+            tasks: worklog,
+            activeApps: activeApps,
+        }, null, 2));
         fs.writeFileSync(dir + '/settings.json', JSON.stringify(settings));
 
         {

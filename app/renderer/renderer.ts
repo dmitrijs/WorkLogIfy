@@ -85,6 +85,7 @@ window.ipc.on('user-active-app', function (event: IpcRendererEvent, activeAppDes
         console.log("[timeredTask.get('id'), activeAppDescription]", [timeredTask.get('id'), activeAppDescription]);
         store.taskAddActiveApp([timeredTask.get('id'), activeAppDescription]);
     }
+    store.addGlobalActiveApp(activeAppDescription);
 });
 
 window.ipc.on('timer-stop', function (event: IpcRendererEvent) {

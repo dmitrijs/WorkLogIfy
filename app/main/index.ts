@@ -1,15 +1,15 @@
-import {StrictIpcMain} from "typesafe-ipc";
-import {IpcChannelMap} from "../shared/ipcs-map";
-import Shortcuts from "./shortcuts";
-import IdleUser from "./idle";
-import Filesystem from "./filesystem";
-import createMainMenu from "./menu";
-import createTray, {setTrayIconActive, setTrayIconIdle} from "./tray";
+import {enable, initialize} from "@electron/remote/main";
 import * as electron from 'electron'
 import {app, BrowserWindow, Menu, shell} from 'electron'
-import {enable, initialize} from "@electron/remote/main";
-import path from "path";
 import isDev from "electron-is-dev";
+import path from "path";
+import {StrictIpcMain} from "typesafe-ipc";
+import {IpcChannelMap} from "../shared/ipcs-map";
+import Filesystem from "./filesystem";
+import IdleUser from "./idle";
+import createMainMenu from "./menu";
+import Shortcuts from "./shortcuts";
+import createTray, {setTrayIconActive, setTrayIconIdle} from "./tray";
 
 const ipcMain: StrictIpcMain<IpcChannelMap> = electron.ipcMain;
 
@@ -151,9 +151,9 @@ app.on('ready', async () => {
             event.returnValue = isDev;
         });
 
-        ipcMain.on('tasks.save', (event: Electron.IpcMainEvent, {day_key, arg1, arg2, arg3}) => {
+        ipcMain.on('tasks.save', (event: Electron.IpcMainEvent, {day_key, arg1: worklog, arg2: worklogProcessed, arg3: settings, activeApps}) => {
             console.log('saving tasks');
-            Filesystem.saveWorkLog(day_key, arg1, arg2, arg3);
+            Filesystem.saveWorkLog(day_key, worklog, worklogProcessed, settings, activeApps);
             event.returnValue = 'ok'
         });
 
@@ -164,7 +164,16 @@ app.on('ready', async () => {
         });
 
         ipcMain.on('tasks.load', (event: Electron.IpcMainEvent, day_key) => {
-            event.returnValue = Filesystem.getWorkLog(day_key);
+            let workday = Filesystem.getWorkLog(day_key);
+
+            if (!(<any>workday).version) { // v1
+                event.returnValue = {
+                    tasks: workday as any,
+                    activeApps: [],
+                }
+            } else {
+                event.returnValue = workday
+            }
         });
 
         ipcMain.on('settings.load', (event: Electron.IpcMainEvent) => {

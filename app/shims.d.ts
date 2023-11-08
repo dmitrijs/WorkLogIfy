@@ -1,3 +1,8 @@
+declare type WorkDayObj = {
+    tasks: any;
+    activeApps: ActiveAppObj[];
+}
+
 declare type TaskObj = {
     id: string;
     code: string;

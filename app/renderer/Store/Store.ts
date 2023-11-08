@@ -1,9 +1,9 @@
-import {timespanToText} from '../Utils/Utils';
 import {List, Map} from 'immutable';
-import Store_GetGroupedTasks from "./Store_GetGroupedTasks";
 import _ from "lodash";
-import {reactive} from "vue";
 import moment from "moment";
+import {reactive} from "vue";
+import {timespanToText} from '../Utils/Utils';
+import Store_GetGroupedTasks from "./Store_GetGroupedTasks";
 
 function saveTasks() {
     window.ipc.sendSync('tasks.save', {
@@ -11,6 +11,7 @@ function saveTasks() {
         arg1: _.cloneDeep(state.tasks.toJS()),
         arg2: _.cloneDeep(store.getTasksGrouped.toJS()),
         arg3: _.cloneDeep(state.settings),
+        activeApps: _.cloneDeep(state.activeApps),
     });
 }
 
@@ -54,6 +55,8 @@ function addRecord(tasks, task_id, recordedSeconds, method, jiraWorkLogId = null
 
 const state = reactive({
     tasks: null as Map<string, Map<string, any>>,
+
+    activeApps: [] as any[],
 
     tasksSelectedIds: Map<string, Boolean>({}),
     taskLastSelected: '',
@@ -285,9 +288,13 @@ const store = {
         }
         state.day_key = day;
         state.week_key = moment(day, "YYYY-MM-DD").endOf('isoWeek').format('YYYY-WW');
-        let tasks = window.ipc.sendSync('tasks.load', state.day_key);
+        let workday = window.ipc.sendSync('tasks.load', state.day_key);
 
-        state.tasks = convertJsTasksToMap(tasks);
+        state.tasks = convertJsTasksToMap(workday.tasks);
+        state.activeApps = workday.activeApps;
+        if (!state.activeApps) {
+            state.activeApps = [];
+        }
     },
     setDayFromJson(tasksJson: string) {
         if (state.taskTimeredId) {
@@ -407,6 +414,13 @@ const store = {
     },
     taskAddActiveApp([taskId, activeAppDescription]) {
         state.tasks = addActiveApp(state.tasks, taskId, activeAppDescription);
+        saveTasks();
+    },
+    addGlobalActiveApp(activeAppDescription: string) {
+        state.activeApps.push({
+            noticed_at: moment().toISOString(),
+            description: activeAppDescription,
+        });
         saveTasks();
     },
     templateNew() {
