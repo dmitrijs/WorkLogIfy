@@ -1,12 +1,17 @@
+import {StrictIpcMain} from "typesafe-ipc";
+import {IpcChannelMap} from "../shared/ipcs-map";
 import Shortcuts from "./shortcuts";
 import IdleUser from "./idle";
 import Filesystem from "./filesystem";
 import createMainMenu from "./menu";
 import createTray, {setTrayIconActive, setTrayIconIdle} from "./tray";
-import electron, {app, BrowserWindow, ipcMain, Menu, shell} from 'electron'
+import * as electron from 'electron'
+import {app, BrowserWindow, Menu, shell} from 'electron'
 import {enable, initialize} from "@electron/remote/main";
 import path from "path";
 import isDev from "electron-is-dev";
+
+const ipcMain: StrictIpcMain<IpcChannelMap> = electron.ipcMain;
 
 process.env.DIST_ELECTRON = path.join(__dirname, '..')
 process.env.DIST = path.join(process.env.DIST_ELECTRON, '../dist')
@@ -47,7 +52,7 @@ app.on('ready', async () => {
 
     createTray(mainWindow);
 
-    mainWindow.on('close', function (event) {
+    mainWindow.on('close', function (event: Electron.IpcMainEvent) {
         event.preventDefault();
         mainWindow.hide();
     });
@@ -63,7 +68,7 @@ app.on('ready', async () => {
         }
     });
 
-    mainWindow.webContents.on("new-window", function (event, url) {
+    mainWindow.webContents.on("new-window", function (event: Electron.IpcMainEvent, url) {
         event.preventDefault();
         shell.openExternal(url);
     });
@@ -78,7 +83,7 @@ app.on('ready', async () => {
     }
 
     {
-        ipcMain.on('timer-state', (event, arg) => {
+        ipcMain.on('timer-state', (event: Electron.IpcMainEvent, arg) => {
             console.log('timer-state', arg)
             switch (arg) {
                 case 'stopped':
@@ -91,38 +96,39 @@ app.on('ready', async () => {
             event.reply('asynchronous-reply', 'ok')
         });
 
-        ipcMain.on('asynchronous-message', (event, arg) => {
+        ipcMain.on('asynchronous-message', (event: Electron.IpcMainEvent, arg) => {
             console.log(arg) // prints "ping"
             event.reply('asynchronous-reply', 'pong')
         })
 
-        ipcMain.on('synchronous-message', (event, arg) => {
+        ipcMain.on('synchronous-message', (event: Electron.IpcMainEvent, arg) => {
             console.log(arg) // prints "ping"
             event.returnValue = 'pong'
         })
 
-        ipcMain.on('show.error', (event, title, content) => {
-            electron.dialog.showErrorBox(title, content);
+        ipcMain.on('show.error', (event: Electron.IpcMainEvent, error) => {
+            electron.dialog.showErrorBox(error.title, error.content);
+            return '';
         });
 
-        ipcMain.on('jira.request', (event, options) => {
+        ipcMain.on('jira.request', (event: Electron.IpcMainEvent, options) => {
             console.log('options', options);
 
-            // TODO: `request-promise` was replaced with `fetch`, code was not adjusted
-            fetch(options)
+            fetch(options.url, options)
                 .then(response => {
-                    console.log('jira.request succeeded', response);
-                    event.returnValue = {response: response};
+                    return response.json();
+                })
+                .then((data) => {
+                    console.log('jira.request succeeded', data);
+                    event.returnValue = {response: data};
                 })
                 .catch(err => {
-                    alert(err.message);
+                    console.error(err.message);
                     event.returnValue = {error: err.message};
                 });
         });
 
-        ipcMain.on('window.open', (event, arg) => {
-            console.log(arg) // prints "ping"
-
+        ipcMain.on('window.open', (event: Electron.IpcMainEvent) => {
             let display = electron.screen.getPrimaryDisplay();
 
             let width = 300, height = 200;
@@ -141,39 +147,39 @@ app.on('ready', async () => {
             event.returnValue = 'ok'
         });
 
-        ipcMain.on('debug.state', (event, arg) => {
+        ipcMain.on('debug.state', (event: Electron.IpcMainEvent) => {
             event.returnValue = isDev;
         });
 
-        ipcMain.on('tasks.save', (event, day_key, arg1, arg2, arg3) => {
+        ipcMain.on('tasks.save', (event: Electron.IpcMainEvent, {day_key, arg1, arg2, arg3}) => {
             console.log('saving tasks');
             Filesystem.saveWorkLog(day_key, arg1, arg2, arg3);
             event.returnValue = 'ok'
         });
 
-        ipcMain.on('tasks.templates.save', (event, arg1) => {
+        ipcMain.on('tasks.templates.save', (event: Electron.IpcMainEvent, taskTemplates) => {
             console.log('saving task templates');
-            Filesystem.saveTaskTemplates(arg1);
+            Filesystem.saveTaskTemplates(taskTemplates);
             event.returnValue = 'ok'
         });
 
-        ipcMain.on('tasks.load', (event, arg) => {
-            event.returnValue = Filesystem.getWorkLog(arg);
+        ipcMain.on('tasks.load', (event: Electron.IpcMainEvent, day_key) => {
+            event.returnValue = Filesystem.getWorkLog(day_key);
         });
 
-        ipcMain.on('settings.load', (event) => {
+        ipcMain.on('settings.load', (event: Electron.IpcMainEvent) => {
             event.returnValue = Filesystem.getSettings();
         });
 
-        ipcMain.on('tasks.getFileTotals', (event) => {
+        ipcMain.on('tasks.getFileTotals', (event: Electron.IpcMainEvent) => {
             event.returnValue = Filesystem.getFileTotals();
         });
 
-        ipcMain.on('tasks.getTaskTemplates', (event) => {
+        ipcMain.on('tasks.getTaskTemplates', (event: Electron.IpcMainEvent) => {
             event.returnValue = Filesystem.getTaskTemplates();
         });
 
-        ipcMain.on('quit.confirmed', (event) => {
+        ipcMain.on('quit.confirmed', (event: Electron.IpcMainEvent) => {
             quitConfirmed = true;
             app.quit();
         });

@@ -1,3 +1,5 @@
+import {StrictIpcRenderer} from "typesafe-ipc";
+import {IpcChannelMap} from "../shared/ipcs-map";
 import store from './Store/Store'
 
 import './../style.scss';
@@ -9,7 +11,7 @@ import moment from "moment";
 
 declare global {
     interface Window {
-        ipc: Electron.IpcRenderer,
+        ipc: StrictIpcRenderer<IpcChannelMap>,
         remote: any,
     }
 }
@@ -57,7 +59,7 @@ const app = createApp(App);
 app.use((<any>store));
 app.mount("#root");
 
-window.ipc.on('user-is-idle', function (emitter, secondsIdle, secondsToBecomeIdle) {
+window.ipc.on('user-is-idle', function (event: IpcRendererEvent, secondsIdle) {
     if (timer.isActive()) {
         let timeredTask = store.state.tasks.get(store.state.taskTimeredId);
         if (timeredTask && timeredTask.get('code') === 'idle') {
@@ -73,11 +75,11 @@ window.ipc.on('user-is-idle', function (emitter, secondsIdle, secondsToBecomeIdl
         store.createTask(idleTask);
 
         timer.start(store.state.createdTaskId);
-        window.ipc.send('show.error', "Idle task", `Idle task was started because of inactivity.`);
+        window.ipc.send('show.error', {title: "Idle task", content: `Idle task was started because of inactivity.`});
     }
 });
 
-window.ipc.on('user-active-app', function (emitter, activeAppDescription) {
+window.ipc.on('user-active-app', function (event: IpcRendererEvent, activeAppDescription) {
     if (timer.isActive()) {
         let timeredTask = store.state.tasks.get(store.state.taskTimeredId);
         console.log("[timeredTask.get('id'), activeAppDescription]", [timeredTask.get('id'), activeAppDescription]);
@@ -85,7 +87,7 @@ window.ipc.on('user-active-app', function (emitter, activeAppDescription) {
     }
 });
 
-window.ipc.on('timer-stop', function (emitter, secondsIdle, secondsToBecomeIdle) {
+window.ipc.on('timer-stop', function (event: IpcRendererEvent) {
     if (timer.isActive()) {
         timer.stop();
     }

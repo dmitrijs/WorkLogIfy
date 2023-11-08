@@ -91,7 +91,7 @@ export default function createMenu() {
                 alert('Would be sent to JIRA: ' + timespanToText(timeSpentSeconds) + ' at ' + workLogTime);
                 jiraResponseWorkLog = {response: {}};
             } else {
-                jiraResponseWorkLog = window.ipc.sendSync('jira.request', _.cloneDeep(options));
+                jiraResponseWorkLog = window.ipc.sendSync('jira.request', <any>_.cloneDeep(options));
             }
 
             if (jiraResponseWorkLog.error) {

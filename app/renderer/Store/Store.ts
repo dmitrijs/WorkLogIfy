@@ -6,7 +6,12 @@ import {reactive} from "vue";
 import moment from "moment";
 
 function saveTasks() {
-    window.ipc.sendSync('tasks.save', state.day_key, _.cloneDeep(state.tasks.toJS()), _.cloneDeep(store.getTasksGrouped.toJS()), _.cloneDeep(state.settings));
+    window.ipc.sendSync('tasks.save', {
+        day_key: state.day_key,
+        arg1: _.cloneDeep(state.tasks.toJS()),
+        arg2: _.cloneDeep(store.getTasksGrouped.toJS()),
+        arg3: _.cloneDeep(state.settings),
+    });
 }
 
 function saveTaskTemplates() {
