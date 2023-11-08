@@ -111,6 +111,11 @@ app.on('ready', async () => {
             return '';
         });
 
+        ipcMain.on('flash.frame', (event: Electron.IpcMainEvent) => {
+            mainWindow.once('focus', () => mainWindow.flashFrame(false))
+            mainWindow.flashFrame(true)
+        });
+
         ipcMain.on('jira.request', (event: Electron.IpcMainEvent, options) => {
             console.log('options', options);
 

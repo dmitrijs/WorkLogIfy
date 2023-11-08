@@ -75,7 +75,7 @@ window.ipc.on('user-is-idle', function (event: IpcRendererEvent, secondsIdle) {
         store.createTask(idleTask);
 
         timer.start(store.state.createdTaskId);
-        window.ipc.send('show.error', {title: "Idle task", content: `Idle task was started because of inactivity.`});
+        window.ipc.send('flash.frame');
     }
 });
 

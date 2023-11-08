@@ -7,6 +7,7 @@ export interface IpcChannelMap {
         title: string,
         content: string,
     }];
+    'flash.frame': [void];
     'jira.request': [object & { url: string } & RequestInit, object];
     'window.open': [void];
 
