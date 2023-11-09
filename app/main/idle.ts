@@ -21,14 +21,14 @@ export default class IdleUser {
                 const secondsIdle = electron.powerMonitor.getSystemIdleTime();
                 (async () => {
                     if (secondsIdle > this.seconds_to_log_active_window) {
-                        mainWindow.webContents.send('user-active-app', '-"-');
+                        mainWindow.webContents.send('user-active-app', {secondsIdle: secondsIdle, appDescription: '-"-'});
                         return;
                     }
                     let obj = await activeWindow();
                     if (!obj) {
                         return;
                     }
-                    mainWindow.webContents.send('user-active-app', `[${obj.owner?.name || obj.owner?.path || obj.title}] "${obj.title}"`);
+                    mainWindow.webContents.send('user-active-app', {secondsIdle: secondsIdle, appDescription: `[${obj.owner?.name || obj.owner?.path || obj.title}] "${obj.title}"`});
                 })();
             }, this.seconds_to_log_active_window * 1000);
         }

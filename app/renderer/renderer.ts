@@ -79,13 +79,13 @@ window.ipc.on('user-is-idle', function (event: IpcRendererEvent, secondsIdle) {
     }
 });
 
-window.ipc.on('user-active-app', function (event: IpcRendererEvent, activeAppDescription) {
+window.ipc.on('user-active-app', function (event: IpcRendererEvent, activeApp) {
     if (timer.isActive()) {
         let timeredTask = store.state.tasks.get(store.state.taskTimeredId);
-        console.log("[timeredTask.get('id'), activeAppDescription]", [timeredTask.get('id'), activeAppDescription]);
-        store.taskAddActiveApp([timeredTask.get('id'), activeAppDescription]);
+        console.log("[timeredTask.get('id'), activeAppDescription]", [timeredTask.get('id'), activeApp.appDescription]);
+        store.taskAddActiveApp([timeredTask.get('id'), activeApp.appDescription, activeApp.secondsIdle]);
     }
-    store.addGlobalActiveApp(activeAppDescription);
+    store.addGlobalActiveApp(activeApp.appDescription, activeApp.secondsIdle);
 });
 
 window.ipc.on('timer-stop', function (event: IpcRendererEvent) {

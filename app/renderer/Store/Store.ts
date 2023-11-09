@@ -30,10 +30,11 @@ function addSession(tasks, task_id, spentSeconds, method, idleSeconds = 0) {
     return tasks.setIn([task_id, 'sessions'], sessions);
 }
 
-function addActiveApp(tasks, task_id, activeAppDescription = 0) {
+function addActiveApp(tasks, task_id, activeAppDescription, secondsIdle) {
     let activeApps = tasks.get(task_id).get('activeApps');
     activeApps = activeApps.push({
         noticed_at: moment().toISOString(),
+        seconds_idle: secondsIdle,
         description: activeAppDescription,
     });
     return tasks.setIn([task_id, 'activeApps'], activeApps);
@@ -412,13 +413,14 @@ const store = {
         state.tasks = addSession(state.tasks, taskId, minutes * 60, method);
         saveTasks();
     },
-    taskAddActiveApp([taskId, activeAppDescription]) {
-        state.tasks = addActiveApp(state.tasks, taskId, activeAppDescription);
+    taskAddActiveApp([taskId, activeAppDescription, secondsIdle]) {
+        state.tasks = addActiveApp(state.tasks, taskId, activeAppDescription, secondsIdle);
         saveTasks();
     },
-    addGlobalActiveApp(activeAppDescription: string) {
+    addGlobalActiveApp(activeAppDescription: string, secondsIdle: number) {
         state.activeApps.push({
             noticed_at: moment().toISOString(),
+            seconds_idle: secondsIdle,
             description: activeAppDescription,
         });
         saveTasks();

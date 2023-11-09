@@ -32,7 +32,7 @@ export interface IpcChannelMap {
     'debug.toggle': [boolean];
     'migration': [string];
     'user-is-idle': [number];
-    'user-active-app': [string];
+    'user-active-app': [{secondsIdle: number, appDescription: string}];
     'timer-stop': [void];
     'confirm-app-quit': [void];
 }
