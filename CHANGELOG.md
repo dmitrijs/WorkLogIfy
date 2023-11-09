@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+### [1.28.1](https://github.com/dmitrijs/WorkLogIfy/compare/v1.28.0...v1.28.1) (2023-11-09)
+
+
+### Improvements
+
+* **tasks:** store idle seconds with active app ([9eb7f8a](https://github.com/dmitrijs/WorkLogIfy/commit/9eb7f8a0d1c2ada286ced6ff0c7c7086d79d92ae))
+
 ## [1.28.0](https://github.com/dmitrijs/WorkLogIfy/compare/v1.27.3...v1.28.0) (2023-11-08)
 
 
