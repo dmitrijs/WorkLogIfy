@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+### [1.28.2](https://github.com/dmitrijs/WorkLogIfy/compare/v1.28.1...v1.28.2) (2023-11-11)
+
+
+### Improvements
+
+* **tasks:** store timered task with active app ([2100b3a](https://github.com/dmitrijs/WorkLogIfy/commit/2100b3a0ce0a0e8d8fa64e92bfdee1647d96a4eb))
+
 ### [1.28.1](https://github.com/dmitrijs/WorkLogIfy/compare/v1.28.0...v1.28.1) (2023-11-09)
 
 
