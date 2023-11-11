@@ -417,10 +417,11 @@ const store = {
         state.tasks = addActiveApp(state.tasks, taskId, activeAppDescription, secondsIdle);
         saveTasks();
     },
-    addGlobalActiveApp(activeAppDescription: string, secondsIdle: number) {
+    addGlobalActiveApp(timeredTaskId: string, activeAppDescription: string, secondsIdle: number) {
         state.activeApps.push({
             noticed_at: moment().toISOString(),
             seconds_idle: secondsIdle,
+            timered_task: timeredTaskId,
             description: activeAppDescription,
         });
         saveTasks();
