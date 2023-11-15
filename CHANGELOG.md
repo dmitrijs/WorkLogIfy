@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+### [1.29.1](https://github.com/dmitrijs/WorkLogIfy/compare/v1.29.0...v1.29.1) (2023-11-15)
+
+
+### Improvements
+
+* **tasks:** fixed the order when a task is active ([b67edd2](https://github.com/dmitrijs/WorkLogIfy/commit/b67edd235396adfb343dcd3e28178fab44f8dcf6))
+
 ## [1.29.0](https://github.com/dmitrijs/WorkLogIfy/compare/v1.28.3...v1.29.0) (2023-11-15)
 
 
