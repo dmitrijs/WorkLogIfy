@@ -79,7 +79,7 @@
                      }"
                          @click="rowOnClick($event, task)"
                     >
-                        <div class="TRowContent">
+                        <div class="TRowContent" v-if="!(tasks_ui.tasksHideUnReportable && (task.distributed || !task.chargeable))">
                             <!--
                             <div class="TCol --selected">
                                 <div class="label-checkbox" @click="store.tasksUiToggle(task.id)">
@@ -173,9 +173,13 @@
                   @click.prevent="toggleShowAsReport()">
                 <label><input type="checkbox" :checked="tasks_ui.tasksShowAsReport"><span></span> as a report</label>
             </span>
+            <span class="label--checkbox label--checkbox--with-text"
+                  @click.prevent="toggleHideUnReportable()">
+                <label><input type="checkbox" :checked="tasks_ui.tasksHideUnReportable"><span></span> hide un-reportable</label>
+            </span>
             <button type="button" class="btn btn-secondary btn-xs" style="margin-left: 6px; line-height: 0.6rem"
                     title="Ctrl+F applies formatting in Slack"
-                    v-if="tasks_ui.tasksShowAsReport"
+                    v-if="tasks_ui.tasksShowAsReport || tasks_ui.tasksHideUnReportable"
                     @click="copyToClipboardAllTasks($event)">
                 Copy for Slack
             </button>
@@ -278,6 +282,18 @@
         return result.toJS();
     });
 
+    const tasksGroupedAndMerged = computed(() => {
+        let groups = store.getTasksGrouped;
+
+        let result = groups;
+        groups.map((group, group_id) => {
+            let tasks = Store_MergeSameCodes(group.get('tasks'));
+            result = result.setIn([group_id, 'tasks'], tasks);
+        });
+
+        return result.toJS();
+    });
+
     const tasks_ui = computed(() => {
         return store.getTasksUi;
     })
@@ -326,6 +342,15 @@
         store.toggleTasksShowAsReport();
     }
 
+    function toggleHideUnReportable() {
+        if (tasks_ui.value.tasksHideUnReportable) {
+            setTimeout(function () {
+                forceUpdateKey.value++; // force reload to remove animation classes
+            }.bind(this), 200/* transition 200ms */);
+        }
+        store.toggleHideUnReportable();
+    }
+
     function copyToClipboard(ev, text) {
         navigator.clipboard.writeText(text).then(function () {
             ev.target.classList.add('AnimationPulseOnceAndHide');
@@ -336,7 +361,7 @@
 
     function copyToClipboardAllTasks(ev) {
         let s = '*' + moment(store.state.day_key + ' 12:00:00').format('ddd, MMM D') + "*\n";
-        for (let group of Object.values(tasksGrouped.value)) {
+        for (let group of Object.values(tasksGroupedAndMerged.value)) {
             for (let task of (<any>group).tasks) {
                 if (!task.chargeable || task.distributed) {
                     continue;
@@ -344,8 +369,9 @@
                 let title = task.title;
                 if (title) {
                     title = title.replaceAll('[combined]', '').trim();
+                    title = title.replace(/^, /, '');
                 }
-                s += title + "\n" + "> " + task.notes + "\n" + "> ~" + timespanToTextHours(task.time_charge_seconds) + "\n";
+                s += title + "\n" + "> " + (task.notes || '') + "\n" + "> ~" + timespanToTextHours(task.time_charge_seconds) + "\n";
             }
         }
         console.log(s);

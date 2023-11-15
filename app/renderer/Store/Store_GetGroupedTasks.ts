@@ -68,6 +68,13 @@ class TasksSorter {
                 return -1 * (this.codeToLastSession[aCode] - this.codeToLastSession[bCode]);
             }
 
+            if (!(a.distributed || !a.chargeable) && (b.distributed || !b.chargeable)) {
+                return -1;
+            }
+            if ((a.distributed || !a.chargeable) && !(b.distributed || !b.chargeable)) {
+                return 1;
+            }
+
             return (a.last_session?.started_at > b.last_session?.started_at ? -1 : 1);
         }
 

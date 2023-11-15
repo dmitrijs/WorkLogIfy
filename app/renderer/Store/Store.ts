@@ -66,6 +66,7 @@ const state = reactive({
     tasksScreen: 'tasks',
     taskTimeredId: null,
     tasksShowAsReport: false,
+    tasksHideUnReportable: false,
     timerElapsedText: null,
     timerElapsed: 0,
     screen: null,
@@ -137,6 +138,7 @@ const store = {
             is_debug: state.is_debug,
             day_key: state.day_key,
             tasksShowAsReport: state.tasksShowAsReport,
+            tasksHideUnReportable: state.tasksHideUnReportable,
             taskInClipboard: state.taskInClipboard,
         }
     },
@@ -277,6 +279,9 @@ const store = {
     },
     toggleTasksShowAsReport() {
         state.tasksShowAsReport = !state.tasksShowAsReport;
+    },
+    toggleHideUnReportable() {
+        state.tasksHideUnReportable = !state.tasksHideUnReportable;
     },
     taskEdit(key) {
         state.taskEditedId = key;
