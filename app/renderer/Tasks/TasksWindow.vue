@@ -62,6 +62,7 @@
                     <div class="TCol --timespan --timespan-spent" title="Spent">{{ group.time_spent_text }}</div>
                 </div>
 
+                {{ void(_codesSeen = {}) }}
                 <transition-group name="fade">
                     <div class="TRow"
                          v-for="task of group.tasks"
@@ -99,7 +100,8 @@
                             </div>
                             <div class="TCol --code"
                                  @click="tasks_ui.tasksShowAsReport ? copyToClipboard($event, task.code) : editTask($event, task)">
-                                {{ task.code }}
+                                <span v-if="_codesSeen[task.code]" style="color: grey;">&#x2937; {{ task.code }}</span>
+                                <span v-else>{{ task.code }}</span>
                                 <div class="--edit-button">
                                     <a href="#" @click.stop="editTask($event, task)" v-if="!task.grouped">edit</a>
                                 </div>
@@ -154,6 +156,7 @@
                                    @click="startTimer($event, task)"></i>
                             </div>
                         </div>
+                        {{ void(task.code && task.code !== 'idle' && (_codesSeen[task.code] = true)) }}
                     </div>
                 </transition-group>
             </template>
@@ -217,6 +220,8 @@
     import moment from "moment";
 
     const remote = window.remote;
+
+    let _codesSeen = {};
 
     const drag = reactive({
         active: false,
