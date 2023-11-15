@@ -4,7 +4,7 @@ import fs from "fs";
 class Filesystem {
     public static getDir() {
         var rootDir = app.getPath('appData');
-        var dir = rootDir + '/WorkLogIfy/';
+        var dir = rootDir + (app.isPackaged ? '/WorkLogIfy/' : '/WorkLogIfy-test/');
 
         if (!fs.existsSync(dir)) {
             fs.mkdirSync(dir, {recursive: true});
