@@ -35,6 +35,9 @@ class TasksSorter {
             if (task.sessions[task.sessions?.length - 1]?.started_at) {
                 started_at = moment(task.sessions[task.sessions?.length - 1]?.started_at).unix();
             }
+            if (store.state.taskTimeredId === task.id) {
+                started_at = moment().unix();
+            }
             if (started_at) {
                 this.codeToLastSession[code] = Math.max(this.codeToLastSession[code] ?? -1, started_at);
             }
