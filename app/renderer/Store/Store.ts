@@ -57,7 +57,7 @@ function addRecord(tasks, task_id, recordedSeconds, method, jiraWorkLogId = null
 const state = reactive({
     tasks: null as Map<string, Map<string, any>>,
 
-    activeApps: [] as any[],
+    activeApps: [] as ActiveAppObj[],
 
     tasksSelectedIds: Map<string, Boolean>({}),
     taskLastSelected: '',

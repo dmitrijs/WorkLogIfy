@@ -7,6 +7,7 @@
             <CalendarWindow v-else-if="tasks_ui.screen === 'calendar'"></CalendarWindow>
             <TemplatesWindow v-else-if="tasks_ui.screen === 'task.templates'"></TemplatesWindow>
             <SettingsWindow v-else-if="tasks_ui.screen === 'settings'"></SettingsWindow>
+            <ActiveAppsWindow v-else-if="tasks_ui.screen === 'active_apps'"></ActiveAppsWindow>
         </transition>
 
         <div class="Debug" v-if="tasks_ui.is_debug">
@@ -37,6 +38,7 @@
 
 <script lang="ts">
     import {Component, Vue} from "vue-facing-decorator";
+    import ActiveAppsWindow from "./Tasks/ActiveAppsWindow.vue";
     import TasksWindow from "./Tasks/TasksWindow.vue";
     import TaskEdit from "./Tasks/TaskEdit.vue";
     import timer from "./Timer";
@@ -48,6 +50,7 @@
 
     @Component({
         components: {
+          ActiveAppsWindow,
             TemplatesWindow,
             CalendarWindow,
             TaskEdit,

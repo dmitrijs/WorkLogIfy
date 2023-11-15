@@ -36,6 +36,12 @@ export default function createMainMenu(mainWindow) {
             },
         },
         {
+            label: 'Active Apps', click: function () {
+                mainWindow.show();
+                mainWindow.webContents.send('change.screen', 'active_apps');
+            },
+        },
+        {
             label: 'Templates', click: function () {
                 mainWindow.show();
                 mainWindow.webContents.send('change.screen', 'task.templates');

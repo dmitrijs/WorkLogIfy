@@ -70,6 +70,8 @@ declare type RecordObj = {
 declare type ActiveAppObj = {
     noticed_at: string;
     description: string;
+    seconds_idle: number;
+    timered_task: string;
 }
 
 declare type SettingsObj = {
