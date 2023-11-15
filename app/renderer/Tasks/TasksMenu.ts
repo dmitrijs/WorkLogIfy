@@ -21,6 +21,12 @@ export default function createMenu() {
     const menu = new Menu();
     menu.append(new MenuItem({
         label: 'New Task', click() {
+            store.state.taskLastSelected = null;
+            store.setScreen('task.new');
+        },
+    }));
+    menu.append(new MenuItem({
+        label: 'New Follow-up Task', click() {
             store.setScreen('task.new');
         },
     }));
