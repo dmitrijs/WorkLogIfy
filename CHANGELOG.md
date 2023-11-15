@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+### [1.28.3](https://github.com/dmitrijs/WorkLogIfy/compare/v1.28.2...v1.28.3) (2023-11-15)
+
+
+### Features
+
+* **tasks:** added 'Last session start time, group tasks with same code' sort order ([f97f2d2](https://github.com/dmitrijs/WorkLogIfy/commit/f97f2d262d8a151f68113116e1c19bfe7db616e9))
+* **tasks:** added explicit 'New Follow-up Task' menu option ([f827dfa](https://github.com/dmitrijs/WorkLogIfy/commit/f827dfa63682b75f8dffa5da4d2fdceb7dcf9997))
+
 ### [1.28.2](https://github.com/dmitrijs/WorkLogIfy/compare/v1.28.1...v1.28.2) (2023-11-11)
 
 
