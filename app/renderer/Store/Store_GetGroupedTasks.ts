@@ -1,40 +1,85 @@
 import {Collection, List, Map, OrderedMap} from "immutable";
+import moment from "moment";
 import store from "../Store/Store";
 import {comparatorLt, timespanToText} from "../Utils/Utils";
 
-export function build_sort_value(task: TaskObj) {
-    let task_not_started = true;
-    let last_session = null;
-    let first_session = null;
-    if (task.sessions && task.sessions.length > 0) {
-        task_not_started = false;
-        last_session = task.sessions[task.sessions.length - 1];
-        first_session = task.sessions[0];
-    }
-    let is_timered = (store.state.taskTimeredId === task.id);
-
+export function build_sort_value(task: TaskObj & {
+    task_not_started: boolean, last_session: SessionObj, first_session: SessionObj, is_timered: boolean,
+}) {
     if (store.state.settings.sorting_order === 'first_session') {
         return '' // 9 - higher, 0 - lower
-            + (task_not_started ? '9' : '0')
-            + (first_session ? first_session.started_at : '')
+            + (task.task_not_started ? '9' : '0')
+            + (task.first_session ? task.first_session.started_at : '')
             + '';
     }
 
     return '' // 9 - higher, 0 - lower
         + (task.is_done ? '0' : '9')
-        + (task_not_started ? '9' : '0')
-        + (is_timered ? '9' : '0')
+        + (task.task_not_started ? '9' : '0')
+        + (task.is_timered ? '9' : '0')
         + (task.time_spent_seconds ? '9' : '0')
         + (task.is_done ? task.is_done_at : '')
         + (task.is_on_hold ? '0' : '9')
         + (task.is_on_hold ? task.is_on_hold_at : '')
-        + (last_session ? last_session.finished_at : '')
+        + (task.last_session ? task.last_session.finished_at : '')
         + '';
 }
 
+class TasksSorter {
+    codeToLastSession = {};
+
+    constructor(tasks: List<TaskObj>) {
+        tasks.forEach((task) => {
+            const code = (!task.code || task.code === 'idle' ? task.id : task.code);
+            let started_at = 0;
+            if (task.sessions[task.sessions?.length - 1]?.started_at) {
+                started_at = moment(task.sessions[task.sessions?.length - 1]?.started_at).unix();
+            }
+            if (started_at) {
+                this.codeToLastSession[code] = Math.max(this.codeToLastSession[code] ?? -1, started_at);
+            }
+        })
+    }
+
+    enhanceTask(task: TaskObj) {
+        let task_not_started = true;
+        let last_session = null;
+        let first_session = null;
+        if (task.sessions && task.sessions.length > 0) {
+            task_not_started = false;
+            last_session = task.sessions[task.sessions.length - 1];
+            first_session = task.sessions[0];
+        }
+        let is_timered = (store.state.taskTimeredId === task.id);
+        return Object.assign({}, task, {
+            task_not_started, last_session, first_session, is_timered,
+        });
+    }
+
+    compare(task1: TaskObj, task2: TaskObj) {
+        const a = this.enhanceTask(task1);
+        const b = this.enhanceTask(task2);
+
+        if (store.state.settings.sorting_order === 'last_session_group_same_code') {
+            const aCode = (!a.code || a.code === 'idle' ? a.id : a.code);
+            const bCode = (!b.code || b.code === 'idle' ? b.id : b.code);
+
+            if (this.codeToLastSession[aCode] !== this.codeToLastSession[bCode]) {
+                return -1 * (this.codeToLastSession[aCode] - this.codeToLastSession[bCode]);
+            }
+
+            return (a.last_session?.started_at > b.last_session?.started_at ? -1 : 1);
+        }
+
+        return comparatorLt(build_sort_value(a), build_sort_value(b));
+    }
+}
+
 export function sort_tasks(tasks) {
+    const sorter = new TasksSorter(tasks);
+
     return tasks.sort((task1: TaskObj, task2: TaskObj) => {
-        return comparatorLt(build_sort_value(task1), build_sort_value(task2));
+        return sorter.compare(task1, task2);
     });
 }
 
