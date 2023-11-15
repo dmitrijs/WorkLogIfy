@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.29.0](https://github.com/dmitrijs/WorkLogIfy/compare/v1.28.3...v1.29.0) (2023-11-15)
+
+
+### Features
+
+* **tasks:** added 'Active Apps' screen ([c6503d3](https://github.com/dmitrijs/WorkLogIfy/commit/c6503d396d6c34110dd9e7aade8e755d2082d448))
+* **tasks:** support hiding non-chargeable tasks ([7be910c](https://github.com/dmitrijs/WorkLogIfy/commit/7be910cc265edf564ccd27d5d0df7e108ecbb4b6))
+
+
+### UI/UX
+
+* **tasks:** added visual indicator that task is a follow-up ([d3a9ab5](https://github.com/dmitrijs/WorkLogIfy/commit/d3a9ab51296171d40b620d972fa0edb55d537a1c))
+
 ### [1.28.3](https://github.com/dmitrijs/WorkLogIfy/compare/v1.28.2...v1.28.3) (2023-11-15)
 
 
