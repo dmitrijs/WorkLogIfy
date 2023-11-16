@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+### [1.29.2](https://github.com/dmitrijs/WorkLogIfy/compare/v1.29.1...v1.29.2) (2023-11-16)
+
+
+### Improvements
+
+* **tasks:** show new not-started tasks on top ([62186e0](https://github.com/dmitrijs/WorkLogIfy/commit/62186e04377b14719a9574f827adfa2f714ca315))
+
 ### [1.29.1](https://github.com/dmitrijs/WorkLogIfy/compare/v1.29.0...v1.29.1) (2023-11-15)
 
 
