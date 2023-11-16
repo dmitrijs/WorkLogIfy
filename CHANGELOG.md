@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+### [1.29.3](https://github.com/dmitrijs/WorkLogIfy/compare/v1.29.2...v1.29.3) (2023-11-16)
+
+
+### Improvements
+
+* **tasks:** always show 'play' button on all tasks ([c0abe38](https://github.com/dmitrijs/WorkLogIfy/commit/c0abe38744dfc989447a33306a59fe0cc4c8b422))
+
 ### [1.29.2](https://github.com/dmitrijs/WorkLogIfy/compare/v1.29.1...v1.29.2) (2023-11-16)
 
 
