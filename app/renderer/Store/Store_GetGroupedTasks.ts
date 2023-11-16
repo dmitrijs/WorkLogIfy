@@ -67,6 +67,16 @@ class TasksSorter {
             const aCode = (!a.code || a.code === 'idle' ? a.id : a.code);
             const bCode = (!b.code || b.code === 'idle' ? b.id : b.code);
 
+            if (!a.last_session && b.last_session) {
+                return -1;
+            }
+            if (a.last_session && !b.last_session) {
+                return 1;
+            }
+            if (!a.last_session && !b.last_session) {
+                return (a.created_at > b.created_at ? -1 : 1);
+            }
+
             if (this.codeToLastSession[aCode] !== this.codeToLastSession[bCode]) {
                 return -1 * (this.codeToLastSession[aCode] - this.codeToLastSession[bCode]);
             }

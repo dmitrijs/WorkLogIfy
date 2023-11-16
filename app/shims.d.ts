@@ -19,6 +19,7 @@ declare type TaskObj = {
     is_on_hold: boolean;
     is_on_hold_at: boolean;
     _selected: boolean;
+    created_at: string;
 
     time_spent_text: string;
     time_recorded_text: string;
