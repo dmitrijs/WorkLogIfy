@@ -45,13 +45,6 @@
             }
         }
 
-        &.distributed,
-        &.notchargeable {
-            .TCol.--playback .IconAsInput.icofont-play {
-                display: none;
-            }
-        }
-
         &.isOnHold {
             .IconOnHold {
                 color: #E9D086;
