@@ -32,7 +32,7 @@
             </div>
         </div>
         <div class="TasksTable"
-             :class="{ ShowAsReport: tasks_ui.tasksShowAsReport }"
+             :class="{ ShowAsReport: tasks_ui.tasksShowAsReport, ShowCompact: tasks_ui.tasksHideUnReportable }"
              :key="forceUpdateKey"
              @click.self="store.deselectAll">
             <div class="TRowDate Total" v-if="tasksGroupedLength > 1">
@@ -76,6 +76,7 @@
                          hasRecords: !!task.time_recorded_seconds,
                          isDone: !!task.is_done,
                          isOnHold: !!task.is_on_hold,
+                         taskCodeSeen: _codesSeen[task.code],
                      }"
                          @click="rowOnClick($event, task)"
                     >
@@ -109,7 +110,7 @@
                             <div class="TCol --title"
                                  @click="tasks_ui.tasksShowAsReport ? copyToClipboard($event, task.notes) : editTask($event, task)">
                                 <span class="Title--Content"
-                                      :class="{ ellipsis: !tasks_ui.tasksShowAsReport }"><span>{{ task.title || '&nbsp;' }}</span></span>
+                                      :class="{ ellipsis: !tasks_ui.tasksShowAsReport && !tasks_ui.tasksHideUnReportable }"><span>{{ task.title || '&nbsp;' }}</span></span>
                                 <span class="Note--Content">
                                     <span class="EmptyNotesError" v-if="tasks_ui.tasksShowAsReport && !task.notes">[empty notes]</span>
                                     <span v-else>{{ task.notes || '&nbsp;' }}</span>

@@ -317,3 +317,13 @@
     overflow: hidden;
     text-overflow: ellipsis;
 }
+
+.ShowCompact {
+    .Title--Content span {
+        font-weight: bold;
+    }
+
+    .TRow:not(.taskCodeSeen):not(.isDone):not(.distributed) {
+        border-top: 1px solid #999999;
+    }
+}
