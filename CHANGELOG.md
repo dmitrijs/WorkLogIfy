@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+### [1.29.4](https://github.com/dmitrijs/WorkLogIfy/compare/v1.29.3...v1.29.4) (2023-12-20)
+
+
+### Improvements
+
+* **ux:** organize tasks list visually when un-reportable tasks are hidden ([7bfc993](https://github.com/dmitrijs/WorkLogIfy/commit/7bfc99370291c5285614f7583a909fe960c79f71))
+
 ### [1.29.3](https://github.com/dmitrijs/WorkLogIfy/compare/v1.29.2...v1.29.3) (2023-11-16)
 
 
