@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.30.0](https://github.com/dmitrijs/WorkLogIfy/compare/v1.29.4...v1.30.0) (2023-12-22)
+
+
+### Improvements
+
+* **osx:** added readme-dev.md ([e4db5e4](https://github.com/dmitrijs/WorkLogIfy/commit/e4db5e42c12ef715e1e036c1d783bba155326604))
+* **osx:** enabled active window reporting (requires self-signed certificate on Mac) ([001bc1a](https://github.com/dmitrijs/WorkLogIfy/commit/001bc1a7e3d3352d268f37bc9db5131fa9735eaa))
+
 ### [1.29.4](https://github.com/dmitrijs/WorkLogIfy/compare/v1.29.3...v1.29.4) (2023-12-20)
 
 
