@@ -14,24 +14,20 @@ export default class IdleUser {
     private static isOffline = false;
 
     public static registerOnReady(mainWindow) {
-        const isMac = process.platform === 'darwin'
-
-        if (!isMac) {
-            setInterval(() => {
-                const secondsIdle = electron.powerMonitor.getSystemIdleTime();
-                (async () => {
-                    if (secondsIdle > this.seconds_to_log_active_window) {
-                        mainWindow.webContents.send('user-active-app', {secondsIdle: secondsIdle, appDescription: '-"-'});
-                        return;
-                    }
-                    let obj = await activeWindow();
-                    if (!obj) {
-                        return;
-                    }
-                    mainWindow.webContents.send('user-active-app', {secondsIdle: secondsIdle, appDescription: `[${obj.owner?.name || obj.owner?.path || obj.title}] "${obj.title}"`});
-                })();
-            }, this.seconds_to_log_active_window * 1000);
-        }
+        setInterval(() => {
+            const secondsIdle = electron.powerMonitor.getSystemIdleTime();
+            (async () => {
+                if (secondsIdle > this.seconds_to_log_active_window) {
+                    mainWindow.webContents.send('user-active-app', {secondsIdle: secondsIdle, appDescription: '-"-'});
+                    return;
+                }
+                let obj = await activeWindow();
+                if (!obj) {
+                    return;
+                }
+                mainWindow.webContents.send('user-active-app', {secondsIdle: secondsIdle, appDescription: `[${obj.owner?.name || obj.owner?.path || obj.title}] "${obj.title}"`});
+            })();
+        }, this.seconds_to_log_active_window * 1000);
 
         setInterval(() => {
             const time = electron.powerMonitor.getSystemIdleTime();
