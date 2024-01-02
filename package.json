@@ -57,7 +57,7 @@
     "vue-tsc": "^1.8.5"
   },
   "devDependencies": {
-    "electron": "^26.1",
+    "electron": "^28.0",
     "electron-builder": "^24.0"
   }
 }
