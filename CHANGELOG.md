@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+### [1.31.1](https://github.com/dmitrijs/WorkLogIfy/compare/v1.31.0...v1.31.1) (2024-01-02)
+
+
+### Improvements
+
+* **tasks:** populate task title from asana ([d89c570](https://github.com/dmitrijs/WorkLogIfy/commit/d89c5701220318b4974d1280a13acccc3d5cd155))
+
 ## [1.31.0](https://github.com/dmitrijs/WorkLogIfy/compare/v1.30.0...v1.31.0) (2024-01-02)
 
 
