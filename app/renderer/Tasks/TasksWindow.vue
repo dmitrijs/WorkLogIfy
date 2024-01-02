@@ -62,7 +62,7 @@
                     <div class="TCol --timespan --timespan-spent" title="Spent">{{ group.time_spent_text }}</div>
                 </div>
 
-                {{ void(_codesSeen = {}) }}
+                {{ void(_rootTask = {}) }}
                 <transition-group name="fade">
                     <div class="TRow"
                          v-for="task of group.tasks"
@@ -76,7 +76,7 @@
                          hasRecords: !!task.time_recorded_seconds,
                          isDone: !!task.is_done,
                          isOnHold: !!task.is_on_hold,
-                         taskCodeSeen: _codesSeen[task.code],
+                         taskCodeSeen: _rootTask[task.code],
                      }"
                          @click="rowOnClick($event, task)"
                     >
@@ -101,7 +101,7 @@
                             </div>
                             <div class="TCol --code"
                                  @click="tasks_ui.tasksShowAsReport ? copyToClipboard($event, task.code) : editTask($event, task)">
-                                <span v-if="_codesSeen[task.code]" style="color: grey;">&#x2937; {{ task.code }}</span>
+                                <span v-if="_rootTask[task.code]" style="color: grey;">&#x2937; {{ task.code }}</span>
                                 <span v-else>{{ task.code }}</span>
                                 <div class="--edit-button">
                                     <a href="#" @click.stop="editTask($event, task)" v-if="!task.grouped">edit</a>
@@ -110,7 +110,10 @@
                             <div class="TCol --title"
                                  @click="tasks_ui.tasksShowAsReport ? copyToClipboard($event, task.notes) : editTask($event, task)">
                                 <span class="Title--Content"
-                                      :class="{ ellipsis: !tasks_ui.tasksShowAsReport && !tasks_ui.tasksHideUnReportable }"><span>{{ task.title || '&nbsp;' }}</span></span>
+                                      :class="{ ellipsis: !tasks_ui.tasksShowAsReport && !tasks_ui.tasksHideUnReportable }"><span>
+                                    <template v-if="task.code !== 'idle' && !task.asanaTaskGid && !_rootTask[task.code]?.asanaTaskGid">❔</template>
+                                    {{ task.title || '&nbsp;' }}
+                                </span></span>
                                 <span class="Note--Content">
                                     <span class="EmptyNotesError" v-if="tasks_ui.tasksShowAsReport && !task.notes">[empty notes]</span>
                                     <span v-else>{{ task.notes || '&nbsp;' }}</span>
@@ -157,7 +160,7 @@
                                    @click="startTimer($event, task)"></i>
                             </div>
                         </div>
-                        {{ void(task.code && task.code !== 'idle' && (_codesSeen[task.code] = true)) }}
+                        {{ void(task.code && task.code !== 'idle' && (_rootTask[task.code] = task)) }}
                     </div>
                 </transition-group>
             </template>
@@ -226,7 +229,7 @@
 
     const remote = window.remote;
 
-    let _codesSeen = {};
+    let _rootTask = {};
 
     const drag = reactive({
         active: false,

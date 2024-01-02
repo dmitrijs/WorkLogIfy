@@ -15,7 +15,7 @@
                         {{ task.assignee_section.name }}
                     </td>
                     <td>
-                        <a :href="task.permalink_url" target="_blank"><i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+                        [<a :href="task.permalink_url" target="_blank">view</a>]
                         {{ task.name }}
                     </td>
                 </tr>
