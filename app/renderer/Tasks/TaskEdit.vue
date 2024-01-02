@@ -10,7 +10,7 @@
                 <tr>
                     <td>Asana task:</td>
                     <td>
-                        <select style="width: 340px;" v-model="task.asanaTaskGid">
+                        <select style="width: 340px;" v-model="task.asanaTaskGid" @change="asanaTaskChanged()">
                             <template v-for="task of store.state.asanaTasks">
                                 <option :value="task.gid">{{ task.name }}</option>
                             </template>
@@ -230,6 +230,14 @@
             if (matches) {
                 this.task = {...this.task, code: matches[1]};
             }
+        }
+
+        asanaTaskChanged() {
+            if (!this.task.asanaTaskGid || !store.state.asanaTasks[this.task.asanaTaskGid]) {
+                return;
+            }
+            const asanaTask = store.state.asanaTasks[this.task.asanaTaskGid];
+            this.task = {...this.task, title: asanaTask.name};
         }
     }
 </script>
