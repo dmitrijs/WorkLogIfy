@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+### [1.31.3](https://github.com/dmitrijs/WorkLogIfy/compare/v1.31.2...v1.31.3) (2024-01-02)
+
+
+### Improvements
+
+* **tasks:** allow removing asana task from a worklog task, ui tweaks ([a30beb6](https://github.com/dmitrijs/WorkLogIfy/commit/a30beb61629b58777629a05e1274e2b1a4f8c0dd))
+
 ### [1.31.2](https://github.com/dmitrijs/WorkLogIfy/compare/v1.31.1...v1.31.2) (2024-01-02)
 
 ### [1.31.1](https://github.com/dmitrijs/WorkLogIfy/compare/v1.31.0...v1.31.1) (2024-01-02)
