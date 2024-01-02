@@ -84,6 +84,7 @@ declare type SettingsObj = {
     asana_assignee_name: string;
     asana_workspace_id: string;
     asana_workspace_name: string;
+    asana_extra_filter: string;
     rounding_minutes: number;
     sorting_order: string;
     special_days: Object;
@@ -130,4 +131,11 @@ declare type CalendarMonthStatistics = {
 declare type AsanaWorkspaceObj = {
     gid: string;
     name: string;
+}
+
+declare type AsanaTaskObj = {
+    gid: string;
+    name: string;
+    permalink_url: string;
+    assignee_section?: { name: string };
 }

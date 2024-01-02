@@ -81,6 +81,8 @@ const state = reactive({
     taskIsCloned: false,
     calendarHoveredDayCode: null,
 
+    asanaTasks: {} as Record<string, AsanaTaskObj>,
+
     settings: {} as SettingsObj,
 });
 state.screen = state.tasksScreen;
@@ -456,6 +458,29 @@ const store = {
     },
     saveTasks() {
         saveTasks();
+    },
+    loadAsanaTasks(force = false) {
+        if (!force && Object.values(state.asanaTasks).length) {
+            return;
+        }
+        const asanaTasksCall = window.ipc.sendSync('jira.request', _.cloneDeep({
+            url: `https://app.asana.com/api/1.0/workspaces/${state.settings.asana_workspace_id}/tasks/search?` +
+                'opt_fields=name,assignee_section.name,permalink_url' +
+                '&resource_subtype=default_task' +
+                '&assignee.any=me' +
+                '&completed=false' +
+                '&is_subtask=false' +
+                (state.settings.asana_extra_filter || ''),
+            headers: {
+                Authorization: `Bearer ${state.settings.asana_token}`,
+                Accept: 'application/json',
+                "Content-Type": "application/json",
+            },
+            method: 'GET',
+            redirect: "follow",
+            referrerPolicy: "no-referrer",
+        }));
+        state.asanaTasks = _.keyBy(asanaTasksCall.response.data, 'gid');
     },
 }
 

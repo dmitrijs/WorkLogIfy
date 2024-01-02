@@ -12,7 +12,8 @@
                 <option :value="workspace.gid">{{ workspace.name }}</option>
             </template>
         </select>
-        <label>Asana Filter:</label> <input type="text" disabled value="not implemented"><br/>
+        <label>Asana Filter (<a href="https://developers.asana.com/reference/searchtasksforworkspace" target="_blank">docs</a>):</label>
+        <input type="text" placeholder="&is_blocked=false&key=value" :value="settings.asana_extra_filter"> <a href="#" @click.prevent="asanaSearchTasks()">load</a><br/>
         <br/>
         <label>Round to nearest:</label> <input type="number" step="10" v-model="settings.rounding_minutes"> minutes<br/>
         <label>Sort by:</label>
@@ -57,9 +58,16 @@
                 method: 'GET',
                 redirect: "follow",
                 referrerPolicy: "no-referrer",
-                // body: JSON.stringify({}),
             }));
             this.asanaWorkspaces = _.keyBy(asanaWorkspacesCall.response.data, 'gid');
+        }
+
+        asanaSearchTasks() {
+            store.loadAsanaTasks(true);
+            const tasksAsStrings = _.map(store.state.asanaTasks, (task: AsanaTaskObj) => {
+                return `${task.gid}: ${task.name} (${task.assignee_section?.name})`;
+            });
+            alert(tasksAsStrings.join('\n'));
         }
     }
 </script>
