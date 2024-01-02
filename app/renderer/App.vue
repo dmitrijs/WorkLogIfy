@@ -4,6 +4,7 @@
             <TasksWindow v-if="tasks_ui.screen === 'tasks'"></TasksWindow>
             <TaskEdit v-else-if="tasks_ui.screen === 'task.edit'" mode="edit" key="task.edit"></TaskEdit>
             <TaskEdit v-else-if="tasks_ui.screen === 'task.new'" mode="new" key="task.new"></TaskEdit>
+            <TodosWindow v-else-if="tasks_ui.screen === 'todo'" key="todo"></TodosWindow>
             <CalendarWindow v-else-if="tasks_ui.screen === 'calendar'"></CalendarWindow>
             <TemplatesWindow v-else-if="tasks_ui.screen === 'task.templates'"></TemplatesWindow>
             <SettingsWindow v-else-if="tasks_ui.screen === 'settings'"></SettingsWindow>
@@ -41,15 +42,16 @@
     import ActiveAppsWindow from "./Tasks/ActiveAppsWindow.vue";
     import TasksWindow from "./Tasks/TasksWindow.vue";
     import TaskEdit from "./Tasks/TaskEdit.vue";
+    import TodosWindow from "./Tasks/TodosWindow.vue";
     import timer from "./Timer";
     import CalendarWindow from "./Tasks/CalendarWindow.vue";
     import store from "./Store/Store";
     import TemplatesWindow from "./Tasks/TemplatesWindow.vue";
     import SettingsWindow from "./Tasks/SettingsWindow.vue";
-    import _ from "lodash";
 
     @Component({
         components: {
+            TodosWindow,
           ActiveAppsWindow,
             TemplatesWindow,
             CalendarWindow,

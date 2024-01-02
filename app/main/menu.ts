@@ -30,6 +30,12 @@ export default function createMainMenu(mainWindow) {
             },
         },
         {
+            label: 'To-do', click: function () {
+                mainWindow.show();
+                mainWindow.webContents.send('change.screen', 'todo');
+            },
+        },
+        {
             label: 'Calendar', click: function () {
                 mainWindow.show();
                 mainWindow.webContents.send('change.screen', 'calendar');
