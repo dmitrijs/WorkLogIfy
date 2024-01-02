@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+### [1.31.4](https://github.com/dmitrijs/WorkLogIfy/compare/v1.31.3...v1.31.4) (2024-01-02)
+
+
+### Improvements
+
+* **tasks:** highlight tasks that are missing a related asana task ([88248c0](https://github.com/dmitrijs/WorkLogIfy/commit/88248c06e9f3b1b84911ab12bac73e951b9bea3b))
+
 ### [1.31.3](https://github.com/dmitrijs/WorkLogIfy/compare/v1.31.2...v1.31.3) (2024-01-02)
 
 
