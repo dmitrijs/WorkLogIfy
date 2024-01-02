@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.31.0](https://github.com/dmitrijs/WorkLogIfy/compare/v1.30.0...v1.31.0) (2024-01-02)
+
+
+### Features
+
+* **asana:** integrate with Asana using API token ([d0b8348](https://github.com/dmitrijs/WorkLogIfy/commit/d0b834816b291a9d76ab517ae08d092ec0621a7a))
+* **asana:** support retrieving tasks ([010bcfb](https://github.com/dmitrijs/WorkLogIfy/commit/010bcfb268fbf2ee85978366e75a7fd521ae9312))
+* **tasks:** added 'To-do' screen that shows asana tasks ([198ca29](https://github.com/dmitrijs/WorkLogIfy/commit/198ca2982e2ea986390105809d4e350f2b29bb9f))
+* **tasks:** allow assigning asana task to a worklog task ([d6968c9](https://github.com/dmitrijs/WorkLogIfy/commit/d6968c9b05aa9e6a707fcb6664e08543f844154d))
+
 ## [1.30.0](https://github.com/dmitrijs/WorkLogIfy/compare/v1.29.4...v1.30.0) (2023-12-22)
 
 
