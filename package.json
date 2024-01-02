@@ -5,6 +5,7 @@
   "main": "dist-electron/main/index.js",
   "scripts": {
     "dev": "vite",
+    "compile": "vue-tsc --noEmit && vite build",
     "build": "vue-tsc --noEmit && vite build && electron-builder --windows --publish never",
     "build-mac": "vue-tsc --noEmit && vite build && electron-builder --mac --publish never",
     "standard-version": "npx standard-version",
