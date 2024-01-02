@@ -8,6 +8,17 @@
                     <td><input type="text" v-model="task.title" ref="focused"/></td>
                 </tr>
                 <tr>
+                    <td>Asana task:</td>
+                    <td>
+                        <select style="width: 340px;" v-model="task.asanaTaskGid">
+                            <template v-for="task of store.state.asanaTasks">
+                                <option :value="task.gid">{{ task.name }}</option>
+                            </template>
+                            <option :value="task.asanaTaskGid">Current: {{ task.asanaTaskGid }}</option>
+                        </select> <a href="#" @click.prevent="store.loadAsanaTasks(true)">refresh</a>
+                    </td>
+                </tr>
+                <tr>
                     <td style="width: 100px">Code:</td>
                     <td class="Complex">
                         <div style="margin-right: 11px;">
@@ -24,7 +35,7 @@
                                 >idle</button>
                             </span>
                             <span>From: <input type="text" class="narrow"
-                                                   v-model="task.source"></span>
+                                               v-model="task.source"></span>
                         </div>
                     </td>
                 </tr>
@@ -54,7 +65,7 @@
                 </tr>
                 <tr>
                     <td>Comment:</td>
-                    <td><input type="text" v-model="task.comment" /></td>
+                    <td><input type="text" v-model="task.comment"/></td>
                 </tr>
                 <tr>
                     <td colspan="2" class="text-right">
@@ -127,11 +138,11 @@
 </template>
 
 <script lang="ts">
+    import moment from "moment";
     import {Component, Prop, Vue} from "vue-facing-decorator";
-    import {timespanToText} from "../Utils/Utils";
     import store from "../Store/Store";
     import timer from "../Timer";
-    import moment from "moment";
+    import {timespanToText} from "../Utils/Utils";
 
     @Component({})
     export default class TaskEdit extends Vue {
@@ -184,7 +195,7 @@
                 this.task = {...this.task, title: template.title};
             }
             if (template.code) {
-              this.task = {...this.task, code: template.code};
+                this.task = {...this.task, code: template.code};
             }
             this.task = {...this.task, frozen: !!template.frozen};
             if (!this.task.notes || forced) {

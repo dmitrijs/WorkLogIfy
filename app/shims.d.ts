@@ -39,6 +39,8 @@ declare type TaskObj = {
     sessions: SessionObj[];
     records: RecordObj[];
     activeApps: ActiveAppObj[];
+
+    asanaTaskGid: string;
 }
 
 declare type TaskEditedObj = TaskObj & {

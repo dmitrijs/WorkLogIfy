@@ -159,6 +159,7 @@ const store = {
             date: state.day_key,
             time_add_minutes: '',
             time_record_minutes: '',
+            asanaTaskGid: '',
         } as TaskEditedObj;
 
         let refTask = null;
@@ -208,6 +209,7 @@ const store = {
             sessions: List(),
             records: List(),
             activeApps: List(),
+            asanaTaskGid: task.asanaTaskGid,
         }));
         state.createdTaskId = id;
 
@@ -237,6 +239,7 @@ const store = {
         state.tasks = state.tasks.setIn([task.id, 'notes'], task.notes);
         state.tasks = state.tasks.setIn([task.id, 'comment'], task.comment);
         state.tasks = state.tasks.setIn([task.id, 'source'], task.source);
+        state.tasks = state.tasks.setIn([task.id, 'asanaTaskGid'], task.asanaTaskGid);
 
         if (task.time_add_minutes) {
             let spentSeconds = parseInt(task.time_add_minutes) * 60 || 0;
