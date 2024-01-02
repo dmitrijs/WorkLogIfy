@@ -8,14 +8,15 @@
                     <td><input type="text" v-model="task.title" ref="focused"/></td>
                 </tr>
                 <tr>
-                    <td>Asana task:</td>
+                    <td>Asana task (<a href="#" @click.prevent="store.loadAsanaTasks(true)"><i class="icofont-refresh"></i></a>):</td>
                     <td>
-                        <select style="width: 340px;" v-model="task.asanaTaskGid" @change="asanaTaskChanged()">
+                        <select v-model="task.asanaTaskGid" @change="asanaTaskChanged()">
+                            <option value=""></option>
+                            <option :value="task.asanaTaskGid" v-if="!store.state.asanaTasks?.[task.asanaTaskGid]">Current: {{ task.asanaTaskGid }}</option>
                             <template v-for="task of store.state.asanaTasks">
                                 <option :value="task.gid">{{ task.name }}</option>
                             </template>
-                            <option :value="task.asanaTaskGid">Current: {{ task.asanaTaskGid }}</option>
-                        </select> <a href="#" @click.prevent="store.loadAsanaTasks(true)">refresh</a>
+                        </select>
                     </td>
                 </tr>
                 <tr>
