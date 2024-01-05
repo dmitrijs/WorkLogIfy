@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+### [1.31.5](https://github.com/dmitrijs/WorkLogIfy/compare/v1.31.4...v1.31.5) (2024-01-05)
+
+
+### UI/UX
+
+* **tasks:** group asana tasks in the dropdown ([ee305a8](https://github.com/dmitrijs/WorkLogIfy/commit/ee305a8087f2ea40cec35d8011666d72c858eea7))
+
 ### [1.31.4](https://github.com/dmitrijs/WorkLogIfy/compare/v1.31.3...v1.31.4) (2024-01-02)
 
 
