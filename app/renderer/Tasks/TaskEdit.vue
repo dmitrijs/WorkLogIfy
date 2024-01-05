@@ -13,8 +13,12 @@
                         <select v-model="task.asanaTaskGid" @change="asanaTaskChanged()">
                             <option value=""></option>
                             <option :value="task.asanaTaskGid" v-if="!store.state.asanaTasks?.[task.asanaTaskGid]">Current: {{ task.asanaTaskGid }}</option>
-                            <template v-for="task of store.state.asanaTasks">
-                                <option :value="task.gid">{{ task.name }}</option>
+                            <template v-for="(tasks, groupName) of asanaTasks">
+                                <optgroup :label="String(groupName)">
+                                    <template v-for="task of tasks">
+                                        <option :value="task.gid">{{ task.name }}</option>
+                                    </template>
+                                </optgroup>
                             </template>
                         </select>
                     </td>
@@ -139,6 +143,7 @@
 </template>
 
 <script lang="ts">
+    import _ from "lodash";
     import moment from "moment";
     import {Component, Prop, Vue} from "vue-facing-decorator";
     import store from "../Store/Store";
@@ -161,6 +166,10 @@
 
         get task_time_spent_text() {
             return timespanToText(this.task.time_spent_seconds);
+        }
+
+        get asanaTasks() {
+            return _.groupBy(store.state.asanaTasks, 'assignee_section.name');
         }
 
         created() {
