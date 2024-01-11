@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+### [1.31.6](https://github.com/dmitrijs/WorkLogIfy/compare/v1.31.5...v1.31.6) (2024-01-11)
+
+
+### Improvements
+
+* **ux:** reverse follow-up items sorting when un-reportable items are hidden ([4489814](https://github.com/dmitrijs/WorkLogIfy/commit/4489814779a5a4c1b46952b6141d0a0768047397))
+
 ### [1.31.5](https://github.com/dmitrijs/WorkLogIfy/compare/v1.31.4...v1.31.5) (2024-01-05)
 
 
