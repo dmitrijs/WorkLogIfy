@@ -62,7 +62,6 @@
                     <div class="TCol --timespan --timespan-spent" title="Spent">{{ group.time_spent_text }}</div>
                 </div>
 
-                {{ void(_rootTask = {}) }}
                 <transition-group name="fade">
                     <div class="TRow"
                          v-for="task of group.tasks"
@@ -76,7 +75,7 @@
                          hasRecords: !!task.time_recorded_seconds,
                          isDone: !!task.is_done,
                          isOnHold: !!task.is_on_hold,
-                         taskCodeSeen: _rootTask[task.code],
+                         isRootTask: (rootTasks[task.code || task.id]?.id === task.id),
                      }"
                          @click="rowOnClick($event, task)"
                     >
@@ -101,7 +100,7 @@
                             </div>
                             <div class="TCol --code"
                                  @click="tasks_ui.tasksShowAsReport ? copyToClipboard($event, task.code) : editTask($event, task)">
-                                <span v-if="_rootTask[task.code]" style="color: grey;">&#x2937; {{ task.code }}</span>
+                                <span v-if="rootTasks[task.code]" style="color: #acacac;">{{ task.code }}</span>
                                 <span v-else>{{ task.code }}</span>
                                 <div class="--edit-button">
                                     <a href="#" @click.stop="editTask($event, task)" v-if="!task.grouped">edit</a>
@@ -111,7 +110,7 @@
                                  @click="tasks_ui.tasksShowAsReport ? copyToClipboard($event, task.notes) : editTask($event, task)">
                                 <span class="Title--Content"
                                       :class="{ ellipsis: !tasks_ui.tasksShowAsReport && !tasks_ui.tasksHideUnReportable }"><span>
-                                    <template v-if="task.code !== 'idle' && !task.asanaTaskGid && !_rootTask[task.code]?.asanaTaskGid">❔</template>
+                                    <template v-if="task.code !== 'idle' && !task.asanaTaskGid && !rootTasks[task.code]?.asanaTaskGid">❔</template>
                                     {{ task.title || '&nbsp;' }}
                                 </span></span>
                                 <span class="Note--Content">
@@ -160,7 +159,6 @@
                                    @click="startTimer($event, task)"></i>
                             </div>
                         </div>
-                        {{ void(task.code && task.code !== 'idle' && (_rootTask[task.code] = task)) }}
                     </div>
                 </transition-group>
             </template>
@@ -229,7 +227,17 @@
 
     const remote = window.remote;
 
-    let _rootTask = {};
+    const rootTasks = computed(() => {
+        const result = {};
+        for (let group of Object.values(tasksGrouped.value)) {
+            for (let task of group.tasks) {
+                if (task.code !== 'idle') {
+                    result[task.code || task.id] = task;
+                }
+            }
+        }
+        return result;
+    });
 
     const drag = reactive({
         active: false,

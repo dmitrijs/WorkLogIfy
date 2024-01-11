@@ -67,16 +67,6 @@ class TasksSorter {
             const aCode = (!a.code || a.code === 'idle' ? a.id : a.code);
             const bCode = (!b.code || b.code === 'idle' ? b.id : b.code);
 
-            if (!a.last_session && b.last_session) {
-                return -1;
-            }
-            if (a.last_session && !b.last_session) {
-                return 1;
-            }
-            if (!a.last_session && !b.last_session) {
-                return (a.created_at > b.created_at ? -1 : 1);
-            }
-
             if (this.codeToLastSession[aCode] !== this.codeToLastSession[bCode]) {
                 return -1 * (this.codeToLastSession[aCode] - this.codeToLastSession[bCode]);
             }
@@ -88,7 +78,11 @@ class TasksSorter {
                 return 1;
             }
 
-            return (a.last_session?.started_at > b.last_session?.started_at ? -1 : 1);
+            const aTime = a.last_session?.started_at || a.created_at;
+            const bTime = b.last_session?.started_at || b.created_at;
+
+            return (store.getTasksUi.tasksHideUnReportable ? -1 : 1) *
+                (aTime > bTime ? -1 : 1);
         }
 
         return comparatorLt(build_sort_value(a), build_sort_value(b));

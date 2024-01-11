@@ -323,7 +323,7 @@
         font-weight: bold;
     }
 
-    .TRow:not(.taskCodeSeen):not(.isDone):not(.distributed) {
-        border-top: 1px solid #999999;
+    .TRow.isRootTask:not(.isDone):not(.distributed) {
+        border-bottom: 1px solid #999999;
     }
 }
