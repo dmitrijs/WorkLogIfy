@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+### [1.31.8](https://github.com/dmitrijs/WorkLogIfy/compare/v1.31.7...v1.31.8) (2024-02-03)
+
+
+### Features
+
+* **tasks:** show chart of current day hours distribution ([74baeb1](https://github.com/dmitrijs/WorkLogIfy/commit/74baeb19b7ab034bec75f72a8f7f2bcbb88d06ff))
+
 ### [1.31.7](https://github.com/dmitrijs/WorkLogIfy/compare/v1.31.6...v1.31.7) (2024-02-03)
 
 
