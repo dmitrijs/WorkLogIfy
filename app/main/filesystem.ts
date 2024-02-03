@@ -15,11 +15,24 @@ class Filesystem {
 
     public static getWorkLog(day_key) {
         const dir = this.getDir();
-        let worklog = [];
+        let worklog = {
+            activeApps: [],
+        };
 
         if (fs.existsSync(dir + '/worklog-' + day_key + '.json')) {
             let contents = fs.readFileSync(dir + '/worklog-' + day_key + '.json', 'utf8');
             worklog = JSON.parse(contents);
+            (<any>worklog).activeApps = [];
+
+            if (fs.existsSync(dir + '/worklog-' + day_key + '-activeApps.json')) {
+                let contents = fs.readFileSync(dir + '/worklog-' + day_key + '-activeApps.json', 'utf8');
+                let activeAppsFile = JSON.parse(contents);
+                let activeApps = [];
+                if (activeAppsFile && activeAppsFile.activeApps) {
+                    activeApps = activeAppsFile.activeApps;
+                }
+                (<any>worklog).activeApps = activeApps;
+            }
         }
 
         return worklog;
@@ -36,12 +49,12 @@ class Filesystem {
         return {};
     }
 
-    public static saveWorkLog(day_key, worklog, worklogProcessed, settings, activeApps) {
+    public static saveWorkLog(day_key, worklog, worklogProcessed, settings) {
         const dir = this.getDir();
+        console.log("files directory: " + dir);
         fs.writeFileSync(dir + '/worklog-' + day_key + '.json', JSON.stringify({
             version: 1,
             tasks: worklog,
-            activeApps: activeApps,
         }, null, 2));
         fs.writeFileSync(dir + '/settings.json', JSON.stringify(settings));
 
@@ -60,6 +73,14 @@ class Filesystem {
             contents[day_key] = day;
             fs.writeFileSync(dir + '/worklog_totals.json', JSON.stringify(contents));
         }
+    }
+
+    public static saveActiveApps(day_key, activeApps) {
+        const dir = this.getDir();
+        fs.writeFileSync(dir + '/worklog-' + day_key + '-activeApps.json', JSON.stringify({
+            version: 1,
+            activeApps: activeApps,
+        }, null, 2));
     }
 
     public static getFileTotals() {

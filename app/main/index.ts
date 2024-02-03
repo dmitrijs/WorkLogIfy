@@ -156,9 +156,15 @@ app.on('ready', async () => {
             event.returnValue = isDev;
         });
 
-        ipcMain.on('tasks.save', (event: Electron.IpcMainEvent, {day_key, arg1: worklog, arg2: worklogProcessed, arg3: settings, activeApps}) => {
+        ipcMain.on('tasks.save', (event: Electron.IpcMainEvent, {day_key, arg1: worklog, arg2: worklogProcessed, arg3: settings}) => {
             console.log('saving tasks');
-            Filesystem.saveWorkLog(day_key, worklog, worklogProcessed, settings, activeApps);
+            Filesystem.saveWorkLog(day_key, worklog, worklogProcessed, settings);
+            event.returnValue = 'ok'
+        });
+
+        ipcMain.on('activeApps.save', (event: Electron.IpcMainEvent, {day_key, activeApps}) => {
+            console.log('saving activeApps');
+            Filesystem.saveActiveApps(day_key, activeApps);
             event.returnValue = 'ok'
         });
 

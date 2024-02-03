@@ -17,6 +17,9 @@ export interface IpcChannelMap {
         arg1: object,
         arg2: object,
         arg3?: object,
+    }];
+    'activeApps.save': [{
+        day_key: string,
         activeApps: object,
     }];
     'tasks.templates.save': [object];

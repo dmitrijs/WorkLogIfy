@@ -11,6 +11,12 @@ function saveTasks() {
         arg1: _.cloneDeep(state.tasks.toJS()),
         arg2: _.cloneDeep(store.getTasksGrouped.toJS()),
         arg3: _.cloneDeep(state.settings),
+    });
+}
+
+function saveActiveApps() {
+    window.ipc.sendSync('activeApps.save', {
+        day_key: state.day_key,
         activeApps: _.cloneDeep(state.activeApps),
     });
 }
@@ -434,7 +440,7 @@ const store = {
             timered_task: timeredTaskId,
             description: activeAppDescription,
         });
-        saveTasks();
+        saveActiveApps();
     },
     templateNew() {
         state.templates.push({
