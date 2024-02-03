@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+### [1.31.7](https://github.com/dmitrijs/WorkLogIfy/compare/v1.31.6...v1.31.7) (2024-02-03)
+
+
+### Improvements
+
+* **tasks:** save activeApps to a separate file ([86a520b](https://github.com/dmitrijs/WorkLogIfy/commit/86a520b7310576a6fb5d8aa18af14b14d98db07d))
+
 ### [1.31.6](https://github.com/dmitrijs/WorkLogIfy/compare/v1.31.5...v1.31.6) (2024-01-11)
 
 
