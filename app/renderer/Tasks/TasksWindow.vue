@@ -164,8 +164,8 @@
             </template>
         </div>
         <CalendarWindow
-            :key="store.state.day_key"
-            :week-key="store.state.week_key"
+                :key="store.state.day_key"
+                :week-key="store.state.week_key"
         ></CalendarWindow>
 
         <div class="ViewOptions">
@@ -185,6 +185,25 @@
                     @click="copyToClipboardAllTasks($event)">
                 Copy for Slack
             </button>
+        </div>
+        <div class="Chart" :title="JSON.stringify(total, null, 2)">
+            <div class="Total" style="height: 4px; background: #696969">
+                <div class="Charge"
+                     style="height: 4px; background: #46e148"
+                     :style="{ width: 100 * (total.time_charge_rounded_seconds / Math.max(total.time_spent_seconds, store.state.settings.working_day_minutes * 60)) + '%' }"
+                >
+                    <div class="Distributed"
+                         style="height: 2px; background: #b403b4;"
+                         :style="{ width: 100 * (total.time_distributed_seconds / total.time_charge_rounded_seconds) + '%' }"
+                    >
+                    </div>
+                </div>
+            </div>
+            <div class="Total" style="width: 100%; background: #ffadad">
+                <div class="WorkingDay" style="height: 3px; background: green"
+                     :style="{ width: (store.state.settings.working_day_minutes * 60) / (Math.max(total.time_spent_seconds, store.state.settings.working_day_minutes * 60)) * 100 + '%' }">
+                </div>
+            </div>
         </div>
 
         <div class="SelectionStatistics">
@@ -214,16 +233,16 @@
 </template>
 
 <script setup lang="ts">
-    import horizontal_scroller from "../library/horizontal_scroller";
-    import createMenu from './TasksMenu';
+    import moment from "moment";
+    import {computed, onBeforeUnmount, onMounted, reactive, ref} from "vue";
     import LineChart from '../Components/LineChart.vue';
+    import horizontal_scroller from "../library/horizontal_scroller";
     import store from "../Store/Store";
-    import timer from "../Timer";
     import {Store_MergeSameCodes} from "../Store/Store_GetGroupedTasks";
+    import timer from "../Timer";
     import {timespanToText, timespanToTextHours} from "../Utils/Utils";
     import CalendarWindow from "./CalendarWindow.vue";
-    import {computed, onBeforeUnmount, onMounted, reactive, ref} from "vue";
-    import moment from "moment";
+    import createMenu from './TasksMenu';
 
     const remote = window.remote;
 
@@ -261,18 +280,23 @@
             time_charge_rounded_seconds: 0,
             time_recorded_seconds: 0,
             time_spent_seconds: 0,
+            time_distributed_seconds: 0,
             time_charge_rounded_text: '',
             time_recorded_text: '',
             time_spent_text: '',
+            time_distributed_text: '',
         };
         for (let group of Object.values(tasksGrouped.value)) {
+            console.log('group', group)
             total.time_charge_rounded_seconds += (<any>group).time_charge_rounded_seconds;
             total.time_recorded_seconds += (<any>group).time_recorded_seconds;
             total.time_spent_seconds += (<any>group).time_spent_seconds;
+            total.time_distributed_seconds += (<any>group).time_distributed_seconds;
         }
         total.time_charge_rounded_text = timespanToText(total.time_charge_rounded_seconds);
         total.time_recorded_text = timespanToText(total.time_recorded_seconds);
         total.time_spent_text = timespanToText(total.time_spent_seconds);
+        total.time_distributed_text = timespanToText(total.time_distributed_seconds);
         return total;
     });
 

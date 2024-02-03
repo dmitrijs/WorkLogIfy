@@ -88,6 +88,7 @@ declare type SettingsObj = {
     asana_workspace_name: string;
     asana_extra_filter: string;
     rounding_minutes: number;
+    working_day_minutes: number;
     sorting_order: string;
     special_days: Object;
 }

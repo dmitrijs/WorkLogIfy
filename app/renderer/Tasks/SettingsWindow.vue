@@ -16,6 +16,7 @@
         <input type="text" placeholder="&is_blocked=false&key=value" :value="settings.asana_extra_filter"> <a href="#" @click.prevent="asanaSearchTasks()">load</a><br/>
         <br/>
         <label>Round to nearest:</label> <input type="number" step="10" v-model="settings.rounding_minutes"> minutes<br/>
+        <label>Working day:</label> <input type="number" step="10" v-model="settings.working_day_minutes"> minutes<br/>
         <label>Sort by:</label>
         <select v-model="settings.sorting_order">
             <option :value="undefined">Default (status, time spent, etc.)</option>
