@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+### [1.31.9](https://github.com/dmitrijs/WorkLogIfy/compare/v1.31.8...v1.31.9) (2024-02-05)
+
+
+### Improvements
+
+* **tasks:** fixed broken save files ([2448a05](https://github.com/dmitrijs/WorkLogIfy/commit/2448a05efbbd9f3656d2bee2c7d91b9e2ca245fb))
+
 ### [1.31.8](https://github.com/dmitrijs/WorkLogIfy/compare/v1.31.7...v1.31.8) (2024-02-03)
 
 
