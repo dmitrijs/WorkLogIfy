@@ -15,9 +15,7 @@ class Filesystem {
 
     public static getWorkLog(day_key) {
         const dir = this.getDir();
-        let worklog = {
-            activeApps: [],
-        };
+        let worklog = []; // should be empty
 
         if (fs.existsSync(dir + '/worklog-' + day_key + '.json')) {
             let contents = fs.readFileSync(dir + '/worklog-' + day_key + '.json', 'utf8');
@@ -52,6 +50,7 @@ class Filesystem {
     public static saveWorkLog(day_key, worklog, worklogProcessed, settings) {
         const dir = this.getDir();
         console.log("files directory: " + dir);
+        delete worklog.activeApps;
         fs.writeFileSync(dir + '/worklog-' + day_key + '.json', JSON.stringify({
             version: 1,
             tasks: worklog,
