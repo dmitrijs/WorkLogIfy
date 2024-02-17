@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+### [1.31.10](https://github.com/dmitrijs/WorkLogIfy/compare/v1.31.9...v1.31.10) (2024-02-17)
+
+
+### Improvements
+
+* style tweaks ([28e574e](https://github.com/dmitrijs/WorkLogIfy/commit/28e574efbac82091e927a852731e3e7ba4364d04))
+
 ### [1.31.9](https://github.com/dmitrijs/WorkLogIfy/compare/v1.31.8...v1.31.9) (2024-02-05)
 
 
