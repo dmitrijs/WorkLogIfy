@@ -627,10 +627,6 @@
                 .TRowContent {
                     margin-bottom: 5px;
 
-                    .Title--Content {
-                        opacity: 0.5;
-                    }
-
                     .TCol.--timespan {
                         .--timespan-spent,
                         .--timespan-charge {

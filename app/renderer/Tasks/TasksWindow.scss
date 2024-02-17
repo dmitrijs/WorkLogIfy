@@ -94,6 +94,10 @@
                     }
                 }
 
+                .Title--Content {
+                    font-weight: bold;
+                }
+
                 .Comment--Content {
                     color: grey;
                     line-height: 0.8rem;
@@ -319,10 +323,6 @@
 }
 
 .ShowCompact {
-    .Title--Content span {
-        font-weight: bold;
-    }
-
     .TRow.isRootTask:not(.isDone):not(.distributed) {
         border-bottom: 1px solid #999999;
     }
