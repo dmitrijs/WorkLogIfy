@@ -73,9 +73,9 @@
                     <td><input type="text" v-model="task.comment"/></td>
                 </tr>
                 <tr>
-                    <td colspan="2" class="text-right">
+                    <td colspan="2">
                         <button class="btn btn-outline-secondary btn-sm" type="button" @click="back">&lt; back</button>
-                        <div class="btn-group" role="group">
+                        <div class="btn-group float-right" role="group">
                             <button class="btn btn-secondary btn-sm"
                                     :class="{ 'btn-primary': store.state.taskTimeredId === task.id }">
                                 {{ mode === 'edit' ? 'update' : 'create' }}
