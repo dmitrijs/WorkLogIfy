@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+### [1.31.11](https://github.com/dmitrijs/WorkLogIfy/compare/v1.31.10...v1.31.11) (2024-02-20)
+
+
+### Improvements
+
+* **ux:** put Back button away from Update button ([6728cab](https://github.com/dmitrijs/WorkLogIfy/commit/6728cab020ae6be9de98975450358ddfbe5830d5))
+
 ### [1.31.10](https://github.com/dmitrijs/WorkLogIfy/compare/v1.31.9...v1.31.10) (2024-02-17)
 
 
