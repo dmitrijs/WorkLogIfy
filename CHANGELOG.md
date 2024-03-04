@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+### [1.31.12](https://github.com/dmitrijs/WorkLogIfy/compare/v1.31.11...v1.31.12) (2024-03-04)
+
+
+### Features
+
+* **tasks:** show external tasks that were completed in last 2 months ([460653c](https://github.com/dmitrijs/WorkLogIfy/commit/460653c24ad81bbc94e3873d3dc872c12e25fcea))
+
 ### [1.31.11](https://github.com/dmitrijs/WorkLogIfy/compare/v1.31.10...v1.31.11) (2024-02-20)
 
 
