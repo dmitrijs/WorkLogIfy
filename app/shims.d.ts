@@ -140,5 +140,6 @@ declare type AsanaTaskObj = {
     gid: string;
     name: string;
     permalink_url: string;
+    completed_at?: string;
     assignee_section?: { name: string };
 }

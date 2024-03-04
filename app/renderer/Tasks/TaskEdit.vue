@@ -16,7 +16,7 @@
                             <template v-for="(tasks, groupName) of asanaTasks">
                                 <optgroup :label="String(groupName)">
                                     <template v-for="task of tasks">
-                                        <option :value="task.gid">{{ task.name }}</option>
+                                        <option :value="task.gid">{{ task.completed_at ? '[✓] ' : '' }}{{ task.name }}</option>
                                     </template>
                                 </optgroup>
                             </template>

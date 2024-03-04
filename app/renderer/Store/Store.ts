@@ -472,7 +472,7 @@ const store = {
         if (!force && Object.values(state.asanaTasks).length) {
             return;
         }
-        const asanaTasksCall = window.ipc.sendSync('jira.request', _.cloneDeep({
+        const asanaTasksCall = window.ipc.sendSync('jira.request', {
             url: `https://app.asana.com/api/1.0/workspaces/${state.settings.asana_workspace_id}/tasks/search?` +
                 'opt_fields=name,assignee_section.name,permalink_url' +
                 '&resource_subtype=default_task' +
@@ -488,8 +488,34 @@ const store = {
             method: 'GET',
             redirect: "follow",
             referrerPolicy: "no-referrer",
-        }));
-        state.asanaTasks = _.keyBy(asanaTasksCall.response.data, 'gid');
+        });
+
+        const completedOnAfter = moment()
+            .subtract(2, 'months')
+            .format('YYYY-MM-DD');
+
+        const asanaTasksCompletedCall = window.ipc.sendSync('jira.request', {
+            url: `https://app.asana.com/api/1.0/workspaces/${state.settings.asana_workspace_id}/tasks/search?` +
+                'opt_fields=name,assignee_section.name,permalink_url,completed_at' +
+                '&resource_subtype=default_task' +
+                '&assignee.any=me' +
+                '&completed=true&completed_on.after=' + completedOnAfter +
+                '&is_subtask=false' +
+                (state.settings.asana_extra_filter || ''),
+            headers: {
+                Authorization: `Bearer ${state.settings.asana_token}`,
+                Accept: 'application/json',
+                "Content-Type": "application/json",
+            },
+            method: 'GET',
+            redirect: "follow",
+            referrerPolicy: "no-referrer",
+        });
+
+        state.asanaTasks = _.keyBy([
+            ...asanaTasksCall.response.data,
+            ...asanaTasksCompletedCall.response.data,
+        ], 'gid');
     },
 }
 
