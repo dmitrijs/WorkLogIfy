@@ -41,6 +41,7 @@ declare type TaskObj = {
     activeApps: ActiveAppObj[];
 
     asanaTaskGid: string;
+    taskIdExtractedFrom: string; // id of task from which current task was extracted
 }
 
 declare type TaskEditedObj = TaskObj & {

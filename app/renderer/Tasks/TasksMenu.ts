@@ -31,6 +31,12 @@ export default function createMenu() {
         },
     }));
     menu.append(new MenuItem({
+        label: 'Extract As New Task', click() {
+            store.state.taskIsExtracting = true;
+            store.setScreen('task.new');
+        },
+    }));
+    menu.append(new MenuItem({
         type: 'separator',
     }));
     menu.append(new MenuItem({

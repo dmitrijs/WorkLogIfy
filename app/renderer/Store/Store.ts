@@ -67,6 +67,7 @@ const state = reactive({
 
     tasksSelectedIds: Map<string, Boolean>({}),
     taskLastSelected: '',
+    taskIsExtracting: false, // new task that is created is extracted from the selected task
     tasksHoveredId: null,
     taskEditedId: null,
     tasksScreen: 'tasks',
@@ -172,6 +173,11 @@ const store = {
         if (state.taskLastSelected && (refTask = state.tasks.get(state.taskLastSelected))) {
             task.date = refTask.get('date');
             task.code = refTask.get('code');
+
+            if (state.taskIsExtracting) {
+                state.taskIsExtracting = false;
+                task.taskIdExtractedFrom = state.taskLastSelected;
+            }
         }
         state.taskLastSelected = '';
 
@@ -222,7 +228,12 @@ const store = {
         if (task.time_add_minutes) {
             let spentSeconds = parseInt(task.time_add_minutes) * 60 || 0;
 
-            state.tasks = addSession(state.tasks, id, spentSeconds, 'manual');
+            if (task.taskIdExtractedFrom) {
+                state.tasks = addSession(state.tasks, id, spentSeconds, 'extracted');
+                state.tasks = addSession(state.tasks, task.taskIdExtractedFrom, -spentSeconds, 'extracted');
+            } else {
+                state.tasks = addSession(state.tasks, id, spentSeconds, 'manual');
+            }
         }
         if (task.time_add_idle_seconds) {
             let seconds = parseInt(task.time_add_idle_seconds) || 0;

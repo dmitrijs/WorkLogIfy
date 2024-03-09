@@ -49,8 +49,10 @@
                     <td class="Complex">
                         <div>
                             <span><strong>{{ task_time_spent_text }}</strong> ({{ task.time_spent_seconds }})</span>
-                            <span>Adjust: <input type="text" class="narrow"
-                                                 v-model="task.time_add_minutes">m</span>
+                            <span :style="{ fontWeight: task.taskIdExtractedFrom ? 'bold' : '' }">
+                                {{ task.taskIdExtractedFrom ? 'Extract' : 'Adjust' }}:
+                                <input type="text" class="narrow" v-model="task.time_add_minutes">m
+                            </span>
                         </div>
                     </td>
                 </tr>
