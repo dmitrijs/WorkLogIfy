@@ -100,7 +100,15 @@ export function sort_tasks(tasks) {
 export function Store_MergeSameCodes(tasks: Map<string, any>) {
     let unique = Map<string, any>();
     let idx = 0;
-    tasks.reverse().map((task: TaskObj) => {
+
+    const tasksInChronologicalOrder =
+        (
+            store.state.tasksHideUnReportable && store.state.settings.sorting_order === 'last_session_group_same_code'
+                ? tasks
+                : tasks.reverse()
+        );
+
+    tasksInChronologicalOrder.map((task: TaskObj) => {
         idx++;
         let existing = unique.get(task.code);
         if (!existing) {
