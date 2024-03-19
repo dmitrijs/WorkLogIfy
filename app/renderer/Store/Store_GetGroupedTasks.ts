@@ -81,7 +81,7 @@ class TasksSorter {
             const aTime = a.last_session?.started_at || a.created_at;
             const bTime = b.last_session?.started_at || b.created_at;
 
-            return (store.getTasksUi.tasksHideUnReportable ? -1 : 1) *
+            return (store.getTasksUi.tasksHideUnReportable || store.getTasksUi.tasksShowAsReport ? -1 : 1) *
                 (aTime > bTime ? -1 : 1);
         }
 
@@ -101,14 +101,7 @@ export function Store_MergeSameCodes(tasks: Map<string, any>) {
     let unique = Map<string, any>();
     let idx = 0;
 
-    const tasksInChronologicalOrder =
-        (
-            store.state.tasksHideUnReportable && store.state.settings.sorting_order === 'last_session_group_same_code'
-                ? tasks
-                : tasks.reverse()
-        );
-
-    tasksInChronologicalOrder.map((task: TaskObj) => {
+    tasks.map((task: TaskObj) => {
         idx++;
         let existing = unique.get(task.code);
         if (!existing) {
