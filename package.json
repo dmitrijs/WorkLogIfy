@@ -55,8 +55,11 @@
     "vue-facing-decorator": "^3.0",
     "vue-tsc": "^2.0.7"
   },
+  "__NOTES": [
+    "Electron 27+ has issues to re-draw UI elements on Windows! For example, calendar disappear until mouse moves over it."
+  ],
   "devDependencies": {
-    "electron": "^29.1.6",
+    "electron": "^26.6.10",
     "electron-builder": "^24.0"
   }
 }
