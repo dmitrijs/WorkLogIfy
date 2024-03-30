@@ -59,7 +59,7 @@ class TasksSorter {
         });
     }
 
-    compare(task1: TaskObj, task2: TaskObj) {
+    compare(task1: TaskObj, task2: TaskObj, forReport = false) {
         const a = this.enhanceTask(task1);
         const b = this.enhanceTask(task2);
 
@@ -78,6 +78,21 @@ class TasksSorter {
                 return 1;
             }
 
+            if (forReport) {
+                if (a.code === 'other' && b.code !== 'other') {
+                    return -1;
+                }
+                if (a.code !== 'other' && b.code === 'other') {
+                    return 1;
+                }
+
+                const aTime = a.first_session?.started_at || a.created_at;
+                const bTime = b.first_session?.started_at || b.created_at;
+
+                return (store.getTasksUi.tasksHideUnReportable || store.getTasksUi.tasksShowAsReport ? -1 : 1) *
+                    (aTime > bTime ? -1 : 1);
+            }
+
             const aTime = a.last_session?.started_at || a.created_at;
             const bTime = b.last_session?.started_at || b.created_at;
 
@@ -89,11 +104,11 @@ class TasksSorter {
     }
 }
 
-export function sort_tasks(tasks) {
+export function sort_tasks(tasks, forReport = false) {
     const sorter = new TasksSorter(tasks);
 
     return tasks.sort((task1: TaskObj, task2: TaskObj) => {
-        return sorter.compare(task1, task2);
+        return sorter.compare(task1, task2, forReport);
     });
 }
 
@@ -165,7 +180,7 @@ export function Store_MergeSameCodes(tasks: Record<string, any>) {
     });
 
     let tasksList = Object.values(unique);
-    return sort_tasks(tasksList);
+    return sort_tasks(tasksList, true);
 }
 
 export default function Store_GetGroupedTasks(): Record<string, any> {
