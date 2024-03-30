@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+### [1.33.2](https://github.com/dmitrijs/WorkLogIfy/compare/v1.33.1...v1.33.2) (2024-03-30)
+
+
+### Improvements
+
+* re-order tasks when generating Slack report ([0d8648e](https://github.com/dmitrijs/WorkLogIfy/commit/0d8648e8b8156ed71d4f2eca523f967513916a64))
+
 ### [1.33.1](https://github.com/dmitrijs/WorkLogIfy/compare/v1.33.0...v1.33.1) (2024-03-30)
 
 ## [1.33.0](https://github.com/dmitrijs/WorkLogIfy/compare/v1.32.2...v1.33.0) (2024-03-30)
