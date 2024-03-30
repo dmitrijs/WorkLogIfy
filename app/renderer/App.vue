@@ -62,7 +62,7 @@
     })
     export default class App extends Vue {
         get tasksGrouped() {
-            return store.getTasksGrouped.toJS();
+            return store.getTasksGrouped;
         }
 
         get tasks_ui() {

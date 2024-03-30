@@ -243,13 +243,14 @@
     import {timespanToText, timespanToTextHours} from "../Utils/Utils";
     import CalendarWindow from "./CalendarWindow.vue";
     import createMenu from './TasksMenu';
+    import {map, mapValues} from "lodash";
 
     const remote = window.remote;
 
     const rootTasks = computed(() => {
         const result = {};
         for (let group of Object.values(tasksGrouped.value)) {
-            for (let task of group.tasks) {
+            for (let task of (<any>group).tasks) {
                 if (task.code !== 'idle') {
                     result[task.code || task.id] = task;
                 }
@@ -287,7 +288,6 @@
             time_distributed_text: '',
         };
         for (let group of Object.values(tasksGrouped.value)) {
-            console.log('group', group)
             total.time_charge_rounded_seconds += (<any>group).time_charge_rounded_seconds;
             total.time_recorded_seconds += (<any>group).time_recorded_seconds;
             total.time_spent_seconds += (<any>group).time_spent_seconds;
@@ -305,29 +305,27 @@
     });
 
     const tasksGrouped = computed(() => {
-        let groups = store.getTasksGrouped;
+        let groups = store.getTasksGrouped as Record<string, any>;
 
         let result = groups;
         if (store.state.tasksShowAsReport) {
-            groups.map((group, group_id) => {
-                let tasks = Store_MergeSameCodes(group.get('tasks'));
-                result = result.setIn([group_id, 'tasks'], tasks);
+            map(groups, (group, date) => {
+                result[date].tasks = Store_MergeSameCodes(group.tasks);
             });
         }
 
-        return result.toJS();
+        return result;
     });
 
     const tasksGroupedAndMerged = computed(() => {
         let groups = store.getTasksGrouped;
 
         let result = groups;
-        groups.map((group, group_id) => {
-            let tasks = Store_MergeSameCodes(group.get('tasks'));
-            result = result.setIn([group_id, 'tasks'], tasks);
+        map(groups, (group, date) => {
+            result[date].tasks = Store_MergeSameCodes(group.tasks);
         });
 
-        return result.toJS();
+        return result;
     });
 
     const tasks_ui = computed(() => {

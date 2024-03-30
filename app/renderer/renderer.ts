@@ -43,7 +43,7 @@ window.ipc.on('debug.toggle', function ($event, value) {
 
 window.ipc.on('migration', function ($event, what) {
     if (what === 'export') {
-        navigator.clipboard.writeText(JSON.stringify(store.state.tasks.toJS())).then(function () {
+        navigator.clipboard.writeText(JSON.stringify(store.state.tasks)).then(function () {
         }, function () {
             /* clipboard write failed */
         });
@@ -61,8 +61,8 @@ app.mount("#root");
 
 window.ipc.on('user-is-idle', function (event: IpcRendererEvent, secondsIdle) {
     if (timer.isActive()) {
-        let timeredTask = store.state.tasks.get(store.state.taskTimeredId);
-        if (timeredTask && timeredTask.get('code') === 'idle') {
+        let timeredTask = store.state.tasks[store.state.taskTimeredId];
+        if (timeredTask && timeredTask.code === 'idle') {
             return; // already idle
         }
         timer.stop(secondsIdle);
@@ -81,9 +81,9 @@ window.ipc.on('user-is-idle', function (event: IpcRendererEvent, secondsIdle) {
 
 window.ipc.on('user-active-app', function (event: IpcRendererEvent, activeApp) {
     if (timer.isActive()) {
-        let timeredTask = store.state.tasks.get(store.state.taskTimeredId);
-        console.log("[timeredTask.get('id'), activeAppDescription]", [timeredTask.get('id'), activeApp.appDescription]);
-        store.taskAddActiveApp([timeredTask.get('id'), activeApp.appDescription, activeApp.secondsIdle]);
+        let timeredTask = store.state.tasks[store.state.taskTimeredId];
+        console.log("[timeredTask.id, activeAppDescription]", [timeredTask.id, activeApp.appDescription]);
+        store.taskAddActiveApp([timeredTask.id, activeApp.appDescription, activeApp.secondsIdle]);
     }
     store.addGlobalActiveApp(store.state.taskTimeredId, activeApp.appDescription, activeApp.secondsIdle);
 });

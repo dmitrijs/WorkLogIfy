@@ -17,7 +17,7 @@
                         {{ moment(activeApp.noticed_at).format('YYYY-MM-DD HH:mm') }}
                         <span v-if="moment().diff(moment(activeApp.noticed_at), 'hour') <= 4">({{ moment().diff(moment(activeApp.noticed_at), 'minute') }}m ago)</span>
                     </td>
-                    <td>{{ activeApp.timered_task ? (store.state.tasks.get(activeApp.timered_task)?.get('code') || 'Y') : '-' }}</td>
+                    <td>{{ activeApp.timered_task ? (store.state.tasks[activeApp.timered_task]?.code || 'Y') : '-' }}</td>
                     <td class="TD-Description">
                         <div :title="activeApp.description">{{ activeApp.description }}</div>
                     </td>

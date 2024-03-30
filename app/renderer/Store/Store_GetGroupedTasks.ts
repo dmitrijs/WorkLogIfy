@@ -1,7 +1,7 @@
-import {Collection, List, Map, OrderedMap} from "immutable";
 import moment from "moment";
 import store from "../Store/Store";
 import {comparatorLt, timespanToText} from "../Utils/Utils";
+import {cloneDeep, groupBy, map, mapValues} from "lodash";
 
 export function build_sort_value(task: TaskObj & {
     task_not_started: boolean, last_session: SessionObj, first_session: SessionObj, is_timered: boolean,
@@ -28,7 +28,7 @@ export function build_sort_value(task: TaskObj & {
 class TasksSorter {
     codeToLastSession = {};
 
-    constructor(tasks: List<TaskObj>) {
+    constructor(tasks: TaskObj[]) {
         tasks.forEach((task) => {
             const code = (!task.code || task.code === 'idle' ? task.id : task.code);
             let started_at = 0;
@@ -97,15 +97,15 @@ export function sort_tasks(tasks) {
     });
 }
 
-export function Store_MergeSameCodes(tasks: Map<string, any>) {
-    let unique = Map<string, any>();
+export function Store_MergeSameCodes(tasks: Record<string, any>) {
+    let unique = {} as Record<string, any>;
     let idx = 0;
 
     tasks.map((task: TaskObj) => {
         idx++;
-        let existing = unique.get(task.code);
+        let existing = unique[task.code];
         if (!existing) {
-            unique = unique.set(task.code, {...task});
+            unique[task.code] = {...task};
             return;
         }
 
@@ -113,7 +113,7 @@ export function Store_MergeSameCodes(tasks: Map<string, any>) {
             return;
         }
         if (existing.time_charge_seconds <= 0) { // replace empty
-            unique = unique.set(task.code, {...task});
+            unique[task.code] = {...task};
             return;
         }
 
@@ -161,29 +161,22 @@ export function Store_MergeSameCodes(tasks: Map<string, any>) {
         existing.id = 'group_' + idx;
         existing.grouped = true;
 
-        console.log('existing', existing);
-
-        unique = unique.set(task.code, existing);
+        unique[task.code] = existing;
     });
 
-    let tasksList = unique.toList();
+    let tasksList = Object.values(unique);
     return sort_tasks(tasksList);
 }
 
-export default function Store_GetGroupedTasks(): Map<string, any> {
+export default function Store_GetGroupedTasks(): Record<string, any> {
     if (!store.state.tasks) {
-        return Map<string, any>();
+        return {};
     }
 
-    let tasksList = List<TaskObj>();
-    store.state.tasks.forEach((taskMap, key) => {
-        let task: TaskObj;
-        if (Map.isMap(taskMap)) {
-            task = <TaskObj>taskMap.toJS();
-        } else {
-            task = <any>taskMap;
-        }
-        task._selected = !!store.state.tasksSelectedIds.get(key);
+    const tasksList = [];
+    Object.values(store.state.tasks).forEach((originalTask, key) => {
+        const task = cloneDeep(originalTask);
+        task._selected = !!store.state.tasksSelectedIds[key];
 
         task.time_charge_text = 'error';
 
@@ -196,15 +189,12 @@ export default function Store_GetGroupedTasks(): Map<string, any> {
 
         task.time_recorded_seconds = task.records.reduce((sum, obj: RecordObj) => sum + obj.recorded_seconds, 0);
         task.time_recorded_text = timespanToText(task.time_recorded_seconds);
-        tasksList = tasksList.push(task);
+        tasksList.push(task);
     });
 
-    let tasks: OrderedMap<string, Collection<number, TaskObj>>;
-    tasks = tasksList.groupBy((x) => x.date).toOrderedMap();
+    const tasks = groupBy(tasksList, 'date');
 
-    let groups: Map<string, any>;
-    groups = tasks.map((tasks) => {
-
+    let groups = mapValues(tasks, (tasks, date) => {
         let spent = 0;
         let charge = 0;
         let distributed = 0;
@@ -228,8 +218,8 @@ export default function Store_GetGroupedTasks(): Map<string, any> {
             time_recorded += task.time_recorded_seconds;
         });
 
-        return Map({
-            tasks: tasks,
+        return {
+            tasks: tasks as TaskObj[],
             time_charge_seconds: charge,
             time_spent_seconds: spent,
             time_distributed_seconds: distributed,
@@ -237,21 +227,24 @@ export default function Store_GetGroupedTasks(): Map<string, any> {
             time_charge_text: timespanToText(charge),
             time_spent_text: timespanToText(spent),
             time_recorded_text: timespanToText(time_recorded),
-        });
-    }).toMap();
+
+            duplicatesExist: null,
+            time_charge_rounded_seconds: null,
+            time_charge_rounded_text: null,
+        };
+    });
 
     // populate charge_time
-    groups = <any>groups.map((group) => {
+    groups = mapValues(groups, (group) => {
 
-        let tasks: List<TaskObj> = group.get('tasks');
-        let distributed = group.get('time_distributed_seconds');
-        let not_distributed = group.get('time_not_distributed_seconds');
+        let distributed = group.time_distributed_seconds;
+        let not_distributed = group.time_not_distributed_seconds;
 
         if (not_distributed === 0) {
             return group;
         }
 
-        tasks = tasks.map((task) => {
+        let tasks = map(group.tasks, (task) => {
             // no charging for lunch, meetings
             if (!task.chargeable || task.distributed) {
                 task.time_charge_seconds = 0;
@@ -267,7 +260,7 @@ export default function Store_GetGroupedTasks(): Map<string, any> {
 
             task.time_charge_text = timespanToText(task.time_charge_seconds);
             return task;
-        }).toList();
+        });
 
         // round times
         let time_charge_rounded_seconds = 0;
@@ -282,10 +275,10 @@ export default function Store_GetGroupedTasks(): Map<string, any> {
 
             time_charge_rounded_seconds += task.time_charge_seconds;
             return task;
-        }).toList();
+        });
 
         {
-            let secondsMissing = parseInt(group.get('time_charge_seconds')) - time_charge_rounded_seconds;
+            let secondsMissing = group.time_charge_seconds - time_charge_rounded_seconds;
             let microTimeBlockSeconds = 60 * 5;
             let blockCount = Math.round((secondsMissing + 60) / microTimeBlockSeconds);
             let secondsMissingRounded = blockCount * microTimeBlockSeconds;
@@ -337,10 +330,10 @@ export default function Store_GetGroupedTasks(): Map<string, any> {
 
         tasks = sort_tasks(tasks);
 
-        group = group.set('duplicatesExist', duplicatesExist);
-        group = group.set('tasks', tasks);
-        group = group.set('time_charge_rounded_seconds', time_charge_rounded_seconds);
-        group = group.set('time_charge_rounded_text', timespanToText(time_charge_rounded_seconds));
+        group.duplicatesExist = duplicatesExist;
+        group.tasks = tasks;
+        group.time_charge_rounded_seconds = time_charge_rounded_seconds;
+        group.time_charge_rounded_text = timespanToText(time_charge_rounded_seconds);
         return group;
     });
 

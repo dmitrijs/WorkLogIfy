@@ -42,7 +42,6 @@
     "@vitejs/plugin-vue": "^5.0.4",
     "active-win": "^8.1.0",
     "electron-is-dev": "^2.0.0",
-    "immutable": "^4.0.0",
     "lodash": "^4.17.21",
     "moment": "^2.24.0",
     "sass": "^1.26.3",

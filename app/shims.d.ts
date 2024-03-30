@@ -14,34 +14,34 @@ declare type TaskObj = {
     chargeable: boolean;
     distributed: boolean;
     frozen: boolean;
-    is_done: boolean;
-    is_done_at: string;
-    is_on_hold: boolean;
-    is_on_hold_at: boolean;
-    _selected: boolean;
+    is_done?: boolean;
+    is_done_at?: string;
+    is_on_hold?: boolean;
+    is_on_hold_at?: boolean;
+    _selected?: boolean;
     created_at: string;
 
-    time_spent_text: string;
-    time_recorded_text: string;
-    time_unrecorded_text: string;
-    time_charge_text: string;
-    time_charge_extra_text: string;
+    time_spent_text?: string;
+    time_recorded_text?: string;
+    time_unrecorded_text?: string;
+    time_charge_text?: string;
+    time_charge_extra_text?: string;
 
-    time_spent_seconds: number;
-    time_recorded_seconds: number;
-    time_unrecorded_seconds: number;
-    time_charge_seconds: number;
-    time_charge_extra_seconds: number;
-    time_add_idle_seconds: number;
+    time_spent_seconds?: number;
+    time_recorded_seconds?: number;
+    time_unrecorded_seconds?: number;
+    time_charge_seconds?: number;
+    time_charge_extra_seconds?: number;
+    time_add_idle_seconds?: number;
 
-    timer_elapsed_seconds_text: string;
+    timer_elapsed_seconds_text?: string;
 
     sessions: SessionObj[];
     records: RecordObj[];
     activeApps: ActiveAppObj[];
 
-    asanaTaskGid: string;
-    taskIdExtractedFrom: string; // id of task from which current task was extracted
+    asanaTaskGid?: string;
+    taskIdExtractedFrom?: string; // id of task from which current task was extracted
 }
 
 declare type TaskEditedObj = TaskObj & {
@@ -68,14 +68,14 @@ declare type RecordObj = {
     recorded_seconds: number;
     method: string;
     created_at: string;
-    jiraWorkLogId: string;
+    jiraWorkLogId?: string;
 }
 
 declare type ActiveAppObj = {
     noticed_at: string;
     description: string;
     seconds_idle: number;
-    timered_task: string;
+    timered_task?: string;
 }
 
 declare type SettingsObj = {

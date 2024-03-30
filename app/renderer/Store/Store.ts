@@ -1,53 +1,50 @@
-import {List, Map} from 'immutable';
-import _ from "lodash";
 import moment from "moment";
 import {reactive} from "vue";
 import {timespanToText} from '../Utils/Utils';
 import Store_GetGroupedTasks from "./Store_GetGroupedTasks";
+import {cloneDeep, keyBy} from "lodash";
 
 function saveTasks() {
     window.ipc.sendSync('tasks.save', {
         day_key: state.day_key,
-        arg1: _.cloneDeep(state.tasks.toJS()),
-        arg2: _.cloneDeep(store.getTasksGrouped.toJS()),
-        arg3: _.cloneDeep(state.settings),
+        arg1: cloneDeep(state.tasks),
+        arg2: cloneDeep(store.getTasksGrouped),
+        arg3: cloneDeep(state.settings),
     });
 }
 
 function saveActiveApps() {
     window.ipc.sendSync('activeApps.save', {
         day_key: state.day_key,
-        activeApps: _.cloneDeep(state.activeApps),
+        activeApps: cloneDeep(state.activeApps),
     });
 }
 
 function saveTaskTemplates() {
-    window.ipc.sendSync('tasks.templates.save', _.cloneDeep(state.templates));
+    window.ipc.sendSync('tasks.templates.save', cloneDeep(state.templates));
 }
 
-function addSession(tasks, task_id, spentSeconds, method, idleSeconds = 0) {
-    let sessions = tasks.get(task_id).get('sessions');
-    sessions = sessions.push({
+function addSession(task_id: string, spentSeconds: number, method: string, idleSeconds = 0) {
+    store.state.tasks[task_id].sessions.push({
         started_at: moment().subtract(spentSeconds, 'seconds').toISOString(),
         finished_at: moment().subtract(idleSeconds, 'seconds').toISOString(),
         spent_seconds: (spentSeconds - idleSeconds),
         method: method,
-    });
-    return tasks.setIn([task_id, 'sessions'], sessions);
+    })
 }
 
-function addActiveApp(tasks, task_id, activeAppDescription, secondsIdle) {
-    let activeApps = tasks.get(task_id).get('activeApps');
-    activeApps = activeApps.push({
+function addActiveApp(task_id: string, activeAppDescription: string, secondsIdle: number) {
+    let activeApps = state.tasks[task_id].activeApps;
+    activeApps.push({
         noticed_at: moment().toISOString(),
         seconds_idle: secondsIdle,
         description: activeAppDescription,
     });
-    return tasks.setIn([task_id, 'activeApps'], activeApps);
+    state.tasks[task_id].activeApps = activeApps;
 }
 
-function addRecord(tasks, task_id, recordedSeconds, method, jiraWorkLogId = null) {
-    let records = tasks.get(task_id).get('records');
+function addRecord(task_id:string, recordedSeconds: number, method: string, jiraWorkLogId = null) {
+    let records = state.tasks[task_id].records;
     let record = {
         created_at: moment().toISOString(),
         recorded_seconds: recordedSeconds,
@@ -56,16 +53,16 @@ function addRecord(tasks, task_id, recordedSeconds, method, jiraWorkLogId = null
     if (jiraWorkLogId) {
         record['jiraWorkLogId'] = jiraWorkLogId;
     }
-    records = records.push(record);
-    return tasks.setIn([task_id, 'records'], records);
+    records.push(record);
+    state.tasks[task_id].records = records;
 }
 
 const state = reactive({
-    tasks: null as Map<string, Map<string, any>>,
+    tasks: {} as Record<string, TaskObj>,
 
     activeApps: [] as ActiveAppObj[],
 
-    tasksSelectedIds: Map<string, Boolean>({}),
+    tasksSelectedIds: {} as Record<string, boolean>,
     taskLastSelected: '',
     taskIsExtracting: false, // new task that is created is extracted from the selected task
     tasksHoveredId: null,
@@ -84,7 +81,7 @@ const state = reactive({
     fileTotals: {},
     templates: [],
     createdTaskId: '',
-    taskInClipboard: null as Map<string, any>,
+    taskInClipboard: null as TaskObj,
     taskIsCloned: false,
     calendarHoveredDayCode: null,
 
@@ -94,37 +91,13 @@ const state = reactive({
 });
 state.screen = state.tasksScreen;
 
-function convertJsTaskToMap(js_task: any): Map<string, any> {
-    let task = Map<string, any>(js_task);
-    let activeApps = task.get('activeApps');
-    task = task.set('sessions', List(task.get('sessions')));
-    task = task.set('records', List(task.get('records')));
-    task = task.set('activeApps', List(activeApps));
-
-    return task;
-}
-
-function convertJsTasksToMap(js_tasks): Map<string, Map<string, any>> {
-    let tasks = Map<string, Map<string, any>>();
-
-    if (typeof js_tasks === 'object') {
-        let keys = Object.keys(js_tasks);
-
-        for (let key of keys) {
-            tasks = tasks.set(key, convertJsTaskToMap(js_tasks[key]));
-        }
-    }
-
-    return tasks;
-}
-
 function updateTaskField(tasks: any, task_id: any, field: any, value: any) {
-    console.log(tasks.get(task_id));
-    tasks = tasks.setIn([task_id, field], value);
+    console.log(tasks[task_id]);
+    tasks[task_id][field] = value;
     if (value === true) {
-        tasks = tasks.setIn([task_id, field + '_at'], moment().toISOString());
+        tasks[task_id][field + '_at'] = moment().toISOString();
     } else if (value === false) {
-        tasks = tasks.deleteIn([task_id, field + '_at']);
+        delete tasks[task_id][field + '_at'];
     }
     return tasks;
 }
@@ -132,7 +105,7 @@ function updateTaskField(tasks: any, task_id: any, field: any, value: any) {
 const store = {
     state,
 
-    get getTasksGrouped(): Map<string, any> {
+    get getTasksGrouped(): Record<string, any> {
         return Store_GetGroupedTasks();
     },
 
@@ -154,7 +127,7 @@ const store = {
 
     get getEditedTask(): TaskEditedObj {
         console.log('getEditedTask', state.taskEditedId);
-        return <TaskEditedObj>state.tasks.get(state.taskEditedId).toJS();
+        return <TaskEditedObj>state.tasks[state.taskEditedId];
     },
 
     get getEmptyTask(): TaskEditedObj {
@@ -170,9 +143,9 @@ const store = {
         } as TaskEditedObj;
 
         let refTask = null;
-        if (state.taskLastSelected && (refTask = state.tasks.get(state.taskLastSelected))) {
-            task.date = refTask.get('date');
-            task.code = refTask.get('code');
+        if (state.taskLastSelected && (refTask = state.tasks[state.taskLastSelected])) {
+            task.date = refTask.date;
+            task.code = refTask.code;
 
             if (state.taskIsExtracting) {
                 state.taskIsExtracting = false;
@@ -197,50 +170,49 @@ const store = {
     },
     tasksUiToggle(id: string) {
         console.log(id);
-        if (state.tasksSelectedIds.get(id)) {
-            state.tasksSelectedIds = state.tasksSelectedIds.delete(id);
+        if (state.tasksSelectedIds[id]) {
+            delete state.tasksSelectedIds[id];
         } else {
-            state.tasksSelectedIds = state.tasksSelectedIds.set(id, true);
+            state.tasksSelectedIds[id] = true;
         }
     },
     createTask(task) {
         const id = 'task_' + moment.utc();
-        state.tasks = state.tasks.set(id, Map({
+        state.tasks[id] = {
             id: id,
             code: task.code,
             title: task.title,
             distributed: false,
             chargeable: true,
-            logged: false,
             frozen: !!task.frozen,
             notes: task.notes,
             comment: task.comment,
             source: task.source,
             date: task.date,
             created_at: moment().toISOString(),
-            sessions: List(),
-            records: List(),
-            activeApps: List(),
+            sessions: [],
+            records: [],
+            activeApps: [],
             asanaTaskGid: task.asanaTaskGid,
-        }));
+        };
         state.createdTaskId = id;
 
         if (task.time_add_minutes) {
             let spentSeconds = parseInt(task.time_add_minutes) * 60 || 0;
 
             if (task.taskIdExtractedFrom) {
-                state.tasks = addSession(state.tasks, id, spentSeconds, 'extracted');
-                state.tasks = addSession(state.tasks, task.taskIdExtractedFrom, -spentSeconds, 'extracted');
+                addSession(id, spentSeconds, 'extracted');
+                addSession(task.taskIdExtractedFrom, -spentSeconds, 'extracted');
             } else {
-                state.tasks = addSession(state.tasks, id, spentSeconds, 'manual');
+                addSession(id, spentSeconds, 'manual');
             }
         }
         if (task.time_add_idle_seconds) {
             let seconds = parseInt(task.time_add_idle_seconds) || 0;
-            state.tasks = addSession(state.tasks, id, seconds, 'idle');
+            addSession(id, seconds, 'idle');
         }
 
-        console.log(state.tasks.toJS());
+        console.log(state.tasks);
 
         state.screen = state.tasksScreen;
 
@@ -249,30 +221,30 @@ const store = {
     saveTask(task: TaskEditedObj) {
         console.log('save', task);
 
-        state.tasks = state.tasks.setIn([task.id, 'code'], task.code);
-        state.tasks = state.tasks.setIn([task.id, 'title'], task.title);
-        state.tasks = state.tasks.setIn([task.id, 'date'], task.date);
-        state.tasks = state.tasks.setIn([task.id, 'frozen'], !!task.frozen);
-        state.tasks = state.tasks.setIn([task.id, 'notes'], task.notes);
-        state.tasks = state.tasks.setIn([task.id, 'comment'], task.comment);
-        state.tasks = state.tasks.setIn([task.id, 'source'], task.source);
-        state.tasks = state.tasks.setIn([task.id, 'asanaTaskGid'], task.asanaTaskGid);
+        state.tasks[task.id].code = task.code;
+        state.tasks[task.id].title = task.title;
+        state.tasks[task.id].date = task.date;
+        state.tasks[task.id].frozen = !!task.frozen;
+        state.tasks[task.id].notes = task.notes;
+        state.tasks[task.id].comment = task.comment;
+        state.tasks[task.id].source = task.source;
+        state.tasks[task.id].asanaTaskGid = task.asanaTaskGid;
 
         if (task.time_add_minutes) {
             let spentSeconds = parseInt(task.time_add_minutes) * 60 || 0;
 
-            state.tasks = addSession(state.tasks, task.id, spentSeconds, 'manual');
+            addSession(task.id, spentSeconds, 'manual');
         }
         if (task.time_record_minutes) {
             let recordSeconds = parseInt(task.time_record_minutes) * 60 || 0;
 
-            state.tasks = addRecord(state.tasks, task.id, recordSeconds, 'manual');
+            addRecord(task.id, recordSeconds, 'manual');
         }
 
         state.taskEditedId = null;
         state.screen = state.tasksScreen;
 
-        console.log(state.tasks.toJS());
+        console.log(state.tasks);
         saveTasks();
     },
     updateTask([task_id, field, value]) {
@@ -283,7 +255,7 @@ const store = {
         saveTasks();
     },
     taskAddRecordedSeconds([task_id, recordSeconds, jiraWorkLogId]) {
-        state.tasks = addRecord(state.tasks, task_id, recordSeconds, 'quick', jiraWorkLogId);
+        addRecord(task_id, recordSeconds, 'quick', jiraWorkLogId);
 
         saveTasks();
     },
@@ -318,7 +290,7 @@ const store = {
         state.week_key = moment(day, "YYYY-MM-DD").endOf('isoWeek').format('YYYY-WW');
         let workday = window.ipc.sendSync('tasks.load', state.day_key);
 
-        state.tasks = convertJsTasksToMap(workday.tasks);
+        state.tasks = workday.tasks; //convertJsTasksToMap(workday.tasks);
         state.activeApps = workday.activeApps;
         if (!state.activeApps) {
             state.activeApps = [];
@@ -340,12 +312,12 @@ const store = {
             return;
         }
         for (let taskId of Object.keys(tasks)) {
-            if (state.tasks.get(taskId)) {
+            if (state.tasks[taskId]) {
                 replaced++;
             } else {
                 added++;
             }
-            state.tasks = state.tasks.set(taskId, convertJsTaskToMap(tasks[taskId]));
+            state.tasks[taskId] = tasks[taskId];
         }
         saveTasks();
         if (replaced + added > 0) {
@@ -369,20 +341,20 @@ const store = {
             return;
         }
         state.taskLastSelected = state.tasksHoveredId;
-        state.tasksSelectedIds = state.tasksSelectedIds.set(state.tasksHoveredId, true);
+        state.tasksSelectedIds[state.tasksHoveredId] = true;
     },
     deselectAll() {
-        state.tasksSelectedIds = state.tasksSelectedIds.clear();
+        state.tasksSelectedIds = {};
     },
     clipboardCopy(taskId) {
-        state.taskInClipboard = state.tasks.get(taskId);
+        state.taskInClipboard = state.tasks[taskId];
         state.taskIsCloned = true;
     },
     clipboardCut(taskId) {
-        state.taskInClipboard = state.tasks.get(taskId);
+        state.taskInClipboard = state.tasks[taskId];
         state.taskIsCloned = false;
 
-        state.tasks = state.tasks.remove(taskId);
+        delete state.tasks[taskId];
 
         saveTasks();
     },
@@ -392,24 +364,24 @@ const store = {
         }
 
         const id = 'task_' + moment.utc();
-        let newTask = state.taskInClipboard.set('id', id);
+        let newTask = {...state.taskInClipboard, id: id};
 
         if (state.taskIsCloned) {
-            newTask = newTask.set('sessions', List());
-            newTask = newTask.set('records', List());
-            newTask = newTask.set('activeApps', List());
+            newTask.sessions = [];
+            newTask.records = [];
+            newTask.activeApps = [];
         }
 
-        state.tasks = state.tasks.set(id, newTask);
+        state.tasks[id] = newTask;
 
         saveTasks();
     },
-    activateTimer(taskId) {
+    activateTimer(taskId: string) {
         if (taskId === null) {
             taskId = state.tasksHoveredId;
         }
         state.taskTimeredId = taskId;
-        state.tasksSelectedIds = Map();
+        state.tasksSelectedIds = {};
 
         state.tasks = updateTaskField(state.tasks, taskId, 'is_on_hold', false);
         saveTasks();
@@ -427,9 +399,9 @@ const store = {
     stopTimer([secondsElapsed, secondsIdle]) {
         console.log('secondsElapsed', secondsElapsed, 'secondsIdle', secondsIdle);
 
-        state.tasks = addSession(state.tasks, state.taskTimeredId, secondsElapsed, 'timer', secondsIdle);
+        addSession(state.taskTimeredId, secondsElapsed, 'timer', secondsIdle);
 
-        state.tasksSelectedIds = Map();
+        state.tasksSelectedIds = {};
         state.timerElapsedText = '';
         state.timerElapsed = 0;
         state.taskTimeredId = null;
@@ -437,11 +409,11 @@ const store = {
         saveTasks();
     },
     taskAddSession([taskId, minutes, method]) {
-        state.tasks = addSession(state.tasks, taskId, minutes * 60, method);
+        addSession(taskId, minutes * 60, method);
         saveTasks();
     },
     taskAddActiveApp([taskId, activeAppDescription, secondsIdle]) {
-        state.tasks = addActiveApp(state.tasks, taskId, activeAppDescription, secondsIdle);
+        addActiveApp(taskId, activeAppDescription, secondsIdle);
         saveTasks();
     },
     addGlobalActiveApp(timeredTaskId: string, activeAppDescription: string, secondsIdle: number) {
@@ -523,7 +495,7 @@ const store = {
             referrerPolicy: "no-referrer",
         });
 
-        state.asanaTasks = _.keyBy([
+        state.asanaTasks = keyBy([
             ...asanaTasksCall.response.data,
             ...asanaTasksCompletedCall.response.data,
         ], 'gid');

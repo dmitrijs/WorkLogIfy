@@ -10,13 +10,13 @@ const JIRA_TIME_FORMAT = 'YYYY-MM-DDTHH:mm:ss.SSSZZ';
 
 export default function createMenu() {
     let task = null;
-    if (store.state.tasksSelectedIds.size === 1) {
-        let taskId = store.state.tasksSelectedIds.keySeq().first();
-        task = store.state.tasks.get(taskId);
+    if (Object.values(store.state.tasksSelectedIds).length === 1) {
+        let taskId = Object.keys(store.state.tasksSelectedIds)[0];
+        task = store.state.tasks[taskId];
     }
 
     console.log('task', task);
-    console.log('task && task.get(\'code\')', (task && task.get('code')));
+    console.log('task && task.code', (task && task.code));
 
     const menu = new Menu();
     menu.append(new MenuItem({
@@ -40,9 +40,9 @@ export default function createMenu() {
         type: 'separator',
     }));
     menu.append(new MenuItem({
-        enabled: (!!(task && task.get('code'))),
+        enabled: (!!(task && task.code)),
         label: 'Copy the ID', click() {
-            navigator.clipboard.writeText(task.get('code')).then(function () {
+            navigator.clipboard.writeText(task.code).then(function () {
             }, function () {
                 /* clipboard write failed */
             });
@@ -52,17 +52,17 @@ export default function createMenu() {
         type: 'separator',
     }));
     menu.append(new MenuItem({
-        enabled: (!!(task && task.get('code'))),
+        enabled: (!!(task && task.code)),
         label: 'View in JIRA', click() {
-            let url = 'https://' + store.state.settings.jira_host + '/browse/' + task.get('code');
+            let url = 'https://' + store.state.settings.jira_host + '/browse/' + task.code;
             window.open(url);
         },
     }));
     menu.append(new MenuItem({
-        enabled: (!!(task && task.get('code') && task.get('chargeable') && !task.get('distributed'))),
+        enabled: (!!(task && task.code && task.chargeable && !task.distributed)),
         label: 'Record to JIRA', click() {
-            let sum = task.get('sessions', []).reduce((sum, obj) => sum + obj.spent_seconds, 0);
-            let recorded = task.get('records', []).reduce((sum, obj) => sum + obj.recorded_seconds, 0);
+            let sum = task.sessions.reduce((sum, obj) => sum + obj.spent_seconds, 0);
+            let recorded = task.records.reduce((sum, obj) => sum + obj.recorded_seconds, 0);
             let step = 6 * 60;
 
             sum -= recorded;
@@ -74,10 +74,10 @@ export default function createMenu() {
 
             let timeSpentSeconds = Math.ceil(sum / step) * step; // round up
 
-            let taskCode = task.get('code');
-            let timeStarted = moment(task.get('sessions').get(0).started_at)
-            let taskDate = moment(task.get('date'), 'YYYY-MM-DD');
-            if (taskDate.format('YYYY-MM-DD') === task.get('date')) { // valid date
+            let taskCode = task.code;
+            let timeStarted = moment(task.sessions[0].started_at)
+            let taskDate = moment(task.date, 'YYYY-MM-DD');
+            if (taskDate.format('YYYY-MM-DD') === task.date) { // valid date
                 timeStarted.year(taskDate.year());
                 timeStarted.month(taskDate.month());
                 timeStarted.date(taskDate.date());
@@ -109,8 +109,8 @@ export default function createMenu() {
             if (jiraResponseWorkLog.error) {
                 alert(jiraResponseWorkLog.error);
             } else {
-                store.taskAddRecordedSeconds([task.get('id'), timeSpentSeconds, (jiraResponseWorkLog.response.id || null)]);
-                store.updateTask([task.get('id'), 'is_done', true])
+                store.taskAddRecordedSeconds([task.id, timeSpentSeconds, (jiraResponseWorkLog.response.id || null)]);
+                store.updateTask([task.id, 'is_done', true])
             }
         },
     }));
@@ -120,13 +120,13 @@ export default function createMenu() {
     menu.append(new MenuItem({
         enabled: (!!task),
         label: 'Copy', click() {
-            store.clipboardCopy(task.get('id'));
+            store.clipboardCopy(task.id);
         },
     }));
     menu.append(new MenuItem({
         enabled: (!!task),
         label: 'Cut', click() {
-            store.clipboardCut(task.get('id'));
+            store.clipboardCut(task.id);
         },
     }));
     menu.append(new MenuItem({
