@@ -79,7 +79,7 @@ const state = reactive({
     week_key: '',
     allFiles: [],
     fileTotals: {},
-    templates: [],
+    templates: [] as TemplateObj[],
     createdTaskId: '',
     taskInClipboard: null as TaskObj,
     taskIsCloned: false,
