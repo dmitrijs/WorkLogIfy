@@ -43,7 +43,7 @@ function addActiveApp(task_id: string, activeAppDescription: string, secondsIdle
     state.tasks[task_id].activeApps = activeApps;
 }
 
-function addRecord(task_id:string, recordedSeconds: number, method: string, jiraWorkLogId = null) {
+function addRecord(task_id: string, recordedSeconds: number, method: string, jiraWorkLogId = null) {
     let records = state.tasks[task_id].records;
     let record = {
         created_at: moment().toISOString(),
@@ -55,6 +55,14 @@ function addRecord(task_id:string, recordedSeconds: number, method: string, jira
     }
     records.push(record);
     state.tasks[task_id].records = records;
+}
+
+function updateProgressBar(task: TaskObj) {
+    if (task.title === '' && (task.notes || '') === '') {
+        window.ipc.send('set.progress', {indeterminate: true});
+    } else {
+        window.ipc.send('set.progress', {indeterminate: false});
+    }
 }
 
 const state = reactive({
@@ -221,6 +229,8 @@ const store = {
         if (isArray(state.tasks)) {
             alert('ASSERT FAILED: `tasks` has invalid data type. Tasks might not be persisted.');
         }
+
+        updateProgressBar(task);
     },
     saveTask(task: TaskEditedObj) {
         console.log('save', task);
@@ -250,6 +260,8 @@ const store = {
 
         console.log(state.tasks);
         saveTasks();
+
+        updateProgressBar(task);
     },
     updateTask([task_id, field, value]) {
         state.tasks = updateTaskField(state.tasks, task_id, field, value);

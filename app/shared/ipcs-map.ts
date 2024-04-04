@@ -8,7 +8,7 @@ export interface IpcChannelMap {
         content: string,
     }];
     'flash.frame': [void];
-    'jira.request': [object & { url: string } & RequestInit, {response: any}];
+    'jira.request': [object & { url: string } & RequestInit, { response: any }];
     'window.open': [void];
 
     'debug.state': [void, boolean];
@@ -35,7 +35,8 @@ export interface IpcChannelMap {
     'debug.toggle': [boolean];
     'migration': [string];
     'user-is-idle': [number];
-    'user-active-app': [{secondsIdle: number, appDescription: string}];
+    'user-active-app': [{ secondsIdle: number, appDescription: string }];
     'timer-stop': [void];
     'confirm-app-quit': [void];
+    'set.progress': [{ progress?: number, indeterminate?: boolean }];
 }

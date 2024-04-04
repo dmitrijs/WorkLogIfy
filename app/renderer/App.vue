@@ -14,22 +14,28 @@
         <div class="Debug" v-if="tasks_ui.is_debug">
             <button onclick="document.location.reload()" class="btn btn-secondary" style="padding: 10px 20px; float: right">reload</button>
             <button type="button" class="btn btn-secondary btn-xs" @click="save()">save</button>
-            <div v-for="(value, key) of tasks_ui"><strong>{{key}}:</strong> {{value}}</div>
+            <div v-for="(value, key) of tasks_ui"><strong>{{ key }}:</strong> {{ value }}</div>
             <hr/>
-            Timer
+            Timer:
             <button type="button" class="btn btn-secondary btn-xs" @click="timerStop" :disabled="!tasks_ui.timeredId">stop</button>
             <hr/>
+            Progress:
+            <button type="button" class="btn btn-secondary btn-xs" @click="progressBar({indeterminate: true})">∞</button>
+            <button type="button" class="btn btn-secondary btn-xs" @click="progressBar({indeterminate: false})">-</button>
+            <button type="button" class="btn btn-secondary btn-xs" @click="progressBar({progress: 0.01})">1%</button>
+            <button type="button" class="btn btn-secondary btn-xs" @click="progressBar({progress: 0.70})">70%</button>
+            <hr/>
             <div v-for="(day, dayId) of tasksGrouped">
-                <strong>{{dayId}}</strong><br />
+                <strong>{{ dayId }}</strong><br/>
                 <div v-for="(val, prop) of day">
                     <template v-if="(<any>prop) === 'tasks'">
                         <div style="padding-left: 10px;" v-for="(task) of val">
-                            <strong>{{task.id}}</strong>
-                            <div style="white-space: pre;">{{task}}</div>
+                            <strong>{{ task.id }}</strong>
+                            <div style="white-space: pre;">{{ task }}</div>
                         </div>
                     </template>
                     <div v-else>
-                        <em>{{prop}}</em>: {{val}}
+                        <em>{{ prop }}</em>: {{ val }}
                     </div>
                 </div>
             </div>
@@ -39,20 +45,20 @@
 
 <script lang="ts">
     import {Component, Vue} from "vue-facing-decorator";
+    import store from "./Store/Store";
     import ActiveAppsWindow from "./Tasks/ActiveAppsWindow.vue";
-    import TasksWindow from "./Tasks/TasksWindow.vue";
+    import CalendarWindow from "./Tasks/CalendarWindow.vue";
+    import SettingsWindow from "./Tasks/SettingsWindow.vue";
     import TaskEdit from "./Tasks/TaskEdit.vue";
+    import TasksWindow from "./Tasks/TasksWindow.vue";
+    import TemplatesWindow from "./Tasks/TemplatesWindow.vue";
     import TodosWindow from "./Tasks/TodosWindow.vue";
     import timer from "./Timer";
-    import CalendarWindow from "./Tasks/CalendarWindow.vue";
-    import store from "./Store/Store";
-    import TemplatesWindow from "./Tasks/TemplatesWindow.vue";
-    import SettingsWindow from "./Tasks/SettingsWindow.vue";
 
     @Component({
         components: {
             TodosWindow,
-          ActiveAppsWindow,
+            ActiveAppsWindow,
             TemplatesWindow,
             CalendarWindow,
             TaskEdit,
@@ -76,6 +82,10 @@
         timerStop() {
             timer.stop();
         }
+
+        progressBar(params: {progress?: number, indeterminate?: boolean}) {
+            window.ipc.send('set.progress', params);
+        }
     }
 </script>
 
@@ -86,6 +96,7 @@
         .fade-enter-active, .fade-leave-active {
             transition: opacity .1s;
         }
+
         .fade-enter, .fade-leave-to {
             opacity: 0;
         }

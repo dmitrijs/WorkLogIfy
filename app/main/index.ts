@@ -207,6 +207,19 @@ app.on('ready', async () => {
             quitConfirmed = true;
             app.quit();
         });
+
+        ipcMain.on('set.progress', (event: Electron.IpcMainEvent, params) => {
+            if (process.platform !== 'darwin') {
+                if (params.indeterminate === true) {
+                    mainWindow.setProgressBar(1.1);
+                } else if (params.indeterminate === false) {
+                    mainWindow.setProgressBar(-1);
+                }
+            }
+            if (typeof params.progress !== 'undefined') {
+                mainWindow.setProgressBar(params.progress);
+            }
+        });
     }
 
     const mainMenu = createMainMenu(mainWindow);
