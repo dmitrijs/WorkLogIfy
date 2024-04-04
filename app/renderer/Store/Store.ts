@@ -212,7 +212,7 @@ const store = {
             addSession(id, seconds, 'idle');
         }
 
-        console.log(state.tasks);
+        console.log("[createTask] final tasks", state.tasks);
 
         state.screen = state.tasksScreen;
 

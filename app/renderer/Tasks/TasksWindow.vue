@@ -343,7 +343,6 @@
     });
 
     function contextMenuShow(e) {
-        console.log('tasks context menu');
         store.selectHovered();
         e.preventDefault();
         createMenu().popup({window: remote.getCurrentWindow()})

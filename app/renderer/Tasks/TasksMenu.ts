@@ -15,9 +15,6 @@ export default function createMenu() {
         task = store.state.tasks[taskId];
     }
 
-    console.log('task', task);
-    console.log('task && task.code', (task && task.code));
-
     const menu = new Menu();
     menu.append(new MenuItem({
         label: 'New Task', click() {

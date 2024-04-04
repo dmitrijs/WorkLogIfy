@@ -116,7 +116,6 @@
         }
 
         calendarMenuShow(e) {
-            console.log('tasks context menu');
             e.preventDefault();
             createCalendarMenu(() => this.cache = null).popup({window: remote.getCurrentWindow()})
         }
