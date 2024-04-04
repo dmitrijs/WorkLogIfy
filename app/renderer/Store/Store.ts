@@ -1,4 +1,4 @@
-import {cloneDeep, keyBy} from "lodash";
+import {cloneDeep, isArray, keyBy} from "lodash";
 import moment from "moment";
 import {reactive} from "vue";
 import {timespanToText} from '../Utils/Utils';
@@ -217,6 +217,10 @@ const store = {
         state.screen = state.tasksScreen;
 
         saveTasks();
+
+        if (isArray(state.tasks)) {
+            alert('ASSERT FAILED: `tasks` has invalid data type. Tasks might not be persisted.');
+        }
     },
     saveTask(task: TaskEditedObj) {
         console.log('save', task);
@@ -290,7 +294,7 @@ const store = {
         state.week_key = moment(day, "YYYY-MM-DD").endOf('isoWeek').format('YYYY-WW');
         let workday = window.ipc.sendSync('tasks.load', state.day_key);
 
-        state.tasks = workday.tasks; //convertJsTasksToMap(workday.tasks);
+        state.tasks = workday.tasks;
         state.activeApps = workday.activeApps;
         if (!state.activeApps) {
             state.activeApps = [];

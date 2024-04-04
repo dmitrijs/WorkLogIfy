@@ -2,6 +2,7 @@ import {enable, initialize} from "@electron/remote/main";
 import * as electron from 'electron'
 import {app, BrowserWindow, Menu, shell} from 'electron'
 import isDev from "electron-is-dev";
+import {isArray, isObject} from "lodash";
 import path from "path";
 import {StrictIpcMain} from "typesafe-ipc";
 import {IpcChannelMap} from "../shared/ipcs-map";
@@ -178,13 +179,16 @@ app.on('ready', async () => {
             let workday = Filesystem.getWorkLog(day_key);
 
             if (!(<any>workday).version) { // v1
-                event.returnValue = {
+                workday = <any>{
                     tasks: workday as any,
                     activeApps: [],
                 }
-            } else {
-                event.returnValue = workday
             }
+
+            if (!workday.hasOwnProperty('tasks') || !isObject((<any>workday).tasks) || isArray((<any>workday).tasks)) {
+                (<any>workday).tasks = {};
+            }
+            event.returnValue = workday;
         });
 
         ipcMain.on('settings.load', (event: Electron.IpcMainEvent) => {
