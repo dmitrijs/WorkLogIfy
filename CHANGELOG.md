@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+### [1.33.4](https://github.com/dmitrijs/WorkLogIfy/compare/v1.33.3...v1.33.4) (2024-04-04)
+
+
+### Features
+
+* **ux:** animate task bar while task is empty (t.i. no title or notes) ([0ef9bb7](https://github.com/dmitrijs/WorkLogIfy/commit/0ef9bb7d02c244e5248d4262b9073b131ae476c6))
+
 ### [1.33.3](https://github.com/dmitrijs/WorkLogIfy/compare/v1.33.2...v1.33.3) (2024-04-04)
 
 
