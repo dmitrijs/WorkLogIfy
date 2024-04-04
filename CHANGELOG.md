@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+### [1.33.3](https://github.com/dmitrijs/WorkLogIfy/compare/v1.33.2...v1.33.3) (2024-04-04)
+
+
+### Improvements
+
+* fixed tasks persistence (make sure tasks field has correct data type) ([cf2d9ab](https://github.com/dmitrijs/WorkLogIfy/commit/cf2d9ab0241f2345ec7de65fb8dd502a46d9fd8e))
+* output json in pretty format ([ab1b968](https://github.com/dmitrijs/WorkLogIfy/commit/ab1b96841a511a157ab0f99fcb09baeefd14dc7e))
+
 ### [1.33.2](https://github.com/dmitrijs/WorkLogIfy/compare/v1.33.1...v1.33.2) (2024-03-30)
 
 
