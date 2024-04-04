@@ -55,7 +55,7 @@ class Filesystem {
             version: 1,
             tasks: worklog,
         }, null, 2));
-        fs.writeFileSync(dir + '/settings.json', JSON.stringify(settings));
+        fs.writeFileSync(dir + '/settings.json', JSON.stringify(settings, null, 2));
 
         {
             let time_charge_rounded_seconds = 0;
@@ -70,7 +70,7 @@ class Filesystem {
             };
             day.time_charge_rounded_seconds = time_charge_rounded_seconds;
             contents[day_key] = day;
-            fs.writeFileSync(dir + '/worklog_totals.json', JSON.stringify(contents));
+            fs.writeFileSync(dir + '/worklog_totals.json', JSON.stringify(contents, null, 2));
         }
     }
 
