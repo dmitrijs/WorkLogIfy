@@ -1,7 +1,7 @@
-import store from "../Store/Store";
-import {timespanToText} from "../Utils/Utils";
 import _ from "lodash";
 import moment from "moment";
+import store from "../Store/Store";
+import {timespanToText} from "../Utils/Utils";
 
 const remote = window.remote;
 const {Menu, MenuItem} = remote;
@@ -121,7 +121,7 @@ export default function createMenu() {
         },
     }));
     menu.append(new MenuItem({
-        enabled: (!!task),
+        enabled: (task && task.id !== store.state.taskTimeredId),
         label: 'Cut', click() {
             store.clipboardCut(task.id);
         },
