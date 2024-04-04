@@ -1,7 +1,7 @@
+import {cloneDeep, groupBy, map, mapValues} from "lodash";
 import moment from "moment";
 import store from "../Store/Store";
 import {comparatorLt, timespanToText} from "../Utils/Utils";
-import {cloneDeep, groupBy, map, mapValues} from "lodash";
 
 export function build_sort_value(task: TaskObj & {
     task_not_started: boolean, last_session: SessionObj, first_session: SessionObj, is_timered: boolean,

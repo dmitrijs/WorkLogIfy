@@ -1,8 +1,8 @@
+import {cloneDeep, keyBy} from "lodash";
 import moment from "moment";
 import {reactive} from "vue";
 import {timespanToText} from '../Utils/Utils';
 import Store_GetGroupedTasks from "./Store_GetGroupedTasks";
-import {cloneDeep, keyBy} from "lodash";
 
 function saveTasks() {
     window.ipc.sendSync('tasks.save', {
