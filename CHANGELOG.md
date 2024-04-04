@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+### [1.33.6](https://github.com/dmitrijs/WorkLogIfy/compare/v1.33.5...v1.33.6) (2024-04-04)
+
+
+### Improvements
+
+* **tasks:** do not allow cutting out the active task ([dfbaa0b](https://github.com/dmitrijs/WorkLogIfy/commit/dfbaa0b0a57d10c038d2e801f22121a1e6fe7109))
+
 ### [1.33.5](https://github.com/dmitrijs/WorkLogIfy/compare/v1.33.4...v1.33.5) (2024-04-04)
 
 
