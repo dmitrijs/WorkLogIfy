@@ -1,5 +1,6 @@
 import {app} from "electron";
 import fs from "fs";
+import moment from "moment";
 
 class Filesystem {
     public static getDir() {
@@ -52,6 +53,10 @@ class Filesystem {
         console.log("files directory: " + dir);
         delete worklog.activeApps;
         fs.writeFileSync(dir + '/worklog-' + day_key + '.json', JSON.stringify({
+            version: 1,
+            tasks: worklog,
+        }, null, 2));
+        fs.writeFileSync(dir + '/backup_worklog-' + day_key + '.' + (moment().format('HH')) + 'h.json', JSON.stringify({
             version: 1,
             tasks: worklog,
         }, null, 2));
