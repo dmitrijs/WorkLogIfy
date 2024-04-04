@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+### [1.33.5](https://github.com/dmitrijs/WorkLogIfy/compare/v1.33.4...v1.33.5) (2024-04-04)
+
+
+### Features
+
+* **tasks:** save an hourly tasks backup file ([38695aa](https://github.com/dmitrijs/WorkLogIfy/commit/38695aa2917384651579dca9ef3dccd8394b4587))
+
 ### [1.33.4](https://github.com/dmitrijs/WorkLogIfy/compare/v1.33.3...v1.33.4) (2024-04-04)
 
 
