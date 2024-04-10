@@ -42,6 +42,8 @@ declare type TaskObj = {
 
     asanaTaskGid?: string;
     taskIdExtractedFrom?: string; // id of task from which current task was extracted
+
+    grouped?: boolean;
 }
 
 declare type TaskGroupObj = {
@@ -53,6 +55,8 @@ declare type TaskGroupObj = {
     time_charge_text: string,
     time_spent_text: string,
     time_recorded_text: string,
+    time_recorded_seconds?: number,
+    time_distributed_text?: string,
 
     duplicatesExist: boolean,
     time_charge_rounded_seconds: number,

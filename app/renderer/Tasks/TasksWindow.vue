@@ -34,19 +34,23 @@
                 <div class="TCol --group-date">Total</div>
                 <div class="TCol --timespan --timespan-charge">
                     <span title="Charge (Rounded)">{{ total.time_charge_rounded_text }}</span>
-                    <span title="Recorded" class="original-time">({{ total.time_recorded_text }})</span>
+                    <span title="Recorded" class="original-time" v-if="total.time_recorded_text !== '-'"> ({{ total.time_recorded_text }})</span>
+                    &nbsp;
+                    <span title="Spent">{{ total.time_spent_text }}</span>
                 </div>
-                <div class="TCol --timespan --timespan-spent" title="Spent">{{ total.time_spent_text }}</div>
             </div>
             <template class="TGroup" v-for="(group, date) of tasksGrouped">
                 <div class="TRowDate" :class="{ SubTotal: tasksGroupedLength > 1 }">
                     <div class="TCol --frozen"><i class="IconAsInput icofont-wall-clock"></i></div>
                     <div class="TCol --group-date">{{ date }}</div>
                     <div class="TCol --timespan --timespan-charge">
+                        <span title="Charge (Not distributed)">{{ timespanToText(applyRoundingMinutes(group.time_not_distributed_seconds)) }}</span>
+                        &nbsp;
                         <span title="Charge (Rounded)">{{ group.time_charge_rounded_text }}</span>
-                        <span title="Recorded" class="original-time">({{ group.time_recorded_text }})</span>
+                        <span title="Recorded" class="original-time" v-if="group.time_recorded_text !== '-'"> ({{ group.time_recorded_text }})</span>
+                        &nbsp;
+                        <span title="Spent">{{ group.time_spent_text }}</span>
                     </div>
-                    <div class="TCol --timespan --timespan-spent" title="Spent">{{ group.time_spent_text }}</div>
                 </div>
 
                 <transition-group name="fade">
@@ -214,6 +218,7 @@
 </template>
 
 <script setup lang="ts">
+    import {map} from "lodash";
     import moment from "moment";
     import {computed, onBeforeUnmount, onMounted, reactive, ref} from "vue";
     import LineChart from '../Components/LineChart.vue';
@@ -221,10 +226,9 @@
     import store from "../Store/Store";
     import {Store_MergeSameCodes} from "../Store/Store_GetGroupedTasks";
     import timer from "../Timer";
-    import {timespanToText, timespanToTextHours} from "../Utils/Utils";
+    import {applyRoundingMinutes, timespanToText, timespanToTextHours} from "../Utils/Utils";
     import CalendarWindow from "./CalendarWindow.vue";
     import createMenu from './TasksMenu';
-    import {map, mapValues} from "lodash";
 
     const remote = window.remote;
 
@@ -257,8 +261,9 @@
     const forceUpdateKey = ref(1);
     const timeline = ref(null);
 
-    const total = computed(() => {
-        let total = {
+    const total = computed<TaskGroupObj>(() => {
+        let total = <TaskGroupObj>{
+            tasks: [],
             time_charge_rounded_seconds: 0,
             time_recorded_seconds: 0,
             time_spent_seconds: 0,
@@ -267,17 +272,25 @@
             time_recorded_text: '',
             time_spent_text: '',
             time_distributed_text: '',
+
+            time_not_distributed_seconds: 0,
+            time_charge_seconds: 0,
+            time_charge_text: '',
+            duplicatesExist: null,
         };
         for (let group of Object.values(tasksGrouped.value)) {
-            total.time_charge_rounded_seconds += (<any>group).time_charge_rounded_seconds;
-            total.time_recorded_seconds += (<any>group).time_recorded_seconds;
-            total.time_spent_seconds += (<any>group).time_spent_seconds;
-            total.time_distributed_seconds += (<any>group).time_distributed_seconds;
+            total.time_charge_rounded_seconds += group.time_charge_rounded_seconds;
+            total.time_recorded_seconds += group.time_recorded_seconds;
+            total.time_spent_seconds += group.time_spent_seconds;
+            total.time_distributed_seconds += group.time_distributed_seconds;
+            total.time_not_distributed_seconds += group.time_not_distributed_seconds;
+            total.time_charge_seconds += group.time_charge_seconds;
         }
         total.time_charge_rounded_text = timespanToText(total.time_charge_rounded_seconds);
         total.time_recorded_text = timespanToText(total.time_recorded_seconds);
         total.time_spent_text = timespanToText(total.time_spent_seconds);
         total.time_distributed_text = timespanToText(total.time_distributed_seconds);
+        total.time_charge_text = timespanToText(total.time_charge_seconds);
         return total;
     });
 
@@ -365,7 +378,7 @@
         store.toggleHideUnReportable();
     }
 
-    function copyToClipboard(ev, text) {
+    function copyToClipboard(ev, text: string) {
         navigator.clipboard.writeText(text).then(function () {
             ev.target.classList.add('AnimationPulseOnceAndHide');
         }, function () {

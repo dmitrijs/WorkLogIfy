@@ -1,6 +1,16 @@
 import moment from "moment";
+import store from "../Store/Store";
 
-export function timespanToText(seconds, emptyValue = '-'): string {
+export function applyRoundingMinutes(seconds: number): number {
+    let timeBlockLengthSeconds = 60 * (store.state.settings.rounding_minutes || 10);
+    let blockCount = Math.round(seconds / timeBlockLengthSeconds);
+    if (seconds >= 60 && blockCount < 1) {
+        blockCount = 1;
+    }
+    return blockCount * timeBlockLengthSeconds;
+}
+
+export function timespanToText(seconds: number, emptyValue = '-'): string {
     let sign = '';
     if (seconds < 0) {
         sign = '-';
@@ -23,7 +33,7 @@ export function timespanToText(seconds, emptyValue = '-'): string {
     return sign + result.trim();
 }
 
-export function timespanToTextHours(seconds): string {
+export function timespanToTextHours(seconds: number): string {
     let sign = '';
     if (seconds < 0) {
         sign = '-';

@@ -1,7 +1,7 @@
 import {cloneDeep, groupBy, map, mapValues} from "lodash";
 import moment from "moment";
 import store from "../Store/Store";
-import {comparatorLt, timespanToText} from "../Utils/Utils";
+import {applyRoundingMinutes, comparatorLt, timespanToText} from "../Utils/Utils";
 
 export function build_sort_value(task: TaskObj & {
     task_not_started: boolean, last_session: SessionObj, first_session: SessionObj, is_timered: boolean,
@@ -280,12 +280,8 @@ export default function Store_GetGroupedTasks(): Record<string, TaskGroupObj> {
         // round times
         let time_charge_rounded_seconds = 0;
         tasks = tasks.map((task) => {
-            let timeBlockLengthSeconds = 60 * (store.state.settings.rounding_minutes || 10);
-            let blockCount = Math.round(task.time_charge_seconds / timeBlockLengthSeconds);
-            if (task.time_charge_seconds >= 60 && blockCount < 1) {
-                blockCount = 1;
-            }
-            task.time_charge_seconds = blockCount * timeBlockLengthSeconds;
+
+            task.time_charge_seconds = applyRoundingMinutes(task.time_charge_seconds);
             task.time_charge_text = timespanToText(task.time_charge_seconds);
 
             time_charge_rounded_seconds += task.time_charge_seconds;
