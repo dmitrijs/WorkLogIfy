@@ -56,7 +56,7 @@ class Filesystem {
             version: 1,
             tasks: worklog,
         }, null, 2));
-        fs.writeFileSync(dir + '/backup_worklog-' + day_key + '.' + (moment().format('HH')) + 'h.json', JSON.stringify({
+        fs.writeFileSync(dir + '/worklog-' + day_key + '.backup_' + (moment().format('YYMMDD_HH')) + 'h.json', JSON.stringify({
             version: 1,
             tasks: worklog,
         }, null, 2));
