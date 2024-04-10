@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file.
 
+### [1.33.7](https://github.com/dmitrijs/WorkLogIfy/compare/v1.33.6...v1.33.7) (2024-04-10)
+
+
+### Features
+
+* show not-distributed time in header ([b41d542](https://github.com/dmitrijs/WorkLogIfy/commit/b41d542acd322910904505135b5d9c5c52d17e4b))
+
+
+### Improvements
+
+* **tasks:** changed backup file format to avoid conflicts ([2b19b63](https://github.com/dmitrijs/WorkLogIfy/commit/2b19b63d20a384a524ad3395c1190777d4190076))
+
 ### [1.33.6](https://github.com/dmitrijs/WorkLogIfy/compare/v1.33.5...v1.33.6) (2024-04-04)
 
 
