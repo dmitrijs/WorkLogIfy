@@ -14,12 +14,6 @@
         </div>
         <div class="TRow --header">
             <div class="TRowContent">
-                <!--
-                <div class="TCol --selected">
-                    <div class="label-checkbox">
-                        <input type="checkbox"><span></span></div>
-                </div>
-                -->
                 <div class="TCol --chargeable"><i class="icofont-not-allowed"></i></div>
                 <div class="TCol --distributed"><i class="icofont-exchange"></i></div>
                 <div class="TCol --frozen"><i class="icofont-unlock"></i></div>
@@ -36,9 +30,6 @@
              :key="forceUpdateKey"
              @click.self="store.deselectAll">
             <div class="TRowDate Total" v-if="tasksGroupedLength > 1">
-                <!--
-                <div class="TCol --selected"></div>
-                -->
                 <div class="TCol --frozen"></div>
                 <div class="TCol --group-date">Total</div>
                 <div class="TCol --timespan --timespan-charge">
@@ -49,11 +40,7 @@
             </div>
             <template class="TGroup" v-for="(group, date) of tasksGrouped">
                 <div class="TRowDate" :class="{ SubTotal: tasksGroupedLength > 1 }">
-                    <!--
-                    <div class="TCol --selected"></div>
-                    -->
-                    <div class="TCol --frozen"><i class="IconAsInput icofont-wall-clock"
-                                                  :class="{ active: group.logged }"></i></div>
+                    <div class="TCol --frozen"><i class="IconAsInput icofont-wall-clock"></i></div>
                     <div class="TCol --group-date">{{ date }}</div>
                     <div class="TCol --timespan --timespan-charge">
                         <span title="Charge (Rounded)">{{ group.time_charge_rounded_text }}</span>
@@ -69,7 +56,7 @@
                          @mouseleave="store.tasksUiHoveredId(null)"
                          :key="task.id"
                          :class="{
-                         selected: task._selected, logged: task.logged, distributed: task.distributed, notchargeable: !task.chargeable,
+                         selected: task._selected, distributed: task.distributed, notchargeable: !task.chargeable,
                          hovered: tasks_ui.hoveredId === task.id,
                          timered: tasks_ui.timeredId === task.id,
                          hasRecords: !!task.time_recorded_seconds,
@@ -80,12 +67,6 @@
                          @click="rowOnClick($event, task)"
                     >
                         <div class="TRowContent" v-if="!(tasks_ui.tasksHideUnReportable && (task.distributed || !task.chargeable))">
-                            <!--
-                            <div class="TCol --selected">
-                                <div class="label-checkbox" @click="store.tasksUiToggle(task.id)">
-                                    <input type="checkbox" :checked="task._selected"><span></span></div>
-                            </div>
-                            -->
                             <div class="TCol --chargeable">
                                 <i class="IconAsInput icofont-not-allowed" :class="{ active: !task.chargeable }"
                                    @click="store.updateTask([task.id, 'chargeable', !task.chargeable])"></i>
@@ -536,18 +517,7 @@
         .TRow.distributed,
         .TRow.notchargeable {
             .TRowContent {
-                //height: 18px;
-
                 .TCol {
-                    //.ChartRecorded,
-                    //.ChartSpent,
-                    //.IconOnHold,
-                    //.Note--Content,
-                    //.--edit-button,
-                    //.--timespan-charge {
-                    //    display: none;
-                    //}
-
                     .--timespan-spent {
                         opacity: 0.35 !important;
                     }
