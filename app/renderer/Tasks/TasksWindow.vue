@@ -304,7 +304,7 @@
         return Object.keys(tasksGrouped.value).length;
     });
 
-    const tasksGrouped = computed(() => {
+    const tasksGrouped = computed<Record<string, TaskGroupObj>>(() => {
         let groups = store.getTasksGrouped as Record<string, any>;
 
         let result = groups;
@@ -317,7 +317,7 @@
         return result;
     });
 
-    const tasksGroupedAndMerged = computed(() => {
+    const tasksGroupedAndMerged = computed<Record<string, TaskGroupObj>>(() => {
         let groups = store.getTasksGrouped;
 
         let result = groups;
@@ -395,7 +395,7 @@
     function copyToClipboardAllTasks(ev) {
         let s = '*' + moment(store.state.day_key + ' 12:00:00').format('ddd, MMM D') + "*\n";
         for (let group of Object.values(tasksGroupedAndMerged.value)) {
-            for (let task of (<any>group).tasks) {
+            for (let task of group.tasks) {
                 if (!task.chargeable || task.distributed) {
                     continue;
                 }

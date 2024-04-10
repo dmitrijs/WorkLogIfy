@@ -183,7 +183,7 @@ export function Store_MergeSameCodes(tasks: Record<string, any>) {
     return sort_tasks(tasksList, true);
 }
 
-export default function Store_GetGroupedTasks(): Record<string, any> {
+export default function Store_GetGroupedTasks(): Record<string, TaskGroupObj> {
     if (!store.state.tasks) {
         return {};
     }
@@ -233,7 +233,7 @@ export default function Store_GetGroupedTasks(): Record<string, any> {
             time_recorded += task.time_recorded_seconds;
         });
 
-        return {
+        return <TaskGroupObj>{
             tasks: tasks as TaskObj[],
             time_charge_seconds: charge,
             time_spent_seconds: spent,

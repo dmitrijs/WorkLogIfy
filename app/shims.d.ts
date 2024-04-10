@@ -44,6 +44,21 @@ declare type TaskObj = {
     taskIdExtractedFrom?: string; // id of task from which current task was extracted
 }
 
+declare type TaskGroupObj = {
+    tasks: TaskObj[],
+    time_charge_seconds: number,
+    time_spent_seconds: number,
+    time_distributed_seconds: number,
+    time_not_distributed_seconds: number,
+    time_charge_text: string,
+    time_spent_text: string,
+    time_recorded_text: string,
+
+    duplicatesExist: boolean,
+    time_charge_rounded_seconds: number,
+    time_charge_rounded_text: string,
+}
+
 declare type TaskEditedObj = TaskObj & {
     time_add_minutes: string;
     time_record_minutes: string;
