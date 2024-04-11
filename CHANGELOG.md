@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+### [1.33.9](https://github.com/dmitrijs/WorkLogIfy/compare/v1.33.8...v1.33.9) (2024-04-11)
+
+
+### Improvements
+
+* **tasks:** include active time when calculating time spent ([8646892](https://github.com/dmitrijs/WorkLogIfy/commit/864689221ca64e113fefb042cdce6bc144d8b3bc))
+
 ### [1.33.8](https://github.com/dmitrijs/WorkLogIfy/compare/v1.33.7...v1.33.8) (2024-04-11)
 
 
