@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+### [1.33.8](https://github.com/dmitrijs/WorkLogIfy/compare/v1.33.7...v1.33.8) (2024-04-11)
+
+
+### UI/UX
+
+* **tasks:** pre-populate 'Extract' input with original task's time spent ([3b7d68d](https://github.com/dmitrijs/WorkLogIfy/commit/3b7d68d485021a74d26875e03cc5f30394656bbd))
+
 ### [1.33.7](https://github.com/dmitrijs/WorkLogIfy/compare/v1.33.6...v1.33.7) (2024-04-10)
 
 
