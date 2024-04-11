@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+### [1.33.10](https://github.com/dmitrijs/WorkLogIfy/compare/v1.33.9...v1.33.10) (2024-04-11)
+
+
+### Improvements
+
+* **tasks:** fixed incorrect progress bar state on active task changes ([7cb6bbc](https://github.com/dmitrijs/WorkLogIfy/commit/7cb6bbc70b313290737afebaf69849a411e16d28))
+
 ### [1.33.9](https://github.com/dmitrijs/WorkLogIfy/compare/v1.33.8...v1.33.9) (2024-04-11)
 
 
