@@ -80,7 +80,7 @@ const state = reactive({
     tasksShowAsReport: false,
     tasksHideUnReportable: false,
     timerElapsedText: null,
-    timerElapsed: 0,
+    timerElapsedSeconds: 0,
     screen: null,
     is_debug: false,
     day_key: '',
@@ -158,7 +158,12 @@ const store = {
             if (state.taskIsExtracting) {
                 state.taskIsExtracting = false;
                 task.taskIdExtractedFrom = state.taskLastSelected;
-                task.time_add_minutes = String(Math.round(refTask.sessions.reduce((sum, obj: SessionObj) => sum + obj.spent_seconds, 0) / 60));
+
+                let taskSpentSeconds = refTask.sessions.reduce((sum, obj: SessionObj) => sum + obj.spent_seconds, 0);
+                if (store.state.taskTimeredId === refTask.id) {
+                    taskSpentSeconds += store.state.timerElapsedSeconds;
+                }
+                task.time_add_minutes = String(Math.round(taskSpentSeconds / 60));
             }
         }
         state.taskLastSelected = '';
@@ -405,7 +410,7 @@ const store = {
     },
     activeTimer(secondsElapsed) {
         state.timerElapsedText = '+' + timespanToText(secondsElapsed, '+');
-        state.timerElapsed = secondsElapsed;
+        state.timerElapsedSeconds = secondsElapsed;
     },
     setFileTotals(fileTotals) {
         state.fileTotals = fileTotals;
@@ -420,7 +425,7 @@ const store = {
 
         state.tasksSelectedIds = {};
         state.timerElapsedText = '';
-        state.timerElapsed = 0;
+        state.timerElapsedSeconds = 0;
         state.taskTimeredId = null;
 
         saveTasks();

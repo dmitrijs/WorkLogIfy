@@ -197,8 +197,8 @@ export default function Store_GetGroupedTasks(): Record<string, TaskGroupObj> {
 
         task.time_spent_seconds = task.sessions.reduce((sum, obj: SessionObj) => sum + obj.spent_seconds, 0);
         if (store.state.taskTimeredId === task.id) {
-            task.time_spent_seconds += store.state.timerElapsed;
-            task.timer_elapsed_seconds_text = timespanToText(store.state.timerElapsed);
+            task.time_spent_seconds += store.state.timerElapsedSeconds;
+            task.timer_elapsed_seconds_text = timespanToText(store.state.timerElapsedSeconds);
         }
         task.time_spent_text = timespanToText(task.time_spent_seconds);
 
