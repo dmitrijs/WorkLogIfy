@@ -178,9 +178,8 @@
             if (this.mode === 'new') {
                 this.task = {...store.getEmptyTask};
             } else {
-                this.task = store.getEditedTask;
+                this.task = {...store.getEditedTask, time_add_minutes: '', time_record_minutes: ''};
             }
-            this.task = {...this.task, time_add_minutes: '', time_record_minutes: ''};
         }
 
         mounted() {

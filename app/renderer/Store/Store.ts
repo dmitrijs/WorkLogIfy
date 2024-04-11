@@ -150,7 +150,7 @@ const store = {
             asanaTaskGid: '',
         } as TaskEditedObj;
 
-        let refTask = null;
+        let refTask = null as TaskObj;
         if (state.taskLastSelected && (refTask = state.tasks[state.taskLastSelected])) {
             task.date = refTask.date;
             task.code = refTask.code;
@@ -158,6 +158,7 @@ const store = {
             if (state.taskIsExtracting) {
                 state.taskIsExtracting = false;
                 task.taskIdExtractedFrom = state.taskLastSelected;
+                task.time_add_minutes = String(Math.round(refTask.sessions.reduce((sum, obj: SessionObj) => sum + obj.spent_seconds, 0) / 60));
             }
         }
         state.taskLastSelected = '';
