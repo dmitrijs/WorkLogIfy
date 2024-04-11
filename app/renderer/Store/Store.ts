@@ -57,8 +57,8 @@ function addRecord(task_id: string, recordedSeconds: number, method: string, jir
     state.tasks[task_id].records = records;
 }
 
-function updateProgressBar(task: TaskObj) {
-    if (task.title === '' && (task.notes || '') === '') {
+function updateProgressBar(task: TaskObj | null) {
+    if (!task || (task.title === '' && (task.notes || '') === '')) {
         window.ipc.send('set.progress', {indeterminate: true});
     } else {
         window.ipc.send('set.progress', {indeterminate: false});
@@ -407,6 +407,8 @@ const store = {
 
         state.tasks = updateTaskField(state.tasks, taskId, 'is_on_hold', false);
         saveTasks();
+
+        updateProgressBar(state.tasks[taskId]);
     },
     activeTimer(secondsElapsed) {
         state.timerElapsedText = '+' + timespanToText(secondsElapsed, '+');
@@ -429,6 +431,8 @@ const store = {
         state.taskTimeredId = null;
 
         saveTasks();
+
+        updateProgressBar(null);
     },
     taskAddSession([taskId, minutes, method]) {
         addSession(taskId, minutes * 60, method);
