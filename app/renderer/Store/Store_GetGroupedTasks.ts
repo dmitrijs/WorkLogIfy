@@ -204,10 +204,15 @@ export default function Store_GetGroupedTasks(): Record<string, TaskGroupObj> {
 
         task.time_recorded_seconds = task.records.reduce((sum, obj: RecordObj) => sum + obj.recorded_seconds, 0);
         task.time_recorded_text = timespanToText(task.time_recorded_seconds);
+
+        task.group_key = task.date;
+        if (store.state.tasksShowAsReport || store.state.tasksHideUnReportable) {
+            task.group_key = store.state.day_key;
+        }
         tasksList.push(task);
     });
 
-    const tasks = groupBy(tasksList, 'date');
+    const tasks = groupBy(tasksList, 'group_key');
 
     let groups = mapValues(tasks, (tasks, date) => {
         let spent = 0;

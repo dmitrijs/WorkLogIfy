@@ -43,6 +43,7 @@ declare type TaskObj = {
     asanaTaskGid?: string;
     taskIdExtractedFrom?: string; // id of task from which current task was extracted
 
+    group_key?: string;
     grouped?: boolean;
 }
 

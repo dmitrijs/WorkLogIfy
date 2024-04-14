@@ -155,10 +155,10 @@
 
         <div class="ViewOptions">
             <a href="#" @click="dragClear" v-if="drag.readyToDrop" style="float: right;">cancel</a>
-            Show:
+            View as report:
             <span class="label--checkbox label--checkbox--with-text"
                   @click.prevent="toggleShowAsReport()">
-                <label><input type="checkbox" :checked="tasks_ui.tasksShowAsReport"><span></span> as a report</label>
+                <label><input type="checkbox" :checked="tasks_ui.tasksShowAsReport"><span></span> merge codes</label>
             </span>
             <span class="label--checkbox label--checkbox--with-text"
                   @click.prevent="toggleHideUnReportable()">
