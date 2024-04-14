@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+### [1.33.11](https://github.com/dmitrijs/WorkLogIfy/compare/v1.33.10...v1.33.11) (2024-04-14)
+
+
+### Features
+
+* **tasks:** merge all tasks into one group when generating report ([1cf9048](https://github.com/dmitrijs/WorkLogIfy/commit/1cf904835071038db3fca5cf55081a4b1497ac18))
+
 ### [1.33.10](https://github.com/dmitrijs/WorkLogIfy/compare/v1.33.9...v1.33.10) (2024-04-11)
 
 
