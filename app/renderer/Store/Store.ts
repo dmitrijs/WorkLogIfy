@@ -96,6 +96,19 @@ const state = reactive({
     asanaTasks: {} as Record<string, AsanaTaskObj>,
 
     settings: {} as SettingsObj,
+    drag: {
+        active: false,
+        readyToDrop: false,
+        distance: 0,
+        minutes: 0,
+        minutes_text: '',
+        startedAt: [0, 0],
+        nowAt: [0, 0],
+        taskFrom: 0,
+        taskFrom_minutes: 0,
+        taskFrom_minutes_text: '',
+        taskTo: 0,
+    },
 });
 state.screen = state.tasksScreen;
 
@@ -525,6 +538,19 @@ const store = {
             ...asanaTasksCall.response.data,
             ...asanaTasksCompletedCall.response.data,
         ], 'gid');
+    },
+
+    dragClear() {
+        state.drag.active = false;
+        state.drag.readyToDrop = false;
+        state.drag.minutes = 0;
+        state.drag.minutes_text = '';
+        state.drag.startedAt = [0, 0];
+        state.drag.nowAt = [0, 0];
+        state.drag.taskFrom = 0;
+        state.drag.taskFrom_minutes = 0;
+        state.drag.taskFrom_minutes_text = '';
+        state.drag.taskTo = 0;
     },
 }
 
