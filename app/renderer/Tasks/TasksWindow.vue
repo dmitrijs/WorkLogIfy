@@ -54,10 +54,11 @@
                 </div>
 
                 <transition-group name="fade">
-                    <template v-for="(task, task_index) of group.tasks" :key="task.id">
+                    <template v-for="(task, task_id) of group.tasks" :key="task.id">
                         <TaskRow :tasksGrouped="tasksGrouped"
                                  :group_id="date"
-                                 :task_index="task_index"
+                                 :task_id="task_id"
+                                 v-if="!task.parentId"
                                  @drag_start="dragStart"></TaskRow>
                     </template>
                 </transition-group>
@@ -152,7 +153,7 @@
 
     const total = computed<TaskGroupObj>(() => {
         let total = <TaskGroupObj>{
-            tasks: [],
+            tasks: {},
             time_charge_rounded_seconds: 0,
             time_recorded_seconds: 0,
             time_spent_seconds: 0,
@@ -248,7 +249,7 @@
     function copyToClipboardAllTasks(ev) {
         let s = '*' + moment(store.state.day_key + ' 12:00:00').format('ddd, MMM D') + "*\n";
         for (let group of Object.values(tasksGroupedAndMerged.value)) {
-            for (let task of group.tasks) {
+            for (let task of Object.values(group.tasks)) {
                 if (!task.chargeable || task.distributed) {
                     continue;
                 }
@@ -358,7 +359,7 @@
 
         .TRow.distributed,
         .TRow.notchargeable {
-            .TRowContent {
+            > .TRowContent {
                 .TCol {
                     .--timespan-spent {
                         opacity: 0.35 !important;
@@ -368,7 +369,7 @@
         }
 
         .TRow.isDone {
-            .TRowContent {
+            > .TRowContent {
                 .TCol {
                     .IconOnHold {
                         display: none;
@@ -378,7 +379,7 @@
         }
 
         .TRow.notchargeable {
-            .TRowContent {
+            > .TRowContent {
                 .TCol {
                     .--timespan-spent {
                         text-decoration: line-through;
@@ -390,7 +391,7 @@
         .TRow {
             transition: all 200ms;
 
-            .TRowContent {
+            > .TRowContent {
                 .TCol.--timespan {
                     .--timespan-spent-unrecorded {
                         display: none;

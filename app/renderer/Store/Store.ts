@@ -150,9 +150,12 @@ const store = {
 
         let refTask = null as TaskObj;
         if (state.taskLastSelected && (refTask = state.tasks[state.taskLastSelected])) {
+            if (refTask.parentId) {
+                refTask = state.tasks[refTask.parentId];
+            }
             task.date = refTask.date;
             task.code = refTask.code;
-            task.parentId = refTask.parentId || refTask.id;
+            task.parentId = refTask.id;
 
             if (state.taskIsExtracting) {
                 state.taskIsExtracting = false;
@@ -284,9 +287,8 @@ const store = {
                 subtasks[state.tasks[taskId].parentId].push(taskId);
             }
         }
-        console.log('subtasks', subtasks);
-        for (let parentId of Object.keys(subtasks)) {
-            state.tasks[parentId].subtaskIds = subtasks[parentId] || null;
+        for (let taskId of Object.keys(state.tasks)) {
+            state.tasks[taskId].subtaskIds = subtasks[taskId] || null;
         }
     },
     taskAddRecordedSeconds([task_id, recordSeconds, jiraWorkLogId]) {

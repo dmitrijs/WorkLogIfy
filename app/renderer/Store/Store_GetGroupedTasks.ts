@@ -214,14 +214,15 @@ export default function Store_GetGroupedTasks(): Record<string, TaskGroupObj> {
 
     const tasks = groupBy(tasksList, 'group_key');
 
-    let groups = mapValues(tasks, (tasks, date) => {
+    let groups = mapValues(tasks, (tasksList, date) => {
         let spent = 0;
         let charge = 0;
         let distributed = 0;
         let not_distributed = 0;
         let time_recorded = 0;
 
-        tasks.forEach((task) => {
+        const tasks = {} as Record<string, TaskObj>;
+        tasksList.forEach((task) => {
             const seconds = parseInt(String(task.time_spent_seconds));
             spent += (seconds);
             if (task.chargeable) {
@@ -236,10 +237,12 @@ export default function Store_GetGroupedTasks(): Record<string, TaskGroupObj> {
                 }
             }
             time_recorded += task.time_recorded_seconds;
+
+            tasks[task.id] = task;
         });
 
         return <TaskGroupObj>{
-            tasks: tasks as TaskObj[],
+            tasks: tasks,
             time_charge_seconds: charge,
             time_spent_seconds: spent,
             time_distributed_seconds: distributed,
@@ -346,8 +349,11 @@ export default function Store_GetGroupedTasks(): Record<string, TaskGroupObj> {
 
         tasks = sort_tasks(tasks);
 
+        group.tasks = {};
+        tasks.forEach((task) => {
+            group.tasks[task.id] = task;
+        });
         group.duplicatesExist = duplicatesExist;
-        group.tasks = tasks;
         group.time_charge_rounded_seconds = time_charge_rounded_seconds;
         group.time_charge_rounded_text = timespanToText(time_charge_rounded_seconds);
         return group;

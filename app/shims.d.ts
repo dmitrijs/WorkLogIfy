@@ -50,7 +50,7 @@ declare type TaskObj = {
 }
 
 declare type TaskGroupObj = {
-    tasks: TaskObj[],
+    tasks: Record<string, TaskObj>,
     time_charge_seconds: number,
     time_spent_seconds: number,
     time_distributed_seconds: number,

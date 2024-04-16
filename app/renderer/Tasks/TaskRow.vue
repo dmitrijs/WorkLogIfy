@@ -4,13 +4,17 @@
          @mouseleave="store.tasksUiHoveredId(null)"
          :key="task.id"
          :class="{
-             selected: task._selected, distributed: task.distributed, notchargeable: !task.chargeable,
+             selected: task._selected,
+             distributed: task.distributed,
+             notchargeable: !task.chargeable,
              hovered: store.state.tasksHoveredId === task.id,
              timered: store.state.taskTimeredId === task.id,
              hasRecords: !!task.time_recorded_seconds,
              isDone: !!task.is_done,
              isOnHold: !!task.is_on_hold,
              isRootTask: (rootTasks[task.code || task.id]?.id === task.id),
+             isSubtask: !!task.parentId,
+             isSubtaskWithDifferentCode: task.code !== parentTask?.code,
          }"
          @click="rowOnClick($event, task)"
     >
@@ -88,6 +92,14 @@
                    @click="startTimer($event, task)"></i>
             </div>
         </div>
+
+        <div class="Subtasks">
+            <template v-for="subtask_id of task.subtaskIds">
+                <TaskRow :group_id="props.group_id"
+                         :task_id="subtask_id"
+                         :tasks-grouped="props.tasksGrouped"></TaskRow>
+            </template>
+        </div>
     </div>
 </template>
 
@@ -100,13 +112,18 @@
     const props = defineProps<{
         tasksGrouped: Record<string, TaskGroupObj>,
         group_id: string,
-        task_index: number,
+        task_id: string,
     }>();
 
     const emit = defineEmits(['drag_start']);
 
-    const task = computed(() => {
-        return props.tasksGrouped[props.group_id].tasks[props.task_index];
+    const task = computed<TaskObj>(() => {
+        return props.tasksGrouped[props.group_id].tasks[props.task_id];
+    })
+    const parentTask = computed<TaskObj>(() => {
+        return task.value.parentId
+            ? props.tasksGrouped[props.group_id].tasks[task.value.parentId]
+            : null;
     })
 
     function rowOnClick($event, task) {
@@ -130,7 +147,7 @@
     const rootTasks = computed(() => {
         const result = {};
         for (let group of Object.values(props.tasksGrouped)) {
-            for (let task of (<any>group).tasks) {
+            for (let task of Object.values(group.tasks)) {
                 if (task.code !== 'idle') {
                     result[task.code || task.id] = task;
                 }
@@ -166,4 +183,19 @@
 </script>
 
 <style lang="scss">
+    .TRow.isSubtask {
+        .TCol.--frozen,
+        .TCol.--chargeable,
+        .TCol.--distributed {
+            opacity: 0;
+            pointer-events: none;
+        }
+    }
+
+    .TRow.isSubtask:not(.isSubtaskWithDifferentCode) {
+        .TCol.--code {
+            opacity: 0;
+            pointer-events: none;
+        }
+    }
 </style>
