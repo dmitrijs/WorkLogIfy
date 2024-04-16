@@ -117,22 +117,6 @@ const store = {
         return Store_GetGroupedTasks();
     },
 
-    get getTasksUi() {
-        return {
-            selectedIds: state.tasksSelectedIds,
-            hoveredId: state.tasksHoveredId,
-            editedId: state.taskEditedId,
-            timeredId: state.taskTimeredId,
-            timerElapsedText: state.timerElapsedText,
-            screen: state.screen,
-            is_debug: state.is_debug,
-            day_key: state.day_key,
-            tasksShowAsReport: state.tasksShowAsReport,
-            tasksHideUnReportable: state.tasksHideUnReportable,
-            taskInClipboard: state.taskInClipboard,
-        }
-    },
-
     get getEditedTask(): TaskEditedObj {
         console.log('getEditedTask', state.taskEditedId);
         return <TaskEditedObj>state.tasks[state.taskEditedId];

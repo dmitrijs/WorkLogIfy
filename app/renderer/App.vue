@@ -1,23 +1,26 @@
 <template>
-    <div class="App" :class="{ isDebug: tasks_ui.is_debug }">
+    <div class="App" :class="{ isDebug: store.state.is_debug }">
         <transition name="fade" mode="out-in">
-            <TasksWindow v-if="tasks_ui.screen === 'tasks'"></TasksWindow>
-            <TaskEdit v-else-if="tasks_ui.screen === 'task.edit'" mode="edit" key="task.edit"></TaskEdit>
-            <TaskEdit v-else-if="tasks_ui.screen === 'task.new'" mode="new" key="task.new"></TaskEdit>
-            <TodosWindow v-else-if="tasks_ui.screen === 'todo'" key="todo"></TodosWindow>
-            <CalendarWindow v-else-if="tasks_ui.screen === 'calendar'"></CalendarWindow>
-            <TemplatesWindow v-else-if="tasks_ui.screen === 'task.templates'"></TemplatesWindow>
-            <SettingsWindow v-else-if="tasks_ui.screen === 'settings'"></SettingsWindow>
-            <ActiveAppsWindow v-else-if="tasks_ui.screen === 'active_apps'"></ActiveAppsWindow>
+            <TasksWindow v-if="store.state.screen === 'tasks'"></TasksWindow>
+            <TaskEdit v-else-if="store.state.screen === 'task.edit'" mode="edit" key="task.edit"></TaskEdit>
+            <TaskEdit v-else-if="store.state.screen === 'task.new'" mode="new" key="task.new"></TaskEdit>
+            <TodosWindow v-else-if="store.state.screen === 'todo'" key="todo"></TodosWindow>
+            <CalendarWindow v-else-if="store.state.screen === 'calendar'"></CalendarWindow>
+            <TemplatesWindow v-else-if="store.state.screen === 'task.templates'"></TemplatesWindow>
+            <SettingsWindow v-else-if="store.state.screen === 'settings'"></SettingsWindow>
+            <ActiveAppsWindow v-else-if="store.state.screen === 'active_apps'"></ActiveAppsWindow>
         </transition>
 
-        <div class="Debug" v-if="tasks_ui.is_debug">
+        <div class="Debug" v-if="store.state.is_debug">
             <button onclick="document.location.reload()" class="btn btn-secondary" style="padding: 10px 20px; float: right">reload</button>
             <button type="button" class="btn btn-secondary btn-xs" @click="save()">save</button>
-            <div v-for="(value, key) of tasks_ui"><strong>{{ key }}:</strong> {{ value }}</div>
+            <template v-for="(value, key) of store.state">
+                <div v-if="!value || typeof value !== 'object'"><strong>{{ key }}:</strong> {{ value }}</div>
+            </template>
+
             <hr/>
             Timer:
-            <button type="button" class="btn btn-secondary btn-xs" @click="timerStop" :disabled="!tasks_ui.timeredId">stop</button>
+            <button type="button" class="btn btn-secondary btn-xs" @click="timerStop" :disabled="!store.state.taskTimeredId">stop</button>
             <hr/>
             Progress:
             <button type="button" class="btn btn-secondary btn-xs" @click="progressBar({indeterminate: true})">∞</button>
@@ -71,8 +74,8 @@
             return store.getTasksGrouped;
         }
 
-        get tasks_ui() {
-            return store.getTasksUi;
+        get store() {
+            return store;
         }
 
         save() {

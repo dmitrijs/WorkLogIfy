@@ -89,14 +89,14 @@ class TasksSorter {
                 const aTime = a.first_session?.started_at || a.created_at;
                 const bTime = b.first_session?.started_at || b.created_at;
 
-                return (store.getTasksUi.tasksHideUnReportable || store.getTasksUi.tasksShowAsReport ? -1 : 1) *
+                return (store.state.tasksHideUnReportable || store.state.tasksShowAsReport ? -1 : 1) *
                     (aTime > bTime ? -1 : 1);
             }
 
             const aTime = a.last_session?.started_at || a.created_at;
             const bTime = b.last_session?.started_at || b.created_at;
 
-            return (store.getTasksUi.tasksHideUnReportable || store.getTasksUi.tasksShowAsReport ? -1 : 1) *
+            return (store.state.tasksHideUnReportable || store.state.tasksShowAsReport ? -1 : 1) *
                 (aTime > bTime ? -1 : 1);
         }
 

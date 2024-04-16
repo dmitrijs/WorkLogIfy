@@ -26,7 +26,7 @@
             </div>
         </div>
         <div class="TasksTable"
-             :class="{ ShowAsReport: tasks_ui.tasksShowAsReport, ShowCompact: tasks_ui.tasksHideUnReportable }"
+             :class="{ ShowAsReport: store.state.tasksShowAsReport, ShowCompact: store.state.tasksHideUnReportable }"
              :key="forceUpdateKey"
              @click.self="store.deselectAll">
             <div class="TRowDate Total" v-if="tasksGroupedLength > 1">
@@ -60,17 +60,17 @@
                          @mouseleave="store.tasksUiHoveredId(null)"
                          :key="task.id"
                          :class="{
-                         selected: task._selected, distributed: task.distributed, notchargeable: !task.chargeable,
-                         hovered: tasks_ui.hoveredId === task.id,
-                         timered: tasks_ui.timeredId === task.id,
-                         hasRecords: !!task.time_recorded_seconds,
-                         isDone: !!task.is_done,
-                         isOnHold: !!task.is_on_hold,
-                         isRootTask: (rootTasks[task.code || task.id]?.id === task.id),
-                     }"
+                             selected: task._selected, distributed: task.distributed, notchargeable: !task.chargeable,
+                             hovered: store.state.tasksHoveredId === task.id,
+                             timered: store.state.taskTimeredId === task.id,
+                             hasRecords: !!task.time_recorded_seconds,
+                             isDone: !!task.is_done,
+                             isOnHold: !!task.is_on_hold,
+                             isRootTask: (rootTasks[task.code || task.id]?.id === task.id),
+                         }"
                          @click="rowOnClick($event, task)"
                     >
-                        <div class="TRowContent" v-if="!(tasks_ui.tasksHideUnReportable && (task.distributed || !task.chargeable))">
+                        <div class="TRowContent" v-if="!(store.state.tasksHideUnReportable && (task.distributed || !task.chargeable))">
                             <div class="TCol --chargeable">
                                 <i class="IconAsInput icofont-not-allowed" :class="{ active: !task.chargeable }"
                                    @click="store.updateTask([task.id, 'chargeable', !task.chargeable])"></i>
@@ -84,7 +84,7 @@
                                    @click="store.updateTask([task.id, 'frozen', !task.frozen])"></i>
                             </div>
                             <div class="TCol --code"
-                                 @click="tasks_ui.tasksShowAsReport ? copyToClipboard($event, task.code) : editTask($event, task)">
+                                 @click="store.state.tasksShowAsReport ? copyToClipboard($event, task.code) : editTask($event, task)">
                                 <span v-if="rootTasks[task.code]" style="color: #acacac;">{{ task.code }}</span>
                                 <span v-else>{{ task.code }}</span>
                                 <div class="--edit-button">
@@ -92,14 +92,14 @@
                                 </div>
                             </div>
                             <div class="TCol --title"
-                                 @click="tasks_ui.tasksShowAsReport ? copyToClipboard($event, task.notes) : editTask($event, task)">
+                                 @click="store.state.tasksShowAsReport ? copyToClipboard($event, task.notes) : editTask($event, task)">
                                 <span class="Title--Content"
-                                      :class="{ ellipsis: !tasks_ui.tasksShowAsReport && !tasks_ui.tasksHideUnReportable }"><span>
+                                      :class="{ ellipsis: !store.state.tasksShowAsReport && !store.state.tasksHideUnReportable }"><span>
                                     <template v-if="task.code !== 'idle' && !task.asanaTaskGid && !rootTasks[task.code]?.asanaTaskGid">❔</template>
                                     {{ task.title || '&nbsp;' }}
                                 </span></span>
                                 <span class="Note--Content">
-                                    <span class="EmptyNotesError" v-if="tasks_ui.tasksShowAsReport && !task.notes">[empty notes]</span>
+                                    <span class="EmptyNotesError" v-if="store.state.tasksShowAsReport && !task.notes">[empty notes]</span>
                                     <span v-else>{{ task.notes || '&nbsp;' }}</span>
                                 </span>
                                 <span class="Comment--Content" v-if="task.comment">
@@ -138,9 +138,9 @@
                                            :progress_normal="task.time_spent_seconds"></LineChart>
                             </div>
                             <div class="TCol --playback">
-                                <i class="IconAsInput icofont-square" v-if="tasks_ui.timeredId === task.id"
+                                <i class="IconAsInput icofont-square" v-if="store.state.taskTimeredId === task.id"
                                    @click="stopTimer()"></i>
-                                <i class="IconAsInput icofont-play" v-if="tasks_ui.timeredId !== task.id"
+                                <i class="IconAsInput icofont-play" v-if="store.state.taskTimeredId !== task.id"
                                    @click="startTimer($event, task)"></i>
                             </div>
                         </div>
@@ -158,15 +158,15 @@
             View as report:
             <span class="label--checkbox label--checkbox--with-text"
                   @click.prevent="toggleShowAsReport()">
-                <label><input type="checkbox" :checked="tasks_ui.tasksShowAsReport"><span></span> merge codes</label>
+                <label><input type="checkbox" :checked="store.state.tasksShowAsReport"><span></span> merge codes</label>
             </span>
             <span class="label--checkbox label--checkbox--with-text"
                   @click.prevent="toggleHideUnReportable()">
-                <label><input type="checkbox" :checked="tasks_ui.tasksHideUnReportable"><span></span> hide un-reportable</label>
+                <label><input type="checkbox" :checked="store.state.tasksHideUnReportable"><span></span> hide un-reportable</label>
             </span>
             <button type="button" class="btn btn-secondary btn-xs" style="margin-left: 6px; line-height: 0.6rem"
                     title="Ctrl+F applies formatting in Slack"
-                    v-if="tasks_ui.tasksShowAsReport || tasks_ui.tasksHideUnReportable"
+                    v-if="store.state.tasksShowAsReport || store.state.tasksHideUnReportable"
                     @click="copyToClipboardAllTasks($event)">
                 Copy for Slack
             </button>
@@ -322,10 +322,6 @@
         return result;
     });
 
-    const tasks_ui = computed(() => {
-        return store.getTasksUi;
-    })
-
     onMounted(() => {
         horizontal_scroller(timeline.value);
 
@@ -361,7 +357,7 @@
     }
 
     function toggleShowAsReport() {
-        if (tasks_ui.value.tasksShowAsReport) {
+        if (store.state.tasksShowAsReport) {
             setTimeout(function () {
                 forceUpdateKey.value++; // force reload to remove animation classes
             }.bind(this), 200/* transition 200ms */);
@@ -370,7 +366,7 @@
     }
 
     function toggleHideUnReportable() {
-        if (tasks_ui.value.tasksHideUnReportable) {
+        if (store.state.tasksHideUnReportable) {
             setTimeout(function () {
                 forceUpdateKey.value++; // force reload to remove animation classes
             }.bind(this), 200/* transition 200ms */);
