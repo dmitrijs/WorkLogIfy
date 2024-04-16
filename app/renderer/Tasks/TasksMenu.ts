@@ -28,7 +28,7 @@ export default function createMenu() {
         },
     }));
     menu.append(new MenuItem({
-        label: 'Extract As New Task', click() {
+        label: 'Extract Subtask', click() {
             store.state.taskIsExtracting = true;
             store.setScreen('task.new');
         },
