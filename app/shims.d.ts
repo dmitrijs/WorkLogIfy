@@ -20,6 +20,7 @@ declare type TaskObj = {
     is_on_hold_at?: boolean;
     _selected?: boolean;
     created_at: string;
+    parentId: string;
 
     time_spent_text?: string;
     time_recorded_text?: string;
@@ -39,6 +40,7 @@ declare type TaskObj = {
     sessions: SessionObj[];
     records: RecordObj[];
     activeApps: ActiveAppObj[];
+    subtaskIds?: string[];
 
     asanaTaskGid?: string;
     taskIdExtractedFrom?: string; // id of task from which current task was extracted

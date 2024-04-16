@@ -1,11 +1,11 @@
 <template>
     <div class="TaskEdit" :data-mode="mode">
-        <br/>
+        <br />
         <form class="TaskEditForm" @submit.prevent="save()">
             <table style="width: 100%;">
                 <tr>
                     <td>Title:</td>
-                    <td><input type="text" v-model="task.title" ref="focused"/></td>
+                    <td><input type="text" v-model="task.title" ref="focused" /></td>
                 </tr>
                 <tr>
                     <td>Asana task (<a href="#" @click.prevent="store.loadAsanaTasks(true)"><i class="icofont-refresh"></i></a>):</td>
@@ -28,7 +28,7 @@
                     <td class="Complex">
                         <div style="margin-right: 11px;">
                             <span>
-                                <input type="text" placeholder="TSKS-0000" v-model="task.code" @keyup="codeChanged()"/>
+                                <input type="text" placeholder="TSKS-0000" v-model="task.code" @keyup="codeChanged()" />
                                 <button class="btn btn-xs"
                                         type="button"
                                         :class="{
@@ -60,7 +60,7 @@
                     <td>Date:</td>
                     <td class="Complex">
                         <div>
-                            <span><input type="text" v-model="task.date"/></span>
+                            <span><input type="text" v-model="task.date" /></span>
                             <span>Recorded: <input type="text" class="narrow"
                                                    v-model="task.time_record_minutes">m</span>
                         </div>
@@ -72,7 +72,20 @@
                 </tr>
                 <tr>
                     <td>Comment:</td>
-                    <td><input type="text" v-model="task.comment"/></td>
+                    <td><input type="text" v-model="task.comment" /></td>
+                </tr>
+                <tr>
+                    <td>Parent task:</td>
+                    <td><select v-model="task.parentId">
+                        <option :value="null"></option>
+                        <template v-for="parentTask of store.state.tasks">
+                            <option v-if="parentTask.id !== task.id && !parentTask.parentId" :value="parentTask.id">
+                                <template v-if="parentTask.code">[{{ parentTask.code }}]</template>
+                                {{ parentTask.title }}
+                                <template v-if="parentTask.notes"> ({{ parentTask.notes }})</template>
+                            </option>
+                        </template>
+                    </select></td>
                 </tr>
                 <tr>
                     <td colspan="2">
@@ -127,7 +140,7 @@
                 </tr>
                 <tr>
                     <td colspan="2">
-                        <hr/>
+                        <hr />
                     </td>
                 </tr>
                 <tr>

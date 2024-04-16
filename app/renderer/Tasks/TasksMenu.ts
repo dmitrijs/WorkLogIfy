@@ -23,7 +23,7 @@ export default function createMenu() {
         },
     }));
     menu.append(new MenuItem({
-        label: 'New Follow-up Task', click() {
+        label: 'New Subtask', click() {
             store.setScreen('task.new');
         },
     }));

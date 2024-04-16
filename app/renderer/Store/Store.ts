@@ -148,12 +148,14 @@ const store = {
             time_add_minutes: '',
             time_record_minutes: '',
             asanaTaskGid: '',
+            parentId: '',
         } as TaskEditedObj;
 
         let refTask = null as TaskObj;
         if (state.taskLastSelected && (refTask = state.tasks[state.taskLastSelected])) {
             task.date = refTask.date;
             task.code = refTask.code;
+            task.parentId = refTask.parentId || refTask.id;
 
             if (state.taskIsExtracting) {
                 state.taskIsExtracting = false;
@@ -208,6 +210,7 @@ const store = {
             records: [],
             activeApps: [],
             asanaTaskGid: task.asanaTaskGid,
+            parentId: task.parentId,
         };
         state.createdTaskId = id;
 
@@ -225,6 +228,7 @@ const store = {
             let seconds = parseInt(task.time_add_idle_seconds) || 0;
             addSession(id, seconds, 'idle');
         }
+        this.populateSubtaskIds();
 
         console.log("[createTask] final tasks", state.tasks);
 
@@ -239,8 +243,6 @@ const store = {
         updateProgressBar(task);
     },
     saveTask(task: TaskEditedObj) {
-        console.log('save', task);
-
         state.tasks[task.id].code = task.code;
         state.tasks[task.id].title = task.title;
         state.tasks[task.id].date = task.date;
@@ -249,6 +251,7 @@ const store = {
         state.tasks[task.id].comment = task.comment;
         state.tasks[task.id].source = task.source;
         state.tasks[task.id].asanaTaskGid = task.asanaTaskGid;
+        state.tasks[task.id].parentId = task.parentId;
 
         if (task.time_add_minutes) {
             let spentSeconds = parseInt(task.time_add_minutes) * 60 || 0;
@@ -260,11 +263,11 @@ const store = {
 
             addRecord(task.id, recordSeconds, 'manual');
         }
+        this.populateSubtaskIds();
 
         state.taskEditedId = null;
         state.screen = state.tasksScreen;
 
-        console.log(state.tasks);
         saveTasks();
 
         updateProgressBar(task);
@@ -275,6 +278,19 @@ const store = {
             state.tasks = updateTaskField(state.tasks, task_id, 'is_done', true);
         }
         saveTasks();
+    },
+    populateSubtaskIds() {
+        const subtasks = {} as Map<string, string[]>;
+        for (let taskId of Object.keys(state.tasks)) {
+            if (state.tasks[taskId].parentId) {
+                subtasks[state.tasks[taskId].parentId] = subtasks[state.tasks[taskId].parentId] || [];
+                subtasks[state.tasks[taskId].parentId].push(taskId);
+            }
+        }
+        console.log('subtasks', subtasks);
+        for (let parentId of Object.keys(subtasks)) {
+            state.tasks[parentId].subtaskIds = subtasks[parentId] || null;
+        }
     },
     taskAddRecordedSeconds([task_id, recordSeconds, jiraWorkLogId]) {
         addRecord(task_id, recordSeconds, 'quick', jiraWorkLogId);
