@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.34.0](https://github.com/dmitrijs/WorkLogIfy/compare/v1.33.11...v1.34.0) (2024-04-16)
+
+
+### Features
+
+* **tasks:** group tasks with their subtasks ([d9de782](https://github.com/dmitrijs/WorkLogIfy/commit/d9de782c649aa1abe0e46c7894a4ab0ce0acf831))
+* **tasks:** support assigning tasks as Subtasks ([a1809fc](https://github.com/dmitrijs/WorkLogIfy/commit/a1809fc7e7ba823dfc59ec3bd87822c5deccca98))
+
 ### [1.33.11](https://github.com/dmitrijs/WorkLogIfy/compare/v1.33.10...v1.33.11) (2024-04-14)
 
 
