@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+### [1.34.1](https://github.com/dmitrijs/WorkLogIfy/compare/v1.34.0...v1.34.1) (2024-04-17)
+
+
+### Improvements
+
+* **tasks:** fixed tasks merging for report ([064d99c](https://github.com/dmitrijs/WorkLogIfy/commit/064d99c549c9862631a11d31077f11f91ca8a617))
+
 ## [1.34.0](https://github.com/dmitrijs/WorkLogIfy/compare/v1.33.11...v1.34.0) (2024-04-16)
 
 
