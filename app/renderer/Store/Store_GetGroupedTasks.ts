@@ -28,8 +28,8 @@ export function build_sort_value(task: TaskObj & {
 class TasksSorter {
     codeToLastSession = {};
 
-    constructor(tasks: TaskObj[]) {
-        tasks.forEach((task) => {
+    constructor(tasks: Record<string, TaskObj>) {
+        Object.values(tasks).forEach((task) => {
             const code = (!task.code || task.code === 'idle' ? task.id : task.code);
             let started_at = 0;
             if (task.sessions[task.sessions?.length - 1]?.started_at) {
@@ -104,19 +104,19 @@ class TasksSorter {
     }
 }
 
-export function sort_tasks(tasks, forReport = false) {
+export function sort_tasks(tasks: Record<string, TaskObj>, forReport = false): Record<string, TaskObj> {
     const sorter = new TasksSorter(tasks);
 
-    return tasks.sort((task1: TaskObj, task2: TaskObj) => {
-        return sorter.compare(task1, task2, forReport);
-    });
+    return Object.fromEntries(Object.entries(tasks).sort((task1: [string, TaskObj], task2: [string, TaskObj]) => {
+        return sorter.compare(task1[1], task2[1], forReport);
+    }));
 }
 
 export function Store_MergeSameCodes(tasks: Record<string, any>) {
     let unique = {} as Record<string, any>;
     let idx = 0;
 
-    tasks.map((task: TaskObj) => {
+    Object.values(tasks).forEach((task: TaskObj) => {
         idx++;
         let existing = unique[task.code];
         if (!existing) {
@@ -175,12 +175,12 @@ export function Store_MergeSameCodes(tasks: Record<string, any>) {
 
         existing.id = 'group_' + idx;
         existing.grouped = true;
+        existing.parentId = null;
 
         unique[task.code] = existing;
     });
 
-    let tasksList = Object.values(unique);
-    return sort_tasks(tasksList, true);
+    return sort_tasks(unique, true);
 }
 
 export default function Store_GetGroupedTasks(): Record<string, TaskGroupObj> {
@@ -347,12 +347,12 @@ export default function Store_GetGroupedTasks(): Record<string, TaskGroupObj> {
             task.time_unrecorded_text = timespanToText(task.time_unrecorded_seconds);
         });
 
-        tasks = sort_tasks(tasks);
+        const tasksMap = {} as Record<string, TaskObj>;
+        tasks.forEach((task: TaskObj) => {
+            tasksMap[task.id] = task;
+        })
 
-        group.tasks = {};
-        tasks.forEach((task) => {
-            group.tasks[task.id] = task;
-        });
+        group.tasks = sort_tasks(tasksMap);
         group.duplicatesExist = duplicatesExist;
         group.time_charge_rounded_seconds = time_charge_rounded_seconds;
         group.time_charge_rounded_text = timespanToText(time_charge_rounded_seconds);
