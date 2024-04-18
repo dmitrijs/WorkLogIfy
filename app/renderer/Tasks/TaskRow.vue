@@ -97,7 +97,9 @@
             <template v-for="subtask_id of task.subtaskIds">
                 <TaskRow :group_id="props.group_id"
                          :task_id="subtask_id"
-                         :tasks-grouped="props.tasksGrouped"></TaskRow>
+                         :tasks-grouped="props.tasksGrouped"
+                         @drag_start="subtaskDragStart"
+                ></TaskRow>
             </template>
         </div>
     </div>
@@ -179,6 +181,10 @@
             store.taskAddSession([store.state.drag.taskTo, store.state.drag.minutes, 'drop']);
         }
         store.dragClear();
+    }
+
+    function subtaskDragStart($event: Event, task: TaskObj) {
+        emit('drag_start', $event, task);
     }
 </script>
 
