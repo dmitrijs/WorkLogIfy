@@ -5,12 +5,27 @@ import {timespanToText} from '../Utils/Utils';
 import Store_GetGroupedTasks from "./Store_GetGroupedTasks";
 
 function saveTasks() {
+    populateSubtaskIds();
+
     window.ipc.sendSync('tasks.save', {
         day_key: state.day_key,
         arg1: cloneDeep(state.tasks),
         arg2: cloneDeep(store.getTasksGrouped),
         arg3: cloneDeep(state.settings),
     });
+}
+
+function populateSubtaskIds() {
+    const subtasks = {} as Map<string, string[]>;
+    for (let taskId of Object.keys(state.tasks)) {
+        if (state.tasks[taskId].parentId) {
+            subtasks[state.tasks[taskId].parentId] = subtasks[state.tasks[taskId].parentId] || [];
+            subtasks[state.tasks[taskId].parentId].push(taskId);
+        }
+    }
+    for (let taskId of Object.keys(state.tasks)) {
+        state.tasks[taskId].subtaskIds = subtasks[taskId] || null;
+    }
 }
 
 function saveActiveApps() {
@@ -228,7 +243,6 @@ const store = {
             let seconds = parseInt(task.time_add_idle_seconds) || 0;
             addSession(id, seconds, 'idle');
         }
-        this.populateSubtaskIds();
 
         console.log("[createTask] final tasks", state.tasks);
 
@@ -263,7 +277,6 @@ const store = {
 
             addRecord(task.id, recordSeconds, 'manual');
         }
-        this.populateSubtaskIds();
 
         state.taskEditedId = null;
         state.screen = state.tasksScreen;
@@ -278,18 +291,6 @@ const store = {
             state.tasks = updateTaskField(state.tasks, task_id, 'is_done', true);
         }
         saveTasks();
-    },
-    populateSubtaskIds() {
-        const subtasks = {} as Map<string, string[]>;
-        for (let taskId of Object.keys(state.tasks)) {
-            if (state.tasks[taskId].parentId) {
-                subtasks[state.tasks[taskId].parentId] = subtasks[state.tasks[taskId].parentId] || [];
-                subtasks[state.tasks[taskId].parentId].push(taskId);
-            }
-        }
-        for (let taskId of Object.keys(state.tasks)) {
-            state.tasks[taskId].subtaskIds = subtasks[taskId] || null;
-        }
     },
     taskAddRecordedSeconds([task_id, recordSeconds, jiraWorkLogId]) {
         addRecord(task_id, recordSeconds, 'quick', jiraWorkLogId);
