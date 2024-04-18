@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+### [1.34.2](https://github.com/dmitrijs/WorkLogIfy/compare/v1.34.1...v1.34.2) (2024-04-18)
+
+
+### Improvements
+
+* **tasks:** fixed subtask time drag ([8e86c01](https://github.com/dmitrijs/WorkLogIfy/commit/8e86c016b85cebf11814024df0ab1cfe702bea46))
+
 ### [1.34.1](https://github.com/dmitrijs/WorkLogIfy/compare/v1.34.0...v1.34.1) (2024-04-17)
 
 
