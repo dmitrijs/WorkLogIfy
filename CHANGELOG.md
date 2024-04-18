@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+### [1.34.3](https://github.com/dmitrijs/WorkLogIfy/compare/v1.34.2...v1.34.3) (2024-04-18)
+
+
+### Improvements
+
+* **tasks:** make sure subtasks are updated on any change to the tasks ([1d712b0](https://github.com/dmitrijs/WorkLogIfy/commit/1d712b0643da0662bbfe73731778978e4d75a7a5))
+
 ### [1.34.2](https://github.com/dmitrijs/WorkLogIfy/compare/v1.34.1...v1.34.2) (2024-04-18)
 
 
