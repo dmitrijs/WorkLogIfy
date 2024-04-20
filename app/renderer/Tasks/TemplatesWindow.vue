@@ -36,7 +36,6 @@
 
         created() {
             store.setTaskTemplates(window.ipc.sendSync('tasks.getTaskTemplates'));
-            store.setTaskTemplates(window.ipc.sendSync('tasks.getTaskTemplates'));
         }
 
         add() {
