@@ -18,18 +18,25 @@ export default function createMenu() {
     const menu = new Menu();
     menu.append(new MenuItem({
         label: 'New Task', click() {
-            store.state.taskLastSelected = null;
+            store.setScreen('task.new');
+        },
+    }));
+    menu.append(new MenuItem({
+        label: 'Extract Task', click() {
+            store.state.creatingByExtract = true;
             store.setScreen('task.new');
         },
     }));
     menu.append(new MenuItem({
         label: 'New Subtask', click() {
+            store.state.creatingSubtask = true;
             store.setScreen('task.new');
         },
     }));
     menu.append(new MenuItem({
         label: 'Extract Subtask', click() {
-            store.state.taskIsExtracting = true;
+            store.state.creatingSubtask = true;
+            store.state.creatingByExtract = true;
             store.setScreen('task.new');
         },
     }));

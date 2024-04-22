@@ -87,7 +87,8 @@ const state = reactive({
 
     tasksSelectedIds: {} as Record<string, boolean>,
     taskLastSelected: '',
-    taskIsExtracting: false, // new task that is created is extracted from the selected task
+    creatingByExtract: false, // new task that is created is extracted from the selected task
+    creatingSubtask: false, // new task that is created is extracted as a Subtask
     tasksHoveredId: null,
     taskEditedId: null,
     tasksScreen: 'tasks',
@@ -164,26 +165,28 @@ const store = {
         } as TaskEditedObj;
 
         let refTask = null as TaskObj;
+        let refRootTask = null as TaskObj;
         if (state.taskLastSelected && (refTask = state.tasks[state.taskLastSelected])) {
-            if (refTask.parentId) {
-                refTask = state.tasks[refTask.parentId];
-            }
-            task.date = refTask.date;
-            task.code = refTask.code;
-            task.parentId = refTask.id;
-
-            if (state.taskIsExtracting) {
-                state.taskIsExtracting = false;
-                task.taskIdExtractedFrom = state.taskLastSelected;
-
-                let taskSpentSeconds = refTask.sessions.reduce((sum, obj: SessionObj) => sum + obj.spent_seconds, 0);
-                if (store.state.taskTimeredId === refTask.id) {
-                    taskSpentSeconds += store.state.timerElapsedSeconds;
-                }
-                task.time_add_minutes = String(Math.round(taskSpentSeconds / 60));
-            }
+            refRootTask = (refTask.parentId ? state.tasks[refTask.parentId] : refTask);
         }
-        state.taskLastSelected = '';
+        if (refRootTask && state.creatingSubtask) {
+            task.date = refRootTask.date;
+            task.code = refRootTask.code;
+            task.parentId = refRootTask.id;
+        }
+        if (refTask && state.creatingByExtract) {
+            state.creatingByExtract = false;
+            task.taskIdExtractedFrom = state.taskLastSelected;
+
+            let taskSpentSeconds = refTask.sessions.reduce((sum, obj: SessionObj) => sum + obj.spent_seconds, 0);
+            if (store.state.taskTimeredId === refTask.id) {
+                taskSpentSeconds += store.state.timerElapsedSeconds;
+            }
+            task.time_add_minutes = String(Math.round(taskSpentSeconds / 60));
+        }
+
+        state.creatingSubtask = false;
+        state.creatingByExtract = false;
 
         return task;
     },
