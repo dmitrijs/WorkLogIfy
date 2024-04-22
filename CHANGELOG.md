@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+### [1.34.4](https://github.com/dmitrijs/WorkLogIfy/compare/v1.34.3...v1.34.4) (2024-04-22)
+
+
+### Features
+
+* **tasks:** added 'Extract Task' action ([57ce3c6](https://github.com/dmitrijs/WorkLogIfy/commit/57ce3c6723293324388d24d167f31b30470723ac))
+
 ### [1.34.3](https://github.com/dmitrijs/WorkLogIfy/compare/v1.34.2...v1.34.3) (2024-04-18)
 
 
