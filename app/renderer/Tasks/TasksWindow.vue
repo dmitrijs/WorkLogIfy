@@ -14,6 +14,7 @@
         </div>
         <div class="TRow --header">
             <div class="TRowContent">
+                <div class="TCol --hierarchy"><i class="icofont-rounded-down"></i></div>
                 <div class="TCol --chargeable"><i class="icofont-not-allowed"></i></div>
                 <div class="TCol --distributed"><i class="icofont-exchange"></i></div>
                 <div class="TCol --frozen"><i class="icofont-unlock"></i></div>

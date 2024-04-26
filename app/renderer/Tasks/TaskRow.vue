@@ -14,11 +14,16 @@
              isOnHold: !!task.is_on_hold,
              isRootTask: (rootTasks[task.code || task.id]?.id === task.id),
              isSubtask: !!task.parentId,
-             isSubtaskWithDifferentCode: task.code !== parentTask?.code,
          }"
          @click="rowOnClick($event, task)"
     >
         <div class="TRowContent" v-if="!(store.state.tasksHideUnReportable && (task.distributed || !task.chargeable))">
+            <div class="TCol --hierarchy">
+                <template v-if="!task.parentId">
+                    <i class="icofont-rounded-down" v-if="task.subtaskIds?.length"></i>
+                    <i class="icofont-rounded-right" style="color: #ababab" v-else></i>
+                </template>
+            </div>
             <div class="TCol --chargeable">
                 <i class="IconAsInput icofont-not-allowed" :class="{ active: !task.chargeable }"
                    @click="store.updateTask([task.id, 'chargeable', !task.chargeable])"></i>
@@ -189,19 +194,4 @@
 </script>
 
 <style lang="scss">
-    .TRow.isSubtask {
-        .TCol.--frozen,
-        .TCol.--chargeable,
-        .TCol.--distributed {
-            opacity: 0;
-            pointer-events: none;
-        }
-    }
-
-    .TRow.isSubtask:not(.isSubtaskWithDifferentCode) {
-        .TCol.--code {
-            opacity: 0;
-            pointer-events: none;
-        }
-    }
 </style>

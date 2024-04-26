@@ -41,7 +41,11 @@
         &.notchargeable,
         &.distributed {
             .TRowContent {
-                opacity: 0.4;
+                background-color: #f1f1f1;
+
+                * {
+                    color: gray;
+                }
             }
         }
 
@@ -53,68 +57,81 @@
 
         .TRowContent {
             display: grid;
-            grid-template-columns: 22px 22px 22px 73px 1fr 22px 63px 34px;
+            grid-template-columns: 22px 22px 22px 22px 73px 1fr 22px 63px 34px;
             grid-template-rows: auto;
 
             margin: 0px 1px;
             padding: 1px;
+        }
 
-            .TCol {
-                padding: 1px 3px;
+        &.isSubtask {
+            padding-left: 22px;
 
-                &.--code {
-                    white-space: nowrap;
+            .TRowContent {
+                grid-template-columns: 22px 22px 22px 73px 1fr 22px 63px 34px; // without first column
+            }
+
+            .TCol.--hierarchy {
+                display: none;
+            }
+        }
+
+        .TCol {
+            padding: 1px 3px;
+
+            &.--code {
+                white-space: nowrap;
+            }
+
+            &.--time {
+                color: #364abc;
+            }
+
+            &.--hierarchy,
+            &.--selected,
+            &.--distributed,
+            &.--chargeable,
+            &.--frozen {
+                align-self: center;
+                text-align: center;
+            }
+
+            &.--timespan {
+                align-self: center;
+
+                .--timespan-charge {
+                    opacity: 0.5;
                 }
+            }
 
-                &.--time {
-                    color: #364abc;
-                }
-
-                &.--selected,
-                &.--distributed,
-                &.--chargeable,
-                &.--frozen {
-                    align-self: center;
-                    text-align: center;
-                }
-
-                &.--timespan {
-                    align-self: center;
-
-                    .--timespan-charge {
-                        opacity: 0.5;
-                    }
-                }
-
-                &.--title {
-                    .Comment--Content,
-                    .Note--Content,
-                    .Title--Content {
-                        display: block;
-                        word-break: break-word;
-                    }
-                }
-
+            &.--title {
+                .Comment--Content,
+                .Note--Content,
                 .Title--Content {
-                    font-weight: bold;
+                    display: block;
+                    word-break: break-word;
                 }
+            }
 
-                .Comment--Content {
-                    color: grey;
-                    line-height: 0.8rem;
-                    padding-top: 2px;
-                    padding-bottom: 2px;
-                }
+            .Title--Content {
+                font-weight: bold;
+            }
 
-                &.--timespan {
-                    span {
-                        display: block;
-                    }
-                }
+            .Comment--Content {
+                color: grey;
+                line-height: 0.8rem;
+                padding-top: 2px;
+                padding-bottom: 2px;
+            }
 
-                &.--playback {
-                    align-self: center;
+            &.--timespan {
+                span {
+                    display: block;
                 }
+            }
+
+            &.--playback {
+                align-self: center;
             }
         }
 
