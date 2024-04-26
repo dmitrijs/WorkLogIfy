@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+### [1.34.5](https://github.com/dmitrijs/WorkLogIfy/compare/v1.34.4...v1.34.5) (2024-04-26)
+
+
+### Improvements
+
+* **ux:** changed how tasks hierarchy and statuses are visualized ([09577b4](https://github.com/dmitrijs/WorkLogIfy/commit/09577b408ac59e6638b07448230077fc746f89b1))
+* **ux:** handle very long words in the task description ([7e71947](https://github.com/dmitrijs/WorkLogIfy/commit/7e71947ed5be5cfa2bf584397de3fd7015c226d4))
+
 ### [1.34.4](https://github.com/dmitrijs/WorkLogIfy/compare/v1.34.3...v1.34.4) (2024-04-22)
 
 
