@@ -15,11 +15,9 @@
             background: #fcfcfc;
         }
 
-        &:hover {
-            > .TRowContent {
-                padding: 0;
-                border: 1px solid #d5d5d5;
-            }
+        .TRowContent:hover {
+            padding: 0;
+            border: 1px solid #d5d5d5;
 
             .TCol.--playback .IconAsInput.icofont-play {
                 display: block;
@@ -69,6 +67,8 @@
 
             .TRowContent {
                 grid-template-columns: 22px 22px 22px 73px 1fr 22px 63px 34px; // without first column
+                border-left: 1px dashed #c2c2c2 !important;
+                padding-left: 0;
             }
 
             .TCol.--hierarchy {
@@ -279,14 +279,12 @@
     }
 }
 
-.TRow:hover {
-    .TRowContent {
-        .IconAsInput {
-            opacity: 0.3;
+.TRowContent:hover {
+    .IconAsInput {
+        opacity: 0.3;
 
-            &:hover {
-                opacity: 0.5;
-            }
+        &:hover {
+            opacity: 0.5;
         }
     }
 }
