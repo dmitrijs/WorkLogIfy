@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+### [1.34.6](https://github.com/dmitrijs/WorkLogIfy/compare/v1.34.5...v1.34.6) (2024-04-26)
+
+
+### Improvements
+
+* **ux:** style tweaks (fixed hover effect, highlighted subtasks) ([885c726](https://github.com/dmitrijs/WorkLogIfy/commit/885c726e503f99430adde4c51f2affe4ade2cf9e))
+
 ### [1.34.5](https://github.com/dmitrijs/WorkLogIfy/compare/v1.34.4...v1.34.5) (2024-04-26)
 
 
