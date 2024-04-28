@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+### [1.34.8](https://github.com/dmitrijs/WorkLogIfy/compare/v1.34.7...v1.34.8) (2024-04-28)
+
+
+### Features
+
+* **ux:** show main menu on all platforms inside the main window ([41f6f2d](https://github.com/dmitrijs/WorkLogIfy/commit/41f6f2db09944cea0552e4417351fd18ad3da097))
+
 ### [1.34.7](https://github.com/dmitrijs/WorkLogIfy/compare/v1.34.6...v1.34.7) (2024-04-28)
 
 
