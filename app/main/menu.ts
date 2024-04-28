@@ -16,55 +16,61 @@ export function toggleDebug(mainWindow) {
 export default function createMainMenu(mainWindow) {
     const isMac = process.platform === 'darwin'
 
-    const menuItems = [
-        {
-            label: 'New', click: function () {
-                mainWindow.show();
-                mainWindow.webContents.send('change.screen', 'task.new');
-            },
-        },
-        {
-            label: 'Tasks', click: function () {
-                mainWindow.show();
-                mainWindow.webContents.send('change.screen', 'tasks');
-            },
-        },
-        {
-            label: 'To-do', click: function () {
-                mainWindow.show();
-                mainWindow.webContents.send('change.screen', 'todo');
-            },
-        },
-        {
-            label: 'Calendar', click: function () {
-                mainWindow.show();
-                mainWindow.webContents.send('change.screen', 'calendar');
-            },
-        },
-        {
-            label: 'Active Apps', click: function () {
-                mainWindow.show();
-                mainWindow.webContents.send('change.screen', 'active_apps');
-            },
-        },
-        {
-            label: 'Templates', click: function () {
-                mainWindow.show();
-                mainWindow.webContents.send('change.screen', 'task.templates');
-            },
-        },
-        {
-            label: 'Settings', click: function () {
-                mainWindow.show();
-                mainWindow.webContents.send('change.screen', 'settings');
-            },
-        },
-    ];
     return Menu.buildFromTemplate([
-        ...(isMac ? [{
+        {
             label: 'WorkLogIfy',
-            submenu: menuItems,
-        }] : menuItems),
+            submenu: [
+                {
+                    label: 'New', click: function () {
+                        mainWindow.show();
+                        mainWindow.webContents.send('change.screen', 'task.new');
+                    },
+                },
+                {
+                    label: 'Tasks', click: function () {
+                        mainWindow.show();
+                        mainWindow.webContents.send('change.screen', 'tasks');
+                    },
+                },
+                {
+                    label: 'To-do', click: function () {
+                        mainWindow.show();
+                        mainWindow.webContents.send('change.screen', 'todo');
+                    },
+                },
+                {
+                    label: 'Calendar', click: function () {
+                        mainWindow.show();
+                        mainWindow.webContents.send('change.screen', 'calendar');
+                    },
+                },
+                {
+                    label: 'Active Apps', click: function () {
+                        mainWindow.show();
+                        mainWindow.webContents.send('change.screen', 'active_apps');
+                    },
+                },
+                {
+                    label: 'Templates', click: function () {
+                        mainWindow.show();
+                        mainWindow.webContents.send('change.screen', 'task.templates');
+                    },
+                },
+                {
+                    label: 'Settings', click: function () {
+                        mainWindow.show();
+                        mainWindow.webContents.send('change.screen', 'settings');
+                    },
+                },
+                {type: 'separator'},
+                {
+                    label: 'Quit', click: function () {
+                        app.quit();
+                    },
+                    ...(isMac && {accelerator: "CmdOrCtrl+Q"}),
+                },
+            ],
+        },
         ...(isMac ? [{
             label: "Edit",
             submenu: [
@@ -106,13 +112,6 @@ export default function createMainMenu(mainWindow) {
                         mainWindow.show();
                         mainWindow.webContents.send('migration', 'import');
                     },
-                },
-                {type: 'separator'},
-                {
-                    label: 'Quit', click: function () {
-                        app.quit();
-                    },
-                    ...(isMac && {accelerator: "CmdOrCtrl+Q"}),
                 },
             ],
         },

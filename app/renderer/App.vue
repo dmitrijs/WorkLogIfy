@@ -1,5 +1,13 @@
 <template>
     <div class="App" :class="{ isDebug: store.state.is_debug }">
+        <div class="MainMenu">
+            <ul>
+                <li @click="store.setScreen('tasks')" :class="{ Selected: store.state.screen === 'tasks' }"><span><i class="icofont-tasks"></i> Tasks</span></li>
+                <li @click="store.setScreen('active_apps')" :class="{ Selected: store.state.screen === 'active_apps' }"><span><i class="icofont-clock-time"></i> Active Apps</span></li>
+                <li @click="store.setScreen('calendar')" :class="{ Selected: store.state.screen === 'calendar' }"><span><i class="icofont-calendar"></i> Calendar</span></li>
+                <li @click="store.setScreen('settings')" :class="{ Selected: store.state.screen === 'settings' }"><span><i class="icofont-settings"></i> Settings</span></li>
+            </ul>
+        </div>
         <transition name="fade" mode="out-in">
             <TasksWindow v-if="store.state.screen === 'tasks'"></TasksWindow>
             <TaskEdit v-else-if="store.state.screen === 'task.edit'" mode="edit" key="task.edit"></TaskEdit>
@@ -18,18 +26,18 @@
                 <div v-if="!value || typeof value !== 'object'"><strong>{{ key }}:</strong> {{ value }}</div>
             </template>
 
-            <hr/>
+            <hr />
             Timer:
             <button type="button" class="btn btn-secondary btn-xs" @click="timerStop" :disabled="!store.state.taskTimeredId">stop</button>
-            <hr/>
+            <hr />
             Progress:
             <button type="button" class="btn btn-secondary btn-xs" @click="progressBar({indeterminate: true})">∞</button>
             <button type="button" class="btn btn-secondary btn-xs" @click="progressBar({indeterminate: false})">-</button>
             <button type="button" class="btn btn-secondary btn-xs" @click="progressBar({progress: 0.01})">1%</button>
             <button type="button" class="btn btn-secondary btn-xs" @click="progressBar({progress: 0.70})">70%</button>
-            <hr/>
+            <hr />
             <div v-for="(day, dayId) of tasksGrouped">
-                <strong>{{ dayId }}</strong><br/>
+                <strong>{{ dayId }}</strong><br />
                 <div v-for="(val, prop) of day">
                     <template v-if="(<any>prop) === 'tasks'">
                         <div style="padding-left: 10px;" v-for="(task) of val">
@@ -86,7 +94,7 @@
             timer.stop();
         }
 
-        progressBar(params: {progress?: number, indeterminate?: boolean}) {
+        progressBar(params: { progress?: number, indeterminate?: boolean }) {
             window.ipc.send('set.progress', params);
         }
     }
@@ -102,6 +110,35 @@
 
         .fade-enter, .fade-leave-to {
             opacity: 0;
+        }
+
+        .MainMenu {
+            ul {
+                list-style: none;
+                padding: 0;
+                margin: 0;
+                display: flex;
+                justify-content: space-around;
+                align-items: flex-end;
+                border-bottom: 1px solid #e6e6e6;
+            }
+
+            li {
+                width: 100%;
+                cursor: pointer;
+                display: flex;
+                align-items: flex-end;
+                justify-content: center;
+                height: 28px;
+                line-height: 24px;
+
+                &:hover {
+                    background: #eee;
+                }
+                &.Selected {
+                    background: #e2e2e2;
+                }
+            }
         }
     }
 </style>
