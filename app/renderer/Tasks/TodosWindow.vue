@@ -1,6 +1,5 @@
 <template>
     <div class="TodosWindow">
-        <MainMenu></MainMenu>
         <button @click="store.loadAsanaTasks(true)">Refresh tasks list</button>
         <table>
             <thead>
@@ -30,7 +29,6 @@
     import _ from "lodash";
     import {computed, onMounted} from "vue";
     import store from "../Store/Store";
-    import MainMenu from "../MainMenu.vue";
 
     const tasks = computed(() => {
         return _.sortBy(store.state.asanaTasks, 'assignee_section.name');

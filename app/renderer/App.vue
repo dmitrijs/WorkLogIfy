@@ -1,6 +1,8 @@
 <template>
     <div class="App" :class="{ isDebug: store.state.is_debug }">
         <div class="AppScreen">
+            <MainMenu></MainMenu>
+
             <transition name="fade" mode="out-in">
                 <TasksWindow v-if="store.state.screen === 'tasks'"></TasksWindow>
                 <TaskEdit v-else-if="store.state.screen === 'task.edit'" mode="edit" key="task.edit"></TaskEdit>
@@ -100,7 +102,20 @@
     .App {
         @import 'App';
 
-            .fade-enter-active, .fade-leave-active {
+        height: 100%;
+        overflow: hidden;
+
+        outline: 1px solid black;
+
+        display: flex;
+
+        --main-menu-height: 29px;
+
+        .AppScreen {
+            width: 500px;
+        }
+
+        .fade-enter-active, .fade-leave-active {
             transition: opacity .1s;
         }
 

@@ -1,6 +1,5 @@
 <template>
     <div class="TasksWindow" @mousemove="dragContinue($event)" @mouseup="dragStop">
-        <MainMenu></MainMenu>
         <div class="DragGhost"
              :style="'left: ' + (store.state.drag.nowAt[0] + 6) + 'px; top: ' + (store.state.drag.nowAt[1] - 24) + 'px;'"
              v-if="store.state.drag.active && store.state.drag.distance > 20"
@@ -147,7 +146,6 @@
     import CalendarWindow from "./CalendarWindow.vue";
     import createMenu from './TasksMenu';
     import TaskRow from "./TaskRow.vue";
-    import MainMenu from '../MainMenu.vue';
 
     const remote = window.remote;
 

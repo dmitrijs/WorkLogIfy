@@ -1,6 +1,5 @@
 <template>
     <div class="CalendarWindow">
-        <MainMenu v-if="!weekKey"></MainMenu>
         <br v-if="!weekKey"/>
         <div>
             <div v-for="(week, week_key) of weeks" class="Week" :data-week="week_key">
@@ -41,13 +40,10 @@
     import store from "../Store/Store";
     import Store_GetCalendarStatistics from "../Store/Store_GetCalendarStatistics";
     import createCalendarMenu from "./CalendarMenu";
-    import MainMenu from "../MainMenu.vue";
 
     const remote = window.remote;
 
-    @Component({
-        components: {MainMenu}
-    })
+    @Component({})
     export default class CalendarWindow extends Vue {
 
         cache = null;
