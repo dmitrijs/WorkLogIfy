@@ -129,7 +129,6 @@ const state = reactive({
 state.screen = state.tasksScreen;
 
 function updateTaskField(tasks: any, task_id: any, field: any, value: any) {
-    console.log(tasks[task_id]);
     tasks[task_id][field] = value;
     if (value === true) {
         tasks[task_id][field + '_at'] = moment().toISOString();

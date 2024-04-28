@@ -220,6 +220,7 @@ export default function Store_GetGroupedTasks(): Record<string, TaskGroupObj> {
         let distributed = 0;
         let not_distributed = 0;
         let time_recorded = 0;
+        let frozen = 0;
 
         const tasks = {} as Record<string, TaskObj>;
         tasksList.forEach((task) => {
@@ -231,8 +232,10 @@ export default function Store_GetGroupedTasks(): Record<string, TaskGroupObj> {
                 if (task.distributed) {
                     distributed += seconds;
                 } else {
-                    if (!task.frozen) {
-                        not_distributed += seconds;
+                    not_distributed += seconds;
+
+                    if (task.frozen) {
+                        frozen += seconds;
                     }
                 }
             }
@@ -247,6 +250,7 @@ export default function Store_GetGroupedTasks(): Record<string, TaskGroupObj> {
             time_spent_seconds: spent,
             time_distributed_seconds: distributed,
             time_not_distributed_seconds: not_distributed,
+            time_frozen_seconds: frozen,
             time_charge_text: timespanToText(charge),
             time_spent_text: timespanToText(spent),
             time_recorded_text: timespanToText(time_recorded),
@@ -258,12 +262,17 @@ export default function Store_GetGroupedTasks(): Record<string, TaskGroupObj> {
     });
 
     // populate charge_time
-    groups = mapValues(groups, (group) => {
+    groups = mapValues(groups, (group, group_key) => {
 
         let distributed = group.time_distributed_seconds;
         let not_distributed = group.time_not_distributed_seconds;
+        let frozen = group.time_frozen_seconds;
 
-        if (not_distributed === 0) {
+        if (not_distributed - frozen === 0) {
+            if (distributed > 60) {
+                console.error(timespanToText(distributed), 'lost in an empty group', group_key);
+                group.erroneous = true;
+            }
             return group;
         }
 
@@ -306,7 +315,7 @@ export default function Store_GetGroupedTasks(): Record<string, TaskGroupObj> {
             let chargest_task_seconds = 100000000;
             let chargest_task_id = null;
 
-            tasks.map((task) => {
+            tasks.forEach((task) => {
                 if (!task.frozen &&
                     task.time_charge_seconds > 0 &&
                     task.time_charge_seconds + secondsMissingRounded > 0 &&
@@ -317,7 +326,7 @@ export default function Store_GetGroupedTasks(): Record<string, TaskGroupObj> {
             });
 
             if (Math.abs(secondsMissing) > 60) {
-                tasks.map((task) => {
+                tasks.forEach((task) => {
                     if (task.id === chargest_task_id) {
                         time_charge_rounded_seconds += secondsMissingRounded;
                         task.time_charge_seconds += secondsMissingRounded;

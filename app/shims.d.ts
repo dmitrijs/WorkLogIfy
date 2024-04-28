@@ -55,6 +55,7 @@ declare type TaskGroupObj = {
     time_spent_seconds: number,
     time_distributed_seconds: number,
     time_not_distributed_seconds: number,
+    time_frozen_seconds: number,
     time_charge_text: string,
     time_spent_text: string,
     time_recorded_text: string,
@@ -64,6 +65,8 @@ declare type TaskGroupObj = {
     duplicatesExist: boolean,
     time_charge_rounded_seconds: number,
     time_charge_rounded_text: string,
+
+    erroneous?: boolean;
 }
 
 declare type TaskEditedObj = TaskObj & {

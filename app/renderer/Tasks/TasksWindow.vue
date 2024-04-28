@@ -34,6 +34,8 @@
                 <div class="TCol --frozen"></div>
                 <div class="TCol --group-date">Total</div>
                 <div class="TCol --timespan --timespan-charge">
+                    <span title="Charge (Not distributed)">{{ timespanToText(applyRoundingMinutes(total.time_not_distributed_seconds)) }}</span>
+                    &nbsp;
                     <span title="Charge (Rounded)">{{ total.time_charge_rounded_text }}</span>
                     <span title="Recorded" class="original-time" v-if="total.time_recorded_text !== '-'"> ({{ total.time_recorded_text }})</span>
                     &nbsp;
@@ -41,7 +43,7 @@
                 </div>
             </div>
             <template class="TGroup" v-for="(group, date) of tasksGrouped">
-                <div class="TRowDate" :class="{ SubTotal: tasksGroupedLength > 1 }">
+                <div class="TRowDate" :class="{ SubTotal: tasksGroupedLength > 1, Erroneous: group.erroneous }">
                     <div class="TCol --frozen"><i class="IconAsInput icofont-wall-clock"></i></div>
                     <div class="TCol --group-date">{{ date }}</div>
                     <div class="TCol --timespan --timespan-charge">
@@ -459,6 +461,14 @@
         .CalendarWindow {
             overflow: initial !important;
             max-height: initial !important;
+        }
+
+        .TRowDate.Erroneous {
+            color: #f55353;
+
+            .TCol.--group-date:after {
+                background: #f55353;
+            }
         }
     }
 </style>
