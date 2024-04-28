@@ -122,34 +122,5 @@
         .fade-enter, .fade-leave-to {
             opacity: 0;
         }
-
-        .MainMenu {
-            ul {
-                list-style: none;
-                padding: 0;
-                margin: 0;
-                display: flex;
-                justify-content: space-around;
-                align-items: flex-end;
-                border-bottom: 1px solid #e6e6e6;
-            }
-
-            li {
-                width: 100%;
-                cursor: pointer;
-                display: flex;
-                align-items: flex-end;
-                justify-content: center;
-                height: 28px;
-                line-height: 24px;
-
-                &:hover {
-                    background: #eee;
-                }
-                &.Selected {
-                    background: #e2e2e2;
-                }
-            }
-        }
     }
 </style>
