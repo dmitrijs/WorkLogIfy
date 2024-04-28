@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+### [1.34.10](https://github.com/dmitrijs/WorkLogIfy/compare/v1.34.9...v1.34.10) (2024-04-28)
+
+
+### Improvements
+
+* **ux:** improved tasks screen layout fix ([c59299e](https://github.com/dmitrijs/WorkLogIfy/commit/c59299e6ece19f1ff85fc144d3abe687e43d2838))
+
 ### [1.34.9](https://github.com/dmitrijs/WorkLogIfy/compare/v1.34.8...v1.34.9) (2024-04-28)
 
 
