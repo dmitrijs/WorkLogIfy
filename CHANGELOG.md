@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+### [1.34.11](https://github.com/dmitrijs/WorkLogIfy/compare/v1.34.10...v1.34.11) (2024-04-28)
+
+
+### Improvements
+
+* **tasks:** fixed time summing up; highlight erroneous task groups ([69bfde0](https://github.com/dmitrijs/WorkLogIfy/commit/69bfde0dbe5bced128b45cce4ae6a09ec9af9656))
+
 ### [1.34.10](https://github.com/dmitrijs/WorkLogIfy/compare/v1.34.9...v1.34.10) (2024-04-28)
 
 
