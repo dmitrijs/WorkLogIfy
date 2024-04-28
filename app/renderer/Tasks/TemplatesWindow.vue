@@ -1,30 +1,36 @@
 <template>
-    <div class="TemplatesWindow">
-        <div v-for="(template, index) of templates">
-            <div class="actions">
-                <i class="IconAsInput icofont-arrow-up"
-                   @click="swap(index, index - 1)" v-if="(index - 1) >= 0"></i>
-                <i class="IconAsInput icofont-arrow-down"
-                   @click="swap(index, index + 1)" v-if="(index + 1) <= (templates.length - 1)"></i>
+    <div>
+        <MainMenu></MainMenu>
+        <div class="TemplatesWindow">
+            <div v-for="(template, index) of templates">
+                <div class="actions">
+                    <i class="IconAsInput icofont-arrow-up"
+                       @click="swap(index, index - 1)" v-if="(index - 1) >= 0"></i>
+                    <i class="IconAsInput icofont-arrow-down"
+                       @click="swap(index, index + 1)" v-if="(index + 1) <= (templates.length - 1)"></i>
 
-                <button type="button" @click="del(index)" class="btn btn-xs btn-danger">delete</button>
+                    <button type="button" @click="del(index)" class="btn btn-xs btn-danger">delete</button>
+                </div>
+
+                <label>Title:</label> <input type="text" class="narrow" v-model="template.title" @change="update(index, template)">
+                <label>Code:</label> <input type="text" class="narrow" placeholder="TSKS-0000" v-model="template.code" @change="update(index, template)"><br />
+                <label>Notes:</label> <input type="text" v-model="template.notes" @change="update(index, template)" style="width: 300px;">
+                <i class="IconAsInput icofont-unlock" :class="{ active: template.frozen }" @click="template.frozen = !template.frozen, update(index, template)"></i>
             </div>
 
-            <label>Title:</label> <input type="text" class="narrow" v-model="template.title" @change="update(index, template)">
-            <label>Code:</label> <input type="text" class="narrow" placeholder="TSKS-0000" v-model="template.code" @change="update(index, template)"><br/>
-            <label>Notes:</label> <input type="text" v-model="template.notes" @change="update(index, template)" style="width: 300px;">
-            <i class="IconAsInput icofont-unlock" :class="{ active: template.frozen }" @click="template.frozen = !template.frozen, update(index, template)"></i>
+            <button type="button" class="btn btn-xs btn-secondary" @click="add()">+ add another</button>
         </div>
-
-        <button type="button" class="btn btn-xs btn-secondary" @click="add()">+ add another</button>
     </div>
 </template>
 
 <script lang="ts">
     import {Component, Vue} from "vue-facing-decorator";
     import store from "../Store/Store";
+    import MainMenu from "../MainMenu.vue";
 
-    @Component({})
+    @Component({
+        components: {MainMenu}
+    })
     export default class TemplatesWindow extends Vue {
         data() {
             return {}

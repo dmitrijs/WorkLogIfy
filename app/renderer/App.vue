@@ -1,23 +1,17 @@
 <template>
     <div class="App" :class="{ isDebug: store.state.is_debug }">
-        <div class="MainMenu">
-            <ul>
-                <li @click="store.setScreen('tasks')" :class="{ Selected: store.state.screen === 'tasks' }"><span><i class="icofont-tasks"></i> Tasks</span></li>
-                <li @click="store.setScreen('active_apps')" :class="{ Selected: store.state.screen === 'active_apps' }"><span><i class="icofont-clock-time"></i> Active Apps</span></li>
-                <li @click="store.setScreen('calendar')" :class="{ Selected: store.state.screen === 'calendar' }"><span><i class="icofont-calendar"></i> Calendar</span></li>
-                <li @click="store.setScreen('settings')" :class="{ Selected: store.state.screen === 'settings' }"><span><i class="icofont-settings"></i> Settings</span></li>
-            </ul>
+        <div class="AppScreen">
+            <transition name="fade" mode="out-in">
+                <TasksWindow v-if="store.state.screen === 'tasks'"></TasksWindow>
+                <TaskEdit v-else-if="store.state.screen === 'task.edit'" mode="edit" key="task.edit"></TaskEdit>
+                <TaskEdit v-else-if="store.state.screen === 'task.new'" mode="new" key="task.new"></TaskEdit>
+                <TodosWindow v-else-if="store.state.screen === 'todo'" key="todo"></TodosWindow>
+                <CalendarWindow v-else-if="store.state.screen === 'calendar'"></CalendarWindow>
+                <TemplatesWindow v-else-if="store.state.screen === 'task.templates'"></TemplatesWindow>
+                <SettingsWindow v-else-if="store.state.screen === 'settings'"></SettingsWindow>
+                <ActiveAppsWindow v-else-if="store.state.screen === 'active_apps'"></ActiveAppsWindow>
+            </transition>
         </div>
-        <transition name="fade" mode="out-in">
-            <TasksWindow v-if="store.state.screen === 'tasks'"></TasksWindow>
-            <TaskEdit v-else-if="store.state.screen === 'task.edit'" mode="edit" key="task.edit"></TaskEdit>
-            <TaskEdit v-else-if="store.state.screen === 'task.new'" mode="new" key="task.new"></TaskEdit>
-            <TodosWindow v-else-if="store.state.screen === 'todo'" key="todo"></TodosWindow>
-            <CalendarWindow v-else-if="store.state.screen === 'calendar'"></CalendarWindow>
-            <TemplatesWindow v-else-if="store.state.screen === 'task.templates'"></TemplatesWindow>
-            <SettingsWindow v-else-if="store.state.screen === 'settings'"></SettingsWindow>
-            <ActiveAppsWindow v-else-if="store.state.screen === 'active_apps'"></ActiveAppsWindow>
-        </transition>
 
         <div class="Debug" v-if="store.state.is_debug">
             <button onclick="document.location.reload()" class="btn btn-secondary" style="padding: 10px 20px; float: right">reload</button>
@@ -65,6 +59,7 @@
     import TemplatesWindow from "./Tasks/TemplatesWindow.vue";
     import TodosWindow from "./Tasks/TodosWindow.vue";
     import timer from "./Timer";
+    import MainMenu from "./MainMenu.vue";
 
     @Component({
         components: {
@@ -75,6 +70,7 @@
             TaskEdit,
             TasksWindow,
             SettingsWindow,
+            MainMenu,
         },
     })
     export default class App extends Vue {
@@ -104,7 +100,7 @@
     .App {
         @import 'App';
 
-        .fade-enter-active, .fade-leave-active {
+            .fade-enter-active, .fade-leave-active {
             transition: opacity .1s;
         }
 

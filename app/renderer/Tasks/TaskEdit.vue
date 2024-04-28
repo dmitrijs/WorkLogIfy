@@ -1,5 +1,6 @@
 <template>
     <div class="TaskEdit" :data-mode="mode">
+        <MainMenu></MainMenu>
         <br />
         <form class="TaskEditForm" @submit.prevent="save()">
             <table style="width: 100%;">
@@ -164,8 +165,11 @@
     import store from "../Store/Store";
     import timer from "../Timer";
     import {timespanToText} from "../Utils/Utils";
+    import MainMenu from "../MainMenu.vue";
 
-    @Component({})
+    @Component({
+        components: {MainMenu}
+    })
     export default class TaskEdit extends Vue {
         task = {} as TaskEditedObj;
 

@@ -1,5 +1,6 @@
 <template>
     <div class="ActiveAppsWindow">
+        <MainMenu></MainMenu>
         <table>
             <thead>
             <tr>
@@ -32,6 +33,7 @@
     import moment from "moment";
     import {onMounted, ref} from "vue";
     import store from "../Store/Store";
+    import MainMenu from "../MainMenu.vue";
 
     const activeApps = ref<ActiveAppObj[]>([]);
 
