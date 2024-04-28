@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+### [1.34.7](https://github.com/dmitrijs/WorkLogIfy/compare/v1.34.6...v1.34.7) (2024-04-28)
+
+
+### Improvements
+
+* **ux:** show latest day tasks on top ([f4bf3d4](https://github.com/dmitrijs/WorkLogIfy/commit/f4bf3d42a4fff02187ebc4ce699ce7ef0267b2b2))
+
 ### [1.34.6](https://github.com/dmitrijs/WorkLogIfy/compare/v1.34.5...v1.34.6) (2024-04-26)
 
 
