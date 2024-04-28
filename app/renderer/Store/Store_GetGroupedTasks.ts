@@ -359,5 +359,7 @@ export default function Store_GetGroupedTasks(): Record<string, TaskGroupObj> {
         return group;
     });
 
-    return groups;
+    return Object.fromEntries(Object.entries(groups).sort((group1: [string, TaskGroupObj], group2: [string, TaskGroupObj]) => {
+        return -1 * (group1[0].localeCompare(group2[0]));
+    }));
 }
