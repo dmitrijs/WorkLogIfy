@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+### [1.34.12](https://github.com/dmitrijs/WorkLogIfy/compare/v1.34.11...v1.34.12) (2024-05-07)
+
+
+### Features
+
+* **ux:** added hamburger menu with 'Quit' option ([2e65cbb](https://github.com/dmitrijs/WorkLogIfy/commit/2e65cbbe2d93334ac5f6560230ba4f3cf64ca798))
+
 ### [1.34.11](https://github.com/dmitrijs/WorkLogIfy/compare/v1.34.10...v1.34.11) (2024-04-28)
 
 
