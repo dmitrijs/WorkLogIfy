@@ -62,13 +62,16 @@ export default function createMainMenu(mainWindow) {
                         mainWindow.webContents.send('change.screen', 'settings');
                     },
                 },
-                {type: 'separator'},
-                {
-                    label: 'Quit', click: function () {
-                        app.quit();
+                ...(isMac ? [
+                    {type: 'separator'},
+                    {
+                        label: 'Quit',
+                        click: function () {
+                            app.quit();
+                        },
+                        accelerator: "CmdOrCtrl+Q",
                     },
-                    ...(isMac && {accelerator: "CmdOrCtrl+Q"}),
-                },
+                ] : []),
             ],
         },
         ...(isMac ? [{

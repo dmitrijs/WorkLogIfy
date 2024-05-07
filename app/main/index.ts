@@ -209,6 +209,10 @@ app.on('ready', async () => {
             app.quit();
         });
 
+        ipcMain.on('quit.unconfirmed', (event: Electron.IpcMainEvent) => {
+            app.quit();
+        });
+
         ipcMain.on('set.progress', (event: Electron.IpcMainEvent, params) => {
             if (process.platform !== 'darwin') {
                 if (params.indeterminate === true) {

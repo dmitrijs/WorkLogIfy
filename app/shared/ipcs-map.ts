@@ -29,6 +29,7 @@ export interface IpcChannelMap {
     'tasks.getFileTotals': [void, object];
     'tasks.getTaskTemplates': [void, object];
     'quit.confirmed': [void];
+    'quit.unconfirmed': [void];
 
     // renderer
     'change.screen': [string];
