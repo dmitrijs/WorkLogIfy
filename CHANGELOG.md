@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+### [1.34.13](https://github.com/dmitrijs/WorkLogIfy/compare/v1.34.12...v1.34.13) (2024-05-09)
+
+
+### Improvements
+
+* **ux:** updated hamburger menu contents and style ([86c9c00](https://github.com/dmitrijs/WorkLogIfy/commit/86c9c0008ceb18dd4dd023c150011e25e0057f5a))
+
 ### [1.34.12](https://github.com/dmitrijs/WorkLogIfy/compare/v1.34.11...v1.34.12) (2024-05-07)
 
 
