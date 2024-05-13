@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+### [1.34.14](https://github.com/dmitrijs/WorkLogIfy/compare/v1.34.13...v1.34.14) (2024-05-13)
+
+
+### Improvements
+
+* **ux:** fixed style of distributed task's subtasks ([ee21fff](https://github.com/dmitrijs/WorkLogIfy/commit/ee21fffa6e6c96802d6f7ee87fa991c554c5cfd6))
+
 ### [1.34.13](https://github.com/dmitrijs/WorkLogIfy/compare/v1.34.12...v1.34.13) (2024-05-09)
 
 
