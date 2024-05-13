@@ -38,7 +38,7 @@
 
         &.notchargeable,
         &.distributed {
-            .TRowContent {
+            > .TRowContent {
                 background-color: #f1f1f1;
 
                 * {
