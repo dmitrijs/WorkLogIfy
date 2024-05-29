@@ -43,7 +43,12 @@
                 </div>
             </div>
             <template class="TGroup" v-for="(group, date) of tasksGrouped">
-                <div class="TRowDate" :class="{ SubTotal: tasksGroupedLength > 1, Erroneous: group.erroneous }">
+                <div class="TRowDate"
+                     :class="{
+                        SubTotal: tasksGroupedLength > 1,
+                        Erroneous: group.erroneous,
+                        TimeredGroup: (store.state.tasks[store.state.taskTimeredId]?.date === date),
+                     }">
                     <div class="TCol --frozen"><i class="IconAsInput icofont-wall-clock"></i></div>
                     <div class="TCol --group-date">{{ date }}</div>
                     <div class="TCol --timespan --timespan-charge">
@@ -461,6 +466,14 @@
         .CalendarWindow {
             overflow: initial !important;
             max-height: initial !important;
+        }
+
+        .TRowDate.TimeredGroup {
+            color: #74c95c;
+
+            .TCol.--group-date:after {
+                background: #74c95c;
+            }
         }
 
         .TRowDate.Erroneous {
