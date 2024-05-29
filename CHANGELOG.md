@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+### [1.34.15](https://github.com/dmitrijs/WorkLogIfy/compare/v1.34.14...v1.34.15) (2024-05-29)
+
+
+### Improvements
+
+* **ux:** highlight date group where task is active ([bf63329](https://github.com/dmitrijs/WorkLogIfy/commit/bf63329d5d98aaa81fffe796c9382174bc52e015))
+
 ### [1.34.14](https://github.com/dmitrijs/WorkLogIfy/compare/v1.34.13...v1.34.14) (2024-05-13)
 
 
