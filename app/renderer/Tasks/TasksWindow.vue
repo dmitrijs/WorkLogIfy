@@ -66,7 +66,7 @@
                         <TaskRow :tasksGrouped="tasksGrouped"
                                  :group_id="date"
                                  :task_id="task_id"
-                                 v-if="!task.parentId"
+                                 v-if="!task.parentId || store.parentIsMissing(task)"
                                  @drag_start="dragStart"></TaskRow>
                     </template>
                 </transition-group>

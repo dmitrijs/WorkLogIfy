@@ -545,6 +545,11 @@ const store = {
         ], 'gid');
     },
 
+    parentIsMissing(task: TaskObj) {
+        const parentTask = state.tasks[task.parentId];
+        return !parentTask || parentTask.date !== task.date;
+    },
+
     dragClear() {
         state.drag.active = false;
         state.drag.readyToDrop = false;

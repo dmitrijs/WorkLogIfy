@@ -76,6 +76,10 @@
             }
         }
 
+        &.isMissingParent {
+            background-color: #ffcaca !important;
+        }
+
         .TCol {
             padding: 1px 3px;
 

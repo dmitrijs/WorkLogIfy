@@ -14,6 +14,7 @@
              isOnHold: !!task.is_on_hold,
              isRootTask: (rootTasks[task.code || task.id]?.id === task.id),
              isSubtask: !!task.parentId,
+             isMissingParent: task.parentId && store.parentIsMissing(task),
          }"
          @click="rowOnClick($event, task)"
     >

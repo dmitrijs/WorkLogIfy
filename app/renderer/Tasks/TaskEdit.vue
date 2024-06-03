@@ -74,7 +74,7 @@
                     <td>Comment:</td>
                     <td><input type="text" v-model="task.comment" /></td>
                 </tr>
-                <tr>
+                <tr :class="{ HasError: task.parentId && store.parentIsMissing(task) }">
                     <td>Parent task:</td>
                     <td><select v-model="task.parentId">
                         <option :value="null"></option>
@@ -280,5 +280,9 @@
         &:hover {
             text-decoration: underline;
         }
+    }
+
+    .HasError {
+        background-color: #ffcaca;
     }
 </style>
