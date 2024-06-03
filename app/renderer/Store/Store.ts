@@ -17,14 +17,14 @@ function saveTasks() {
 
 function populateSubtaskIds() {
     const subtasks = {} as Map<string, string[]>;
-    for (let taskId of Object.keys(state.tasks)) {
-        if (state.tasks[taskId].parentId) {
-            subtasks[state.tasks[taskId].parentId] = subtasks[state.tasks[taskId].parentId] || [];
-            subtasks[state.tasks[taskId].parentId].push(taskId);
+    for (let task of Object.values(state.tasks)) {
+        if (task.parentId) {
+            subtasks[`${task.date}/${task.parentId}`] = subtasks[task.parentId] || [];
+            subtasks[`${task.date}/${task.parentId}`].push(task.id);
         }
     }
-    for (let taskId of Object.keys(state.tasks)) {
-        state.tasks[taskId].subtaskIds = subtasks[taskId] || null;
+    for (let task of Object.values(state.tasks)) {
+        task.subtaskIds = subtasks[`${task.date}/${task.id}`] || null;
     }
 }
 
