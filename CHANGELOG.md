@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+### [1.34.16](https://github.com/dmitrijs/WorkLogIfy/compare/v1.34.15...v1.34.16) (2024-06-03)
+
+
+### Improvements
+
+* **tasks:** fixed an issue with disappearing subtasks ([603cc4e](https://github.com/dmitrijs/WorkLogIfy/commit/603cc4e25755fc892f5b22d350ab8d81d662c029))
+* **tasks:** highlight tasks that have an invalid parent ([0430833](https://github.com/dmitrijs/WorkLogIfy/commit/0430833ff3d6cf2fe7d70565ab6b562454193ca0))
+
 ### [1.34.15](https://github.com/dmitrijs/WorkLogIfy/compare/v1.34.14...v1.34.15) (2024-05-29)
 
 
