@@ -18,7 +18,7 @@
          }"
          @click="rowOnClick($event, task)"
     >
-        <div class="TRowContent" v-if="!(store.state.tasksHideUnReportable && (task.distributed || !task.chargeable))">
+        <div class="TRowContent" v-if="!(store.state.tasksHideUnReportable && (task.distributed || !task.chargeable)) || store.state.taskTimeredId === task.id">
             <div class="TCol --hierarchy">
                 <template v-if="!task.parentId">
                     <i class="icofont-rounded-down" v-if="task.subtaskIds?.length"></i>
