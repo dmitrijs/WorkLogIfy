@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+### [1.34.17](https://github.com/dmitrijs/WorkLogIfy/compare/v1.34.16...v1.34.17) (2024-06-06)
+
+
+### Improvements
+
+* **tasks:** do not hide un-reportable task if it is active ([493b076](https://github.com/dmitrijs/WorkLogIfy/commit/493b07691c893d3f56e7e906bed675f0bbf66a19))
+
 ### [1.34.16](https://github.com/dmitrijs/WorkLogIfy/compare/v1.34.15...v1.34.16) (2024-06-03)
 
 
