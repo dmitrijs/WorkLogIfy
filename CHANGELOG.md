@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+### [1.34.18](https://github.com/dmitrijs/WorkLogIfy/compare/v1.34.17...v1.34.18) (2024-06-13)
+
+
+### Improvements
+
+* **tasks:** fixed disappearing subtasks when merging codes ([489a15b](https://github.com/dmitrijs/WorkLogIfy/commit/489a15b354ed633b232555c1f6758c4909482a0d))
+* **tasks:** make sure only parent tasks can be marked as root tasks ([70b533c](https://github.com/dmitrijs/WorkLogIfy/commit/70b533cf6c5f828ef88ede5c9d3b2b043de309ad))
+
 ### [1.34.17](https://github.com/dmitrijs/WorkLogIfy/compare/v1.34.16...v1.34.17) (2024-06-06)
 
 
