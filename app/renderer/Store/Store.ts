@@ -19,7 +19,7 @@ function populateSubtaskIds() {
     const subtasks = {} as Map<string, string[]>;
     for (let task of Object.values(state.tasks)) {
         if (task.parentId) {
-            subtasks[`${task.date}/${task.parentId}`] = subtasks[task.parentId] || [];
+            subtasks[`${task.date}/${task.parentId}`] = subtasks[`${task.date}/${task.parentId}`] || [];
             subtasks[`${task.date}/${task.parentId}`].push(task.id);
         }
     }

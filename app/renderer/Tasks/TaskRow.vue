@@ -126,7 +126,7 @@
     const emit = defineEmits(['drag_start']);
 
     const task = computed<TaskObj>(() => {
-        return props.tasksGrouped[props.group_id].tasks[props.task_id];
+        return props.tasksGrouped[props.group_id].tasks[props.task_id] || <any>{code: 'ERROR!', title: `Invalid task id '${props.task_id}' in group '${props.group_id}'`};
     })
     const parentTask = computed<TaskObj>(() => {
         return task.value.parentId

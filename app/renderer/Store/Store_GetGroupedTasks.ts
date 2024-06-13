@@ -132,8 +132,6 @@ export function Store_MergeSameCodes(tasks: Record<string, any>) {
             return;
         }
 
-        console.log(task.code, 'Adding', task.time_charge_text, 'to', existing.time_charge_text);
-
         existing.time_charge_seconds = existing.time_charge_seconds + task.time_charge_seconds;
         existing.time_charge_text = timespanToText(existing.time_charge_seconds);
 
@@ -206,8 +204,11 @@ export default function Store_GetGroupedTasks(): Record<string, TaskGroupObj> {
         task.time_recorded_text = timespanToText(task.time_recorded_seconds);
 
         task.group_key = task.date;
-        if (store.state.tasksShowAsReport || store.state.tasksHideUnReportable) {
-            task.group_key = store.state.day_key;
+        if (store.state.tasksShowAsReport) {
+            // disable hierarchy, make sure all merged tasks are displayed
+            task.group_key = store.state.day_key + '*';
+            task.parentId = null;
+            task.subtaskIds = null;
         }
         tasksList.push(task);
     });
