@@ -156,7 +156,7 @@
         const result = {};
         for (let group of Object.values(props.tasksGrouped)) {
             for (let task of Object.values(group.tasks)) {
-                if (task.code !== 'idle') {
+                if (task.code !== 'idle' && !task.parentId) {
                     result[task.code || task.id] = task;
                 }
             }
