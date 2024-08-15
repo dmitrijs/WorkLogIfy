@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+### [1.34.19](https://github.com/dmitrijs/WorkLogIfy/compare/v1.34.18...v1.34.19) (2024-08-15)
+
+
+### Improvements
+
+* **ux:** do not round the total time in the header ([b5410fb](https://github.com/dmitrijs/WorkLogIfy/commit/b5410fbb33de2dedb9f3fe9f4aacbeab46c3d053))
+
 ### [1.34.18](https://github.com/dmitrijs/WorkLogIfy/compare/v1.34.17...v1.34.18) (2024-06-13)
 
 
