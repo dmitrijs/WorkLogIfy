@@ -34,7 +34,7 @@
                 <div class="TCol --frozen"></div>
                 <div class="TCol --group-date">Total</div>
                 <div class="TCol --timespan --timespan-charge">
-                    <span title="Charge (Not distributed)">{{ timespanToText(applyRoundingMinutes(total.time_not_distributed_seconds)) }}</span>
+                    <span title="Charge (Not distributed)">{{ timespanToText(total.time_not_distributed_seconds) }}</span>
                     &nbsp;
                     <span title="Charge (Rounded)">{{ total.time_charge_rounded_text }}</span>
                     <span title="Recorded" class="original-time" v-if="total.time_recorded_text !== '-'"> ({{ total.time_recorded_text }})</span>
@@ -52,7 +52,7 @@
                     <div class="TCol --frozen"><i class="IconAsInput icofont-wall-clock"></i></div>
                     <div class="TCol --group-date">{{ date }}</div>
                     <div class="TCol --timespan --timespan-charge">
-                        <span title="Charge (Not distributed)">{{ timespanToText(applyRoundingMinutes(group.time_not_distributed_seconds)) }}</span>
+                        <span title="Charge (Not distributed)">{{ timespanToText(group.time_not_distributed_seconds) }}</span>
                         &nbsp;
                         <span title="Charge (Rounded)">{{ group.time_charge_rounded_text }}</span>
                         <span title="Recorded" class="original-time" v-if="group.time_recorded_text !== '-'"> ({{ group.time_recorded_text }})</span>
