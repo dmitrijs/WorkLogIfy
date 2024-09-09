@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file.
 
+### [1.35.1](https://github.com/dmitrijs/WorkLogIfy/compare/v1.35.0...v1.35.1) (2024-09-09)
+
+
+### Features
+
+* **ux:** added global notes section ([8b025ac](https://github.com/dmitrijs/WorkLogIfy/commit/8b025ac108f224de37b1ab16ba345f9aaf2343e3))
+
+
+### Improvements
+
+* **ux:** show report button automatically in the end of the working day ([47e8dd5](https://github.com/dmitrijs/WorkLogIfy/commit/47e8dd5f2e9dc841976822bb790a6426b0ee25ef))
+
 ## [1.35.0](https://github.com/dmitrijs/WorkLogIfy/compare/v1.34.19...v1.35.0) (2024-09-09)
 
 
