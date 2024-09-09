@@ -90,7 +90,7 @@
             </span>
             <button type="button" class="btn btn-secondary btn-xs" style="margin-left: 6px; line-height: 0.6rem"
                     title="Ctrl+F applies formatting in Slack"
-                    v-if="store.state.tasksShowAsReport || store.state.tasksHideUnReportable"
+                    v-if="store.state.tasksShowAsReport || store.state.tasksHideUnReportable || (total.time_charge_rounded_seconds >= store.state.settings.working_day_minutes * 60)"
                     @click="copyToClipboardAllTasks($event)">
                 Copy for Slack
             </button>
