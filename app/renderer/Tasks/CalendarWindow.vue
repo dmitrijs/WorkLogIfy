@@ -3,6 +3,10 @@
         <br v-if="!weekKey"/>
         <div>
             <div v-for="(week, week_key) of weeks" class="Week" :data-week="week_key">
+                <a href="#" class="PrevNextButton"
+                   v-if="weekKey"
+                   @click="open(store.state.day_key_prev_week)"
+                ><i class="icofont-rounded-left"></i></a>
                 <div v-for="(dayCode) of week.days" class="Day"
                      @click="open(dayCode)"
                      @mouseenter="store.calendarHoveredDayCode(dayCode)"
@@ -19,6 +23,10 @@
                     <span class="DayTitle">{{ days[dayCode].title }}</span>
                     <span class="TimeCharged">{{ days[dayCode].charged_seconds_text }}</span>
                 </div>
+                <a href="#" class="PrevNextButton"
+                   v-if="weekKey"
+                   @click="open(store.state.day_key_next_week)"
+                ><i class="icofont-rounded-right"></i></a>
                 <span class="MonthTimeCharged" v-if="months[week_key] && months[week_key].month_charged_seconds">
                     <span class="_Week" v-if="week.week_charged">&Sigma; {{ week.week_charged_text }}</span><br/>
                     <span class="_Month">{{ months[week_key].month_title }}:
@@ -247,6 +255,17 @@
                 bottom: -1px;
                 color: grey;
                 font-size: smaller;
+            }
+        }
+
+        .PrevNextButton {
+            color: inherit;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+
+            i {
+                font-size: 1.2rem;
             }
         }
     }

@@ -101,6 +101,8 @@ const state = reactive({
     is_debug: false,
     day_key: '',
     week_key: '',
+    day_key_next_week: '',
+    day_key_prev_week: '',
     allFiles: [],
     fileTotals: {},
     templates: [] as TemplateObj[],
@@ -328,6 +330,8 @@ const store = {
         }
         state.day_key = day;
         state.week_key = moment(day, "YYYY-MM-DD").endOf('isoWeek').format('YYYY-WW');
+        state.day_key_prev_week = moment(day, "YYYY-MM-DD").startOf('isoWeek').subtract(1, 'week').format('YYYY-MM-DD');
+        state.day_key_next_week = moment(day, "YYYY-MM-DD").endOf('isoWeek').add(1, 'day').format('YYYY-MM-DD');
         let workday = window.ipc.sendSync('tasks.load', state.day_key);
 
         state.tasks = workday.tasks;
