@@ -72,6 +72,16 @@
                 </transition-group>
             </template>
         </div>
+
+        <div>
+            <textarea class="GlobalNotes" rows="1"
+                      ref="globalNotesInput"
+                      v-model="store.state.settings.global_notes"
+                      @blur="store.updateSettings(store.state.settings)">
+                [AskMA] Copy stored credit card when user registers from Horoscope email
+            </textarea>
+        </div>
+
         <CalendarWindow
                 :key="store.state.day_key"
                 :week-key="store.state.week_key"
@@ -144,20 +154,21 @@
 <script setup lang="ts">
     import {map} from "lodash";
     import moment from "moment";
-    import {computed, onBeforeUnmount, onMounted, ref} from "vue";
+    import {computed, onBeforeUnmount, onMounted, ref, watch} from "vue";
     import LineChart from '../Components/LineChart.vue';
     import horizontal_scroller from "../library/horizontal_scroller";
     import store from "../Store/Store";
     import {Store_MergeSameCodes} from "../Store/Store_GetGroupedTasks";
-    import {applyRoundingMinutes, timespanToText, timespanToTextHours} from "../Utils/Utils";
+    import {timespanToText, timespanToTextHours} from "../Utils/Utils";
     import CalendarWindow from "./CalendarWindow.vue";
-    import createMenu from './TasksMenu';
     import TaskRow from "./TaskRow.vue";
+    import createMenu from './TasksMenu';
 
     const remote = window.remote;
 
     const forceUpdateKey = ref(1);
     const timeline = ref(null);
+    const globalNotesInput = ref(null);
 
     const total = computed<TaskGroupObj>(() => {
         let total = <TaskGroupObj>{
@@ -222,6 +233,7 @@
 
     onMounted(() => {
         horizontal_scroller(timeline.value);
+        adjustNotesHeight();
 
         window.addEventListener('contextmenu', contextMenuShow, false);
     });
@@ -229,6 +241,18 @@
     onBeforeUnmount(() => {
         window.removeEventListener('contextmenu', contextMenuShow);
     });
+
+    watch(() => store.state.settings.global_notes, () => {
+        adjustNotesHeight();
+    })
+
+    function adjustNotesHeight() {
+        if (!globalNotesInput.value) {
+            return;
+        }
+        globalNotesInput.value.style.height = "";
+        globalNotesInput.value.style.height = Math.min(50, globalNotesInput.value.scrollHeight) + "px";
+    }
 
     function contextMenuShow(e) {
         store.selectHovered();
@@ -482,6 +506,13 @@
             .TCol.--group-date:after {
                 background: #f55353;
             }
+        }
+
+        .GlobalNotes {
+            width: 100%;
+            border-color: #cbcbcb;
+            font-style: italic;
+            resize: none;
         }
     }
 </style>

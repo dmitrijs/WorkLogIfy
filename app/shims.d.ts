@@ -117,6 +117,7 @@ declare type SettingsObj = {
     working_day_minutes: number;
     sorting_order: string;
     special_days: Object;
+    global_notes: string;
 }
 
 declare type CalendarStatistics = {
