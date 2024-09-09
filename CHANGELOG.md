@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.35.0](https://github.com/dmitrijs/WorkLogIfy/compare/v1.34.19...v1.35.0) (2024-09-09)
+
+
+### Features
+
+* **ux:** added buttons to navigate to previous or next week ([26aa9ca](https://github.com/dmitrijs/WorkLogIfy/commit/26aa9ca6de4089c289e60bc8e9bcf796c535319e))
+
 ### [1.34.19](https://github.com/dmitrijs/WorkLogIfy/compare/v1.34.18...v1.34.19) (2024-08-15)
 
 
