@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+### [1.36.1](https://github.com/dmitrijs/WorkLogIfy/compare/v1.36.0...v1.36.1) (2024-09-16)
+
+
+### Improvements
+
+* **ux:** send 'f' key to go fullscreen on wakeup ([6532d94](https://github.com/dmitrijs/WorkLogIfy/commit/6532d94c6ed0bb6a9b3d2d4192ece5da19f01f2e))
+
 ## [1.36.0](https://github.com/dmitrijs/WorkLogIfy/compare/v1.35.1...v1.36.0) (2024-09-16)
 
 
