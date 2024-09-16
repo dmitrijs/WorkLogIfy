@@ -12,7 +12,7 @@ class Integrations {
             if (!result.screenUnlocked) {
                 await this.unlockAndroid();
             }
-            await this.runShell('adb.exe', ['shell', 'input', 'touchscreen', 'tap', '10', '10']);
+            await this.runShell('adb.exe', ['shell', 'input', 'touchscreen', 'tap', '1', '1']);
         });
     }
 
