@@ -15,6 +15,14 @@
         <label>Asana Filter (<a href="https://developers.asana.com/reference/searchtasksforworkspace" target="_blank">docs</a>):</label>
         <input type="text" placeholder="&is_blocked=false&key=value" :value="settings.asana_extra_filter"> <a href="#" @click.prevent="asanaSearchTasks()">load</a><br/>
         <br/>
+
+        <label>Integrations:</label>
+        <span class="label--checkbox label--checkbox--with-text" @click="settings.wake_up_connected_devices = !settings.wake_up_connected_devices">
+            <input type="checkbox" :checked="settings.wake_up_connected_devices"><span></span> Wake up connected devices (<em title="Android devices will be lock/unlocked automatically. Unlock code should be set to 0000.">info</em>)
+        </span>
+        <br />
+        <br />
+
         <label>Round to nearest:</label> <input type="number" step="10" v-model="settings.rounding_minutes"> minutes<br/>
         <label>Working day:</label> <input type="number" step="10" v-model="settings.working_day_minutes"> minutes<br/>
         <label>Sort by:</label>

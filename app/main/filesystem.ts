@@ -3,6 +3,8 @@ import fs from "fs";
 import moment from "moment";
 
 class Filesystem {
+    public static settings:SettingsObj;
+
     public static getDir() {
         var rootDir = app.getPath('appData');
         var dir = rootDir + (app.isPackaged ? '/WorkLogIfy/' : '/WorkLogIfy-test/');
@@ -42,7 +44,8 @@ class Filesystem {
 
         if (fs.existsSync(dir + '/settings.json')) {
             let contents = fs.readFileSync(dir + '/settings.json', 'utf8');
-            return JSON.parse(contents);
+            this.settings = JSON.parse(contents);
+            return this.settings;
         }
 
         return {};
@@ -61,6 +64,8 @@ class Filesystem {
             tasks: worklog,
         }, null, 2));
         fs.writeFileSync(dir + '/settings.json', JSON.stringify(settings, null, 2));
+
+        Filesystem.settings = settings;
 
         {
             let time_charge_rounded_seconds = 0;

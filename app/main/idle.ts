@@ -1,6 +1,8 @@
 import activeWindow from "active-win";
 import electron from "electron";
 import moment from "moment";
+import Filesystem from "./filesystem";
+import Integrations from "./integrations";
 
 const MINUTES = 60;
 const HOURS = 60 * 60;
@@ -10,10 +12,25 @@ export default class IdleUser {
     private static seconds_to_become_idle = 16 * MINUTES;
     private static seconds_to_become_offline = 2 * HOURS;
     private static seconds_to_become_offline_hard = 6 * HOURS;
+    private static seconds_to_wake_up_devices = 3 * MINUTES;
     private static isIdle = false;
     private static isOffline = false;
 
+    private static lastWakeUp = 0;
+
     public static registerOnReady(mainWindow) {
+        electron.powerMonitor.addListener('lock-screen', () => {
+            if (Filesystem.settings.wake_up_connected_devices) {
+                Integrations.lockDevices();
+            }
+        });
+
+        electron.powerMonitor.addListener('unlock-screen', () => {
+            if (Filesystem.settings.wake_up_connected_devices) {
+                Integrations.wakeUpDevices();
+            }
+        });
+
         setInterval(() => {
             const secondsIdle = electron.powerMonitor.getSystemIdleTime();
             (async () => {
@@ -35,11 +52,20 @@ export default class IdleUser {
             console.log('idle for', time, 'seconds');
             if (time < this.seconds_to_become_idle) {
                 this.isIdle = this.isOffline = false;
+
+                if (Filesystem.settings.wake_up_connected_devices) {
+                    if (!this.lastWakeUp || (moment.utc().unix() - this.lastWakeUp) > this.seconds_to_wake_up_devices) {
+                        this.lastWakeUp = moment.utc().unix();
+                        Integrations.wakeUpDevices();
+                    }
+                }
             }
 
             if (time >= this.seconds_to_become_idle) {
                 if (!this.isIdle) {
                     mainWindow.webContents.send('user-is-idle', time, this.seconds_to_become_idle);
+
+                    Integrations.lockDevices();
                 }
                 this.isIdle = true;
             }

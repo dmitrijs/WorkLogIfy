@@ -118,6 +118,7 @@ declare type SettingsObj = {
     sorting_order: string;
     special_days: Object;
     global_notes: string;
+    wake_up_connected_devices: boolean;
 }
 
 declare type CalendarStatistics = {
@@ -169,4 +170,15 @@ declare type AsanaTaskObj = {
     permalink_url: string;
     completed_at?: string;
     assignee_section?: { name: string };
+}
+
+declare type ShellResult = {
+    code: number;
+    stdout: string;
+    stderr: string;
+}
+
+declare type AndroidState = {
+    screenOn: boolean;
+    screenUnlocked: boolean;
 }
