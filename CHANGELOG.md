@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+### [1.36.3](https://github.com/dmitrijs/WorkLogIfy/compare/v1.36.2...v1.36.3) (2024-09-16)
+
+
+### Improvements
+
+* **ux:** prevent screen dimming ([e83e0f0](https://github.com/dmitrijs/WorkLogIfy/commit/e83e0f013066631ee042d8d9754b67dda196ab07))
+
 ### [1.36.2](https://github.com/dmitrijs/WorkLogIfy/compare/v1.36.1...v1.36.2) (2024-09-16)
 
 
