@@ -1,55 +1,50 @@
 class Integrations {
-    public static wakeUpDevices() {
+    public static async wakeUpDevices() {
         if (process.platform === 'darwin') {
             return;
         }
         console.log('Waking up devices');
 
-        this.getAndroidState().then((result: AndroidState) => {
+        this.getAndroidState().then(async (result: AndroidState) => {
             if (!result.screenOn) {
-                this.wakeUpAndroid();
+                await this.wakeUpAndroid();
             }
             if (!result.screenUnlocked) {
-                this.unlockAndroid();
+                await this.unlockAndroid();
             }
-        });
-
-        this.getAndroidState().then((result: AndroidState) => {
-            if (result.screenOn) {
-                this.lockAndroid();
-            }
+            await this.runShell('adb.exe', ['shell', 'input', 'touchscreen', 'tap', '10', '10']);
         });
     }
 
-    public static lockDevices() {
+    public static async lockDevices() {
         if (process.platform === 'darwin') {
             return;
         }
         console.log('Locking devices');
 
-        this.getAndroidState().then((result: AndroidState) => {
+        this.getAndroidState().then(async (result: AndroidState) => {
             if (result.screenOn) {
-                this.lockAndroid();
+                await this.lockAndroid();
             }
         });
     }
 
     // ---
 
-    private static wakeUpAndroid() {
-        this.runShell('adb.exe', ['shell', 'input', 'keyevent', '26']).then();
+    private static async wakeUpAndroid() {
+        return this.runShell('adb.exe', ['shell', 'input', 'keyevent', '26']).then();
     }
 
-    private static unlockAndroid() {
-        this.runShell('adb.exe', ['shell', 'input', 'touchscreen', '2', '4400', '500', '2']).then(() => {
-            this.runShell('adb.exe', ['shell', 'input', 'text', '0000']).then(() => {
-                this.runShell('adb.exe', ['shell', 'input', 'keyevent', '34']).then() // press 'f' to go full screen
+    private static async unlockAndroid() {
+        return this.runShell('adb.exe', ['shell', 'input', 'touchscreen', '2', '4400', '500', '2']).then(() => {
+            return this.runShell('adb.exe', ['shell', 'input', 'text', '0000']).then(() => {
+                return this.runShell('adb.exe', ['shell', 'input', 'keyevent', '34']).then() // press 'f' to go full screen
             })
         });
     }
 
     private static lockAndroid() {
-        this.runShell('adb.exe', ['shell', 'input', 'keyevent', '26']).then();
+        return this.runShell('adb.exe', ['shell', 'input', 'keyevent', '26']).then();
     }
 
     private static getAndroidState() {
