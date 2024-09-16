@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+### [1.36.2](https://github.com/dmitrijs/WorkLogIfy/compare/v1.36.1...v1.36.2) (2024-09-16)
+
+
+### Improvements
+
+* make sure settings are loaded early ([d6fccca](https://github.com/dmitrijs/WorkLogIfy/commit/d6fcccaf77a795a6fae3f39a331684ed2e5d77b8))
+
 ### [1.36.1](https://github.com/dmitrijs/WorkLogIfy/compare/v1.36.0...v1.36.1) (2024-09-16)
 
 
