@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.36.0](https://github.com/dmitrijs/WorkLogIfy/compare/v1.35.1...v1.36.0) (2024-09-16)
+
+
+### Features
+
+* **ux:** support waking up and locking of connected devices (Android) ([3523e01](https://github.com/dmitrijs/WorkLogIfy/commit/3523e01ef76779d9eb518f0ae3962766fa38adf9))
+
 ### [1.35.1](https://github.com/dmitrijs/WorkLogIfy/compare/v1.35.0...v1.35.1) (2024-09-09)
 
 
