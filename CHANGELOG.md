@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+### [1.36.4](https://github.com/dmitrijs/WorkLogIfy/compare/v1.36.3...v1.36.4) (2024-09-16)
+
+
+### Improvements
+
+* **ux:** do not wake devices up if screen is locked ([9ba7eda](https://github.com/dmitrijs/WorkLogIfy/commit/9ba7edabcde356f09a7418d95d000a4ba8444b39))
+
 ### [1.36.3](https://github.com/dmitrijs/WorkLogIfy/compare/v1.36.2...v1.36.3) (2024-09-16)
 
 
