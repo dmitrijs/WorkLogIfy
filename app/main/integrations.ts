@@ -42,7 +42,9 @@ class Integrations {
 
     private static unlockAndroid() {
         this.runShell('adb.exe', ['shell', 'input', 'touchscreen', '2', '4400', '500', '2']).then(() => {
-            this.runShell('adb.exe', ['shell', 'input', 'text', '0000']).then()
+            this.runShell('adb.exe', ['shell', 'input', 'text', '0000']).then(() => {
+                this.runShell('adb.exe', ['shell', 'input', 'keyevent', '34']).then() // press 'f' to go full screen
+            })
         });
     }
 

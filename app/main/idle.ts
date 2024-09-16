@@ -12,7 +12,7 @@ export default class IdleUser {
     private static seconds_to_become_idle = 16 * MINUTES;
     private static seconds_to_become_offline = 2 * HOURS;
     private static seconds_to_become_offline_hard = 6 * HOURS;
-    private static seconds_to_wake_up_devices = 3 * MINUTES;
+    private static seconds_to_wake_up_devices = 60;
     private static isIdle = false;
     private static isOffline = false;
 
@@ -30,6 +30,11 @@ export default class IdleUser {
                 Integrations.wakeUpDevices();
             }
         });
+
+        if (Filesystem.settings.wake_up_connected_devices) {
+            this.lastWakeUp = moment.utc().unix();
+            Integrations.wakeUpDevices();
+        }
 
         setInterval(() => {
             const secondsIdle = electron.powerMonitor.getSystemIdleTime();
