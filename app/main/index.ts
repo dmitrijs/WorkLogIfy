@@ -33,6 +33,7 @@ initialize()
 
 let mainWindow = null;
 app.on('ready', async () => {
+    Filesystem.getSettings();
 
     mainWindow = new BrowserWindow({
         autoHideMenuBar: true,
