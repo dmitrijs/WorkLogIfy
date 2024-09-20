@@ -98,11 +98,10 @@
                   @click.prevent="toggleHideUnReportable()">
                 <label><input type="checkbox" :checked="store.state.tasksHideUnReportable"><span></span> hide un-reportable</label>
             </span>
-            <button type="button" class="btn btn-secondary btn-xs" style="margin-left: 6px; line-height: 0.6rem"
-                    title="Ctrl+F applies formatting in Slack"
-                    v-if="store.state.tasksShowAsReport || store.state.tasksHideUnReportable || (total.time_charge_rounded_seconds >= store.state.settings.working_day_minutes * 60)"
+            <button type="button" class="btn btn-xs" style="margin-left: 6px; padding: 0px 8px;"
+                    title="Copy for Slack. NOTE: Ctrl+F applies formatting in Slack"
                     @click="copyToClipboardAllTasks($event)">
-                Copy for Slack
+                <i class="icofont-copy"></i>
             </button>
         </div>
         <div class="Chart" :title="JSON.stringify(total, null, 2)">
