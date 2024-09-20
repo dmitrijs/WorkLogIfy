@@ -374,6 +374,8 @@ const store = {
     updateSettings(settings) {
         state.settings = {...settings};
         saveTasks();
+
+        state.screen = state.tasksScreen;
     },
     openNextDay() {
         let today = moment(state.day_key, 'YYYY-MM-DD');
