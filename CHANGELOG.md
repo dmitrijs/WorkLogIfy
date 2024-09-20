@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+### [1.36.6](https://github.com/dmitrijs/WorkLogIfy/compare/v1.36.5...v1.36.6) (2024-09-20)
+
+
+### Improvements
+
+* **ux:** make 'Copy for Slack' button always visible, change it to an icon ([1cf14ee](https://github.com/dmitrijs/WorkLogIfy/commit/1cf14ee0855ece00afd061ad9aef2365086fcaf8))
+
 ### [1.36.5](https://github.com/dmitrijs/WorkLogIfy/compare/v1.36.4...v1.36.5) (2024-09-20)
 
 
