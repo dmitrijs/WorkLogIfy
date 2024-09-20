@@ -12,7 +12,15 @@ class Integrations {
             if (!result.screenUnlocked) {
                 await this.unlockAndroid();
             }
-            await this.runShell('adb.exe', ['shell', 'input', 'touchscreen', 'tap', '1', '1']);
+            await this.runShell('adb.exe', 'shell wm size').then(async (result: ShellResult) => {
+                let m = result.stdout.match(/(\d+)x(\d+)/);
+                if (m) {
+                    await this.runShell('adb.exe', `shell input touchscreen tap ${parseInt(m[1]) - 1} ${parseInt(m[2]) - 1}`);
+                    await this.runShell('adb.exe', `shell input touchscreen tap ${parseInt(m[2]) - 1} ${parseInt(m[1]) - 1 - 80 /* bottom bar */}`);
+
+                    await this.runShell('adb.exe', 'shell input keyevent 34').then() // press 'f' to go full screen
+                }
+            });
         });
     }
 
@@ -32,24 +40,21 @@ class Integrations {
     // ---
 
     private static async wakeUpAndroid() {
-        return this.runShell('adb.exe', ['shell', 'input', 'keyevent', '26']).then();
+        return this.runShell('adb.exe', 'shell input keyevent 26').then();
     }
 
     private static async unlockAndroid() {
-        return this.runShell('adb.exe', ['shell', 'input', 'touchscreen', '2', '4400', '500', '2']).then(() => {
-            return this.runShell('adb.exe', ['shell', 'input', 'text', '0000']).then(() => {
-                return this.runShell('adb.exe', ['shell', 'input', 'keyevent', '34']).then() // press 'f' to go full screen
-            })
-        });
+        await this.runShell('adb.exe', 'shell input touchscreen 2 4400 500 2');
+        return this.runShell('adb.exe', 'shell input text 0000');
     }
 
     private static lockAndroid() {
-        return this.runShell('adb.exe', ['shell', 'input', 'keyevent', '26']).then();
+        return this.runShell('adb.exe', 'shell input keyevent 26').then();
     }
 
     private static getAndroidState() {
         return new Promise((resolve, reject) => {
-            this.runShell('adb.exe', ['shell', 'dumpsys', 'deviceidle']).then((result: ShellResult) => {
+            this.runShell('adb.exe', 'shell dumpsys deviceidle').then((result: ShellResult) => {
                 let screenOn = null, screenUnlocked = null;
                 if (result.code === 0) {
                     screenOn = result.stdout.match(/mScreenOn=(true|false)/)[1] === 'true';
@@ -60,7 +65,11 @@ class Integrations {
         });
     }
 
-    public static runShell(executable: string, args: string[]) {
+    public static runShell(executable: string, args: string | string[]) {
+        if (typeof args === 'string') {
+            args = args.split(' ');
+        }
+        console.log('shell:', [executable, ...args].join(' '));
         return new Promise((resolve, error) => {
             let spawn = require("child_process").spawn;
 
