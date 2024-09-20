@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+### [1.36.5](https://github.com/dmitrijs/WorkLogIfy/compare/v1.36.4...v1.36.5) (2024-09-20)
+
+
+### Improvements
+
+* **ux:** close settings page on save ([63efa1d](https://github.com/dmitrijs/WorkLogIfy/commit/63efa1d7f7a077439ad2aa028f9ee648c58d831e))
+* **ux:** device unlock improvements ([a9d4f97](https://github.com/dmitrijs/WorkLogIfy/commit/a9d4f976ae3460758c7cc20e9ec67128e90b9c94))
+
 ### [1.36.4](https://github.com/dmitrijs/WorkLogIfy/compare/v1.36.3...v1.36.4) (2024-09-16)
 
 
