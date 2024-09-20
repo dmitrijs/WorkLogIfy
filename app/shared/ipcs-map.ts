@@ -40,4 +40,7 @@ export interface IpcChannelMap {
     'timer-stop': [void];
     'confirm-app-quit': [void];
     'set.progress': [{ progress?: number, indeterminate?: boolean }];
+
+    'integrations.lock': [void];
+    'integrations.wakeup': [void];
 }

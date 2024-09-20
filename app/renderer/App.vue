@@ -23,6 +23,9 @@
             </template>
 
             <hr />
+            Integrations:
+            <button type="button" class="btn btn-secondary btn-xs" @click="lock()">lock</button>
+            <button type="button" class="btn btn-secondary btn-xs" @click="wakeup()">wake up</button><br />
             Timer:
             <button type="button" class="btn btn-secondary btn-xs" @click="timerStop" :disabled="!store.state.taskTimeredId">stop</button>
             <hr />
@@ -86,6 +89,13 @@
 
         save() {
             store.saveTasks();
+        }
+
+        lock() {
+            window.ipc.send('integrations.lock');
+        }
+        wakeup() {
+            window.ipc.send('integrations.wakeup');
         }
 
         timerStop() {

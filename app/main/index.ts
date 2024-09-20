@@ -8,6 +8,7 @@ import {StrictIpcMain} from "typesafe-ipc";
 import {IpcChannelMap} from "../shared/ipcs-map";
 import Filesystem from "./filesystem";
 import IdleUser from "./idle";
+import Integrations from "./integrations";
 import createMainMenu from "./menu";
 import Shortcuts from "./shortcuts";
 import createTray, {setTrayIconActive, setTrayIconIdle} from "./tray";
@@ -157,6 +158,14 @@ app.on('ready', async () => {
 
         ipcMain.on('debug.state', (event: Electron.IpcMainEvent) => {
             event.returnValue = isDev;
+        });
+
+        ipcMain.on('integrations.lock', (event: Electron.IpcMainEvent) => {
+            Integrations.lockDevices();
+        });
+
+        ipcMain.on('integrations.wakeup', (event: Electron.IpcMainEvent) => {
+            Integrations.wakeUpDevices();
         });
 
         ipcMain.on('tasks.save', (event: Electron.IpcMainEvent, {day_key, arg1: worklog, arg2: worklogProcessed, arg3: settings}) => {
