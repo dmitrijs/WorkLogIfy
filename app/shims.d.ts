@@ -80,6 +80,8 @@ declare type TemplateObj = {
     notes?: string;
     comment?: string;
     frozen?: boolean;
+    chargeable?: boolean;
+    distributed?: boolean;
 }
 
 declare type SessionObj = {

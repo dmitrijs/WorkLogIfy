@@ -157,6 +157,8 @@ const store = {
             code: '',
             title: '',
             frozen: false,
+            distributed: false,
+            chargeable: true,
             time_spent_seconds: 0,
             date: state.day_key,
             time_add_minutes: '',
@@ -217,8 +219,8 @@ const store = {
             id: id,
             code: task.code,
             title: task.title,
-            distributed: false,
-            chargeable: true,
+            distributed: !!task.distributed,
+            chargeable: !!task.chargeable,
             frozen: !!task.frozen,
             notes: task.notes,
             comment: task.comment,
@@ -264,6 +266,8 @@ const store = {
         state.tasks[task.id].code = task.code;
         state.tasks[task.id].title = task.title;
         state.tasks[task.id].date = task.date;
+        state.tasks[task.id].distributed = !!task.distributed;
+        state.tasks[task.id].chargeable = !!task.chargeable;
         state.tasks[task.id].frozen = !!task.frozen;
         state.tasks[task.id].notes = task.notes;
         state.tasks[task.id].comment = task.comment;
@@ -481,6 +485,7 @@ const store = {
             code: '',
             notes: '',
             comment: '',
+            chargeable: true,
         });
 
         saveTaskTemplates();

@@ -3,9 +3,35 @@
         <br />
         <form class="TaskEditForm" @submit.prevent="save()">
             <table style="width: 100%;">
+                <tr v-if="mode !== 'edit'">
+                    <td>Templates:</td>
+                    <td>
+                        <div class="TemplateTasks">
+                            <template v-for="template of store.state.templates">
+                                <div class="TemplateTask"
+                                     @click="fill(template)"
+                                >
+                                    <strong>{{ template.code }}</strong>&nbsp; "{{ template.title }}"
+
+                                    <div style="float: right">
+                                        <i class="IconAsInput icofont-not-allowed" :class="{ active: !template.chargeable }"></i>
+                                        <i class="IconAsInput icofont-exchange" :class="{ active: template.distributed }"></i>
+                                        <i class="IconAsInput icofont-unlock" :class="{ active: template.frozen }"></i>
+                                    </div>
+                                </div>
+                            </template>
+                        </div>
+                        <em>Click twice to overwrite non-empty fields.</em>
+                    </td>
+                </tr>
+                <tr v-if="mode !== 'edit'">
+                    <td colspan="2">
+                        <hr style="margin-block: 0.5rem;" />
+                    </td>
+                </tr>
                 <tr>
                     <td>Title:</td>
-                    <td><input type="text" v-model="task.title" ref="focused" /></td>
+                    <td><input type="text" v-model="task.title" ref="titleEl" /></td>
                 </tr>
                 <tr>
                     <td>Asana task (<a href="#" @click.prevent="store.loadAsanaTasks(true)"><i class="icofont-refresh"></i></a>):</td>
@@ -69,7 +95,7 @@
                 </tr>
                 <tr>
                     <td>Notes:</td>
-                    <td><textarea v-model="task.notes"></textarea></td>
+                    <td><textarea ref="notesEl" v-model="task.notes"></textarea></td>
                 </tr>
                 <tr>
                     <td>Comment:</td>
@@ -92,6 +118,10 @@
                     <td colspan="2">
                         <button class="btn btn-outline-secondary btn-sm" type="button" @click="back">&lt; back</button>
                         <div class="btn-group float-right" role="group">
+                            <i class="TaskFlagIconAsInput icofont-not-allowed" :class="{ active: !task.chargeable }" @click="task.chargeable = !task.chargeable"></i>
+                            <i class="TaskFlagIconAsInput icofont-exchange" :class="{ active: task.distributed }" @click="task.distributed = !task.distributed"></i>
+                            <i class="TaskFlagIconAsInput icofont-unlock" :class="{ active: task.frozen }" @click="task.frozen = !task.frozen"></i>
+
                             <button class="btn btn-secondary btn-sm"
                                     :class="{ 'btn-primary': store.state.taskTimeredId === task.id }">
                                 {{ mode === 'edit' ? 'update' : 'create' }}
@@ -139,20 +169,6 @@
                         <div v-if="!task.activeApps?.length">none</div>
                     </td>
                 </tr>
-                <tr>
-                    <td colspan="2">
-                        <hr />
-                    </td>
-                </tr>
-                <tr>
-                    <td>Fill in from a template:</td>
-                    <td>
-                        <div v-for="template of templates" class="Template" @click="fill(template)">
-                            {{ template.notes }} <span class="TemplateCode">(<span v-if="template.title">{{ template.title }} / </span>{{ template.code }}<span
-                                v-if="template.frozen"> <i class="IconAsInput icofont-unlock"></i></span>)</span>
-                        </div>
-                    </td>
-                </tr>
             </table>
         </form>
     </div>
@@ -165,6 +181,9 @@
     import store from "../Store/Store";
     import timer from "../Timer";
     import {timespanToText} from "../Utils/Utils";
+    import {ref} from "vue";
+
+    const notesEl = ref(null);
 
     @Component({})
     export default class TaskEdit extends Vue {
@@ -197,7 +216,7 @@
         }
 
         mounted() {
-            (this.$refs.focused as HTMLElement).focus();
+            (this.$refs.titleEl as HTMLElement).focus();
         }
 
         save(autostart = false) {
@@ -222,10 +241,17 @@
             if (template.code) {
                 this.task = {...this.task, code: template.code};
             }
-            this.task = {...this.task, frozen: !!template.frozen};
+            this.task = {
+                ...this.task,
+                frozen: !!template.frozen,
+                chargeable: !!template.chargeable,
+                distributed: !!template.distributed,
+            };
             if (!this.task.notes || forced) {
                 this.task = {...this.task, notes: template.notes};
             }
+
+            (this.$refs.notesEl as HTMLElement).focus();
         }
 
         back() {
@@ -280,6 +306,45 @@
 
         &:hover {
             text-decoration: underline;
+        }
+    }
+
+    .TemplateTasks {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        margin-bottom: 4px;
+
+        .TemplateTask {
+            padding: 2px;
+            margin-right: 2px;
+            margin-bottom: 3px;
+            border: 1px solid #cdcdcd;
+            border-radius: 5px;
+
+            &:hover {
+                cursor: pointer;
+                background-color: #e7e7e7;
+            }
+        }
+
+        .IconAsInput:not(.active) {
+            opacity: 0.1;
+        }
+    }
+
+    .TaskFlagIconAsInput {
+        font-size: 20px;
+        line-height: 28px;
+        margin-right: 2px;
+        padding-inline: 3px;
+        cursor: pointer;
+
+        &:not(.active) {
+            opacity: 0.2;
+
+            &:hover {
+                opacity: 0.5;
+            }
         }
     }
 
