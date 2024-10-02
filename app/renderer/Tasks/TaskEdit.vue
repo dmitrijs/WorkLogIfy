@@ -45,10 +45,11 @@
                     </td>
                 </tr>
                 <tr>
-                    <td>Time Spent:</td>
+                    <td>Report group:</td>
                     <td class="Complex">
                         <div>
-                            <span><strong>{{ task_time_spent_text }}</strong> ({{ task.time_spent_seconds }})</span>
+                            <span><input type="text" :placeholder="task.date" v-model="task.group_key"></span>
+
                             <span :style="{ fontWeight: task.taskIdExtractedFrom ? 'bold' : '' }">
                                 {{ task.taskIdExtractedFrom ? 'Extract' : 'Adjust' }}:
                                 <input type="text" class="narrow" v-model="task.time_add_minutes">m
