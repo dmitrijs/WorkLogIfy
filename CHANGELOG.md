@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.37.0](https://github.com/dmitrijs/WorkLogIfy/compare/v1.36.6...v1.37.0) (2024-10-03)
+
+
+### Features
+
+* **templates:** support distributed and chargeable flags, show templates on top for new tasks ([a8c7bb7](https://github.com/dmitrijs/WorkLogIfy/commit/a8c7bb7d0fdc26156489a0b8fb7d7a7a7ade1e8a))
+* **ux:** allow overriding reporting group ([3d8b213](https://github.com/dmitrijs/WorkLogIfy/commit/3d8b2131bbfb604767910e07ef573dca19142038))
+
 ### [1.36.6](https://github.com/dmitrijs/WorkLogIfy/compare/v1.36.5...v1.36.6) (2024-09-20)
 
 
