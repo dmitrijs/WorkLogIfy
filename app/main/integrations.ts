@@ -3,24 +3,24 @@ class Integrations {
         if (process.platform === 'darwin') {
             return;
         }
-        console.log('Waking up devices');
+        console.log('> Waking up devices');
 
         this.getAndroidState().then(async (result: AndroidState) => {
             if (!result.screenOn) {
+                console.log('>> wakeUpAndroid');
                 await this.wakeUpAndroid();
             }
             if (!result.screenUnlocked) {
+                console.log('>> unlockAndroid');
                 await this.unlockAndroid();
             }
-            await this.runShell('adb.exe', 'shell wm size').then(async (result: ShellResult) => {
-                let m = result.stdout.match(/(\d+)x(\d+)/);
-                if (m) {
-                    await this.runShell('adb.exe', `shell input touchscreen tap ${parseInt(m[1]) - 1} ${parseInt(m[2]) - 1}`);
-                    await this.runShell('adb.exe', `shell input touchscreen tap ${parseInt(m[2]) - 1} ${parseInt(m[1]) - 1 - 80 /* bottom bar */}`);
 
-                    await this.runShell('adb.exe', 'shell input keyevent 34').then() // press 'f' to go full screen
-                }
-            });
+            console.log('>> go fullscreen');
+
+            setTimeout(async () => {
+                await this.runShell('adb.exe', `shell input touchscreen tap 200 200`);
+                await this.runShell('adb.exe', 'shell input keyevent 34').then() // press 'f' to go full screen
+            }, 500);
         });
     }
 
@@ -44,8 +44,9 @@ class Integrations {
     }
 
     private static async unlockAndroid() {
-        await this.runShell('adb.exe', 'shell input touchscreen 2 4400 500 2');
-        return this.runShell('adb.exe', 'shell input text 0000');
+        await this.runShell('adb.exe', 'shell input touchscreen swipe 400 600 400 100');
+        await this.runShell('adb.exe', 'shell input text 0000');
+        return this.runShell('adb.exe', 'shell input keyevent 66');
     }
 
     private static lockAndroid() {
