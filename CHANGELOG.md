@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+### [1.37.1](https://github.com/dmitrijs/WorkLogIfy/compare/v1.37.0...v1.37.1) (2024-10-08)
+
+
+### Improvements
+
+* **ux:** integration fixes ([8eaee27](https://github.com/dmitrijs/WorkLogIfy/commit/8eaee271b82bbc21bd5f9e6f64852adbb1502ea9))
+
 ## [1.37.0](https://github.com/dmitrijs/WorkLogIfy/compare/v1.36.6...v1.37.0) (2024-10-03)
 
 
