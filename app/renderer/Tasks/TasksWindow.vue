@@ -157,7 +157,7 @@
     import LineChart from '../Components/LineChart.vue';
     import horizontal_scroller from "../library/horizontal_scroller";
     import store from "../Store/Store";
-    import {Store_MergeSameCodes} from "../Store/Store_GetGroupedTasks";
+    import Store_GetGroupedTasks, {Store_MergeSameCodes} from "../Store/Store_GetGroupedTasks";
     import {timespanToText, timespanToTextHours} from "../Utils/Utils";
     import CalendarWindow from "./CalendarWindow.vue";
     import TaskRow from "./TaskRow.vue";
@@ -207,7 +207,7 @@
     });
 
     const tasksGrouped = computed<Record<string, TaskGroupObj>>(() => {
-        let groups = store.getTasksGrouped as Record<string, any>;
+        let groups = Store_GetGroupedTasks();
 
         let result = groups;
         if (store.state.tasksShowAsReport) {
@@ -219,16 +219,26 @@
         return result;
     });
 
-    const tasksGroupedAndMerged = computed<Record<string, TaskGroupObj>>(() => {
-        let groups = store.getTasksGrouped;
+    function computeTasksGroupedAndMerged(forReport = false) {
+        let opt1 = store.state.tasksHideUnReportable;
+        let opt2 = store.state.tasksShowAsReport;
+        if (forReport) {
+            store.state.tasksHideUnReportable = true;
+            store.state.tasksShowAsReport = true;
+        }
+        let groups = Store_GetGroupedTasks();
 
         let result = groups;
         map(groups, (group, date) => {
             result[date].tasks = Store_MergeSameCodes(group.tasks);
         });
 
+        if (forReport) {
+            store.state.tasksHideUnReportable = opt1;
+            store.state.tasksShowAsReport = opt2;
+        }
         return result;
-    });
+    }
 
     onMounted(() => {
         horizontal_scroller(timeline.value);
@@ -279,7 +289,7 @@
 
     function copyToClipboardAllTasks(ev) {
         let s = '*' + moment(store.state.day_key + ' 12:00:00').format('ddd, MMM D') + "*\n";
-        for (let group of Object.values(tasksGroupedAndMerged.value)) {
+        for (let group of Object.values(computeTasksGroupedAndMerged())) {
             for (let task of Object.values(group.tasks)) {
                 if (!task.chargeable || task.distributed) {
                     continue;

@@ -47,18 +47,19 @@
             </div>
             <div class="TCol --title"
                  @click="store.state.tasksShowAsReport ? copyToClipboard($event, task.notes) : editTask($event, task)">
-                                <span class="Title--Content"
-                                      :class="{ ellipsis: !store.state.tasksShowAsReport && !store.state.tasksHideUnReportable }"><span>
-                                    <template v-if="task.code !== 'idle' && !task.asanaTaskGid && !rootTasks[task.code]?.asanaTaskGid">❔</template>
-                                    {{ task.title || '&nbsp;' }}
-                                </span></span>
+                <span class="Title--Content"
+                      :class="{ ellipsis: !store.state.tasksShowAsReport && !store.state.tasksHideUnReportable }"><span>
+                    <template v-if="task.code !== 'idle' && !task.asanaTaskGid && !rootTasks[task.code]?.asanaTaskGid">❔</template>
+                    {{ task.title || '&nbsp;' }}
+                </span></span>
                 <span class="Note--Content">
-                                    <span class="EmptyNotesError" v-if="store.state.tasksShowAsReport && !task.notes">[empty notes]</span>
-                                    <span v-else>{{ task.notes || '&nbsp;' }}</span>
-                                </span>
+                    <span class="EmptyNotesError" v-if="store.state.tasksShowAsReport && !task.notes">[empty notes]</span>
+                    <span v-else>{{ task.notes || '&nbsp;' }}</span><br />
+                    <em>[1st started {{ task.sessions[0]?.started_at }}]</em>
+                </span>
                 <span class="Comment--Content" v-if="task.comment">
-                                    // {{ task.comment || '&nbsp;' }}
-                                </span>
+                    // {{ task.comment || '&nbsp;' }}
+                </span>
             </div>
             <div class="TCol --status">
                 <i class="IconAsInput IconDone icofont-ui-check" :class="{ active: task.is_done }"
