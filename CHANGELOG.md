@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+### [1.37.2](https://github.com/dmitrijs/WorkLogIfy/compare/v1.37.1...v1.37.2) (2024-12-06)
+
+
+### Features
+
+* **tasks:** show time spent on the task in active session ([263d581](https://github.com/dmitrijs/WorkLogIfy/commit/263d5811cea198b8015e9a9cf9f67032bc398ebf))
+
 ### [1.37.1](https://github.com/dmitrijs/WorkLogIfy/compare/v1.37.0...v1.37.1) (2024-10-08)
 
 
