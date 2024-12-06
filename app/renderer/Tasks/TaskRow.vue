@@ -73,7 +73,8 @@
                  :title="'Final charge: ' + task.time_charge_text + '\n' + 'Recorded: ' + task.time_recorded_text + '\n' + 'Not recorded: ' + task.time_unrecorded_text"
             >
                             <span class="--timespan-spent">
-                                {{ task.time_spent_text }}
+                                <template v-if="store.state.taskTimeredId === task.id">{{ timespanToText(store.state.timerElapsedSeconds) }}<br /></template>
+                                <span style="display: inline" v-if="store.state.taskTimeredId === task.id">&sum; </span>{{ task.time_spent_text }}
                             </span>
                 <span class="--timespan-charge"
                       v-if="task.time_recorded_seconds > 0">
@@ -116,6 +117,7 @@
     import LineChart from '../Components/LineChart.vue';
     import {computed} from "vue";
     import timer from "../Timer";
+    import {timespanToText} from "../Utils/Utils";
 
     const props = defineProps<{
         tasksGrouped: Record<string, TaskGroupObj>,
