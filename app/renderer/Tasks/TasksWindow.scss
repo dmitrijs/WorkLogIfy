@@ -1,7 +1,7 @@
 & {
     display: flex;
     flex-direction: column;
-    height: calc( 100% - var(--main-menu-height) );
+    height: calc(100% - var(--main-menu-height));
 }
 
 .TasksTable {
@@ -44,12 +44,6 @@
                 * {
                     color: gray;
                 }
-            }
-        }
-
-        &.isOnHold {
-            .IconOnHold {
-                color: #E9D086;
             }
         }
 
@@ -157,13 +151,57 @@
     .TasksTable:not(.ShowAsReport) {
         .TRow.isOnHold {
             background: #fffef2;
+
+            .IconOnHold {
+                color: #E9D086 !important;
+                opacity: 0.4 !important;
+            }
+
+            .TCol.--playback {
+                .IconOnHold.active {
+                    background-color: transparent;
+                    font-size: 1.5rem;
+                    line-height: 0.7rem;
+                    opacity: 1 !important;
+                }
+            }
+
+            .TCol.--playback:hover .IconOnHold,
+            .TCol.--playback:not(:hover) .hidden {
+                display: none;
+            }
         }
 
         .TRow.isDone {
             background-color: #fafffa;
 
-            .IconDone.active {
+            .IconDone {
                 color: #94CC94;
+            }
+            &:not(.timered) .IconDone {
+                opacity: 0.4 !important;
+            }
+
+            .TCol.--playback {
+                .IconDone.active {
+                    background-color: transparent;
+                    font-size: 1.5rem;
+                    line-height: 0.7rem;
+                    opacity: 1 !important;
+                }
+            }
+
+            .TCol.--playback:not(:hover) .hidden {
+                display: none;
+            }
+            &.timered .TCol.--playback,
+            .TCol.--playback:hover {
+                .hidden {
+                    display: block;
+                }
+                .IconDone {
+                    display: none;
+                }
             }
         }
     }

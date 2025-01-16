@@ -94,9 +94,15 @@
             </div>
             <div class="TCol --playback">
                 <i class="IconAsInput icofont-square" v-if="store.state.taskTimeredId === task.id"
+                   :class="{ hidden: task.is_done || task.is_on_hold }"
                    @click="stopTimer()"></i>
                 <i class="IconAsInput icofont-play" v-if="store.state.taskTimeredId !== task.id"
+                   :class="{ hidden: task.is_done || task.is_on_hold }"
                    @click="startTimer($event, task)"></i>
+                <i class="IconAsInput IconDone IconStatus icofont-ui-check active"
+                   v-if="task.is_done"></i>
+                <i class="IconAsInput IconOnHold IconStatus icofont-sand-clock active"
+                   v-if="task.is_on_hold"></i>
             </div>
         </div>
 

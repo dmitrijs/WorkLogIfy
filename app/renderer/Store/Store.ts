@@ -434,6 +434,7 @@ const store = {
         state.tasksSelectedIds = {};
 
         state.tasks = updateTaskField(state.tasks, taskId, 'is_on_hold', false);
+        state.tasks = updateTaskField(state.tasks, taskId, 'is_done', false);
         saveTasks();
 
         updateProgressBar(state.tasks[taskId]);
