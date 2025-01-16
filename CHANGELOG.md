@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file.
 
+### [1.37.3](https://github.com/dmitrijs/WorkLogIfy/compare/v1.37.1...v1.37.3) (2025-01-16)
+
+
+### Features
+
+* **tasks:** show time spent on the task in active session ([263d581](https://github.com/dmitrijs/WorkLogIfy/commit/263d5811cea198b8015e9a9cf9f67032bc398ebf))
+
+
+### Improvements
+
+* tweaked style of tasks with 'done' or 'on hold' flag ([3d85c93](https://github.com/dmitrijs/WorkLogIfy/commit/3d85c937a85ff97c27ef65e42bac619f6bf9e937))
+
 ### [1.37.2](https://github.com/dmitrijs/WorkLogIfy/compare/v1.37.1...v1.37.2) (2024-12-06)
 
 
