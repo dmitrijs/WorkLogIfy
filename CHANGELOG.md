@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+### [1.37.4](https://github.com/dmitrijs/WorkLogIfy/compare/v1.37.3...v1.37.4) (2025-01-17)
+
+
+### Improvements
+
+* made sure hardware acceleration is disabled by default ([4698a66](https://github.com/dmitrijs/WorkLogIfy/commit/4698a66c165a97574317e9f49a8751aa9480eedd))
+
 ### [1.37.3](https://github.com/dmitrijs/WorkLogIfy/compare/v1.37.1...v1.37.3) (2025-01-16)
 
 
