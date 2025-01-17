@@ -56,7 +56,7 @@
     "vue-tsc": "^2.0.7"
   },
   "__NOTES": [
-    "Electron 27+ has issues to re-draw UI elements on Windows! For example, calendar disappear until mouse moves over it.",
+    "electron 27+ has issues to re-draw UI elements on Windows! For example, calendar disappear until mouse moves over it. Workaround: app.disableHardwareAcceleration()",
     "electron-builder 25+ fails to build because of node-gyp error"
   ],
   "devDependencies": {

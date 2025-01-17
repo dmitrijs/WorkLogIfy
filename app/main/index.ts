@@ -15,6 +15,8 @@ import createTray, {setTrayIconActive, setTrayIconIdle} from "./tray";
 
 const ipcMain: StrictIpcMain<IpcChannelMap> = electron.ipcMain;
 
+app.disableHardwareAcceleration();
+
 process.env.DIST_ELECTRON = path.join(__dirname, '..')
 process.env.DIST = path.join(process.env.DIST_ELECTRON, '../dist')
 process.env.PUBLIC = process.env.VITE_DEV_SERVER_URL
