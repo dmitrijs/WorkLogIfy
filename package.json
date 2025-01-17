@@ -48,18 +48,19 @@
     "standard-version": "^9.3.2",
     "typesafe-ipc": "github:dmitrijs/typesafe-ipc#68d490de8950abaf7d386bef0ee404d629e97ba5",
     "typescript": "^5.0",
-    "vite": "^5.2.7",
-    "vite-plugin-electron": "^0.28.4",
+    "vite": "^6.0.7",
+    "vite-plugin-electron": "^0.29.0",
     "vite-plugin-electron-renderer": "^0.14.5",
     "vue": "^3.3.4",
     "vue-facing-decorator": "^3.0",
     "vue-tsc": "^2.0.7"
   },
   "__NOTES": [
-    "Electron 27+ has issues to re-draw UI elements on Windows! For example, calendar disappear until mouse moves over it."
+    "Electron 27+ has issues to re-draw UI elements on Windows! For example, calendar disappear until mouse moves over it.",
+    "electron-builder 25+ fails to build because of node-gyp error"
   ],
   "devDependencies": {
-    "electron": "^26.6.10",
+    "electron": "^34.0",
     "electron-builder": "^24.0"
   }
 }
