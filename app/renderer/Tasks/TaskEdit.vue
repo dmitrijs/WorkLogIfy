@@ -3,6 +3,7 @@
         <br />
         <form class="TaskEditForm" @submit.prevent="save()">
             <table style="width: 100%;">
+                <tbody>
                 <tr v-if="mode !== 'edit'">
                     <td>Templates:</td>
                     <td>
@@ -169,6 +170,7 @@
                         <div v-if="!task.activeApps?.length">none</div>
                     </td>
                 </tr>
+            </tbody>
             </table>
         </form>
     </div>

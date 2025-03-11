@@ -16,6 +16,11 @@
         </div>
 
         <div class="Debug" v-if="store.state.is_debug">
+
+
+
+
+
             <button onclick="document.location.reload()" class="btn btn-secondary" style="padding: 10px 20px; float: right">reload</button>
             <button type="button" class="btn btn-secondary btn-xs" @click="save()">save</button>
             <template v-for="(value, key) of store.state">
@@ -110,8 +115,6 @@
 
 <style lang="scss">
     .App {
-        @import 'App';
-
         height: 100%;
         overflow: hidden;
 
@@ -120,6 +123,8 @@
         display: flex;
 
         --main-menu-height: 29px;
+
+        @import 'App';
 
         .AppScreen {
             width: 500px;
