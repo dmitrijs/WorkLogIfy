@@ -124,7 +124,49 @@
 
         --main-menu-height: 29px;
 
-        @import 'App';
+        .App {
+            &:not(.isDebug) {
+                .Timeline,
+                .SelectionStatistics {
+                    display: none !important;
+                }
+            }
+        }
+
+        .AnimationPulseOnceAndHide {
+            animation: AnimationPulseOnceAndHide linear .5s;
+            opacity: 0.5;
+        }
+
+        @keyframes AnimationPulseOnceAndHide {
+            0% {
+                transform: none;
+            }
+            50% {
+                transform: scale(1.1);
+            }
+            100% {
+                transform: none;
+            }
+        }
+
+        .Debug {
+            position: absolute;
+            left: 510px;
+            top: 5px;
+            width: 280px;
+            z-index: 111;
+        }
+
+        .btn-xs {
+            font-size: .675rem;
+            line-height: 1.3;
+        }
+
+        .btn-danger {
+            background-color: #ad2d39;
+            border-color: #ad2d39;
+        }
 
         .AppScreen {
             width: 500px;

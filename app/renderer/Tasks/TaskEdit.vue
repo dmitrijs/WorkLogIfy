@@ -296,7 +296,53 @@
 </script>
 
 <style scoped lang="scss">
-    @import 'TaskEdit';
+    .TaskEdit {
+        overflow-y: auto;
+        max-height: 100%;
+    }
+
+    .TaskEditForm {
+        td {
+            vertical-align: top;
+        }
+
+        td:not(.Complex) {
+            input,
+            select,
+            textarea {
+                width: 100%;
+            }
+
+            textarea {
+                min-height: 64px;
+            }
+        }
+
+        .Complex {
+            > div {
+                align-items: baseline;
+                display: flex;
+                justify-content: space-between;
+            }
+
+            input.narrow {
+                max-width: 100px;
+            }
+        }
+
+        .btn-primary {
+            padding-left: 24px;
+            padding-right: 24px;
+
+            background-color: green;
+            border-color: green;
+        }
+
+        .btn-secondary {
+            padding-left: 24px;
+            padding-right: 24px;
+        }
+    }
 
     .Template {
         cursor: pointer;

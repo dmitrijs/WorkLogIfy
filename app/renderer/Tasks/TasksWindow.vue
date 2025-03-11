@@ -350,7 +350,385 @@
 
 <style lang="scss">
     .TasksWindow {
-        @import "./TasksWindow";
+        & {
+            display: flex;
+            flex-direction: column;
+            height: calc(100% - var(--main-menu-height));
+        }
+
+        .TasksTable {
+            overflow-y: scroll;
+            flex-grow: 1;
+        }
+
+        & {
+            .TRow {
+                &:nth-child(2n) {
+                    background: #fcfcfc;
+                }
+
+                .TRowContent:hover {
+                    padding: 0;
+                    border: 1px solid #d5d5d5;
+
+                    .TCol.--playback .IconAsInput.icofont-play {
+                        display: block;
+                    }
+                }
+
+                &.selected {
+                    background-color: #f0f0f0 !important;
+                }
+
+                &.--header {
+                    padding: 1px 0 3px 0;
+
+                    .TCol {
+                        font-weight: bold;
+                    }
+                }
+
+                &.notchargeable,
+                &.distributed {
+                    > .TRowContent {
+                        background-color: #f1f1f1;
+
+                        * {
+                            color: gray;
+                        }
+                    }
+                }
+
+                .TRowContent {
+                    display: grid;
+                    grid-template-columns: 22px 22px 22px 22px 73px 1fr 22px 63px 34px;
+                    grid-template-rows: auto;
+
+                    margin: 0px 1px;
+                    padding: 1px;
+                }
+
+                &.isSubtask {
+                    padding-left: 22px;
+
+                    .TRowContent {
+                        grid-template-columns: 22px 22px 22px 73px 1fr 22px 63px 34px; // without first column
+                        border-left: 1px dashed #c2c2c2 !important;
+                        padding-left: 0;
+                    }
+
+                    .TCol.--hierarchy {
+                        display: none;
+                    }
+                }
+
+                &.isMissingParent {
+                    background-color: #ffcaca !important;
+                }
+
+                .TCol {
+                    padding: 1px 3px;
+
+                    &.--code {
+                        white-space: nowrap;
+                    }
+
+                    &.--time {
+                        color: #364abc;
+                    }
+
+                    &.--hierarchy,
+                    &.--selected,
+                    &.--distributed,
+                    &.--chargeable,
+                    &.--frozen {
+                        align-self: center;
+                        text-align: center;
+                    }
+
+                    &.--timespan {
+                        align-self: center;
+
+                        .--timespan-charge {
+                            opacity: 0.5;
+                        }
+                    }
+
+                    &.--title {
+                        .Comment--Content,
+                        .Note--Content,
+                        .Title--Content {
+                            display: block;
+                            word-break: break-word;
+                        }
+                    }
+
+                    .Title--Content {
+                        font-weight: bold;
+                    }
+
+                    .Comment--Content {
+                        color: grey;
+                        line-height: 0.8rem;
+                        padding-top: 2px;
+                        padding-bottom: 2px;
+                    }
+
+                    &.--timespan {
+                        span {
+                            display: block;
+                        }
+                    }
+
+                    &.--playback {
+                        align-self: center;
+                    }
+                }
+
+                &.timered > .TRowContent {
+                    background-color: #ebffeb !important;
+                    border: 1px solid #2fbb26;
+                    padding: 0;
+                }
+            }
+
+            .TasksTable { // not header
+                .TCol.--code,
+                .TCol.--title,
+                .TCol.--timespan {
+                    cursor: pointer;
+                }
+            }
+
+            .TasksTable:not(.ShowAsReport) {
+                .TRow.isOnHold {
+                    background: #fffef2;
+
+                    .IconOnHold {
+                        color: #E9D086 !important;
+                        opacity: 0.4 !important;
+                    }
+
+                    .TCol.--playback {
+                        .IconOnHold.active {
+                            background-color: transparent;
+                            font-size: 1.5rem;
+                            line-height: 0.7rem;
+                            opacity: 1 !important;
+                        }
+                    }
+
+                    .TCol.--playback:hover .IconOnHold,
+                    .TCol.--playback:not(:hover) .hidden {
+                        display: none;
+                    }
+                }
+
+                .TRow.isDone {
+                    background-color: #fafffa;
+
+                    .IconDone {
+                        color: #94CC94;
+                    }
+                    &:not(.timered) .IconDone {
+                        opacity: 0.4 !important;
+                    }
+
+                    .TCol.--playback {
+                        .IconDone.active {
+                            background-color: transparent;
+                            font-size: 1.5rem;
+                            line-height: 0.7rem;
+                            opacity: 1 !important;
+                        }
+                    }
+
+                    .TCol.--playback:not(:hover) .hidden {
+                        display: none;
+                    }
+                    &.timered .TCol.--playback,
+                    .TCol.--playback:hover {
+                        .hidden {
+                            display: block;
+                        }
+                        .IconDone {
+                            display: none;
+                        }
+                    }
+                }
+            }
+
+            .TasksTable.ShowAsReport {
+                .TCol.--status {
+                    opacity: 0;
+                }
+            }
+
+            .TRowDate {
+                display: grid;
+                grid-template-columns: 22px 1fr 215px 22px;
+                grid-template-rows: auto;
+
+                padding: 2px 0px;
+                color: #364abc;
+
+                .TCol {
+                    padding: 1px 3px;
+
+                    &.--timespan {
+                        text-align: right;
+                    }
+
+                    &.--group-date {
+                        position: relative;
+
+                        &:after {
+                            position: absolute;
+                            content: "";
+                            display: block;
+                            height: 1px;
+                            width: 64%;
+                            background: #b8c1f1;
+                            top: 9px;
+                            right: 5px;
+                        }
+                    }
+
+                    &.--timespan-charge {
+                        .original-time {
+                            opacity: 0.5;
+                        }
+                    }
+
+                    &.--timespan-spent {
+                        opacity: 0.5;
+                    }
+                }
+
+                &.Total {
+                    .TCol.--group-date {
+                        &:after {
+                            width: 82%;
+                        }
+                    }
+                }
+
+                &.SubTotal {
+                    color: #a9b5f1;
+                }
+            }
+
+        }
+
+        .SelectionStatistics {
+            background: white;
+            padding: 4px 6px;
+            border-top: 1px solid grey;
+            border-radius: 3px;
+        }
+
+        [class*=" icofont-"],
+        [class^=icofont-] {
+            font-size: 17px;
+        }
+
+        .TRow {
+            .TRowContent {
+                .IconAsInput {
+                    opacity: 0.1;
+                    cursor: pointer;
+
+                    &.active {
+                        opacity: 1 !important;
+                    }
+                }
+
+                .TCol.--playback {
+                    .IconAsInput {
+                        background: #e2e2e2;
+                        opacity: 1 !important;
+                        font-size: 13px;
+                        border-radius: 14px;
+                        color: white;
+                        display: inline-block;
+                        width: 28px;
+                        height: 28px;
+                        text-align: center;
+                        padding-top: 9px;
+
+                        &.icofont-square {
+                            background: #4db34d !important;
+                            color: white !important;
+                        }
+                    }
+                }
+            }
+
+            &:not(.timered) {
+                .TCol.--playback {
+                    .IconAsInput:hover {
+                        background: #74b874;
+                    }
+                }
+            }
+        }
+
+        .TRowContent:hover {
+            .IconAsInput {
+                opacity: 0.3;
+
+                &:hover {
+                    opacity: 0.5;
+                }
+            }
+        }
+
+        .Timeline {
+            height: 52px;
+            overflow-x: scroll;
+            flex-shrink: 0;
+        }
+
+        .TimelineItems {
+            width: auto;
+            height: 40px;
+            display: flex;
+            padding: 3px;
+
+            > div {
+                height: 40px;
+            }
+
+            &:hover {
+                > div {
+                    flex-shrink: 0;
+                }
+            }
+        }
+
+        .ellipsis {
+            position: relative;
+        }
+
+        .ellipsis:before {
+            content: 'X';
+            visibility: hidden;
+        }
+
+        .ellipsis span {
+            position: absolute;
+            left: 0;
+            right: 0;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .ShowCompact {
+            .TRow.isRootTask:not(.isDone):not(.distributed) {
+                border-bottom: 1px solid #999999;
+            }
+        }
 
         .--edit-button {
             display: none;
