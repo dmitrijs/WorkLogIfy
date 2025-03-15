@@ -1,21 +1,22 @@
 import _ from "lodash";
 import moment from "moment";
-import store from "../Store/Store";
 import {timespanToText} from "../Utils/Utils";
 
-const remote = window.remote;
+const remote: { Menu: Electron.Menu, MenuItem: Electron.MenuItem } = window.remote;
 const {Menu, MenuItem} = remote;
 
 const JIRA_TIME_FORMAT = 'YYYY-MM-DDTHH:mm:ss.SSSZZ';
 
-export default function createMenu() {
+export default function createMenu(store): Electron.Menu {
     let task = null;
     if (Object.values(store.state.tasksSelectedIds).length === 1) {
         let taskId = Object.keys(store.state.tasksSelectedIds)[0];
         task = store.state.tasks[taskId];
     }
 
-    const menu = new Menu();
+    console.log('selected ids', store.state.tasksSelectedIds, 'menu task', task)
+
+    const menu: Electron.Menu = new Menu();
     menu.append(new MenuItem({
         label: 'New Task', click() {
             store.setScreen('task.new');
@@ -141,6 +142,7 @@ export default function createMenu() {
     }));
 
     menu.addListener('menu-will-close', function () {
+        console.log('menu-will-close')
         store.deselectAll();
     });
 

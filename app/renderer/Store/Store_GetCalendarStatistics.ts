@@ -1,4 +1,3 @@
-import store from "./Store";
 import {timespanToText} from "../Utils/Utils";
 import {Moment} from "moment";
 import {SPECIAL_DAYS} from "../Tasks/CalendarMenu";
@@ -13,7 +12,7 @@ export default function Store_GetCalendarStatistics(): CalendarStatistics {
         let startOfMonthBeforePrevious: Moment = moment(today).subtract(2, 'months').startOf('month');
         let startOfWeekOfStartOfMonthBeforePrevious = startOfMonthBeforePrevious.clone().startOf('isoWeek');
 
-        let totals = store.getFileTotals;
+        let totals = (window as any).storeGlobal.getFileTotals();
 
         let todayCode = moment().format('YYYY-MM-DD');
         let currentMonthCode = moment().format('YYYY-MM');
@@ -32,7 +31,7 @@ export default function Store_GetCalendarStatistics(): CalendarStatistics {
             currentDay.monthName = day.format('MMM');
             currentDay.isFirstDayOfTheMonth = (day.format('DD') === '01');
             currentDay.title = (currentDay.isFirstDayOfTheMonth ? day.format('MMM DD') : day.format('DD'));
-            currentDay.isOpened = (store.state.day_key === dayCode);
+            currentDay.isOpened = ((window as any).storeGlobal.state.day_key === dayCode);
             currentDay.isToday = (todayCode === dayCode);
             currentDay.isWeekend = (dow >= 6);
             currentDay.isCurrentMonth = (currentMonthCode === day.format('YYYY-MM'));
@@ -49,8 +48,8 @@ export default function Store_GetCalendarStatistics(): CalendarStatistics {
 
             currentDay.expectedHours = (currentDay.isWeekend ? 0 : 8);
 
-            if (store.state.settings['special_days'] && store.state.settings['special_days'][dayCode]) {
-                switch (store.state.settings['special_days'][dayCode]) {
+            if ((window as any).storeGlobal.state.settings['special_days'] && (window as any).storeGlobal.state.settings['special_days'][dayCode]) {
+                switch ((window as any).storeGlobal.state.settings['special_days'][dayCode]) {
                     case SPECIAL_DAYS.WORKDAY:
                         currentDay.expectedHours = 8;
                         break;

@@ -1,5 +1,3 @@
-import store from "../Store/Store";
-
 const remote = window.remote;
 const {Menu, MenuItem} = remote;
 
@@ -11,7 +9,7 @@ export class SPECIAL_DAYS {
     public static UNPAID = 'unpaid';
 }
 
-export default function createCalendarMenu(callback) {
+export default function createCalendarMenu(store, callback) {
     let dayCode = store.state.calendarHoveredDayCode;
 
     function update_special_day_status(dayCode, status) {

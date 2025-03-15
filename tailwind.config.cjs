@@ -1,4 +1,3 @@
-const {heroui} = require("@heroui/theme");
 
 /** @type {import('tailwindcss').Config} */
 module.exports = {
@@ -22,8 +21,8 @@ module.exports = {
             sm: {max: "639px"},
             // => @media (max-width: 639px) { ... }
 
-            le320: {max: "320px"},
-            // => @media (max-width: 639px) { ... }
+            xs: {max: "319px"},
+            // => @media (max-width: 319px) { ... }
 
             ['>xl']: {min: "1280px"},
             ['>lg']: {min: "1024px"},
@@ -31,27 +30,4 @@ module.exports = {
         },
     },
     darkMode: "class",
-    plugins:  [heroui({
-        themes: {
-            dark: {
-                colors: {
-                    background: "#141316",
-                    primary:    {
-                        DEFAULT:    "#5BF556",
-                        foreground: "black",
-                    },
-                    danger:     {
-                        DEFAULT: "#E31A1A",
-                    },
-                    default:    {
-                        DEFAULT:    "#222421",
-                        foreground: "white",
-                    },
-                    focus:      "#5BF556",
-                },
-            },
-        },
-    })],
 }
-
-

@@ -1,4 +1,4 @@
-import store from "./Store/Store";
+import { useStoreContext} from "./Store/Store";
 import moment, {Moment} from "moment";
 
 const {app} = window.remote;
@@ -31,7 +31,7 @@ class Timer {
         }
         if (!this.handle) {
             this.timeStart = moment.utc();
-            store.activateTimer(taskId);
+            (window as any).storeGlobal.activateTimer(taskId);
 
             this.handle = setInterval(this.tick.bind(this), 1000);
             this.tick();
@@ -43,13 +43,13 @@ class Timer {
     }
 
     tick() {
-        store.activeTimer(this.getSecondsElapsed(moment.utc()));
+        (window as any).storeGlobal.activeTimer(this.getSecondsElapsed(moment.utc()));
     }
 
     stop(idleSeconds = 0, sendEvent = true) {
         if (this.handle) {
             this.timeEnd = moment.utc();
-            store.stopTimer([this.getSecondsElapsed(this.timeEnd), idleSeconds * (store.state.is_debug ? 60 : 1)]);
+            (window as any).storeGlobal.stopTimer([this.getSecondsElapsed(this.timeEnd), idleSeconds * ((window as any).storeGlobal.state.is_debug ? 60 : 1)]);
 
             clearInterval(this.handle);
             this.handle = 0;
@@ -62,7 +62,7 @@ class Timer {
 
     getSecondsElapsed(timeEnd: Moment) {
         let timeElapsed = timeEnd.unix() - this.timeStart.unix();
-        return timeElapsed * (store.state.is_debug ? 60 : 1);
+        return timeElapsed * ((window as any).storeGlobal.state.is_debug ? 60 : 1);
     }
 }
 

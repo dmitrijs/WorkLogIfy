@@ -1,8 +1,7 @@
 import moment from "moment";
-import store from "../Store/Store";
 
-export function applyRoundingMinutes(seconds: number): number {
-    let timeBlockLengthSeconds = 60 * (store.state.settings.rounding_minutes || 10);
+export function applyRoundingMinutes(seconds: number, rounding_minutes?: number): number {
+    let timeBlockLengthSeconds = 60 * (rounding_minutes || 10);
     let blockCount = Math.round(seconds / timeBlockLengthSeconds);
     if (seconds >= 60 && blockCount < 1) {
         blockCount = 1;
