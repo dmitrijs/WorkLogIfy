@@ -129,7 +129,7 @@ export default function createMenu(store): Electron.Menu {
         },
     }));
     menu.append(new MenuItem({
-        enabled: (task && task.id !== store.state.taskTimeredId),
+        enabled: (!!task && task.id !== store.state.taskTimeredId),
         label: 'Cut', click() {
             store.clipboardCut(task.id);
         },
