@@ -7,9 +7,10 @@ import './../../external/icofont/icofont.min.css';
 import './../../external/checkbox.scss';
 import timer from "./Timer";
 import {createApp} from "vue";
+import {createRoot} from 'react-dom/client'
 import moment from "moment";
 
-import App from './App.vue'
+import App from './App'
 import IpcRendererEvent = Electron.IpcRendererEvent;
 
 declare global {
@@ -55,9 +56,15 @@ window.ipc.on('migration', function ($event, what) {
     }
 });
 
-const app = createApp(App);
-app.use((<any>store));
-app.mount("#root");
+
+createRoot(document.getElementById('root')!).render(
+        <App />
+)
+
+
+// const app = createApp(App);
+// app.use((<any>store));
+// app.mount("#root");
 
 window.ipc.on('user-is-idle', function (event: IpcRendererEvent, secondsIdle) {
     if (timer.isActive()) {
