@@ -18,7 +18,7 @@ const TaskEdit = ({ mode }) => {
             setTask({ ...store.getEditedTask(), time_add_minutes: '', time_record_minutes: '' });
         }
         titleEl.current.focus();
-    }, [mode, store]);
+    }, [mode]);
 
     const save = (autostart = false) => {
         if (mode === 'edit') {

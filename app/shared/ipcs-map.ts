@@ -30,6 +30,8 @@ export interface IpcChannelMap {
     'tasks.getTaskTemplates': [void, object];
     'quit.confirmed': [void];
     'quit.unconfirmed': [void];
+    'tasks.showMenu': [{ task: TaskObj, allowCut: boolean, allowPaste: boolean }];
+    'calendar.showMenu': [{ dayCode: string }];
 
     // renderer
     'change.screen': [string];
@@ -39,6 +41,9 @@ export interface IpcChannelMap {
     'user-active-app': [{ secondsIdle: number, appDescription: string }];
     'timer-stop': [void];
     'confirm-app-quit': [void];
+    'tasks-menu-command': ['New Task' | 'Extract Task'];
+    'tasks-menu-closed': [void];
+    'calendar-menu-command': [{dayCode, dayType}];
     'set.progress': [{ progress?: number, indeterminate?: boolean }];
 
     'integrations.lock': [void];

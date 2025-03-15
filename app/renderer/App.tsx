@@ -1,18 +1,11 @@
-import React, {useContext, useEffect} from 'react';
-import store, {useStoreContext} from './Store/Store';
+import React, {useEffect} from 'react';
+import MainMenu from './MainMenu';
+import {useStoreContext} from './Store/Store';
 import ActiveAppsWindow from "./Tasks/ActiveAppsWindow";
 import CalendarWindow from "./Tasks/CalendarWindow";
 import SettingsWindow from "./Tasks/SettingsWindow";
 import TaskEdit from "./Tasks/TaskEdit";
-// import ActiveAppsWindow from './Tasks/ActiveAppsWindow';
-// import CalendarWindow from './Tasks/CalendarWindow';
-// import SettingsWindow from './Tasks/SettingsWindow';
-// import TaskEdit from './Tasks/TaskEdit';
 import TasksWindow from './Tasks/TasksWindow';
-// import TemplatesWindow from './Tasks/TemplatesWindow';
-// import TodosWindow from './Tasks/TodosWindow';
-// import timer from './Timer';
-import MainMenu from './MainMenu';
 import TemplatesWindow from "./Tasks/TemplatesWindow";
 import TodosWindow from "./Tasks/TodosWindow";
 import timer from "./Timer";
@@ -109,6 +102,119 @@ const App = () => {
             window.ipc.send('quit.confirmed');
         });
 
+        window.ipc.on('tasks-menu-command', (e, command) => {
+            console.log('tasks-menu-command', command);
+            switch (command) {
+                case 'New Task':
+                    store.setScreen('task.new');
+                    break;
+                case 'Extract Task':
+                    store.state.creatingByExtract = true;
+                    store.setScreen('task.new');
+                    break;
+                case 'New Subtask':
+                    store.state.creatingSubtask = true;
+                    store.setScreen('task.new');
+                    break;
+                case 'Extract Subtask':
+                    store.state.creatingSubtask = true;
+                    store.state.creatingByExtract = true;
+                    store.setScreen('task.new');
+                    break;
+                case 'Copy the ID':
+                    navigator.clipboard.writeText(task.code).then(function () {
+                    }, function () {
+                        /* clipboard write failed */
+                    });
+                    break;
+                case 'View in JIRA':
+                    let url = 'https://' + store.state.settings.jira_host + '/browse/' + task.code;
+                    window.open(url);
+                    break;
+                case 'Record to JIRA':
+                    let sum = task.sessions.reduce((sum, obj) => sum + obj.spent_seconds, 0);
+                    let recorded = task.records.reduce((sum, obj) => sum + obj.recorded_seconds, 0);
+                    let step = 6 * 60;
+
+                    sum -= recorded;
+
+                    if (sum < step) {
+                        alert('Time to record is too little. At least ' + timespanToText(step) + ' are required.');
+                        return;
+                    }
+
+                    let timeSpentSeconds = Math.ceil(sum / step) * step; // round up
+
+                    let taskCode = task.code;
+                    let timeStarted = moment(task.sessions[0].started_at)
+                    let taskDate = moment(task.date, 'YYYY-MM-DD');
+                    if (taskDate.format('YYYY-MM-DD') === task.date) { // valid date
+                        timeStarted.year(taskDate.year());
+                        timeStarted.month(taskDate.month());
+                        timeStarted.date(taskDate.date());
+                    }
+                    let workLogTime = timeStarted.format(JIRA_TIME_FORMAT);
+
+                    // TODO: `request-promise` was replaced with `fetch`, these options were not adjusted
+                    let options = {
+                        url: 'https://' + store.state.settings.jira_host + '/rest/api/2/issue/' + taskCode + '/worklog?notifyUsers=false&adjustEstimate=auto',
+                        auth: {
+                            user: store.state.settings.jira_username,
+                            pass: store.state.settings.jira_password,
+                        },
+                        method: 'POST',
+                        json: true,
+                        body: {
+                            started: workLogTime,
+                            timeSpentSeconds: timeSpentSeconds,
+                        },
+                    };
+                    let jiraResponseWorkLog;
+                    if (store.state.is_debug) {
+                        alert('Would be sent to JIRA: ' + timespanToText(timeSpentSeconds) + ' at ' + workLogTime);
+                        jiraResponseWorkLog = {response: {}};
+                    } else {
+                        jiraResponseWorkLog = window.ipc.sendSync('jira.request', _.cloneDeep(options));
+                    }
+
+                    if (jiraResponseWorkLog.error) {
+                        alert(jiraResponseWorkLog.error);
+                    } else {
+                        store.taskAddRecordedSeconds([task.id, timeSpentSeconds, (jiraResponseWorkLog.response.id || null)]);
+                        store.updateTask([task.id, 'is_done', true])
+                    }
+                    break;
+                case 'Copy':
+                    store.clipboardCopy(task.id);
+                    break;
+                case 'Cut':
+                    store.clipboardCut(task.id);
+                    break;
+                case 'Paste':
+                    store.clipboardPaste();
+                    break;
+            }
+            store.deselectAll();
+        })
+
+        window.ipc.on('calendar-menu-command', (e, {dayCode, dayType}) => {
+            console.log('calendar-menu-command',  {dayCode, dayType});
+
+            let settings = store.state.settings;
+            settings.special_days = settings.special_days || {};
+            if (dayType) {
+                settings.special_days[dayCode] = dayType;
+            } else {
+                delete settings.special_days[dayCode];
+            }
+            store.updateSettings(settings, false);
+        })
+
+        window.ipc.on('tasks-menu-closed', (e, command) => {
+            console.log('tasks-menu-closed');
+            store.deselectAll();
+        })
+
         return () => {
             window.ipc.removeAllListeners();
         }
@@ -117,39 +223,40 @@ const App = () => {
     return (
         <div className={`App ${store.state.is_debug ? 'isDebug' : ''}`}>
             <div className="AppScreen">
-                <MainMenu />
+                <MainMenu/>
                 <React.Fragment>
-                    {store.state.screen === 'tasks' && <TasksWindow />}
-                    {store.state.screen === 'task.edit' && <TaskEdit mode="edit" />}
-                    {store.state.screen === 'task.new' && <TaskEdit mode="new" />}
-                    {store.state.screen === 'todo' && <TodosWindow />}
-                    {store.state.screen === 'calendar' && <CalendarWindow />}
-                    {store.state.screen === 'task.templates' && <TemplatesWindow />}
-                    {store.state.screen === 'settings' && <SettingsWindow />}
-                    {store.state.screen === 'active_apps' && <ActiveAppsWindow />}
+                    {store.state.screen === 'tasks' && <TasksWindow/>}
+                    {store.state.screen === 'task.edit' && <TaskEdit mode="edit"/>}
+                    {store.state.screen === 'task.new' && <TaskEdit mode="new"/>}
+                    {store.state.screen === 'todo' && <TodosWindow/>}
+                    {store.state.screen === 'calendar' && <CalendarWindow/>}
+                    {store.state.screen === 'task.templates' && <TemplatesWindow/>}
+                    {store.state.screen === 'settings' && <SettingsWindow/>}
+                    {store.state.screen === 'active_apps' && <ActiveAppsWindow/>}
                 </React.Fragment>
             </div>
 
             {store.state.is_debug && (
                 <div className="Debug">
-                    <button onClick={() => document.location.reload()} className="btn btn-secondary" style={{ padding: '10px 20px', float: 'right' }}>reload</button>
+                    <button onClick={() => document.location.reload()} className="btn btn-secondary" style={{padding: '10px 20px', float: 'right'}}>reload</button>
                     <button type="button" className="btn btn-secondary btn-xs" onClick={save}>save</button>
-                    {Object.entries(store.state).map(([key, value]) => (key === 'tasks' || key === 'activeApps' ? null :
-                        <div key={key}><strong>{key}:</strong> {(!value || typeof value === 'object') ? JSON.stringify(value) : value}</div>
+                    {Object.entries(store.state).map(([key, value]) => (key === 'settings' || key === 'fileTotals' || key === 'tasks' || key === 'activeApps' ? null :
+                            <div key={key}><strong>{key}:</strong> {(!value || typeof value === 'object') ? JSON.stringify(value) : value}</div>
                     ))}
-                    <hr />
+                    <hr/>
                     Integrations:
                     <button type="button" className="btn btn-secondary btn-xs" onClick={lock}>lock</button>
-                    <button type="button" className="btn btn-secondary btn-xs" onClick={wakeup}>wake up</button><br />
+                    <button type="button" className="btn btn-secondary btn-xs" onClick={wakeup}>wake up</button>
+                    <br/>
                     Timer:
                     <button type="button" className="btn btn-secondary btn-xs" onClick={timerStop} disabled={!store.state.taskTimeredId}>stop</button>
-                    <hr />
+                    <hr/>
                     Progress:
-                    <button type="button" className="btn btn-secondary btn-xs" onClick={() => progressBar({ indeterminate: true })}>∞</button>
-                    <button type="button" className="btn btn-secondary btn-xs" onClick={() => progressBar({ indeterminate: false })}>-</button>
-                    <button type="button" className="btn btn-secondary btn-xs" onClick={() => progressBar({ progress: 0.01 })}>1%</button>
-                    <button type="button" className="btn btn-secondary btn-xs" onClick={() => progressBar({ progress: 0.70 })}>70%</button>
-                    <hr />
+                    <button type="button" className="btn btn-secondary btn-xs" onClick={() => progressBar({indeterminate: true})}>∞</button>
+                    <button type="button" className="btn btn-secondary btn-xs" onClick={() => progressBar({indeterminate: false})}>-</button>
+                    <button type="button" className="btn btn-secondary btn-xs" onClick={() => progressBar({progress: 0.01})}>1%</button>
+                    <button type="button" className="btn btn-secondary btn-xs" onClick={() => progressBar({progress: 0.70})}>70%</button>
+                    <hr/>
                     {/*{Object.entries(tasksGrouped).map(([dayId, day]) => (
                         <div key={dayId}>
                             <strong>{dayId}</strong><br />

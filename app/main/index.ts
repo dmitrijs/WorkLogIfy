@@ -5,6 +5,8 @@ import isDev from "electron-is-dev";
 import {isArray, isObject} from "lodash";
 import path from "path";
 import {StrictIpcMain} from "typesafe-ipc";
+import createCalendarMenu from "../renderer/Tasks/CalendarMenu";
+import createMenu from "../renderer/Tasks/TasksMenu";
 import {IpcChannelMap} from "../shared/ipcs-map";
 import Filesystem from "./filesystem";
 import IdleUser from "./idle";
@@ -223,6 +225,16 @@ app.on('ready', async () => {
 
         ipcMain.on('quit.unconfirmed', (event: Electron.IpcMainEvent) => {
             app.quit();
+        });
+
+        ipcMain.on('tasks.showMenu', (event: Electron.IpcMainEvent, params) => {
+            console.log('tasks.showMenu', params)
+            createMenu(mainWindow, params).popup();
+        });
+
+        ipcMain.on('calendar.showMenu', (event: Electron.IpcMainEvent, params) => {
+            console.log('calendar.showMenu', params)
+            createCalendarMenu(mainWindow, params).popup();
         });
 
         ipcMain.on('set.progress', (event: Electron.IpcMainEvent, params) => {

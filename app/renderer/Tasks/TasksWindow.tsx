@@ -6,9 +6,8 @@ import horizontalScroller from '../library/horizontal_scroller';
 import {useStoreContext} from '../Store/Store';
 import {Store_MergeSameCodes} from '../Store/Store_GetGroupedTasks';
 import {timespanToText, timespanToTextHours} from '../Utils/Utils';
-// import CalendarWindow from './CalendarWindow';
+import CalendarWindow from './CalendarWindow';
 import TaskRow from './TaskRow';
-import createMenu from './TasksMenu';
 
 const TasksWindow = () => {
     const forceUpdateKey = useRef(1);
@@ -30,7 +29,18 @@ const TasksWindow = () => {
         const contextMenuShow = (e) => {
             store.selectHovered();
             e.preventDefault();
-            createMenu(store).popup();
+
+            let task = null;
+            if (Object.values(store.state.tasksSelectedIds).length === 1) {
+                let taskId = Object.keys(store.state.tasksSelectedIds)[0];
+                task = store.state.tasks[taskId];
+            }
+
+            window.ipc.send('tasks.showMenu', {
+                task,
+                allowCut: (!!task && task.id !== store.state.taskTimeredId),
+                allowPaste: !!store.state.taskInClipboard,
+            })
         };
 
         window.addEventListener('contextmenu', contextMenuShow, false);
@@ -274,7 +284,7 @@ const TasksWindow = () => {
             <div>
                 <textarea className="GlobalNotes" rows="1" ref={globalNotesInputRef} onBlur={handleBlur}></textarea>
             </div>
-            {/*<CalendarWindow key={store.state.day_key} week_key={store.state.week_key} />*/}
+            <CalendarWindow key={store.state.day_key} weekKey={store.state.week_key}/>
             <div className="ViewOptions">
                 {store.state.drag.readyToDrop && <a href="#" onClick={store.dragClear} style={{float: 'right'}}>cancel</a>}
                 View as report:

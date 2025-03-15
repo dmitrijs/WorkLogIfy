@@ -1,13 +1,11 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {useStoreContext} from '../Store/Store';
 import Store_GetCalendarStatistics from '../Store/Store_GetCalendarStatistics';
-import createCalendarMenu from './CalendarMenu';
-
-const {remote} = window;
 
 const CalendarWindow = ({weekKey}) => {
     const store = useStoreContext();
     const [cache, setCache] = useState(null);
+    const calendarHoveredDayCode = useRef(null);
 
     const collectData = () => {
         if (cache) return;
@@ -21,7 +19,12 @@ const CalendarWindow = ({weekKey}) => {
 
     const calendarMenuShow = (e) => {
         e.preventDefault();
-        createCalendarMenu(store, () => setCache(null)).popup({window: remote.getCurrentWindow()});
+        // createCalendarMenu(store, () => setCache(null)).popup({window: remote.getCurrentWindow()});
+
+        console.log('store.state.calendarHoveredDayCode', calendarHoveredDayCode.current)
+        window.ipc.send('calendar.showMenu', {
+            dayCode: calendarHoveredDayCode.current,
+        });
     };
 
     useEffect(() => {
@@ -35,6 +38,10 @@ const CalendarWindow = ({weekKey}) => {
             }
         };
     }, [weekKey]);
+
+    useEffect(() => {
+        calendarHoveredDayCode.current = store.state.calendarHoveredDayCode;
+    }, [store.state.calendarHoveredDayCode]);
 
     collectData();
 

@@ -59,58 +59,60 @@ function updateTaskField(tasks: any, task_id: any, field: any, value: any) {
 
 const StoreContext = createContext();
 
+const initialState = {
+    initialized: false,
+    tasks: {} as Record<string, TaskObj>,
+
+    activeApps: [] as ActiveAppObj[],
+
+    tasksSelectedIds: {} as Record<string, boolean>,
+    taskLastSelected: '',
+    creatingByExtract: false, // new task that is created is extracted from the selected task
+    creatingSubtask: false, // new task that is created is extracted as a Subtask
+    tasksHoveredId: null,
+    taskEditedId: null,
+    tasksScreen: 'tasks',
+    taskTimeredId: null,
+    tasksShowAsReport: false,
+    tasksHideUnReportable: false,
+    timerElapsedText: null,
+    timerElapsedSeconds: 0,
+    screen: 'tasks',
+    is_debug: false,
+    day_key: '',
+    week_key: '',
+    day_key_next_week: '',
+    day_key_prev_week: '',
+    allFiles: [],
+    fileTotals: {},
+    templates: [] as TemplateObj[],
+    createdTaskId: '',
+    taskInClipboard: null as TaskObj,
+    taskIsCloned: false,
+    calendarHoveredDayCode: null,
+
+    asanaTasks: {} as Record<string, AsanaTaskObj>,
+
+    settings: {} as SettingsObj,
+    drag: {
+        active: false,
+        readyToDrop: false,
+        distance: 0,
+        minutes: 0,
+        minutes_text: '',
+        startedAt: [0, 0],
+        nowAt: [0, 0],
+        taskFrom: 0,
+        taskFrom_minutes: 0,
+        taskFrom_minutes_text: '',
+        taskTo: 0,
+    },
+    _now: null,
+};
+
 const StoreContentProvider = ({children}) => {
 
-    const [state, setState] = useState({
-        initialized: false,
-        tasks: {} as Record<string, TaskObj>,
-
-        activeApps: [] as ActiveAppObj[],
-
-        tasksSelectedIds: {} as Record<string, boolean>,
-        taskLastSelected: '',
-        creatingByExtract: false, // new task that is created is extracted from the selected task
-        creatingSubtask: false, // new task that is created is extracted as a Subtask
-        tasksHoveredId: null,
-        taskEditedId: null,
-        tasksScreen: 'tasks',
-        taskTimeredId: null,
-        tasksShowAsReport: false,
-        tasksHideUnReportable: false,
-        timerElapsedText: null,
-        timerElapsedSeconds: 0,
-        screen: 'tasks',
-        is_debug: false,
-        day_key: '',
-        week_key: '',
-        day_key_next_week: '',
-        day_key_prev_week: '',
-        allFiles: [],
-        fileTotals: {},
-        templates: [] as TemplateObj[],
-        createdTaskId: '',
-        taskInClipboard: null as TaskObj,
-        taskIsCloned: false,
-        calendarHoveredDayCode: null,
-
-        asanaTasks: {} as Record<string, AsanaTaskObj>,
-
-        settings: {} as SettingsObj,
-        drag: {
-            active: false,
-            readyToDrop: false,
-            distance: 0,
-            minutes: 0,
-            minutes_text: '',
-            startedAt: [0, 0],
-            nowAt: [0, 0],
-            taskFrom: 0,
-            taskFrom_minutes: 0,
-            taskFrom_minutes_text: '',
-            taskTo: 0,
-        },
-        _now: null,
-    });
+    const [state, setState] = useState(initialState);
 
     // state.screen = state.tasksScreen;
 
@@ -189,7 +191,6 @@ const StoreContentProvider = ({children}) => {
                     task.parentId = refRootTask.id;
                 }
                 if (refTask && state.creatingByExtract) {
-                    state.creatingByExtract = false;
                     task.taskIdExtractedFrom = state.taskLastSelected;
 
                     let taskSpentSeconds = refTask.sessions.reduce((sum, obj: SessionObj) => sum + obj.spent_seconds, 0);
@@ -418,11 +419,13 @@ const StoreContentProvider = ({children}) => {
                 console.log('setState loadSettings');
                 setState({...state, _now: new Date()})
             },
-            updateSettings(settings) {
-                state.settings = {...settings};
+            updateSettings(settings, returnToTasksScreen = true) {
+                state.settings = {...state.settings, ...settings};
                 saveTasks(state, store);
 
-                state.screen = state.tasksScreen;
+                if (returnToTasksScreen) {
+                    state.screen = state.tasksScreen;
+                }
                 console.log('setState updateSettings');
                 setState({...state, _now: new Date()})
             },
@@ -693,7 +696,7 @@ const StoreContentProvider = ({children}) => {
 }
 
 export const useStoreContext = () => {
-    return useContext(StoreContext);
+    return useContext<typeof initialState>(StoreContext);
 };
 
 export default StoreContentProvider;
