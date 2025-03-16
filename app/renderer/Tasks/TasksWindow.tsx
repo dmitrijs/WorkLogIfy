@@ -17,6 +17,11 @@ const TasksWindow = () => {
     const [tasksGrouped, setTasksGrouped] = useState<any>({});
     const [tasksGroupedAndMerged, setTasksGroupedAndMerged] = useState<any>({});
     const store = useStoreContext()
+    const tasksMenuOptions = useRef({
+        task: null as TaskObj,
+        allowCut: false,
+        allowPaste: false,
+    })
 
     const getTasksGrouped = useMemo(() => {
         return store.getTasksGrouped();
@@ -30,17 +35,7 @@ const TasksWindow = () => {
             store.selectHovered();
             e.preventDefault();
 
-            let task = null;
-            if (Object.values(store.state.tasksSelectedIds).length === 1) {
-                let taskId = Object.keys(store.state.tasksSelectedIds)[0];
-                task = store.state.tasks[taskId];
-            }
-
-            window.ipc.send('tasks.showMenu', {
-                task,
-                allowCut: (!!task && task.id !== store.state.taskTimeredId),
-                allowPaste: !!store.state.taskInClipboard,
-            })
+            window.ipc.send('tasks.showMenu', tasksMenuOptions.current)
         };
 
         window.addEventListener('contextmenu', contextMenuShow, false);
@@ -48,6 +43,20 @@ const TasksWindow = () => {
             window.removeEventListener('contextmenu', contextMenuShow);
         };
     }, []);
+
+    useEffect(() => {
+        let task = null;
+        if (Object.values(store.state.tasksSelectedIds).length === 1) {
+            let taskId = Object.keys(store.state.tasksSelectedIds)[0];
+            task = store.state.tasks[taskId];
+        }
+        tasksMenuOptions.current = {
+            task: task,
+            allowCut: (!!task && task.id !== store.state.taskTimeredId),
+            allowPaste: !!store.state.taskInClipboard,
+        };
+        console.log('tasksMenuOptions.current.task', tasksMenuOptions.current.task?.id)
+    }, [store]);
 
     useEffect(() => {
         adjustNotesHeight();

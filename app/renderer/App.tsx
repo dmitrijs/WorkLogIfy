@@ -210,11 +210,6 @@ const App = () => {
             store.updateSettings(settings, false);
         })
 
-        window.ipc.on('tasks-menu-closed', (e, command) => {
-            console.log('tasks-menu-closed');
-            store.deselectAll();
-        })
-
         return () => {
             window.ipc.removeAllListeners();
         }

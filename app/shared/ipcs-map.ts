@@ -42,7 +42,6 @@ export interface IpcChannelMap {
     'timer-stop': [void];
     'confirm-app-quit': [void];
     'tasks-menu-command': ['New Task' | 'Extract Task'];
-    'tasks-menu-closed': [void];
     'calendar-menu-command': [{dayCode, dayType}];
     'set.progress': [{ progress?: number, indeterminate?: boolean }];
 

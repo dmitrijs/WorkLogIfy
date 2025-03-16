@@ -36,11 +36,9 @@
   },
   "dependencies": {
     "@babel/types": "*",
-    "@electron/remote": "^2.0.10",
     "@types/lodash": "*",
     "@types/node": "*",
     "@vitejs/plugin-react": "^4.3.4",
-    "@vitejs/plugin-vue": "^5.0.4",
     "active-win": "^8.1.0",
     "autoprefixer": "^10.4.21",
     "electron-is-dev": "^2.0.0",
@@ -55,10 +53,7 @@
     "typesafe-ipc": "github:dmitrijs/typesafe-ipc#68d490de8950abaf7d386bef0ee404d629e97ba5",
     "vite": "^6.0.7",
     "vite-plugin-electron": "^0.29.0",
-    "vite-plugin-electron-renderer": "^0.14.5",
-    "vue": "^3.3.4",
-    "vue-facing-decorator": "^3.0",
-    "vue-tsc": "^2.0.7"
+    "vite-plugin-electron-renderer": "^0.14.5"
   },
   "__NOTES": [
     "electron 27+ has issues to re-draw UI elements on Windows! For example, calendar disappear until mouse moves over it. Workaround: app.disableHardwareAcceleration()",

@@ -1,4 +1,3 @@
-import {enable, initialize} from "@electron/remote/main";
 import * as electron from 'electron'
 import {app, BrowserWindow, Menu, shell} from 'electron'
 import isDev from "electron-is-dev";
@@ -34,8 +33,6 @@ if (isDev) {
 
 let quitConfirmed = false;
 
-initialize()
-
 let mainWindow = null;
 app.on('ready', async () => {
     Filesystem.getSettings();
@@ -56,7 +53,6 @@ app.on('ready', async () => {
             nodeIntegration: true, // to work in Electron 20+
         },
     });
-    enable(mainWindow.webContents)
 
     createTray(mainWindow);
 

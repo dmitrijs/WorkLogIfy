@@ -151,14 +151,5 @@ export default function createMenu(mainWindow, params): Electron.Menu {
         },
     }));
 
-    menu.addListener('menu-will-close', function () {
-        console.log('menu-will-close')
-        setTimeout(() => {
-            if (!itemClicked) {
-                mainWindow.webContents.send('tasks-menu-closed');
-            }
-        }, 1); // wait for itemClicked to get updated
-    });
-
     return menu;
 }
