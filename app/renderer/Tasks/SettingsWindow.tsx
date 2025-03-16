@@ -33,7 +33,7 @@ const SettingsWindow = () => {
         <div className="SettingsWindow">
             <label>JIRA Host:</label> <input type="text" value={store.state.settings.jira_host} onChange={(e) => store.state.settings.jira_host = e.target.value} placeholder="example.atlassian.net" /><br />
             <label>JIRA Email:</label> <input type="text" value={store.state.settings.jira_username} onChange={(e) => store.state.settings.jira_username = e.target.value} placeholder="you@example.com" /><br />
-            <label>JIRA API Token:</label> <input type="password" value={store.state.settings.jira_password} onChange={(e) => store.state.settings.jira_password = e.target.value} placeholder="***********" /> <a target="_blank" href="https://id.atlassian.com/manage-profile/security/api-tokens">API tokens</a><br />
+            <label>JIRA API Token:</label> <input type="password" value={store.state.settings.jira_password} onChange={(e) => store.state.settings.jira_password = e.target.value} placeholder="***********" /> <a target="_blank" rel="noreferrer" href="https://id.atlassian.com/manage-profile/security/api-tokens">API tokens</a><br />
             <br />
             <label>Asana API Token:</label> <input type="password" value={store.state.settings.asana_token} onChange={(e) => store.state.settings.asana_token = e.target.value} placeholder="***********" /><br />
             <label>Asana Workspace (<a href="#" onClick={(e) => { e.preventDefault(); asanaRefreshWorkspace(); }}><i className="icofont-refresh"></i></a>):</label>
@@ -43,7 +43,7 @@ const SettingsWindow = () => {
                     <option key={workspace.gid} value={workspace.gid}>{workspace.name}</option>
                 ))}
             </select>
-            <label>Asana Filter (<a href="https://developers.asana.com/reference/searchtasksforworkspace" target="_blank">docs</a>):</label>
+            <label>Asana Filter (<a href="https://developers.asana.com/reference/searchtasksforworkspace" target="_blank" rel="noreferrer">docs</a>):</label>
             <input type="text" placeholder="&is_blocked=false&key=value" value={store.state.settings.asana_extra_filter} onChange={(e) => store.state.settings.asana_extra_filter = e.target.value} /> <a href="#" onClick={(e) => { e.preventDefault(); asanaSearchTasks(); }}>load</a><br />
             <br />
 

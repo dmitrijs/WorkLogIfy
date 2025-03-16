@@ -1,12 +1,11 @@
 import { useStoreContext} from "./Store/Store";
 import moment, {Moment} from "moment";
-
-const {app} = window.remote;
+import pkg from './../../package.json'
 
 let baseTitle;
 
 function setTitle(timerActive = true) {
-    document.title = baseTitle + ' v' + app.getVersion() + (timerActive ? '' : ' - INACTIVE');
+    document.title = baseTitle + ' v' + pkg.version + (timerActive ? '' : ' - INACTIVE');
 }
 
 class Timer {

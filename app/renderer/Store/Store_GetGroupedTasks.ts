@@ -1,14 +1,13 @@
 import {cloneDeep, groupBy, map, mapValues} from "lodash";
 import moment from "moment";
-import { useStoreContext} from "../Store/Store";
 import {applyRoundingMinutes, comparatorLt, timespanToText} from "../Utils/Utils";
 
-let localStore = null;
+let localState = null;
 
 export function build_sort_value(task: TaskObj & {
     task_not_started: boolean, last_session: SessionObj, first_session: SessionObj, is_timered: boolean,
 }) {
-    if (localStore.state.settings.sorting_order === 'first_session') {
+    if (localState.settings.sorting_order === 'first_session') {
         return '' // 9 - higher, 0 - lower
             + (task.task_not_started ? '9' : '0')
             + (task.first_session ? task.first_session.started_at : '')
@@ -37,7 +36,7 @@ class TasksSorter {
             if (task.sessions[task.sessions?.length - 1]?.started_at) {
                 started_at = moment(task.sessions[task.sessions?.length - 1]?.started_at).unix();
             }
-            if (localStore.state.taskTimeredId === task.id) {
+            if (localState.taskTimeredId === task.id) {
                 started_at = moment().unix();
             }
             if (started_at) {
@@ -55,7 +54,7 @@ class TasksSorter {
             last_session = task.sessions[task.sessions.length - 1];
             first_session = task.sessions[0];
         }
-        let is_timered = (localStore.state.taskTimeredId === task.id);
+        let is_timered = (localState.taskTimeredId === task.id);
         return Object.assign({}, task, {
             task_not_started, last_session, first_session, is_timered,
         });
@@ -65,7 +64,7 @@ class TasksSorter {
         const a = this.enhanceTask(task1);
         const b = this.enhanceTask(task2);
 
-        if (localStore.state.settings.sorting_order === 'last_session_group_same_code') {
+        if (localState.settings.sorting_order === 'last_session_group_same_code') {
             const aCode = (!a.code || a.code === 'idle' ? a.id : a.code);
             const bCode = (!b.code || b.code === 'idle' ? b.id : b.code);
 
@@ -91,14 +90,14 @@ class TasksSorter {
                 const aTime = a.first_session?.started_at || a.created_at;
                 const bTime = b.first_session?.started_at || b.created_at;
 
-                return (localStore.state.tasksHideUnReportable || localStore.state.tasksShowAsReport ? -1 : 1) *
+                return (localState.tasksHideUnReportable || localState.tasksShowAsReport ? -1 : 1) *
                     (aTime > bTime ? -1 : 1);
             }
 
             const aTime = a.last_session?.started_at || a.created_at;
             const bTime = b.last_session?.started_at || b.created_at;
 
-            return (localStore.state.tasksHideUnReportable || localStore.state.tasksShowAsReport ? -1 : 1) *
+            return (localState.tasksHideUnReportable || localState.tasksShowAsReport ? -1 : 1) *
                 (aTime > bTime ? -1 : 1);
         }
 
@@ -183,33 +182,31 @@ export function Store_MergeSameCodes(tasks: Record<string, any>) {
     return sort_tasks(unique, true);
 }
 
-export default function Store_GetGroupedTasks(store): Record<string, TaskGroupObj> {
-    localStore = store;
-    if (!store.state.tasks) {
+export default function Store_GetGroupedTasks(state): Record<string, TaskGroupObj> {
+    localState = state;
+    if (!state.tasks) {
         return {};
     }
 
     const tasksList = [];
-    Object.values(store.state.tasks).forEach((originalTask, key) => {
+    Object.values(state.tasks).forEach((originalTask, key) => {
         const task = cloneDeep(originalTask) as any;
-        task._selected = !!store.state.tasksSelectedIds[key];
-
         task.time_charge_text = 'error';
 
         task.time_spent_seconds = task.sessions.reduce((sum, obj: SessionObj) => sum + obj.spent_seconds, 0);
-        if (store.state.taskTimeredId === task.id) {
-            task.time_spent_seconds += store.state.timerElapsedSeconds;
-            task.timer_elapsed_seconds_text = timespanToText(store.state.timerElapsedSeconds);
+        if (state.taskTimeredId === task.id) {
+            task.time_spent_seconds += state.timerElapsedSeconds;
+            task.timer_elapsed_seconds_text = timespanToText(state.timerElapsedSeconds);
         }
         task.time_spent_text = timespanToText(task.time_spent_seconds);
 
         task.time_recorded_seconds = task.records.reduce((sum, obj: RecordObj) => sum + obj.recorded_seconds, 0);
         task.time_recorded_text = timespanToText(task.time_recorded_seconds);
 
-        if (store.state.tasksShowAsReport) {
+        if (state.tasksShowAsReport) {
             if (!task.group_key) {
                 // disable hierarchy, make sure all merged tasks are displayed
-                task.group_key = store.state.day_key + '*';
+                task.group_key = state.day_key + '*';
             }
             task.parentId = null;
             task.subtaskIds = null;
@@ -306,7 +303,7 @@ export default function Store_GetGroupedTasks(store): Record<string, TaskGroupOb
         let time_charge_rounded_seconds = 0;
         tasks = tasks.map((task) => {
 
-            task.time_charge_seconds = applyRoundingMinutes(task.time_charge_seconds, store.state.settings.rounding_minutes);
+            task.time_charge_seconds = applyRoundingMinutes(task.time_charge_seconds, state.settings.rounding_minutes);
             task.time_charge_text = timespanToText(task.time_charge_seconds);
 
             time_charge_rounded_seconds += task.time_charge_seconds;

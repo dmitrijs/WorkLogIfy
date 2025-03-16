@@ -6,7 +6,6 @@ import './../style.scss';
 import './../../external/icofont/icofont.min.css';
 import './../../external/checkbox.scss';
 import timer from "./Timer";
-import {createApp} from "vue";
 import {createRoot} from 'react-dom/client'
 import moment from "moment";
 

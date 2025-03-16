@@ -4,20 +4,14 @@ import LineChart from '../Components/LineChart';
 import { timespanToText } from '../Utils/Utils';
 import timer from "../Timer";
 
-const TaskRow = ({ tasksGrouped, group_id, task_id, onDragStart }) => {
+const TaskRow = ({ tasksGrouped, group_id, task_id, onDragStart }:any) => {
     const task = tasksGrouped[group_id]?.tasks[task_id] || { code: 'ERROR!', title: `Invalid task id '${task_id}' in group '${group_id}'` };
     const rootTasks:any[] = Object.values(tasksGrouped).flatMap((group:any) => Object.values(group.tasks)).filter((t:any) => t.code !== 'idle' && !t.parentId);
     const store = useStoreContext();
 
-    const rowOnClick = useCallback((event) => {
-        if (event.ctrlKey) {
-            store.tasksUiToggle(task.id);
-        }
-    }, [store, task.id]);
-
     const editTask = useCallback((event) => {
         store.taskEdit(task.id);
-    }, [store, task.id]);
+    }, [task.id]);
 
     const startTimer = useCallback((event) => {
         timer.start(task.id);
@@ -34,25 +28,15 @@ const TaskRow = ({ tasksGrouped, group_id, task_id, onDragStart }) => {
     }, []);
 
     const dropTime = useCallback((event) => {
-        if (!store.state.drag.active || !store.state.drag.readyToDrop) {
-            return;
-        }
-        store.state.drag.readyToDrop = store.state.drag.active = false;
-        store.state.drag.taskTo = task.id;
-
-        if (store.state.drag.minutes > 0 && store.state.drag.taskFrom && store.state.drag.taskTo && store.state.drag.taskFrom !== store.state.drag.taskTo) {
-            store.taskAddSession([store.state.drag.taskFrom, -store.state.drag.minutes, 'store.state.drag']);
-            store.taskAddSession([store.state.drag.taskTo, store.state.drag.minutes, 'drop']);
-        }
-        store.dragClear();
-    }, [store]);
+        store.dropTime(event, task.id);
+    }, [store.state, task.id]);
 
     return (
         <div
-            className={`TRow ${task._selected ? 'selected' : ''} ${task.distributed ? 'distributed' : ''} ${!task.chargeable ? 'notchargeable' : ''} ${store.state.tasksHoveredId === task.id ? 'hovered' : ''} ${store.state.taskTimeredId === task.id ? 'timered' : ''} ${task.time_recorded_seconds ? 'hasRecords' : ''} ${task.is_done ? 'isDone' : ''} ${task.is_on_hold ? 'isOnHold' : ''} ${rootTasks[task.code || task.id]?.id === task.id ? 'isRootTask' : ''} ${task.parentId ? 'isSubtask' : ''} ${task.parentId && store.parentIsMissing(task) ? 'isMissingParent' : ''}`}
+            key={task_id}
+            className={`TRow ${task.distributed ? 'distributed' : ''} ${!task.chargeable ? 'notchargeable' : ''} ${store.state.tasksHoveredId === task.id ? 'hovered' : ''} ${store.state.taskTimeredId === task.id ? 'timered' : ''} ${task.time_recorded_seconds ? 'hasRecords' : ''} ${task.is_done ? 'isDone' : ''} ${task.is_on_hold ? 'isOnHold' : ''} ${rootTasks[task.code || task.id]?.id === task.id ? 'isRootTask' : ''} ${task.parentId ? 'isSubtask' : ''} ${task.parentId && store.parentIsMissing(task) ? 'isMissingParent' : ''}`}
             onMouseEnter={() => store.tasksUiHoveredId(task.id)}
-            onMouseLeave={() => store.tasksUiHoveredId(null)}
-            onClick={rowOnClick}
+            onMouseLeave={() => store.tasksUiUnhoveredId(task.id)}
         >
             <div className="TRowContent" style={{ display: (store.state.tasksHideUnReportable && (task.distributed || !task.chargeable)) && store.state.taskTimeredId !== task.id ? 'none' : '' }}>
                 <div className="TCol --hierarchy">

@@ -4,7 +4,7 @@ import React, {useEffect, useMemo, useRef, useState} from 'react';
 import LineChart from '../Components/LineChart';
 import horizontalScroller from '../library/horizontal_scroller';
 import {useStoreContext} from '../Store/Store';
-import {Store_MergeSameCodes} from '../Store/Store_GetGroupedTasks';
+import Store_GetGroupedTasks, {Store_MergeSameCodes} from '../Store/Store_GetGroupedTasks';
 import {timespanToText, timespanToTextHours} from '../Utils/Utils';
 import CalendarWindow from './CalendarWindow';
 import TaskRow from './TaskRow';
@@ -12,7 +12,6 @@ import TaskRow from './TaskRow';
 const TasksWindow = () => {
     const forceUpdateKey = useRef(1);
     const timeline = useRef(null);
-    const globalNotesInput = useRef(null);
     const [total, setTotal] = useState({});
     const [tasksGrouped, setTasksGrouped] = useState<any>({});
     const [tasksGroupedAndMerged, setTasksGroupedAndMerged] = useState<any>({});
@@ -23,71 +22,40 @@ const TasksWindow = () => {
         allowPaste: false,
     })
 
-    const getTasksGrouped = useMemo(() => {
-        return store.getTasksGrouped();
-    }, []);
+    const getTasksGroupedMemo = useMemo(() => {
+        return Store_GetGroupedTasks(store.state);
+    }, [store.state]);
 
     useEffect(() => {
         horizontalScroller(timeline.current);
         adjustNotesHeight();
 
         const contextMenuShow = (e) => {
-            store.selectHovered();
+            const hoveredId = store.state.tasksHoveredId;
+            const task = store.state.tasks[hoveredId];
             e.preventDefault();
 
-            window.ipc.send('tasks.showMenu', tasksMenuOptions.current)
+            store.updateState({taskLastSelected: hoveredId});
+
+            console.log('tasks.showMenu', hoveredId, task?.id)
+            window.ipc.send('tasks.showMenu', {
+                task: task,
+                allowCut: (!!task && task.id !== store.state.taskTimeredId),
+                allowPaste: !!store.state.taskInClipboard,
+            })
         };
 
         window.addEventListener('contextmenu', contextMenuShow, false);
         return () => {
             window.removeEventListener('contextmenu', contextMenuShow);
         };
-    }, []);
-
-    useEffect(() => {
-        let task = null;
-        if (Object.values(store.state.tasksSelectedIds).length === 1) {
-            let taskId = Object.keys(store.state.tasksSelectedIds)[0];
-            task = store.state.tasks[taskId];
-        }
-        tasksMenuOptions.current = {
-            task: task,
-            allowCut: (!!task && task.id !== store.state.taskTimeredId),
-            allowPaste: !!store.state.taskInClipboard,
-        };
-        console.log('tasksMenuOptions.current.task', tasksMenuOptions.current.task?.id)
-    }, [store]);
+    }, [store.state]);
 
     useEffect(() => {
         adjustNotesHeight();
     }, [store.state.settings.global_notes]);
 
     useEffect(() => {
-        const computedTotal = computeTotal();
-        setTotal(computedTotal);
-    }, [tasksGrouped]);
-
-    useEffect(() => {
-        const groups = getTasksGrouped;
-        let result = groups;
-        if (store.state.tasksShowAsReport) {
-            map(groups, (group, date) => {
-                result[date].tasks = Store_MergeSameCodes(group.tasks);
-            });
-        }
-        setTasksGrouped(result);
-    }, [getTasksGrouped]);
-
-    useEffect(() => {
-        const groups = getTasksGrouped;
-        let result = cloneDeep(groups);
-        map(groups, (group, date) => {
-            result[date].tasks = Store_MergeSameCodes(group.tasks);
-        });
-        setTasksGroupedAndMerged(result);
-    }, [getTasksGrouped]);
-
-    const computeTotal = () => {
         let total = {
             tasks: {},
             time_charge_rounded_seconds: 0,
@@ -116,15 +84,36 @@ const TasksWindow = () => {
         total.time_spent_text = timespanToText(total.time_spent_seconds);
         total.time_distributed_text = timespanToText(total.time_distributed_seconds);
         total.time_charge_text = timespanToText(total.time_charge_seconds);
-        return total;
-    };
+
+        setTotal(total);
+    }, [tasksGrouped]);
+
+    useEffect(() => {
+        const groups = getTasksGroupedMemo;
+        let result = groups;
+        if (store.state.tasksShowAsReport) {
+            map(groups, (group, date) => {
+                result[date].tasks = Store_MergeSameCodes(group.tasks);
+            });
+        }
+        setTasksGrouped(result);
+    }, [getTasksGroupedMemo, store.state]);
+
+    useEffect(() => {
+        const groups = getTasksGroupedMemo;
+        let result = cloneDeep(groups);
+        map(groups, (group, date) => {
+            result[date].tasks = Store_MergeSameCodes(group.tasks);
+        });
+        setTasksGroupedAndMerged(result);
+    }, [getTasksGroupedMemo]);
 
     const adjustNotesHeight = () => {
-        if (!globalNotesInput.current) {
+        if (!globalNotesInputRef.current) {
             return;
         }
-        globalNotesInput.current.style.height = "";
-        globalNotesInput.current.style.height = Math.min(50, globalNotesInput.current.scrollHeight) + "px";
+        globalNotesInputRef.current.style.height = "";
+        globalNotesInputRef.current.style.height = Math.min(50, globalNotesInputRef.current.scrollHeight) + "px";
     };
 
     const copyToClipboardAllTasks = (ev) => {
@@ -152,49 +141,15 @@ const TasksWindow = () => {
     };
 
     const dragStart = ($event, task) => {
-        if (store.state.drag.readyToDrop) {
-            return;
-        }
-        store.dragClear();
-
-        store.state.drag.active = true;
-        store.state.drag.startedAt = [$event.clientX, $event.clientY];
-        store.state.drag.nowAt = [$event.clientX, $event.clientY];
-        store.state.drag.taskFrom = task.id;
-        store.state.drag.taskFrom_minutes = Math.round(task.time_spent_seconds / 60);
-        store.state.drag.taskFrom_minutes_text = task.time_spent_seconds_text;
+        store.dragStart($event, task);
     };
 
     const dragContinue = ($event) => {
-        if (!store.state.drag.active) {
-            return;
-        }
-        store.state.drag.nowAt = [$event.clientX, $event.clientY];
-
-        let distance = Math.sqrt(
-            Math.pow(store.state.drag.startedAt[0] - store.state.drag.nowAt[0], 2) +
-            Math.pow(store.state.drag.startedAt[1] - store.state.drag.nowAt[1], 2),
-        );
-        if (!store.state.drag.readyToDrop) {
-            store.state.drag.distance = distance;
-            let coefficient = 10.0 / Math.log10(distance);
-            store.state.drag.minutes = Math.max(0, Math.round(distance / coefficient) - 5);
-            store.state.drag.minutes = Math.min(store.state.drag.minutes, store.state.drag.taskFrom_minutes);
-
-            if (store.state.drag.nowAt[0] < 80) {
-                store.state.drag.minutes = 0;
-            }
-            store.state.drag.minutes_text = timespanToText(store.state.drag.minutes * 60);
-        }
+        store.dragContinue($event);
     };
 
     const dragStop = () => {
-        store.state.drag.readyToDrop = store.state.drag.minutes > 0;
-        store.state.drag.active = store.state.drag.minutes > 0;
-
-        if (!store.state.drag.active) {
-            store.dragClear();
-        }
+        store.dragStop();
     };
 
     const globalNotesInputRef = useRef(null);
@@ -254,17 +209,17 @@ const TasksWindow = () => {
                     <div className="TCol --timespan"></div>
                 </div>
             </div>
-            <div className={`TasksTable ${store.state.tasksShowAsReport ? 'ShowAsReport' : ''} ${store.state.tasksHideUnReportable ? 'ShowCompact' : ''}`} key={forceUpdateKey.current} onClick={() => store.deselectAll()}>
+            <div className={`TasksTable ${store.state.tasksShowAsReport ? 'ShowAsReport' : ''} ${store.state.tasksHideUnReportable ? 'ShowCompact' : ''}`} key={forceUpdateKey.current}>
                 {tasksGrouped.length > 1 && (
                     <div className="TRowDate Total">
                         <div className="TCol --frozen"></div>
                         <div className="TCol --group-date">Total</div>
                         <div className="TCol --timespan --timespan-charge">
                             <span title="Charge (Not distributed)">{timespanToText(total.time_not_distributed_seconds)}</span>
-                            &nbsp;
+                            {' '}&nbsp;{' '}
                             <span title="Charge (Rounded)">{total.time_charge_rounded_text}</span>
                             {total.time_recorded_text !== '-' && <span title="Recorded" className="original-time"> ({total.time_recorded_text})</span>}
-                            &nbsp;
+                            {' '}&nbsp;{' '}
                             <span title="Spent">{total.time_spent_text}</span>
                         </div>
                     </div>
@@ -276,10 +231,10 @@ const TasksWindow = () => {
                         <div className="TCol --group-date">{date}</div>
                         <div className="TCol --timespan --timespan-charge">
                             <span title="Charge (Not distributed)">{timespanToText(group.time_not_distributed_seconds)}</span>
-                            &nbsp;
+                            {' '}&nbsp;{' '}
                             <span title="Charge (Rounded)">{group.time_charge_rounded_text}</span>
                             {group.time_recorded_text !== '-' && <span title="Recorded" className="original-time"> ({group.time_recorded_text})</span>}
-                            &nbsp;
+                            {' '}&nbsp;{' '}
                             <span title="Spent">{group.time_spent_text}</span>
                         </div>
                     </div>
@@ -293,7 +248,7 @@ const TasksWindow = () => {
             <div>
                 <textarea className="GlobalNotes" rows="1" ref={globalNotesInputRef} onBlur={handleBlur}></textarea>
             </div>
-            <CalendarWindow key={store.state.day_key} weekKey={store.state.week_key}/>
+            <CalendarWindow weekKey={store.state.week_key}/>
             <div className="ViewOptions">
                 {store.state.drag.readyToDrop && <a href="#" onClick={store.dragClear} style={{float: 'right'}}>cancel</a>}
                 View as report:

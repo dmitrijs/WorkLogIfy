@@ -1,3 +1,5 @@
+import {cloneDeep} from "lodash";
+import moment from "moment";
 import React, {useEffect} from 'react';
 import MainMenu from './MainMenu';
 import {useStoreContext} from './Store/Store';
@@ -9,10 +11,11 @@ import TasksWindow from './Tasks/TasksWindow';
 import TemplatesWindow from "./Tasks/TemplatesWindow";
 import TodosWindow from "./Tasks/TodosWindow";
 import timer from "./Timer";
+import {timespanToText} from "./Utils/Utils";
+
+const JIRA_TIME_FORMAT = 'YYYY-MM-DDTHH:mm:ss.SSSZZ';
 
 const App = () => {
-    // const tasksGrouped = store.getTasksGrouped();
-
     const store = useStoreContext();
     (window as any).storeGlobal = store;
 
@@ -102,9 +105,12 @@ const App = () => {
             window.ipc.send('quit.confirmed');
         });
 
-        window.ipc.on('tasks-menu-command', (e, command) => {
-            console.log('tasks-menu-command', command);
-            switch (command) {
+        window.ipc.on('tasks-menu-command', (e, params) => {
+            console.log('tasks-menu-command', params);
+
+            const task = (params.taskId ? store.state.tasks[params.taskId] : null);
+
+            switch (params.command) {
                 case 'New Task':
                     store.setScreen('task.new');
                     break;
@@ -127,11 +133,12 @@ const App = () => {
                         /* clipboard write failed */
                     });
                     break;
-                case 'View in JIRA':
-                    let url = 'https://' + store.state.settings.jira_host + '/browse/' + task.code;
+                case 'View in JIRA': {
+                    const url = 'https://' + store.state.settings.jira_host + '/browse/' + task.code;
                     window.open(url);
                     break;
-                case 'Record to JIRA':
+                }
+                case 'Record to JIRA': {
                     let sum = task.sessions.reduce((sum, obj) => sum + obj.spent_seconds, 0);
                     let recorded = task.records.reduce((sum, obj) => sum + obj.recorded_seconds, 0);
                     let step = 6 * 60;
@@ -174,7 +181,7 @@ const App = () => {
                         alert('Would be sent to JIRA: ' + timespanToText(timeSpentSeconds) + ' at ' + workLogTime);
                         jiraResponseWorkLog = {response: {}};
                     } else {
-                        jiraResponseWorkLog = window.ipc.sendSync('jira.request', _.cloneDeep(options));
+                        jiraResponseWorkLog = window.ipc.sendSync('jira.request', cloneDeep(options) as any);
                     }
 
                     if (jiraResponseWorkLog.error) {
@@ -184,6 +191,7 @@ const App = () => {
                         store.updateTask([task.id, 'is_done', true])
                     }
                     break;
+                }
                 case 'Copy':
                     store.clipboardCopy(task.id);
                     break;
@@ -194,11 +202,10 @@ const App = () => {
                     store.clipboardPaste();
                     break;
             }
-            store.deselectAll();
         })
 
         window.ipc.on('calendar-menu-command', (e, {dayCode, dayType}) => {
-            console.log('calendar-menu-command',  {dayCode, dayType});
+            console.log('calendar-menu-command', {dayCode, dayType});
 
             let settings = store.state.settings;
             settings.special_days = settings.special_days || {};
@@ -213,7 +220,7 @@ const App = () => {
         return () => {
             window.ipc.removeAllListeners();
         }
-    }, [store]);
+    }, [store.state]);
 
     return (
         <div className={`App ${store.state.is_debug ? 'isDebug' : ''}`}>
@@ -224,7 +231,7 @@ const App = () => {
                     {store.state.screen === 'task.edit' && <TaskEdit mode="edit"/>}
                     {store.state.screen === 'task.new' && <TaskEdit mode="new"/>}
                     {store.state.screen === 'todo' && <TodosWindow/>}
-                    {store.state.screen === 'calendar' && <CalendarWindow/>}
+                    {store.state.screen === 'calendar' && <CalendarWindow weekKey={null}/>}
                     {store.state.screen === 'task.templates' && <TemplatesWindow/>}
                     {store.state.screen === 'settings' && <SettingsWindow/>}
                     {store.state.screen === 'active_apps' && <ActiveAppsWindow/>}

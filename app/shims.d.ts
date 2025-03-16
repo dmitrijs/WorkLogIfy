@@ -18,7 +18,6 @@ declare type TaskObj = {
     is_done_at?: string;
     is_on_hold?: boolean;
     is_on_hold_at?: boolean;
-    _selected?: boolean;
     created_at: string;
     parentId: string;
 
@@ -118,7 +117,7 @@ declare type SettingsObj = {
     rounding_minutes: number;
     working_day_minutes: number;
     sorting_order: string;
-    special_days: Object;
+    special_days: object;
     global_notes: string;
     wake_up_connected_devices: boolean;
 }

@@ -2,8 +2,6 @@ import electron from "electron";
 
 const {Menu, MenuItem} = electron;
 
-const JIRA_TIME_FORMAT = 'YYYY-MM-DDTHH:mm:ss.SSSZZ';
-
 export default function createMenu(mainWindow, params): Electron.Menu {
     console.log('createMenu', params)
     const {task, allowCut, allowPaste} = params;
@@ -13,7 +11,7 @@ export default function createMenu(mainWindow, params): Electron.Menu {
     function command(text) {
         itemClicked = true;
         console.log(`command: '${text}'`)
-        mainWindow.webContents.send('tasks-menu-command', text);
+        mainWindow.webContents.send('tasks-menu-command', {taskId: params.task?.id, command: text});
     }
 
     const menu: Electron.Menu = new Menu();
@@ -24,6 +22,7 @@ export default function createMenu(mainWindow, params): Electron.Menu {
         },
     }));
     menu.append(new MenuItem({
+        enabled: !!task,
         label: 'Extract Task', click() {
             command('Extract Task')
             // store.state.creatingByExtract = true;
@@ -31,6 +30,7 @@ export default function createMenu(mainWindow, params): Electron.Menu {
         },
     }));
     menu.append(new MenuItem({
+        enabled: !!task,
         label: 'New Subtask', click() {
             command('New Subtask')
             // store.state.creatingSubtask = true;
@@ -38,6 +38,7 @@ export default function createMenu(mainWindow, params): Electron.Menu {
         },
     }));
     menu.append(new MenuItem({
+        enabled: !!task,
         label: 'Extract Subtask', click() {
             command('Extract Subtask')
             // store.state.creatingSubtask = true;

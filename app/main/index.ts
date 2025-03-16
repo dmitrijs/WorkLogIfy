@@ -187,17 +187,17 @@ app.on('ready', async () => {
         });
 
         ipcMain.on('tasks.load', (event: Electron.IpcMainEvent, day_key) => {
-            let workday = Filesystem.getWorkLog(day_key);
+            let workday:any = Filesystem.getWorkLog(day_key);
 
-            if (!(<any>workday).version) { // v1
+            if (!workday.version) { // v1
                 workday = <any>{
                     tasks: workday as any,
                     activeApps: [],
                 }
             }
 
-            if (!workday.hasOwnProperty('tasks') || !isObject((<any>workday).tasks) || isArray((<any>workday).tasks)) {
-                (<any>workday).tasks = {};
+            if (!workday.tasks || !isObject(workday.tasks) || isArray(workday.tasks)) {
+                workday.tasks = {};
             }
             event.returnValue = workday;
         });

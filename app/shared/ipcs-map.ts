@@ -1,3 +1,5 @@
+type TasksMenuCommand = 'New Task' | 'Extract Task' | 'New Subtask' | 'Extract Subtask' | 'Copy the ID' | 'View in JIRA' | 'Record to JIRA' | 'Copy' | 'Cut' | 'Paste';
+
 export interface IpcChannelMap {
     // main
     'timer-state': ['stopped' | 'active'];
@@ -41,8 +43,8 @@ export interface IpcChannelMap {
     'user-active-app': [{ secondsIdle: number, appDescription: string }];
     'timer-stop': [void];
     'confirm-app-quit': [void];
-    'tasks-menu-command': ['New Task' | 'Extract Task'];
-    'calendar-menu-command': [{dayCode, dayType}];
+    'tasks-menu-command': [{taskId: string, command: TasksMenuCommand}];
+    'calendar-menu-command': [{ dayCode: string, dayType: number }];
     'set.progress': [{ progress?: number, indeterminate?: boolean }];
 
     'integrations.lock': [void];

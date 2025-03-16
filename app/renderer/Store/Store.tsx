@@ -1,16 +1,16 @@
 import {cloneDeep, isArray, keyBy} from "lodash";
 import moment from "moment";
-import {createContext, useContext, useMemo, useState} from "react";
+import {createContext, useCallback, useContext, useMemo, useState} from "react";
 import {timespanToText} from '../Utils/Utils';
 import Store_GetGroupedTasks from "./Store_GetGroupedTasks";
 
-function saveTasks(state, store) {
+function saveTasks(state) {
     populateSubtaskIds(state);
 
     window.ipc.sendSync('tasks.save', {
         day_key: state.day_key,
         arg1: cloneDeep(state.tasks),
-        arg2: cloneDeep(store.getTasksGrouped()),
+        arg2: cloneDeep(Store_GetGroupedTasks(state)),
         arg3: cloneDeep(state.settings),
     });
 }
@@ -65,7 +65,6 @@ const initialState = {
 
     activeApps: [] as ActiveAppObj[],
 
-    tasksSelectedIds: {} as Record<string, boolean>,
     taskLastSelected: '',
     creatingByExtract: false, // new task that is created is extracted from the selected task
     creatingSubtask: false, // new task that is created is extracted as a Subtask
@@ -110,7 +109,7 @@ const initialState = {
     _now: null,
 };
 
-const StoreContentProvider = ({children}) => {
+const StoreContentProvider = ({children}: any) => {
 
     const [state, setState] = useState(initialState);
 
@@ -123,7 +122,7 @@ const StoreContentProvider = ({children}) => {
             spent_seconds: (spentSeconds - idleSeconds),
             method: method,
         })
-        console.log('setState');
+        console.log('setState addSession');
         setState({...state, _now: new Date()})
     }
 
@@ -155,12 +154,8 @@ const StoreContentProvider = ({children}) => {
         setState({...state, _now: new Date()})
     }
 
-    const store = useMemo(() => {
+    const storeMethods = useMemo(() => {
         return {
-            getTasksGrouped(): Record<string, any> {
-                return Store_GetGroupedTasks({state});
-            },
-
             getEditedTask(): TaskEditedObj {
                 return state.tasks[state.taskEditedId];
             },
@@ -194,8 +189,8 @@ const StoreContentProvider = ({children}) => {
                     task.taskIdExtractedFrom = state.taskLastSelected;
 
                     let taskSpentSeconds = refTask.sessions.reduce((sum, obj: SessionObj) => sum + obj.spent_seconds, 0);
-                    if (store.state.taskTimeredId === refTask.id) {
-                        taskSpentSeconds += store.state.timerElapsedSeconds;
+                    if (state.taskTimeredId === refTask.id) {
+                        taskSpentSeconds += state.timerElapsedSeconds;
                     }
                     task.time_add_minutes = String(Math.round(taskSpentSeconds / 60));
                 }
@@ -221,15 +216,14 @@ const StoreContentProvider = ({children}) => {
                 // console.log('setState tasksUiHoveredId');
                 setState({...state, _now: new Date()})
             },
-            tasksUiToggle(id: string) {
-                console.log(id);
-                if (state.tasksSelectedIds[id]) {
-                    delete state.tasksSelectedIds[id];
-                } else {
-                    state.tasksSelectedIds[id] = true;
-                }
-                console.log('setState tasksUiToggle');
-                setState({...state, _now: new Date()})
+            tasksUiUnhoveredId(id: string) {
+                setState((state) => {
+                    if (state.tasksHoveredId !== id) {
+                        return state;
+                    }
+                    console.log(`setState tasksUiUnhoveredId ${id}`);
+                    return {...state, tasksHoveredId: null}
+                })
             },
             createTask(task) {
                 const id = 'task_' + moment.utc();
@@ -272,7 +266,7 @@ const StoreContentProvider = ({children}) => {
 
                 state.screen = state.tasksScreen;
 
-                saveTasks(state, store);
+                saveTasks(state);
 
                 if (isArray(state.tasks)) {
                     alert('ASSERT FAILED: `tasks` has invalid data type. Tasks might not be persisted.');
@@ -309,7 +303,7 @@ const StoreContentProvider = ({children}) => {
                 state.taskEditedId = null;
                 state.screen = state.tasksScreen;
 
-                saveTasks(state, store);
+                saveTasks(state);
 
                 updateProgressBar(task);
                 console.log('setState saveTask');
@@ -320,18 +314,21 @@ const StoreContentProvider = ({children}) => {
                 if ((field === 'chargeable' && !value) || (field === 'distributed' && value)) {
                     state.tasks = updateTaskField(state.tasks, task_id, 'is_done', true);
                 }
-                saveTasks(state, store);
+                saveTasks(state);
                 console.log('setState updateTask');
                 setState({...state, _now: new Date()})
             },
             taskAddRecordedSeconds([task_id, recordSeconds, jiraWorkLogId]) {
                 addRecord(state, task_id, recordSeconds, 'quick', jiraWorkLogId);
 
-                saveTasks(state, store);
+                saveTasks(state);
                 console.log('setState taskAddRecordedSeconds');
                 setState({...state, _now: new Date()})
             },
             setScreen(screen) {
+                if (state.drag.active) {
+                    return;
+                }
                 state.screen = screen;
                 if (screen === 'tasks') {
                     state.tasksScreen = screen;
@@ -362,7 +359,7 @@ const StoreContentProvider = ({children}) => {
             taskEdit(key) {
                 state.taskEditedId = key;
                 state.screen = 'task.edit';
-                console.log('setState');
+                console.log(`setState taskEdit "${key}"`);
                 setState({...state, _now: new Date()})
             },
             setDay(day: string) {
@@ -394,6 +391,7 @@ const StoreContentProvider = ({children}) => {
                 try {
                     tasks = JSON.parse(tasksJson);
                 } catch (ex) {
+                    console.log('tasksJson could not be parsed')
                 }
                 if (!tasks || !Object.keys(tasks).length || !Object.keys(tasks)[0].match(/^task_\d+$/)) {
                     alert(`ERROR: Invalid clipboard contents:\n\n${tasksJson}`);
@@ -407,7 +405,7 @@ const StoreContentProvider = ({children}) => {
                     }
                     state.tasks[taskId] = tasks[taskId];
                 }
-                saveTasks(state, store);
+                saveTasks(state);
                 if (replaced + added > 0) {
                     alert(`${added} task(s) added, ${replaced} existing task(s) replaced`);
                 }
@@ -421,7 +419,7 @@ const StoreContentProvider = ({children}) => {
             },
             updateSettings(settings, returnToTasksScreen = true) {
                 state.settings = {...state.settings, ...settings};
-                saveTasks(state, store);
+                saveTasks(state);
 
                 if (returnToTasksScreen) {
                     state.screen = state.tasksScreen;
@@ -436,20 +434,6 @@ const StoreContentProvider = ({children}) => {
                 console.log('setState');
                 setState({...state, _now: new Date()})
             },
-            selectHovered() {
-                if (!state.tasksHoveredId) {
-                    return;
-                }
-                state.taskLastSelected = state.tasksHoveredId;
-                state.tasksSelectedIds[state.tasksHoveredId] = true;
-                console.log(`setState selectHovered ${state.tasksHoveredId}`);
-                setState({...state, _now: new Date()})
-            },
-            deselectAll() {
-                state.tasksSelectedIds = {};
-                console.log('setState deselectAll');
-                setState({...state, _now: new Date()})
-            },
             clipboardCopy(taskId) {
                 state.taskInClipboard = state.tasks[taskId];
                 state.taskIsCloned = true;
@@ -462,7 +446,7 @@ const StoreContentProvider = ({children}) => {
 
                 delete state.tasks[taskId];
 
-                saveTasks(state, store);
+                saveTasks(state);
                 console.log('setState');
                 setState({...state, _now: new Date()})
             },
@@ -482,7 +466,7 @@ const StoreContentProvider = ({children}) => {
 
                 state.tasks[id] = newTask;
 
-                saveTasks(state, store);
+                saveTasks(state);
                 console.log('setState');
                 setState({...state, _now: new Date()})
             },
@@ -491,11 +475,10 @@ const StoreContentProvider = ({children}) => {
                     taskId = state.tasksHoveredId;
                 }
                 state.taskTimeredId = taskId;
-                state.tasksSelectedIds = {};
 
                 state.tasks = updateTaskField(state.tasks, taskId, 'is_on_hold', false);
                 state.tasks = updateTaskField(state.tasks, taskId, 'is_done', false);
-                saveTasks(state, store)
+                saveTasks(state)
 
                 updateProgressBar(state.tasks[taskId]);
                 console.log('setState activateTimer');
@@ -522,28 +505,27 @@ const StoreContentProvider = ({children}) => {
 
                 addSession(state, state.taskTimeredId, secondsElapsed, 'timer', secondsIdle);
 
-                state.tasksSelectedIds = {};
                 state.timerElapsedText = '';
                 state.timerElapsedSeconds = 0;
                 state.taskTimeredId = null;
 
-                saveTasks(state, store)
+                saveTasks(state)
 
                 updateProgressBar(null);
 
-                console.log('setState');
+                console.log('setState stopTimer');
                 setState({...state, _now: new Date()})
             },
             taskAddSession([taskId, minutes, method]) {
                 addSession(state, taskId, minutes * 60, method);
-                saveTasks(state, store)
-                console.log('setState');
+                saveTasks(state)
+                console.log('setState taskAddSession');
                 setState({...state, _now: new Date()})
             },
             taskAddActiveApp([taskId, activeAppDescription, secondsIdle]) {
                 addActiveApp(state, taskId, activeAppDescription, secondsIdle);
-                saveTasks(state, store)
-                console.log('setState');
+                saveTasks(state)
+                console.log('setState taskAddActiveApp');
                 setState({...state, _now: new Date()})
             },
             addGlobalActiveApp(timeredTaskId: string, activeAppDescription: string, secondsIdle: number) {
@@ -590,7 +572,7 @@ const StoreContentProvider = ({children}) => {
                 setState((state) => ({...state, _now: new Date(), calendarHoveredDayCode: dayCode}))
             },
             saveTasks() {
-                saveTasks(state, store)
+                saveTasks(state)
                 console.log('setState saveTasks');
                 setState({...state, _now: new Date()})
             },
@@ -651,6 +633,75 @@ const StoreContentProvider = ({children}) => {
                 return !parentTask || parentTask.date !== task.date;
             },
 
+            dragStart($event, task) {
+                if (state.drag.readyToDrop) {
+                    return;
+                }
+                storeMethods.dragClear();
+
+                state.drag.active = true;
+                state.drag.startedAt = [$event.clientX, $event.clientY];
+                state.drag.nowAt = [$event.clientX, $event.clientY];
+                state.drag.taskFrom = task.id;
+                state.drag.taskFrom_minutes = Math.round(task.time_spent_seconds / 60);
+                state.drag.taskFrom_minutes_text = task.time_spent_seconds_text;
+
+                console.log('setState dragStart');
+                setState({...state, _now: new Date(), drag: state.drag})
+            },
+
+            dragContinue($event) {
+                if (!state.drag.active) {
+                    return;
+                }
+                state.drag.nowAt = [$event.clientX, $event.clientY];
+
+                let distance = Math.sqrt(
+                    Math.pow(state.drag.startedAt[0] - state.drag.nowAt[0], 2) +
+                    Math.pow(state.drag.startedAt[1] - state.drag.nowAt[1], 2),
+                );
+                if (!state.drag.readyToDrop) {
+                    state.drag.distance = distance;
+                    let coefficient = 10.0 / Math.log10(distance);
+                    state.drag.minutes = Math.max(0, Math.round(distance / coefficient) - 5);
+                    state.drag.minutes = Math.min(state.drag.minutes, state.drag.taskFrom_minutes);
+
+                    if (state.drag.nowAt[0] < 80) {
+                        state.drag.minutes = 0;
+                    }
+                    state.drag.minutes_text = timespanToText(state.drag.minutes * 60);
+                }
+
+                console.log('setState dragContinue');
+                setState({...state, _now: new Date(), drag: state.drag})
+            },
+
+            dragStop() {
+                state.drag.readyToDrop = state.drag.minutes > 0;
+                state.drag.active = state.drag.minutes > 0;
+
+                if (!state.drag.active) {
+                    storeMethods.dragClear();
+                }
+
+                console.log('setState dragStop');
+                setState({...state, _now: new Date(), drag: state.drag})
+            },
+
+            dropTime(event, task_id) {
+                if (!state.drag.active || !state.drag.readyToDrop) {
+                    return;
+                }
+                state.drag.readyToDrop = state.drag.active = false;
+                state.drag.taskTo = task_id;
+
+                if (state.drag.minutes > 0 && state.drag.taskFrom && state.drag.taskTo && state.drag.taskFrom !== state.drag.taskTo) {
+                    storeMethods.taskAddSession([state.drag.taskFrom, -state.drag.minutes, 'state.drag']);
+                    storeMethods.taskAddSession([state.drag.taskTo, state.drag.minutes, 'drop']);
+                }
+                storeMethods.dragClear(); // will save
+            },
+
             dragClear() {
                 state.drag.active = false;
                 state.drag.readyToDrop = false;
@@ -662,34 +713,36 @@ const StoreContentProvider = ({children}) => {
                 state.drag.taskFrom_minutes = 0;
                 state.drag.taskFrom_minutes_text = '';
                 state.drag.taskTo = 0;
-                console.log('setState');
-                setState({...state, _now: new Date()})
+                console.log('setState dragClear');
+                setState({...state, _now: new Date(), drag: state.drag})
             },
         };
-    }, []);
+    }, [state]);
 
     // Vue.prototype.$store = store.original;
     if (!state.initialized) {
-        store.loadSettings();
+        storeMethods.loadSettings();
 
-        store.toggleDebug(window.ipc.sendSync('debug.state'));
+        storeMethods.toggleDebug(window.ipc.sendSync('debug.state'));
         let today = moment();
         if (state.is_debug) {
             today.startOf('month').endOf('isoWeek');
         }
-        store.setDay(today.format("YYYY-MM-DD"));
+        storeMethods.setDay(today.format("YYYY-MM-DD"));
 
-        store.setTaskTemplates(window.ipc.sendSync('tasks.getTaskTemplates'));
+        storeMethods.setTaskTemplates(window.ipc.sendSync('tasks.getTaskTemplates'));
 
         state.initialized = true;
+
+        console.log('state.tasks', state.tasks)
         setState({...state, _now: new Date()});
     }
 
-    const contextValue = useMemo(() => ({
-            state,
-            ...store,
+    const contextValue = useMemo<typeof storeMethods>(() => ({
+            state: state,
+            ...storeMethods,
         }),
-        [state],
+        [state, storeMethods],
     );
 
     return <StoreContext.Provider value={contextValue}>{children}</StoreContext.Provider>

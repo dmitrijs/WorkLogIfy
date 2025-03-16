@@ -6,8 +6,8 @@ class Filesystem {
     public static settings:SettingsObj;
 
     public static getDir() {
-        var rootDir = app.getPath('appData');
-        var dir = rootDir + (app.isPackaged ? '/WorkLogIfy/' : '/WorkLogIfy-test/');
+        const rootDir = app.getPath('appData');
+        const dir = rootDir + (app.isPackaged ? '/WorkLogIfy/' : '/WorkLogIfy-test/');
 
         if (!fs.existsSync(dir)) {
             fs.mkdirSync(dir, {recursive: true});

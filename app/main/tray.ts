@@ -16,7 +16,7 @@ export function setTrayIconActive() {
 export default function createTray(mainWindow) {
     tray = new Tray(path.join(process.env.PUBLIC, '/assets/trayInactive.png'));
 
-    var contextMenu = Menu.buildFromTemplate([
+    const contextMenu = Menu.buildFromTemplate([
         {
             label: 'Show App', click: function () {
                 mainWindow.show();

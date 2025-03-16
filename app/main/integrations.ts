@@ -1,3 +1,5 @@
+import {spawn} from "child_process"
+
 class Integrations {
     public static async wakeUpDevices() {
         if (process.platform === 'darwin') {
@@ -72,8 +74,6 @@ class Integrations {
         }
         console.log('shell:', [executable, ...args].join(' '));
         return new Promise((resolve, error) => {
-            let spawn = require("child_process").spawn;
-
             let bat = spawn(executable, args);
 
             let stdout = '';

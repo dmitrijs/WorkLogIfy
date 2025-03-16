@@ -16,7 +16,8 @@ import StoreContentProvider from './Store/Store';
 
 const AppBase = () => {
     return (
-        <StoreContentProvider children={<App />}>
+        <StoreContentProvider>
+            <App />
         </StoreContentProvider>
     );
 };

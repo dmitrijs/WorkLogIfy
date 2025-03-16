@@ -25,6 +25,7 @@ const ActiveAppsWindow = () => {
                     <tr key={activeApp.noticed_at} className={activeApp.seconds_idle > 60 ? 'Idle' : ''}>
                         <td className="TD-Time" title={`Idle: ${activeApp.seconds_idle}s`}>
                             {moment(activeApp.noticed_at).format('YYYY-MM-DD HH:mm')}
+                            {' '}
                             {moment().diff(moment(activeApp.noticed_at), 'hour') <= 4 && (
                                 <span>({moment().diff(moment(activeApp.noticed_at), 'minute')}m ago)</span>
                             )}

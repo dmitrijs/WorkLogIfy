@@ -2,7 +2,7 @@ import React, {useEffect, useRef, useState} from 'react';
 import {useStoreContext} from '../Store/Store';
 import Store_GetCalendarStatistics from '../Store/Store_GetCalendarStatistics';
 
-const CalendarWindow = ({weekKey}) => {
+const CalendarWindow = ({weekKey}: { weekKey: string }) => {
     const store = useStoreContext();
     const [cache, setCache] = useState(null);
     const calendarHoveredDayCode = useRef(null);
@@ -90,12 +90,12 @@ const CalendarWindow = ({weekKey}) => {
                                 <span className="TimeCharged">{days[dayCode].charged_seconds_text}</span>
                             </div>
                         ))}
-                        {weekKey && (
+                        {!!weekKey && (
                             <a href="#" className="PrevNextButton" onClick={() => open(store.state.day_key_next_week)}>
                                 <i className="icofont-rounded-right"></i>
                             </a>
                         )}
-                        {months[week_key] && months[week_key].month_charged_seconds && (
+                        {!!months[week_key] && !!months[week_key].month_charged_seconds && (
                             <span className="MonthTimeCharged">
                                 <span className="_Week">{week.week_charged && `Σ ${week.week_charged_text}`}</span>
                                 <br/>
@@ -114,7 +114,7 @@ const CalendarWindow = ({weekKey}) => {
                                 </span>
                             </span>
                         )}
-                        {!months[week_key] && week.week_charged && (
+                        {!months[week_key] && !!week.week_charged && (
                             <span className="WeekTimeCharged">Σ {week.week_charged_text}</span>
                         )}
                     </div>

@@ -5,9 +5,10 @@
   "main": "dist-electron/main/index.js",
   "scripts": {
     "dev": "vite",
-    "compile": "vue-tsc --noEmit && vite build",
-    "build": "vue-tsc --noEmit && vite build && electron-builder --windows --publish never",
-    "build-mac": "vue-tsc --noEmit && vite build && electron-builder --mac --publish never",
+    "compile": "tsc --noEmit && vite build",
+    "build": "tsc --noEmit && vite build && electron-builder --windows --publish never",
+    "build-mac": "tsc --noEmit && vite build && electron-builder --mac --publish never",
+    "eslint": "npx eslint .",
     "standard-version": "npx standard-version",
     "standard-version-x.minor.z": "npx standard-version --release-as minor",
     "standard-version-x.y.patch": "npx standard-version --release-as patch",
@@ -42,6 +43,7 @@
     "active-win": "^8.1.0",
     "autoprefixer": "^10.4.21",
     "electron-is-dev": "^2.0.0",
+    "eslint-plugin-react": "^7.37.4",
     "lodash": "^4.17.21",
     "moment": "^2.24.0",
     "postcss": "^8.5.1",
@@ -64,6 +66,7 @@
     "electron": "^34.0",
     "electron-builder": "^24.0",
     "eslint": "^9.22.0",
+    "eslint-plugin-react-hooks": "^5.2.0",
     "typescript": "^5.8.2",
     "typescript-eslint": "^8.26.1"
   }

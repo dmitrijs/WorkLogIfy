@@ -1,7 +1,7 @@
 let el;
 
 function scrollHorizontally(e) {
-    e = window.event || e;
+    // e = window.event || e;
     e.preventDefault();
     el.scrollLeft -= (e.wheelDelta || -e.detail) * 0.5;
 }
