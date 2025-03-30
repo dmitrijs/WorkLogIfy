@@ -35,10 +35,11 @@ const TaskRow = ({ tasksGrouped, group_id, task_id, onDragStart }:any) => {
         <div
             key={task_id}
             className={`TRow ${task.distributed ? 'distributed' : ''} ${!task.chargeable ? 'notchargeable' : ''} ${store.state.tasksHoveredId === task.id ? 'hovered' : ''} ${store.state.taskTimeredId === task.id ? 'timered' : ''} ${task.time_recorded_seconds ? 'hasRecords' : ''} ${task.is_done ? 'isDone' : ''} ${task.is_on_hold ? 'isOnHold' : ''} ${rootTasks[task.code || task.id]?.id === task.id ? 'isRootTask' : ''} ${task.parentId ? 'isSubtask' : ''} ${task.parentId && store.parentIsMissing(task) ? 'isMissingParent' : ''}`}
-            onMouseEnter={() => store.tasksUiHoveredId(task.id)}
-            onMouseLeave={() => store.tasksUiUnhoveredId(task.id)}
         >
-            <div className="TRowContent" style={{ display: (store.state.tasksHideUnReportable && (task.distributed || !task.chargeable)) && store.state.taskTimeredId !== task.id ? 'none' : '' }}>
+            <div className="TRowContent" style={{ display: (store.state.tasksHideUnReportable && (task.distributed || !task.chargeable)) && store.state.taskTimeredId !== task.id ? 'none' : '' }}
+                 onMouseEnter={() => store.tasksUiHoveredId(task.id)}
+                 onMouseLeave={() => store.tasksUiUnhoveredId(task.id)}
+            >
                 <div className="TCol --hierarchy">
                     {!task.parentId ? (
                         task.subtaskIds?.length ? <i className="icofont-rounded-down"></i> : <i className="icofont-rounded-right" style={{ color: '#ababab' }}></i>

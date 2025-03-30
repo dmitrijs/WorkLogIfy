@@ -31,7 +31,7 @@ export default function createMenu(mainWindow, params): Electron.Menu {
     }));
     menu.append(new MenuItem({
         enabled: !!task,
-        label: 'New Subtask', click() {
+        label: 'New ' + (task?.code ? `"${task?.code}" ` : '') + 'Subtask', click() {
             command('New Subtask')
             // store.state.creatingSubtask = true;
             // store.setScreen('task.new');
@@ -39,7 +39,7 @@ export default function createMenu(mainWindow, params): Electron.Menu {
     }));
     menu.append(new MenuItem({
         enabled: !!task,
-        label: 'Extract Subtask', click() {
+        label: 'Extract ' + (task?.code ? `"${task?.code}" ` : '') + 'Subtask', click() {
             command('Extract Subtask')
             // store.state.creatingSubtask = true;
             // store.state.creatingByExtract = true;

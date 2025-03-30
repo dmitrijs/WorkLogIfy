@@ -261,7 +261,6 @@ const StoreContentProvider = ({children}: any) => {
         },
 
         tasksUiHoveredId(id: string) {
-            console.log(`setState tasksUiHoveredId ${id}`);
             storeMethods.updateState({tasksHoveredId: id})
         },
         tasksUiUnhoveredId(id: string) {
@@ -269,7 +268,7 @@ const StoreContentProvider = ({children}: any) => {
                 if (state.tasksHoveredId !== id) {
                     return state;
                 }
-                console.log(`setState tasksUiUnhoveredId ${id}`);
+                console.log('tasksUiUnhoveredId')
                 return {...state, tasksHoveredId: null}
             })
         },
