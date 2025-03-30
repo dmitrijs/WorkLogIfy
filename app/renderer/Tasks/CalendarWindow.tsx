@@ -1,16 +1,14 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useEffect, useMemo, useRef, useState} from 'react';
 import {useStoreContext} from '../Store/Store';
 import Store_GetCalendarStatistics from '../Store/Store_GetCalendarStatistics';
 
 const CalendarWindow = ({weekKey}: { weekKey: string }) => {
     const store = useStoreContext();
-    const [cache, setCache] = useState(null);
     const calendarHoveredDayCode = useRef(null);
 
-    const collectData = () => {
-        if (cache) return;
-        setCache(Store_GetCalendarStatistics());
-    };
+    const cache = useMemo(() => {
+        return Store_GetCalendarStatistics();
+    }, [store.state.day_key]);
 
     const open = (day) => {
         store.setDay(day);
@@ -42,8 +40,6 @@ const CalendarWindow = ({weekKey}: { weekKey: string }) => {
     useEffect(() => {
         calendarHoveredDayCode.current = store.state.calendarHoveredDayCode;
     }, [store.state.calendarHoveredDayCode]);
-
-    collectData();
 
     const weeks = weekKey ? (cache?.weeks[weekKey] ? {[weekKey]: cache.weeks[weekKey]} : {}) : cache?.weeks;
     const months = cache?.months;

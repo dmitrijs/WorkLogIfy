@@ -111,6 +111,7 @@ const initialState = {
 
 type StoreMethodsType = {
     updateState: (values) => void,
+    updateSettingsState: (values) => void,
     getEditedTask: () => TaskEditedObj,
     getEmptyTask: () => TaskEditedObj,
     getFileTotals: () => void,
@@ -204,6 +205,11 @@ const StoreContentProvider = ({children}: any) => {
         updateState(values) {
             console.log('updateState', 'keys:', JSON.stringify(Object.keys(values)))
             setState((state) => ({...state, ...values, _now: new Date()}));
+        },
+
+        updateSettingsState(values) {
+            console.log('updateState', 'keys:', JSON.stringify(Object.keys(values)))
+            setState((state) => ({...state, settings: {...state.settings, ...values}, _now: new Date()}));
         },
 
         getEditedTask(): TaskEditedObj {

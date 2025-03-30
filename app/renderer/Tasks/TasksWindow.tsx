@@ -252,11 +252,11 @@ const TasksWindow = () => {
             <div className="ViewOptions">
                 {store.state.drag.readyToDrop && <a href="#" onClick={store.dragClear} style={{float: 'right'}}>cancel</a>}
                 View as report:
-                <span className="label--checkbox label--checkbox--with-text" onClick={toggleShowAsReport}>
-                    <label><input type="checkbox" checked={store.state.tasksShowAsReport} readOnly/><span></span> merge codes</label>
+                <span className="label--checkbox label--checkbox--with-text">
+                    <label><input type="checkbox" checked={store.state.tasksShowAsReport} onChange={toggleShowAsReport} /><span></span> merge codes</label>
                 </span>
-                <span className="label--checkbox label--checkbox--with-text" onClick={toggleHideUnReportable}>
-                    <label><input type="checkbox" checked={store.state.tasksHideUnReportable} readOnly/><span></span> hide un-reportable</label>
+                <span className="label--checkbox label--checkbox--with-text">
+                    <label><input type="checkbox" checked={store.state.tasksHideUnReportable} onChange={toggleHideUnReportable} /><span></span> hide un-reportable</label>
                 </span>
                 <button type="button" className="btn btn-xs" style={{marginLeft: '6px', padding: '0px 8px'}} title="Copy for Slack. NOTE: Ctrl+F applies formatting in Slack" onClick={copyToClipboardAllTasks}>
                     <i className="icofont-copy"></i>

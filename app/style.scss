@@ -55,12 +55,10 @@ table {
 
     --main-menu-height: 29px;
 
-    .App {
-        &:not(.isDebug) {
-            .Timeline,
-            .SelectionStatistics {
-                display: none !important;
-            }
+    &:not(.isDebug) {
+        .Timeline,
+        .SelectionStatistics {
+            display: none !important;
         }
     }
 
@@ -657,7 +655,7 @@ table {
                 background-color: #fafffa;
 
                 .IconDone {
-                    color: #94CC94;
+                    color: #b7e7b7 !important;
                 }
                 &:not(.timered) .IconDone {
                     opacity: 0.4 !important;
