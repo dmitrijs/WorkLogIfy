@@ -52,7 +52,7 @@
     "sass": "^1.26.3",
     "standard-version": "^9.3.2",
     "tailwindcss": "^3.4.17",
-    "typesafe-ipc": "github:dmitrijs/typesafe-ipc#68d490de8950abaf7d386bef0ee404d629e97ba5",
+    "typesafe-ipc": "github:dmitrijs/typesafe-ipc#ea3facd456e7bfc947dd20addcb9cab45d4cd0ad",
     "vite": "^6.0.7",
     "vite-plugin-electron": "^0.29.0",
     "vite-plugin-electron-renderer": "^0.14.5"

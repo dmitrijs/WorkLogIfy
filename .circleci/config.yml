@@ -23,18 +23,18 @@ jobs:
   build_windows:
     resource_class: large
     docker:
-      - image: electronuserland/builder:18-wine
+      - image: electronuserland/builder:22-wine
 
     steps:
       - checkout
       - restore_cache:
           keys:
-            - npm18-deps-{{ checksum "package-lock.json" }}
+            - npm22-deps-{{ checksum "package-lock.json" }}
 
       - run: npm install
 
       - save_cache:
-          key: npm18-deps-{{ checksum "package-lock.json" }}
+          key: npm22-deps-{{ checksum "package-lock.json" }}
           paths:
             - node_modules
 
