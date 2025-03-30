@@ -109,6 +109,55 @@ const initialState = {
     _now: null,
 };
 
+type StoreMethodsType = {
+    updateState: (values) => void,
+    getEditedTask: () => TaskEditedObj,
+    getEmptyTask: () => TaskEditedObj,
+    getFileTotals: () => void,
+    getTaskTemplates: () => TemplateObj[],
+    tasksUiHoveredId: (id: string) => void,
+    tasksUiUnhoveredId: (id: string) => void,
+    createTask: (task) => void,
+    saveTask: (task: TaskEditedObj) => void,
+    updateTask: ([task_id, field, value]) => void,
+    taskAddRecordedSeconds: ([task_id, recordSeconds, jiraWorkLogId]) => void,
+    setScreen: (screen) => void,
+    returnToTasksScreen: () => void,
+    toggleDebug: (value) => void,
+    toggleTasksShowAsReport: () => void,
+    toggleHideUnReportable: () => void,
+    taskEdit: (key) => void,
+    setDay: (day: string) => void,
+    setDayFromJson: (tasksJson: string) => void,
+    loadSettings: () => void,
+    updateSettings: (settings, returnToTasksScreen?: boolean) => void,
+    openNextDay: () => void,
+    clipboardCopy: (taskId) => void,
+    clipboardCut: (taskId) => void,
+    clipboardPaste: () => void,
+    activateTimer: (taskId: string) => void,
+    activeTimer: (secondsElapsed) => void,
+    setFileTotals: (fileTotals) => void,
+    setTaskTemplates: (templates) => void,
+    stopTimer: ([secondsElapsed, secondsIdle]) => void,
+    taskAddSession: ([taskId, minutes, method]) => void,
+    taskAddActiveApp: ([taskId, activeAppDescription, secondsIdle]) => void,
+    addGlobalActiveApp: (timeredTaskId: string, activeAppDescription: string, secondsIdle: number) => void,
+    templateNew: () => void,
+    templateUpdate: ([idx, updated]) => void,
+    templateDelete: ([idx]) => void,
+    calendarHoveredDayCode: (dayCode: string) => void,
+    saveTasks: () => void,
+    loadAsanaTasks: (force?: boolean) => void,
+    parentIsMissing: (task: TaskObj) => boolean,
+    dragStart: ($event, task) => void,
+    dragContinue: ($event) => void,
+    dragStop: () => void,
+    dropTime: (event, task_id) => void,
+    dragClear: () => void,
+};
+type StoreType = ({state: typeof initialState} & StoreMethodsType);
+
 const StoreContentProvider = ({children}: any) => {
 
     const [state, setState] = useState(initialState);
@@ -151,7 +200,7 @@ const StoreContentProvider = ({children}: any) => {
         storeMethods.updateState({tasks: {...state.tasks}})
     }
 
-    const storeMethods = {
+    const storeMethods:StoreMethodsType = {
         updateState(values) {
             console.log('updateState', 'keys:', JSON.stringify(Object.keys(values)))
             setState((state) => ({...state, ...values, _now: new Date()}));
@@ -774,7 +823,7 @@ const StoreContentProvider = ({children}: any) => {
         storeMethods.updateState({initialized: true});
     }
 
-    const contextValue = useMemo<typeof storeMethods>(() => ({
+    const contextValue = useMemo<StoreType>(():StoreType => ({
             state: state,
             ...storeMethods,
         }),
@@ -784,8 +833,8 @@ const StoreContentProvider = ({children}: any) => {
     return <StoreContext.Provider value={contextValue}>{children}</StoreContext.Provider>
 }
 
-export const useStoreContext = () => {
-    return useContext<typeof initialState>(StoreContext);
+export const useStoreContext = ():StoreType => {
+    return useContext<StoreType>(StoreContext);
 };
 
 export default StoreContentProvider;

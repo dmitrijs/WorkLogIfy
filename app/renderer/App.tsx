@@ -20,7 +20,7 @@ const App = () => {
     (window as any).storeGlobal = store;
 
     const save = () => {
-        store.saveTasks(store, store)
+        store.saveTasks()
     };
 
     const lock = () => {
