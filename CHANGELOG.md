@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.38.0](https://github.com/dmitrijs/WorkLogIfy/compare/v1.37.4...v1.38.0) (2025-03-30)
+
+
+Project migrated from Vue to the React framework.
+
 ### [1.37.4](https://github.com/dmitrijs/WorkLogIfy/compare/v1.37.3...v1.37.4) (2025-01-17)
 
 
