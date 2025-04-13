@@ -208,9 +208,11 @@ const TaskEdit = ({mode}: { mode: string }) => {
                         <td>
                             <select value={task.parentId || ''} onChange={(e) => setTask({...task, parentId: e.target.value})}>
                                 <option value={null}></option>
-                                {Object.values(store.state.tasks).map((parentTask: any) => (
+                                {Object.values(store.state.tasks).map((parentTask: TaskObj) => (
                                     parentTask.id !== task.id && !parentTask.parentId && (
-                                        <option key={parentTask.id} value={parentTask.id}>
+                                        <option key={parentTask.id} value={parentTask.id}
+                                                style={{color: (parentTask.distributed || !parentTask.chargeable ? '#c1c1c1' : '')}}
+                                        >
                                             {parentTask.code && `[${parentTask.code}]`}
                                             {parentTask.title}
                                             {parentTask.notes && ` (${parentTask.notes})`}
