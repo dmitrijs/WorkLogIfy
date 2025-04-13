@@ -210,7 +210,7 @@ const TasksWindow = () => {
                 </div>
             </div>
             <div className={`TasksTable ${store.state.tasksShowAsReport ? 'ShowAsReport' : ''} ${store.state.tasksHideUnReportable ? 'ShowCompact' : ''}`} key={forceUpdateKey.current}>
-                {tasksGrouped.length > 1 && (
+                {Object.entries(tasksGrouped || {}).length > 1 && (
                     <div className="TRowDate Total">
                         <div className="TCol --frozen"></div>
                         <div className="TCol --group-date">Total</div>
@@ -253,10 +253,10 @@ const TasksWindow = () => {
                 {store.state.drag.readyToDrop && <a href="#" onClick={store.dragClear} style={{float: 'right'}}>cancel</a>}
                 View as report:
                 <span className="label--checkbox label--checkbox--with-text">
-                    <label><input type="checkbox" checked={store.state.tasksShowAsReport} onChange={toggleShowAsReport} /><span></span> merge codes</label>
+                    <label><input type="checkbox" checked={store.state.tasksShowAsReport} onChange={toggleShowAsReport}/><span></span> merge codes</label>
                 </span>
                 <span className="label--checkbox label--checkbox--with-text">
-                    <label><input type="checkbox" checked={store.state.tasksHideUnReportable} onChange={toggleHideUnReportable} /><span></span> hide un-reportable</label>
+                    <label><input type="checkbox" checked={store.state.tasksHideUnReportable} onChange={toggleHideUnReportable}/><span></span> hide un-reportable</label>
                 </span>
                 <button type="button" className="btn btn-xs" style={{marginLeft: '6px', padding: '0px 8px'}} title="Copy for Slack. NOTE: Ctrl+F applies formatting in Slack" onClick={copyToClipboardAllTasks}>
                     <i className="icofont-copy"></i>
