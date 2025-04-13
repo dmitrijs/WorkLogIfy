@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file.
 
+### [1.38.1](https://github.com/dmitrijs/WorkLogIfy/compare/v1.38.0...v1.38.1) (2025-04-13)
+
+
+### Features
+
+* **ux:** fade out unimportant tasks when selecting parent ([4791b52](https://github.com/dmitrijs/WorkLogIfy/commit/4791b52a8977df6f5a2831e660cea5a9ebc5be29))
+
+
+### Improvements
+
+* **ux:** fixed missing 'Total' row ([89c90d8](https://github.com/dmitrijs/WorkLogIfy/commit/89c90d8b5a042ed5945cea3e540c3008af1d0667))
+
 ## [1.38.0](https://github.com/dmitrijs/WorkLogIfy/compare/v1.37.4...v1.38.0) (2025-03-30)
 
 
