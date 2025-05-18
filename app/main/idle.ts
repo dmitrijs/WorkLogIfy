@@ -23,19 +23,19 @@ export default class IdleUser {
     public static registerOnReady(mainWindow) {
         electron.powerMonitor.addListener('lock-screen', () => {
             this.screenLocked = true;
-            if (Filesystem.settings.wake_up_connected_devices) {
+            if (Filesystem.settings.connected_devices_wake_up) {
                 Integrations.lockDevices();
             }
         });
 
         electron.powerMonitor.addListener('unlock-screen', () => {
             this.screenLocked = false;
-            if (Filesystem.settings.wake_up_connected_devices) {
+            if (Filesystem.settings.connected_devices_wake_up) {
                 Integrations.wakeUpDevices();
             }
         });
 
-        if (Filesystem.settings.wake_up_connected_devices) {
+        if (Filesystem.settings.connected_devices_wake_up) {
             this.lastWakeUp = moment.utc().unix();
             Integrations.wakeUpDevices();
         }
@@ -62,7 +62,7 @@ export default class IdleUser {
             if (time < this.seconds_to_become_idle) {
                 this.isIdle = this.isOffline = false;
 
-                if (Filesystem.settings.wake_up_connected_devices && !this.screenLocked) {
+                if (Filesystem.settings.connected_devices_wake_up && !this.screenLocked) {
                     if (!this.lastWakeUp || (moment.utc().unix() - this.lastWakeUp) > this.seconds_to_wake_up_devices) {
                         this.lastWakeUp = moment.utc().unix();
                         Integrations.wakeUpDevices();

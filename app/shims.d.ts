@@ -119,7 +119,7 @@ declare type SettingsObj = {
     sorting_order: string;
     special_days: object;
     global_notes: string;
-    wake_up_connected_devices: boolean;
+    connected_devices_wake_up: boolean;
 }
 
 declare type CalendarStatistics = {
