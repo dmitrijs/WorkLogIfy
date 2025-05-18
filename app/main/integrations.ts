@@ -1,4 +1,5 @@
 import {spawn} from "child_process"
+import Filesystem from "./filesystem";
 
 class Integrations {
     public static async wakeUpDevices() {
@@ -17,12 +18,15 @@ class Integrations {
                 await this.unlockAndroid();
             }
 
-            console.log('>> go fullscreen');
 
-            setTimeout(async () => {
-                await this.runShell('adb.exe', `shell input touchscreen tap 200 200`);
-                await this.runShell('adb.exe', 'shell input keyevent 34').then() // press 'f' to go full screen
-            }, 500);
+            if (Filesystem.settings.connected_devices_open_dashboard) {
+                console.log('>> go fullscreen');
+
+                setTimeout(async () => {
+                    await this.runShell('adb.exe', `shell input touchscreen tap 200 200`);
+                    await this.runShell('adb.exe', 'shell input keyevent 34').then() // press 'f' to go full screen
+                }, 500);
+            }
         });
     }
 

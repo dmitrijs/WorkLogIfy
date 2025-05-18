@@ -120,6 +120,7 @@ declare type SettingsObj = {
     special_days: object;
     global_notes: string;
     connected_devices_wake_up: boolean;
+    connected_devices_open_dashboard: boolean;
 }
 
 declare type CalendarStatistics = {

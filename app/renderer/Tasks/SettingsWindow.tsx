@@ -53,6 +53,10 @@ const SettingsWindow = () => {
                     <input type="checkbox" checked={store.state.settings.connected_devices_wake_up} onChange={() => store.updateSettingsState({connected_devices_wake_up: !store.state.settings.connected_devices_wake_up})} /><span></span>
                     Wake up connected devices (<em title="Android devices will be lock/unlocked automatically. Unlock code should be set to 0000.">info</em>)
                 </label>
+                <label style={{width: 'auto', cursor: 'pointer'}}>
+                    <input type="checkbox" checked={store.state.settings.connected_devices_open_dashboard} onChange={() => store.updateSettingsState({connected_devices_open_dashboard: !store.state.settings.connected_devices_open_dashboard})} /><span></span>
+                    Open dashboard on connected devices (<em title="ify.lv specific feature">info</em>)
+                </label>
             </span>
             <br />
             <br />
