@@ -42,6 +42,7 @@ declare type TaskObj = {
     subtaskIds?: string[];
 
     asanaTaskGid?: string;
+    youtrackTaskCode?: string;
     taskIdExtractedFrom?: string; // id of task from which current task was extracted
 
     group_key?: string;
@@ -109,6 +110,9 @@ declare type SettingsObj = {
     jira_username: string;
     jira_password: string;
     asana_token: string;
+    youtrack_domain: string;
+    youtrack_token: string;
+    youtrack_query: string;
     asana_assignee_id: string;
     asana_assignee_name: string;
     asana_workspace_id: string;
@@ -121,6 +125,8 @@ declare type SettingsObj = {
     global_notes: string;
     connected_devices_wake_up: boolean;
     connected_devices_open_dashboard: boolean;
+    asana_enabled: boolean;
+    youtrack_enabled: boolean;
 }
 
 declare type CalendarStatistics = {
@@ -172,6 +178,22 @@ declare type AsanaTaskObj = {
     permalink_url: string;
     completed_at?: string;
     assignee_section?: { name: string };
+}
+
+declare type YoutrackTaskObj = {
+    customFields: any[],
+    idReadable,
+    summary,
+    description,
+
+    AsanaID: string;
+    Assignee: string;
+    Estimation: string;
+    Note: string;
+    Original_estimation: string;
+    Priority: string;
+    Spent_time: string;
+    State: string;
 }
 
 declare type ShellResult = {

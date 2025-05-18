@@ -119,9 +119,11 @@ export function Store_MergeSameCodes(tasks: Record<string, any>) {
 
     Object.values(tasks).forEach((task: TaskObj) => {
         idx++;
-        let existing = unique[task.code];
+
+        let mergingCode = task.code.replace(/-.*/, '');
+        let existing = unique[mergingCode];
         if (!existing) {
-            unique[task.code] = {...task};
+            unique[mergingCode] = {...task, code: mergingCode};
             return;
         }
 
@@ -129,7 +131,7 @@ export function Store_MergeSameCodes(tasks: Record<string, any>) {
             return;
         }
         if (existing.time_charge_seconds <= 0) { // replace empty
-            unique[task.code] = {...task};
+            unique[mergingCode] = {...task};
             return;
         }
 
@@ -176,7 +178,7 @@ export function Store_MergeSameCodes(tasks: Record<string, any>) {
         existing.grouped = true;
         existing.parentId = null;
 
-        unique[task.code] = existing;
+        unique[mergingCode] = existing;
     });
 
     return sort_tasks(unique, true);

@@ -91,6 +91,7 @@ const initialState = {
     calendarHoveredDayCode: null,
 
     asanaTasks: {} as Record<string, AsanaTaskObj>,
+    youtrackTasks: {} as Record<string, YoutrackTaskObj>,
 
     settings: {} as SettingsObj,
     drag: {
@@ -150,6 +151,7 @@ type StoreMethodsType = {
     calendarHoveredDayCode: (dayCode: string) => void,
     saveTasks: () => void,
     loadAsanaTasks: (force?: boolean) => void,
+    loadYoutrackTasks: (force?: boolean) => void,
     parentIsMissing: (task: TaskObj) => boolean,
     dragStart: ($event, task) => void,
     dragContinue: ($event) => void,
@@ -157,7 +159,7 @@ type StoreMethodsType = {
     dropTime: (event, task_id) => void,
     dragClear: () => void,
 };
-type StoreType = ({state: typeof initialState} & StoreMethodsType);
+type StoreType = ({ state: typeof initialState } & StoreMethodsType);
 
 const StoreContentProvider = ({children}: any) => {
 
@@ -201,7 +203,7 @@ const StoreContentProvider = ({children}: any) => {
         storeMethods.updateState({tasks: {...state.tasks}})
     }
 
-    const storeMethods:StoreMethodsType = {
+    const storeMethods: StoreMethodsType = {
         updateState(values) {
             console.log('updateState', 'keys:', JSON.stringify(Object.keys(values)))
             setState((state) => ({...state, ...values, _now: new Date()}));
@@ -228,6 +230,7 @@ const StoreContentProvider = ({children}: any) => {
                 time_add_minutes: '',
                 time_record_minutes: '',
                 asanaTaskGid: '',
+                youtrackTaskCode: '',
                 parentId: '',
             } as TaskEditedObj;
 
@@ -296,6 +299,7 @@ const StoreContentProvider = ({children}: any) => {
                 records: [],
                 activeApps: [],
                 asanaTaskGid: task.asanaTaskGid,
+                youtrackTaskCode: task.youtrackTaskCode,
                 parentId: task.parentId,
             };
             state.createdTaskId = id;
@@ -343,6 +347,7 @@ const StoreContentProvider = ({children}: any) => {
             state.tasks[task.id].comment = task.comment;
             state.tasks[task.id].source = task.source;
             state.tasks[task.id].asanaTaskGid = task.asanaTaskGid;
+            state.tasks[task.id].youtrackTaskCode = task.youtrackTaskCode;
             state.tasks[task.id].parentId = task.parentId;
 
             if (task.time_add_minutes) {
@@ -721,6 +726,37 @@ const StoreContentProvider = ({children}: any) => {
             })
         },
 
+        loadYoutrackTasks(force = false) {
+            if (!force && Object.values(state.youtrackTasks).length) {
+                return;
+            }
+            const youtrackTasksCall = window.ipc.sendSync('jira.request', {
+                url: `https://${state.settings.youtrack_domain}/api/issues?fields=id,idReadable,description,summary,customFields(name,value(name))` +
+                    '&query=' + encodeURIComponent(state.settings.youtrack_query || ''),
+                headers: {
+                    Authorization: `Bearer ${state.settings.youtrack_token}`,
+                    Accept: 'application/json',
+                    "Content-Type": "application/json",
+                },
+                method: 'GET',
+                redirect: "follow",
+                referrerPolicy: "no-referrer",
+            });
+
+            state.youtrackTasks = keyBy([
+                ...youtrackTasksCall.response.map((ytTask: YoutrackTaskObj) => {
+                    ytTask.customFields.forEach((cf) => {
+                        ytTask[cf.name.replace(/ /, '_')] = cf.value?.name || cf.value;
+                    })
+                    delete ytTask.customFields;
+                    return ytTask;
+                }),
+            ], 'idReadable');
+            storeMethods.updateState({
+                youtrackTasks: state.youtrackTasks,
+            })
+        },
+
         parentIsMissing(task: TaskObj) {
             const parentTask = state.tasks[task.parentId];
             return !parentTask || parentTask.date !== task.date;
@@ -828,7 +864,7 @@ const StoreContentProvider = ({children}: any) => {
         storeMethods.updateState({initialized: true});
     }
 
-    const contextValue = useMemo<StoreType>(():StoreType => ({
+    const contextValue = useMemo<StoreType>((): StoreType => ({
             state: state,
             ...storeMethods,
         }),
@@ -838,7 +874,7 @@ const StoreContentProvider = ({children}: any) => {
     return <StoreContext.Provider value={contextValue}>{children}</StoreContext.Provider>
 }
 
-export const useStoreContext = ():StoreType => {
+export const useStoreContext = (): StoreType => {
     return useContext<StoreType>(StoreContext);
 };
 

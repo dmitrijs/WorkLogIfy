@@ -35,6 +35,14 @@ const SettingsWindow = () => {
             <label>JIRA Email:</label> <input type="text" value={store.state.settings.jira_username || ''} onChange={(e) => store.updateSettingsState({jira_username: e.target.value})} placeholder="you@example.com" /><br />
             <label>JIRA API Token:</label> <input type="password" value={store.state.settings.jira_password || ''} onChange={(e) => store.updateSettingsState({jira_password: e.target.value})} placeholder="***********" /> <a target="_blank" rel="noreferrer" href="https://id.atlassian.com/manage-profile/security/api-tokens">API tokens</a><br />
             <br />
+            <label>Asana:</label>
+            <span className="label--checkbox label--checkbox--with-text">
+                <label style={{width: 'auto', cursor: 'pointer'}}>
+                    <input type="checkbox" checked={store.state.settings.asana_enabled} onChange={() => store.updateSettingsState({asana_enabled: !store.state.settings.asana_enabled})} /><span></span>
+                    {' '}Enabled
+                </label>
+            </span>
+            <br />
             <label>Asana API Token:</label> <input type="password" value={store.state.settings.asana_token || ''} onChange={(e) => store.updateSettingsState({asana_token: e.target.value})} placeholder="***********" /><br />
             <label>Asana Workspace (<a href="#" onClick={(e) => { e.preventDefault(); asanaRefreshWorkspace(); }}><i className="icofont-refresh"></i></a>):</label>
             <select value={store.state.settings.asana_workspace_id} onChange={(e) => store.updateSettingsState({asana_workspace_id: e.target.value, asana_workspace_name: asanaWorkspaces[e.target.value].name })}>
@@ -45,6 +53,18 @@ const SettingsWindow = () => {
             </select>
             <label>Asana Filter (<a href="https://developers.asana.com/reference/searchtasksforworkspace" target="_blank" rel="noreferrer">docs</a>):</label>
             <input type="text" placeholder="&is_blocked=false&key=value" value={store.state.settings.asana_extra_filter || ''} onChange={(e) => store.updateSettingsState({asana_extra_filter: e.target.value})} /> <a href="#" onClick={(e) => { e.preventDefault(); asanaSearchTasks(); }}>load</a><br />
+            <br />
+            <label>Youtrack:</label>
+            <span className="label--checkbox label--checkbox--with-text">
+                <label style={{width: 'auto', cursor: 'pointer'}}>
+                    <input type="checkbox" checked={store.state.settings.youtrack_enabled} onChange={() => store.updateSettingsState({youtrack_enabled: !store.state.settings.youtrack_enabled})} /><span></span>
+                    {' '}Enabled
+                </label>
+            </span>
+            <br />
+            <label>Youtrack Domain:</label> <input type="text" value={store.state.settings.youtrack_domain || ''} onChange={(e) => store.updateSettingsState({youtrack_domain: e.target.value})} placeholder="company.youtrack.cloud" /><br />
+            <label>Youtrack API Token:</label> <input type="password" value={store.state.settings.youtrack_token || ''} onChange={(e) => store.updateSettingsState({youtrack_token: e.target.value})} placeholder="***********" /><br />
+            <label>Youtrack Query:</label> <input type="text" value={store.state.settings.youtrack_query || ''} onChange={(e) => store.updateSettingsState({youtrack_query: e.target.value})} placeholder="project: {My Project} -Verified -Duplicate" /><br />
             <br />
 
             <label>Integrations:</label>

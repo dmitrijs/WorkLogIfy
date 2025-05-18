@@ -837,10 +837,10 @@ table {
         position: relative;
     }
 
-    .ellipsis:before {
-        content: 'X';
-        visibility: hidden;
-    }
+    //.ellipsis:before {
+    //    content: 'X';
+    //    visibility: hidden;
+    //}
 
     .ellipsis span {
         position: absolute;

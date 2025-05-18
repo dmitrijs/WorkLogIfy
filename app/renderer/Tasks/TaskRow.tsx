@@ -5,7 +5,7 @@ import timer from "../Timer";
 import {timespanToText} from '../Utils/Utils';
 
 const TaskRow = ({tasksGrouped, group_id, task_id, onDragStart}: any) => {
-    const task = tasksGrouped[group_id]?.tasks[task_id] || {code: 'ERROR!', title: `Invalid task id '${task_id}' in group '${group_id}'`};
+    const task: TaskObj = tasksGrouped[group_id]?.tasks[task_id] || {code: 'ERROR!', title: `Invalid task id '${task_id}' in group '${group_id}'`};
     const rootTasks: any[] = Object.values(tasksGrouped).flatMap((group: any) => Object.values(group.tasks)).filter((t: any) => t.code !== 'idle' && !t.parentId);
     const store = useStoreContext();
 
@@ -65,7 +65,7 @@ const TaskRow = ({tasksGrouped, group_id, task_id, onDragStart}: any) => {
                 </div>
                 <div className="TCol --title" onClick={() => store.state.tasksShowAsReport ? copyToClipboard(event, task.notes) : editTask(event)}>
                     <span className={`Title--Content ${!store.state.tasksShowAsReport && !store.state.tasksHideUnReportable ? 'ellipsis' : ''}`}>
-                        {task.code !== 'idle' && !task.asanaTaskGid && !rootTasks[task.code]?.asanaTaskGid ? '❔' : null}
+                        {task.code !== 'idle' && !task.asanaTaskGid && !rootTasks[task.code]?.asanaTaskGid && !task.youtrackTaskCode ? '❔' : null}
                         {task.title || '\u00A0'}
                     </span>
                     <span className="Note--Content">

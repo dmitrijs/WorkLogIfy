@@ -5,6 +5,14 @@ import {useStoreContext} from '../Store/Store';
 import timer from "../Timer";
 import {timespanToText} from '../Utils/Utils';
 
+const YoutrackPriorities = {
+    'Show-stopper': 1,
+    'Critical': 2,
+    'Major': 3,
+    'Normal': 4,
+    'Minor': 5,
+}
+
 const TaskEdit = ({mode}: { mode: string }) => {
     const [task, setTask] = useState({});
     const titleEl = useRef(null);
@@ -18,6 +26,12 @@ const TaskEdit = ({mode}: { mode: string }) => {
             setTask({...store.getEditedTask(), time_add_minutes: '', time_record_minutes: ''});
         }
         titleEl.current.focus();
+
+        if (mode === 'new') {
+            (async () => {
+                store.loadYoutrackTasks(true);
+            })();
+        }
     }, [mode]);
 
     const save = (autostart = false) => {
@@ -91,6 +105,22 @@ const TaskEdit = ({mode}: { mode: string }) => {
 
     const asanaTasks = _.groupBy(store.state.asanaTasks, 'assignee_section.name');
 
+    const youtrackTaskChanged = (youtrackTask: YoutrackTaskObj) => {
+        if (!youtrackTask) {
+            setTask({...task, youtrackTaskCode: null});
+            return;
+        }
+        setTask({
+            ...task,
+            youtrackTaskCode: youtrackTask.idReadable,
+            code: youtrackTask.idReadable,
+            title: youtrackTask.summary,
+        });
+    };
+
+    const youtrackTasksSorted = _.sortBy(store.state.youtrackTasks, [(a) => YoutrackPriorities[a.Priority], 'idReadable']);
+    const youtrackTasksGrouped = _.groupBy(youtrackTasksSorted, 'Priority');
+
     return (
         <div className="TaskEdit" data-mode={mode}>
             <br/>
@@ -131,7 +161,7 @@ const TaskEdit = ({mode}: { mode: string }) => {
                         <td>Title:</td>
                         <td><input type="text" value={task.title || ''} onChange={(e) => setTask({...task, title: e.target.value})} ref={titleEl}/></td>
                     </tr>
-                    <tr>
+                    {store.state.settings.asana_enabled && <tr>
                         <td>Asana task (<a href="#" onClick={(e) => {
                             e.preventDefault();
                             store.loadAsanaTasks(true);
@@ -153,7 +183,29 @@ const TaskEdit = ({mode}: { mode: string }) => {
                                 ))}
                             </select>
                         </td>
-                    </tr>
+                    </tr>}
+                    {store.state.settings.youtrack_enabled && <tr>
+                        <td>Youtrack (<a href="#" onClick={(e) => {
+                            e.preventDefault();
+                            store.loadYoutrackTasks(true);
+                        }}><i className="icofont-refresh"></i></a>):
+                        </td>
+                        <td>
+                            <select value={task.youtrackTaskCode || ''} onChange={(e) => {
+                                youtrackTaskChanged(store.state.youtrackTasks?.[e.target.value]);
+                            }}>
+                                <option value=""></option>
+                                {!store.state.youtrackTasks?.[task.youtrackTaskCode] && <option value={task.youtrackTaskCode}>Current: {task.youtrackTaskCode}</option>}
+                                {Object.entries(youtrackTasksGrouped).map(([groupName, tasks]) => (
+                                    <optgroup key={groupName} label={String(groupName)}>
+                                        {tasks.map(task => (
+                                            <option key={task.idReadable} value={task.idReadable}>[{task.idReadable}] {task.summary}</option>
+                                        ))}
+                                    </optgroup>
+                                ))}
+                            </select>
+                        </td>
+                    </tr>}
                     <tr>
                         <td style={{width: '100px'}}>Code:</td>
                         <td className="Complex">
