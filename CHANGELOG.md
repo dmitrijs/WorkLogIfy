@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.39.0](https://github.com/dmitrijs/WorkLogIfy/compare/v1.38.3...v1.39.0) (2025-05-18)
+
+
+### Features
+
+* added Youtrack integration ([5b4a2bb](https://github.com/dmitrijs/WorkLogIfy/commit/5b4a2bbd2ca9c8c0116a52d236196ff7f294cd5d))
+
 ### [1.38.3](https://github.com/dmitrijs/WorkLogIfy/compare/v1.38.2...v1.38.3) (2025-05-18)
 
 ### [1.38.2](https://github.com/dmitrijs/WorkLogIfy/compare/v1.38.1...v1.38.2) (2025-05-18)
