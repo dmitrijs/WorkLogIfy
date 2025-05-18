@@ -1,6 +1,6 @@
 {
   "name": "work-log-ify",
-  "version": "1.38.2",
+  "version": "1.38.3",
   "description": "WorkLogIfy",
   "main": "dist-electron/main/index.js",
   "scripts": {
