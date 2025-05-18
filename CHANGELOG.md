@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+### [1.39.1](https://github.com/dmitrijs/WorkLogIfy/compare/v1.39.0...v1.39.1) (2025-05-18)
+
+
+### Improvements
+
+* fixed global notes not being saved ([0f8f573](https://github.com/dmitrijs/WorkLogIfy/commit/0f8f57320e2c800c8b1fd02c2d5d0aa5f846fa39))
+
 ## [1.39.0](https://github.com/dmitrijs/WorkLogIfy/compare/v1.38.3...v1.39.0) (2025-05-18)
 
 
