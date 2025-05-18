@@ -25,7 +25,11 @@
         "section": "Features"
       },
       {
-        "type": "patch",
+        "type": "major",
+        "section": "Features"
+      },
+      {
+        "type": "minor",
         "section": "Improvements"
       },
       {
