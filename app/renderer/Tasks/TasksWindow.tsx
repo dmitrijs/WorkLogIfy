@@ -160,8 +160,8 @@ const TasksWindow = () => {
         }
     }, [store.state.settings.global_notes]);
 
-    const handleBlur = () => {
-        store.updateSettings(store.state.settings);
+    const handleBlur = (e) => {
+        store.updateSettings({global_notes: e.target.value});
     };
 
     function toggleShowAsReport() {
