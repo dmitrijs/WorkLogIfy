@@ -205,12 +205,10 @@ const StoreContentProvider = ({children}: any) => {
 
     const storeMethods: StoreMethodsType = {
         updateState(values) {
-            console.log('updateState', 'keys:', JSON.stringify(Object.keys(values)))
             setState((state) => ({...state, ...values, _now: new Date()}));
         },
 
         updateSettingsState(values) {
-            console.log('updateState', 'keys:', JSON.stringify(Object.keys(values)))
             setState((state) => ({...state, settings: {...state.settings, ...values}, _now: new Date()}));
         },
 
@@ -277,7 +275,6 @@ const StoreContentProvider = ({children}: any) => {
                 if (state.tasksHoveredId !== id) {
                     return state;
                 }
-                console.log('tasksUiUnhoveredId')
                 return {...state, tasksHoveredId: null}
             })
         },
@@ -429,7 +426,6 @@ const StoreContentProvider = ({children}: any) => {
         taskEdit(key) {
             state.taskEditedId = key;
             state.screen = 'task.edit';
-            console.log(`setState taskEdit "${key}"`);
             storeMethods.updateState({
                 taskEditedId: state.taskEditedId,
                 screen: state.screen,

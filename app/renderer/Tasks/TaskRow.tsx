@@ -33,7 +33,6 @@ const TaskRow = ({tasksGrouped, group_id, task_id, onDragStart}: any) => {
 
     return (
         <div
-            key={task_id}
             className={`TRow ${task.distributed ? 'distributed' : ''} ${!task.chargeable ? 'notchargeable' : ''} ${store.state.tasksHoveredId === task.id ? 'hovered' : ''} ${store.state.taskTimeredId === task.id ? 'timered' : ''} ${task.time_recorded_seconds ? 'hasRecords' : ''} ${task.is_done ? 'isDone' : ''} ${task.is_on_hold ? 'isOnHold' : ''} ${rootTasks[task.code || task.id]?.id === task.id ? 'isRootTask' : ''} ${task.parentId ? 'isSubtask' : ''} ${task.parentId && store.parentIsMissing(task) ? 'isMissingParent' : ''}`}
         >
             <div className="TRowContent" style={{display: (store.state.tasksHideUnReportable && (task.distributed || !task.chargeable)) && store.state.taskTimeredId !== task.id ? 'none' : ''}}
@@ -102,6 +101,7 @@ const TaskRow = ({tasksGrouped, group_id, task_id, onDragStart}: any) => {
             <div className="Subtasks">
                 {Object.values(task.subtaskIds || []).map(subtask_id => (
                     <TaskRow
+                        key={subtask_id}
                         group_id={group_id}
                         task_id={subtask_id}
                         tasksGrouped={tasksGrouped}
