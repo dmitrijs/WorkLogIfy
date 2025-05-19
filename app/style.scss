@@ -547,6 +547,9 @@ table {
                 .TCol.--hierarchy {
                     display: none;
                 }
+                .TCol.--code {
+                    color: #aaaaaa;
+                }
             }
 
             &.isMissingParent {

@@ -64,10 +64,10 @@ const TaskRow = ({tasksGrouped, group_id, task_id, onDragStart}: any) => {
                     </div>
                 </div>
                 <div className="TCol --title" onClick={() => store.state.tasksShowAsReport ? copyToClipboard(event, task.notes) : editTask(event)}>
-                    <span className={`Title--Content ${!store.state.tasksShowAsReport && !store.state.tasksHideUnReportable ? 'ellipsis' : ''}`}>
-                        {task.code !== 'idle' && !task.asanaTaskGid && !rootTasks[task.code]?.asanaTaskGid && !task.youtrackTaskCode ? '❔' : null}
+                    {(!task.parentId || task.title) && <span className={`Title--Content ${!store.state.tasksShowAsReport && !store.state.tasksHideUnReportable ? 'ellipsis' : ''}`}>
+                        {task.code !== 'idle' && !task.asanaTaskGid && !rootTasks[task.code]?.asanaTaskGid && !task.youtrackTaskCode && !task.parentId ? '❔' : null}
                         {task.title || '\u00A0'}
-                    </span>
+                    </span>}
                     <span className="Note--Content">
                         {store.state.tasksShowAsReport && !task.notes ? '[empty notes]' : task.notes || '\u00A0'}
                     </span>
