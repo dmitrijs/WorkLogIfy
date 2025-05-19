@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+### [1.39.5](https://github.com/dmitrijs/WorkLogIfy/compare/v1.39.4...v1.39.5) (2025-05-19)
+
+
+### Improvements
+
+* load youtrack tasks if they have not loaded yet ([1c226df](https://github.com/dmitrijs/WorkLogIfy/commit/1c226dfaf567861468a75d6f26753e797f359dc7))
+* updated tasks selection combobox style ([afb8319](https://github.com/dmitrijs/WorkLogIfy/commit/afb83194e32aebe913ada9c304f4174fad71ce00))
+
 ### [1.39.4](https://github.com/dmitrijs/WorkLogIfy/compare/v1.39.3...v1.39.4) (2025-05-19)
 
 ### [1.39.3](https://github.com/dmitrijs/WorkLogIfy/compare/v1.39.2...v1.39.3) (2025-05-19)
