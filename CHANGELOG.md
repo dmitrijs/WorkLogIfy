@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+### [1.39.2](https://github.com/dmitrijs/WorkLogIfy/compare/v1.39.1...v1.39.2) (2025-05-19)
+
+
+### Improvements
+
+* tweaked style for subtasks ([111152b](https://github.com/dmitrijs/WorkLogIfy/commit/111152bcc7b581f1fca0f84370513935d4c2fd91))
+* tweaked style of tasks list ([d0265c2](https://github.com/dmitrijs/WorkLogIfy/commit/d0265c2b34b1a76d1952ad557308bd34b9542daa))
+
 ### [1.39.1](https://github.com/dmitrijs/WorkLogIfy/compare/v1.39.0...v1.39.1) (2025-05-18)
 
 
