@@ -28,7 +28,7 @@ const TaskEdit = ({mode}: { mode: string }) => {
         }
         titleEl.current.focus();
 
-        if (mode === 'new') {
+        if (mode === 'new' || (store.state.settings.youtrack_enabled && !Object.keys(store.state.youtrackTasks || {}).length)) {
             (async () => {
                 store.loadYoutrackTasks(true);
             })();
