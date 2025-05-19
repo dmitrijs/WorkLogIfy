@@ -540,7 +540,7 @@ table {
 
                 .TRowContent {
                     grid-template-columns: 22px 22px 22px 73px 1fr 22px 63px 34px; // without first column
-                    border-left: 1px dashed #c2c2c2 !important;
+                    border-left: 1px dotted #aaaaaa !important;
                     padding-left: 0;
                 }
 
@@ -550,6 +550,10 @@ table {
                 .TCol.--code {
                     color: #aaaaaa;
                 }
+            }
+            &:not(.--header):not(.isSubtask):not(.notchargeable):not(.distributed) > .TRowContent {
+                padding-top: 0;
+                border-top: 1px solid #ddd !important;
             }
 
             &.isMissingParent {
