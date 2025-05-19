@@ -1245,7 +1245,10 @@ table {
     //    @apply border-border outline-ring/50;
     //}
     //
-    //body {
-    //    @apply bg-background text-foreground;
-    //}
+    body {
+        --text-sm: 0.68rem;
+        --text-xs: 0.75rem;
+
+        --popover-foreground: grey; /* popover border color */
+    }
 }

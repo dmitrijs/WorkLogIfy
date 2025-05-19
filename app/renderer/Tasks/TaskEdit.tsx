@@ -1,3 +1,4 @@
+import {ComboboxTasks} from "@/components/ComboboxTasks";
 import _ from 'lodash';
 import moment from 'moment';
 import React, {useEffect, useRef, useState} from 'react';
@@ -191,19 +192,13 @@ const TaskEdit = ({mode}: { mode: string }) => {
                         }}><i className="icofont-refresh"></i></a>):
                         </td>
                         <td>
-                            <select value={task.youtrackTaskCode || ''} onChange={(e) => {
-                                youtrackTaskChanged(store.state.youtrackTasks?.[e.target.value]);
-                            }}>
-                                <option value=""></option>
-                                {!store.state.youtrackTasks?.[task.youtrackTaskCode] && <option value={task.youtrackTaskCode}>Current: {task.youtrackTaskCode}</option>}
-                                {Object.entries(youtrackTasksGrouped).map(([groupName, tasks]) => (
-                                    <optgroup key={groupName} label={String(groupName)}>
-                                        {tasks.map(task => (
-                                            <option key={task.idReadable} value={task.idReadable}>[{task.idReadable}] {task.summary}</option>
-                                        ))}
-                                    </optgroup>
-                                ))}
-                            </select>
+                            <ComboboxTasks currentTaskCode={task.youtrackTaskCode}
+                                           currentTask={store.state.youtrackTasks?.[task.youtrackTaskCode]}
+                                           tasksGrouped={youtrackTasksGrouped}
+                                           onChange={(value) => {
+                                               youtrackTaskChanged(store.state.youtrackTasks?.[value]);
+                                           }}
+                            />
                         </td>
                     </tr>}
                     <tr>
