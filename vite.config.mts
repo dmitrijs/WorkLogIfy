@@ -4,6 +4,8 @@ import electron from 'vite-plugin-electron'
 import renderer from 'vite-plugin-electron-renderer'
 import pkg from './package.json'
 import react from '@vitejs/plugin-react'
+import path from "path"
+import tailwindcss from '@tailwindcss/vite'
 
 // https://vitejs.dev/config/
 export default defineConfig(({ command }) => {
@@ -19,6 +21,7 @@ export default defineConfig(({ command }) => {
     },
     plugins: [
       react(),
+      tailwindcss(),
       electron([
         {
           // Main-Process entry file of the Electron App.
@@ -65,6 +68,11 @@ export default defineConfig(({ command }) => {
       // Use Node.js API in the Renderer-process
       renderer(),
     ],
+    resolve: {
+      alias: {
+        "@": path.resolve(__dirname, "./app"),
+      },
+    },
     server: process.env.VSCODE_DEBUG && (() => {
       const url = new URL((pkg as any).debug.env.VITE_DEV_SERVER_URL)
       return {

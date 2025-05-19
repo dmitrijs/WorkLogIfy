@@ -1,18 +1,7 @@
+@import "tailwindcss" important; /* important suppresses warning */
+@config "../tailwind.config.cjs";
+
 @import './../external/bootstrap-4.3.1-dist/css/bootstrap.min.css';
-
-@layer base tw-base tw-components tw-utilities;
-
-@layer tw-base {
-    @tailwind base;
-}
-
-@layer tw-components {
-    @tailwind components;
-}
-
-@layer tw-utilities {
-    @tailwind utilities;
-}
 
 body {
     font-size: 11px;
@@ -21,6 +10,10 @@ body {
 
 table {
     font-size: inherit;
+
+    td {
+        padding-bottom: 1px;
+    }
 }
 
 ::-webkit-scrollbar {

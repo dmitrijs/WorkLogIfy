@@ -1,5 +1,9 @@
 {
   "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./app/*"]
+    },
     "esModuleInterop": true,
     "experimentalDecorators": true,
     "target": "esnext",
