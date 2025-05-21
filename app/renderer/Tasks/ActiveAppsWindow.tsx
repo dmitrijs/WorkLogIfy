@@ -11,7 +11,7 @@ const ActiveAppsWindow = () => {
     }, [store.state.activeApps]);
 
     return (
-        <div className="ActiveAppsWindow">
+        <div className="ActiveAppsWindow [&_td]:pr-1 [&_td]:whitespace-nowrap">
             <table>
                 <thead>
                 <tr>
