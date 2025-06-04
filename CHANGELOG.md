@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+### [1.39.7](https://github.com/dmitrijs/WorkLogIfy/compare/v1.39.6...v1.39.7) (2025-06-04)
+
+
+### Improvements
+
+* fixed youtrack tasks search ([f49e3ae](https://github.com/dmitrijs/WorkLogIfy/commit/f49e3aec4e421ba8f1c3e93d2fa6486f2bd3b6b9))
+* search youtrack tasks by State, added State icons ([a0ff262](https://github.com/dmitrijs/WorkLogIfy/commit/a0ff262e5b9301919b428413296c62d610db7df1))
+
 ### [1.39.6](https://github.com/dmitrijs/WorkLogIfy/compare/v1.39.5...v1.39.6) (2025-05-21)
 
 ### [1.39.5](https://github.com/dmitrijs/WorkLogIfy/compare/v1.39.4...v1.39.5) (2025-05-19)
