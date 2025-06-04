@@ -739,15 +739,15 @@ const StoreContentProvider = ({children}: any) => {
                 referrerPolicy: "no-referrer",
             });
 
-            state.youtrackTasks = keyBy([
-                ...youtrackTasksCall.response.map((ytTask: YoutrackTaskObj) => {
-                    ytTask.customFields.forEach((cf) => {
-                        ytTask[cf.name.replace(/ /, '_')] = cf.value?.name || cf.value;
-                    })
-                    delete ytTask.customFields;
-                    return ytTask;
-                }),
-            ], 'idReadable');
+            const tasksNormalized = youtrackTasksCall.response.map((ytTask: YoutrackTaskObj) => {
+                ytTask.customFields.forEach((cf) => { // set custom fields on root
+                    ytTask[cf.name.replace(/ /, '_')] = cf.value?.name || cf.value;
+                })
+                delete ytTask.customFields;
+                return ytTask;
+            });
+
+            state.youtrackTasks = keyBy(tasksNormalized, 'idReadable');
             storeMethods.updateState({
                 youtrackTasks: state.youtrackTasks,
             })
