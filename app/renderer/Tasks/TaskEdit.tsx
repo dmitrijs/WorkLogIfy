@@ -13,6 +13,13 @@ const YoutrackPriorities = {
     'Normal': 4,
     'Minor': 5,
 }
+const YoutrackStates = {
+    'In Progress': 10,
+    'To be discussed': 20,
+    'Fixed': 25,
+    'Open': 30,
+    'Submitted': 30,
+}
 
 const TaskEdit = ({mode}: { mode: string }) => {
     const [task, setTask] = useState({});
@@ -119,7 +126,11 @@ const TaskEdit = ({mode}: { mode: string }) => {
         });
     };
 
-    const youtrackTasksSorted = _.sortBy(store.state.youtrackTasks, [(a) => YoutrackPriorities[a.Priority], 'idReadable']);
+    const youtrackTasksSorted = _.sortBy(store.state.youtrackTasks, [
+        (a) => YoutrackPriorities[a.Priority],
+        (a) => YoutrackStates[a.State],
+        '-idReadable',
+    ]);
     const youtrackTasksGrouped = _.groupBy(youtrackTasksSorted, 'Priority');
 
     return (

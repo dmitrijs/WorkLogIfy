@@ -3,7 +3,7 @@
 import {Button} from "@/components/ui/button"
 import {Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList} from "@/components/ui/command"
 import {Popover, PopoverContent, PopoverTrigger} from "@/components/ui/popover"
-import {useStoreContext} from "@/renderer/Store/Store";
+import {Icon} from "@iconify-icon/react";
 import {ChevronDown, X} from "lucide-react"
 import * as React from "react"
 
@@ -30,6 +30,22 @@ export function ComboboxTasks({currentTaskCode, currentTask, tasksGrouped, onCha
         'Normal': 'text-green-500',
         'Minor': 'text-neutral-500',
     };
+
+    function stateIcon(state) {
+        switch (state) {
+            case 'In Progress':
+                return <Icon icon="material-symbols-light:play-circle-outline-rounded" width="16" height="16" className={"text-green-700"}/>
+            case 'To be discussed':
+                return <Icon icon="material-symbols-light:pause-circle-outline-rounded" width="16" height="16" className={"text-yellow-700"}/>
+            case   'Open':
+            case   'Submitted':
+                return <Icon icon="material-symbols-light:stop-outline-rounded" width="16" height="16"/>
+            case 'Fixed':
+                return <Icon icon="material-symbols-light:done-rounded" width="16" height="16" className={"text-green-700"}/>
+        }
+        console.log('UNKNOWN STATE: ' + state);
+        return <Icon icon="material-symbols-light:stop-outline-rounded" width="16" height="16"/>
+    }
 
     return (
         <Popover open={open} onOpenChange={setOpen}>
@@ -63,7 +79,7 @@ export function ComboboxTasks({currentTaskCode, currentTask, tasksGrouped, onCha
                             <CommandGroup heading={<strong className={priorityToTextClassName[groupName]}>{groupName}</strong>} className={priorityToClassName[groupName] || ''}>
                                 {tasks.map(task => (
                                     <CommandItem value={task.idReadable} onSelect={onSelect}>
-                                        <span>[{task.idReadable}] {task.summary}</span>
+                                        <span className={"flex gap-1 items-center"}>{stateIcon(task.State)} [{task.idReadable}] {task.summary}</span>
                                     </CommandItem>
                                 ))}
                             </CommandGroup>
