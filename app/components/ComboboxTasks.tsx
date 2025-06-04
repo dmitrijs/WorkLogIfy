@@ -9,11 +9,11 @@ import * as React from "react"
 
 export function ComboboxTasks({currentTaskCode, currentTask, tasksGrouped, onChange}) {
     const [open, setOpen] = React.useState(false)
-    const [search, setSearch] = React.useState('')
 
     function onSelect(value) {
         setOpen(false)
-        onChange(value);
+        const idReadable = value.split("|")[0]
+        onChange(idReadable);
     }
 
     const priorityToClassName = {
@@ -61,8 +61,11 @@ export function ComboboxTasks({currentTaskCode, currentTask, tasksGrouped, onCha
                 </Button>
             </PopoverTrigger>
             <PopoverContent className="w-[var(--radix-popover-trigger-width)] p-0">
-                <Command className="rounded-lg shadow-md">
-                    <CommandInput value={search} onValueChange={setSearch} placeholder="Type to search..."/>
+                <Command className="rounded-lg shadow-md"
+                         filter={(value, search) => {
+                             return (value.toLowerCase().includes(search.toLowerCase()) ? 1 : 0);
+                         }}>
+                    <CommandInput placeholder="Type to search..."/>
                     <CommandList>
                         <CommandEmpty>No results found.</CommandEmpty>
                         <CommandGroup>
@@ -78,7 +81,7 @@ export function ComboboxTasks({currentTaskCode, currentTask, tasksGrouped, onCha
                         {Object.entries(tasksGrouped).map(([groupName, tasks]: [string, any]) => (
                             <CommandGroup heading={<strong className={priorityToTextClassName[groupName]}>{groupName}</strong>} className={priorityToClassName[groupName] || ''}>
                                 {tasks.map(task => (
-                                    <CommandItem value={task.idReadable} onSelect={onSelect}>
+                                    <CommandItem value={`${task.idReadable}|${task.summary}`} key={task.idReadable} onSelect={onSelect}>
                                         <span className={"flex gap-1 items-center"}>{stateIcon(task.State)} [{task.idReadable}] {task.summary}</span>
                                     </CommandItem>
                                 ))}

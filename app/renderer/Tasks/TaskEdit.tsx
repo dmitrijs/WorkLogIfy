@@ -206,8 +206,8 @@ const TaskEdit = ({mode}: { mode: string }) => {
                             <ComboboxTasks currentTaskCode={task.youtrackTaskCode}
                                            currentTask={store.state.youtrackTasks?.[task.youtrackTaskCode]}
                                            tasksGrouped={youtrackTasksGrouped}
-                                           onChange={(value) => {
-                                               youtrackTaskChanged(store.state.youtrackTasks?.[value]);
+                                           onChange={(idReadable: string) => {
+                                               youtrackTaskChanged(store.state.youtrackTasks?.[idReadable]);
                                            }}
                             />
                         </td>
