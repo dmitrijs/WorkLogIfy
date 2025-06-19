@@ -93,7 +93,8 @@ const TasksWindow = () => {
         let result = groups;
         if (store.state.tasksShowAsReport) {
             map(groups, (group, date) => {
-                result[date].tasks = Store_MergeSameCodes(group.tasks);
+                result[date].tasks = Store_MergeSameCodes(group.tasks, true);
+                result[date].tasks = Store_MergeSameCodes(result[date].tasks, false);
             });
         }
         setTasksGrouped(result);
