@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+### [1.39.8](https://github.com/dmitrijs/WorkLogIfy/compare/v1.39.7...v1.39.8) (2025-06-19)
+
+
+### Improvements
+
+* improved subtasks ordering in report ([fe5e578](https://github.com/dmitrijs/WorkLogIfy/commit/fe5e57826f4aecb575b2a0b2984a69902d7479f3))
+
 ### [1.39.7](https://github.com/dmitrijs/WorkLogIfy/compare/v1.39.6...v1.39.7) (2025-06-04)
 
 
