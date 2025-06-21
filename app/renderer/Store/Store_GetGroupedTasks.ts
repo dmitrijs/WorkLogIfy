@@ -113,14 +113,14 @@ export function sort_tasks(tasks: Record<string, TaskObj>, forReport = false): R
     }));
 }
 
-export function Store_MergeSameCodes(tasks: Record<string, any>, mergeSubtasks = true) {
+export function Store_MergeSameCodes(tasks: TaskObj[], mergeOnlySubtasks = true) {
     let unique = {} as Record<string, any>;
     let idx = 0;
 
-    Object.values(tasks).forEach((task: TaskObj) => {
+    tasks.forEach((task: TaskObj) => {
         idx++;
 
-        let mergingCode = (mergeSubtasks ? task.code : task.code.replace(/-.*/, ''));
+        let mergingCode = (mergeOnlySubtasks ? task.code : task.code.replace(/-.*/, ''));
         let existing = unique[mergingCode];
         if (!existing) {
             unique[mergingCode] = {...task, code: mergingCode};

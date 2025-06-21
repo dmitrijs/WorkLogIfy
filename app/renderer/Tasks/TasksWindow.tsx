@@ -93,8 +93,8 @@ const TasksWindow = () => {
         let result = groups;
         if (store.state.tasksShowAsReport) {
             map(groups, (group, date) => {
-                result[date].tasks = Store_MergeSameCodes(group.tasks, true);
-                result[date].tasks = Store_MergeSameCodes(result[date].tasks, false);
+                const tasks = Store_MergeSameCodes(Object.values(group.tasks), true);
+                result[date].tasks = Store_MergeSameCodes(Object.values(tasks).reverse(), false);
             });
         }
         setTasksGrouped(result);
@@ -104,7 +104,7 @@ const TasksWindow = () => {
         const groups = getTasksGroupedMemo;
         let result = cloneDeep(groups);
         map(groups, (group, date) => {
-            result[date].tasks = Store_MergeSameCodes(group.tasks);
+            result[date].tasks = Store_MergeSameCodes(Object.values(group.tasks));
         });
         setTasksGroupedAndMerged(result);
     }, [getTasksGroupedMemo]);
