@@ -12,7 +12,7 @@ export function ComboboxTasks({currentTaskCode, currentTask, tasksGrouped, onCha
 
     function onSelect(value) {
         setOpen(false)
-        const idReadable = value.split("|")[0]
+        const idReadable = value ? value.split("|")[0] : null;
         onChange(idReadable);
     }
 
@@ -67,8 +67,9 @@ export function ComboboxTasks({currentTaskCode, currentTask, tasksGrouped, onCha
                          }}>
                     <CommandInput placeholder="Type to search..."/>
                     <CommandList>
-                        <CommandEmpty>No results found.</CommandEmpty>
-                        <CommandGroup>
+                        {!currentTaskCode && <CommandEmpty>No results found.</CommandEmpty>}
+
+                        <CommandGroup forceMount={true}>
                             {currentTaskCode && !currentTask && <CommandItem>
                                 <span><b>Current:</b> {currentTaskCode}</span>
                             </CommandItem>}
