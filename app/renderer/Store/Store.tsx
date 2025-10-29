@@ -739,7 +739,7 @@ const StoreContentProvider = ({children}: any) => {
                 referrerPolicy: "no-referrer",
             });
 
-            const tasksNormalized = youtrackTasksCall.response.map((ytTask: YoutrackTaskObj) => {
+            const tasksNormalized = youtrackTasksCall.response?.map((ytTask: YoutrackTaskObj) => {
                 ytTask.customFields.forEach((cf) => { // set custom fields on root
                     ytTask[cf.name.replace(/ /, '_')] = cf.value?.name || cf.value;
                 })

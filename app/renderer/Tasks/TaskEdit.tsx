@@ -149,7 +149,7 @@ const TaskEdit = ({mode}: { mode: string }) => {
                                 <td>
                                     <div className="TemplateTasks">
                                         {store.state.templates.map(template => (
-                                            <div key={template.code} className="TemplateTask" onClick={() => fill(template)}>
+                                            <div key={template.code + "/" + template.title + "/" + template.notes} className="TemplateTask" onClick={() => fill(template)}>
                                                 <strong>{template.code}</strong>&nbsp; &quot;{template.title}&quot;
                                                 <div style={{float: 'right'}}>
                                                     <i className={`IconAsInput icofont-not-allowed ${!template.chargeable ? 'active' : ''}`}></i>
