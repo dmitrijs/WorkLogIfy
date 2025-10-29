@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+### [1.39.11](https://github.com/dmitrijs/WorkLogIfy/compare/v1.39.10...v1.39.11) (2025-10-29)
+
+
+### Improvements
+
+* **tasks:** support predefined codes (projects) ([f31dd73](https://github.com/dmitrijs/WorkLogIfy/commit/f31dd73c8b0e7e91965d4f668e6a4942dbcd8cae))
+
 ### [1.39.10](https://github.com/dmitrijs/WorkLogIfy/compare/v1.39.9...v1.39.10) (2025-10-20)
 
 ### [1.39.9](https://github.com/dmitrijs/WorkLogIfy/compare/v1.39.8...v1.39.9) (2025-06-21)
