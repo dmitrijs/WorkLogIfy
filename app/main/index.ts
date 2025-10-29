@@ -186,6 +186,12 @@ app.on('ready', async () => {
             event.returnValue = 'ok'
         });
 
+        ipcMain.on('tasks.projects.save', (event: Electron.IpcMainEvent, taskProjects) => {
+            console.log('saving task projects');
+            Filesystem.saveTaskProjects(taskProjects);
+            event.returnValue = 'ok'
+        });
+
         ipcMain.on('tasks.load', (event: Electron.IpcMainEvent, day_key) => {
             let workday:any = Filesystem.getWorkLog(day_key);
 
@@ -212,6 +218,10 @@ app.on('ready', async () => {
 
         ipcMain.on('tasks.getTaskTemplates', (event: Electron.IpcMainEvent) => {
             event.returnValue = Filesystem.getTaskTemplates();
+        });
+
+        ipcMain.on('tasks.getTaskProjects', (event: Electron.IpcMainEvent) => {
+            event.returnValue = Filesystem.getTaskProjects();
         });
 
         ipcMain.on('quit.confirmed', (event: Electron.IpcMainEvent) => {

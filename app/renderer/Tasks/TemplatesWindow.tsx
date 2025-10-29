@@ -5,6 +5,11 @@ const TemplatesWindow = () => {
     const store = useStoreContext();
 
     const templates = store.getTaskTemplates();
+    const projects = store.getTaskProjects();
+
+    const updateProjects = (str) => {
+        store.projectsUpdate([str.split(',').map((s) => s.trim())]);
+    };
 
     const add = () => {
         store.templateNew();
@@ -53,6 +58,19 @@ const TemplatesWindow = () => {
             ))}
 
             <button type="button" className="btn btn-xs btn-secondary" onClick={add}>+ add another</button>
+
+            <br />
+            <br />
+            <hr />
+            <br />
+            <div className={"flex gap-2 items-center"}>
+                <label className={"w-auto!"}>Projects:</label>
+                <div className={"flex-1"}>
+                    <input type="text" className={"w-full"} value={projects.join(', ')} onChange={(e) => updateProjects(e.target.value)}/><br />
+                    <small>comma separated</small>
+                </div>
+            </div>
+
         </div>
     );
 };

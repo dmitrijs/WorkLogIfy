@@ -38,6 +38,9 @@ function saveActiveApps(state) {
 function saveTaskTemplates(state) {
     window.ipc.sendSync('tasks.templates.save', cloneDeep(state.templates));
 }
+function saveTaskProjects(state) {
+    window.ipc.sendSync('tasks.projects.save', cloneDeep(state.projects));
+}
 
 function updateProgressBar(task: TaskObj | null) {
     if (!task || (task.title === '' && (task.notes || '') === '')) {
@@ -117,6 +120,8 @@ type StoreMethodsType = {
     getEmptyTask: () => TaskEditedObj,
     getFileTotals: () => void,
     getTaskTemplates: () => TemplateObj[],
+    getTaskProjects: () => string[],
+    projectsUpdate: (list: string[]) => void,
     tasksUiHoveredId: (id: string) => void,
     tasksUiUnhoveredId: (id: string) => void,
     createTask: (task) => void,
@@ -141,6 +146,7 @@ type StoreMethodsType = {
     activeTimer: (secondsElapsed) => void,
     setFileTotals: (fileTotals) => void,
     setTaskTemplates: (templates) => void,
+    setTaskProjects: (projects) => void,
     stopTimer: ([secondsElapsed, secondsIdle]) => void,
     taskAddSession: ([taskId, minutes, method]) => void,
     taskAddActiveApp: ([taskId, activeAppDescription, secondsIdle]) => void,
@@ -265,6 +271,19 @@ const StoreContentProvider = ({children}: any) => {
 
         getTaskTemplates() {
             return state.templates;
+        },
+
+        getTaskProjects() {
+            return state.projects;
+        },
+
+        projectsUpdate([list]) {
+            state.projects = list;
+
+            saveTaskProjects(state);
+            storeMethods.updateState({
+                projects: state.projects,
+            })
         },
 
         tasksUiHoveredId(id: string) {
@@ -590,6 +609,12 @@ const StoreContentProvider = ({children}: any) => {
                 templates: state.templates,
             })
         },
+        setTaskProjects(projects) {
+            state.projects = projects;
+            storeMethods.updateState({
+                projects: state.projects,
+            })
+        },
         stopTimer([secondsElapsed, secondsIdle]) {
             console.log('secondsElapsed', secondsElapsed, 'secondsIdle', secondsIdle);
 
@@ -853,6 +878,8 @@ const StoreContentProvider = ({children}: any) => {
         storeMethods.setDay(today.format("YYYY-MM-DD"));
 
         storeMethods.setTaskTemplates(window.ipc.sendSync('tasks.getTaskTemplates'));
+
+        storeMethods.setTaskProjects(window.ipc.sendSync('tasks.getTaskProjects'));
 
         state.initialized = true;
 

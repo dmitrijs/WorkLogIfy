@@ -108,12 +108,28 @@ class Filesystem {
         fs.writeFileSync(dir + '/worklog_templates.json', JSON.stringify(taskTemplates));
     }
 
+    public static saveTaskProjects(taskProjects) {
+        const dir = this.getDir();
+        fs.writeFileSync(dir + '/worklog_projects.json', JSON.stringify(taskProjects));
+    }
+
     public static getTaskTemplates() {
         const dir = this.getDir();
 
         let contents = [];
         if (fs.existsSync(dir + '/worklog_templates.json')) {
             contents = JSON.parse(fs.readFileSync(dir + '/worklog_templates.json').toString());
+            contents = contents || [];
+        }
+        return contents;
+    }
+
+    public static getTaskProjects() {
+        const dir = this.getDir();
+
+        let contents = [];
+        if (fs.existsSync(dir + '/worklog_projects.json')) {
+            contents = JSON.parse(fs.readFileSync(dir + '/worklog_projects.json').toString());
             contents = contents || [];
         }
         return contents;

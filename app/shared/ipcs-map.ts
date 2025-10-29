@@ -25,11 +25,13 @@ export interface IpcChannelMap {
         activeApps: object,
     }];
     'tasks.templates.save': [object];
+    'tasks.projects.save': [object];
 
     'tasks.load': [string, WorkDayObj];
     'settings.load': [void, SettingsObj];
     'tasks.getFileTotals': [void, object];
     'tasks.getTaskTemplates': [void, object];
+    'tasks.getTaskProjects': [void, object];
     'quit.confirmed': [void];
     'quit.unconfirmed': [void];
     'tasks.showMenu': [{ task: TaskObj, allowCut: boolean, allowPaste: boolean }];
