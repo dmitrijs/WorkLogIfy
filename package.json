@@ -70,7 +70,8 @@
     "typesafe-ipc": "github:dmitrijs/typesafe-ipc#ea3facd456e7bfc947dd20addcb9cab45d4cd0ad",
     "vite": "^6.3",
     "vite-plugin-electron": "^0.29.0",
-    "vite-plugin-electron-renderer": "^0.14.5"
+    "vite-plugin-electron-renderer": "^0.14.5",
+    "zustand": "^5.0.8"
   },
   "__NOTES": [
     "electron 27+ has issues to re-draw UI elements on Windows! For example, calendar disappear until mouse moves over it. Workaround: app.disableHardwareAcceleration()",
