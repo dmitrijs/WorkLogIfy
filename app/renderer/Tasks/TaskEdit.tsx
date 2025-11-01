@@ -218,20 +218,20 @@ const TaskEdit = ({mode}: { mode: string }) => {
                         <td className="Complex">
                             <div style={{marginRight: '11px'}}>
                                 <div className={"flex gap-1"}>
-                                    <input type="text" placeholder="TSKS-0000" value={task.code || ''} onChange={(e) => {
+                                    {/*<input type="text" placeholder="TSKS-0000" value={task.code || ''} onChange={(e) => {
                                         setTask({...task, code: e.target.value});
                                         codeChanged();
-                                    }}/>
-                                    {/*<button
-                                        className={`btn btn-xs ${task.code === 'idle' ? 'btn-secondary' : 'btn-outline-secondary'}`}
-                                        type="button"
-                                        style={{padding: '1px 8px', display: 'block', float: 'right', position: 'relative', top: '1px'}}
-                                        onClick={() => setTask({...task, code: 'idle'})}
-                                    >idle</button>*/}
+                                    }}/>*/}
                                     <ComboboxProjects projects={store.getTaskProjects()} currentProject={task.code} onChange={(code) => {
                                         setTask({...task, code: code});
                                         codeChanged();
                                     }} />
+                                    <button
+                                        className={`btn btn-xs ${task.code === 'idle' ? 'btn-secondary' : 'btn-outline-secondary'}`}
+                                        type="button"
+                                        style={{padding: '1px 8px', display: 'block', float: 'right', position: 'relative', top: '1px'}}
+                                        onClick={() => setTask({...task, code: 'idle'})}
+                                    >idle</button>
                                 </div>
                                 <span>From: <input type="text" className="narrow" value={task.source || ''} onChange={(e) => setTask({...task, source: e.target.value})}/></span>
                             </div>

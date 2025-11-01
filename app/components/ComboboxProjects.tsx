@@ -19,16 +19,12 @@ export function ComboboxProjects({currentProject, projects, onChange}) {
     return (
         <Popover open={open} onOpenChange={setOpen}>
             <PopoverTrigger asChild className={"!px-1"}>
-                <Button
-                    variant="outline"
-                    role="combobox"
-                    aria-expanded={open}
-                    className="inline justify-between flex justify-between border-neutral-500"
-                >
-                    <ChevronDown className="opacity-50" />
-                </Button>
+                <input type="text" placeholder="TSKS-0000" value={currentProject || ''} onChange={(e) => {
+                    onChange(e.target.value);
+                }} />
             </PopoverTrigger>
-            <PopoverContent className="w-[var(--radix-popover-trigger-width)] p-0 min-w-40">
+            <PopoverContent className="w-[var(--radix-popover-trigger-width)] p-0 min-w-40"
+                            onOpenAutoFocus={(e) => e.preventDefault()}>
                 <Command className="rounded-lg shadow-md"
                          filter={(value, search) => {
                              return (value.toLowerCase().includes(search.toLowerCase()) ? 1 : 0);
