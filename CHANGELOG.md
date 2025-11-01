@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.40.0](https://github.com/dmitrijs/WorkLogIfy/compare/v1.39.11...v1.40.0) (2025-11-01)
+
+
+### Improvements
+
+* **ui:** implemented dark mode ([ecad03b](https://github.com/dmitrijs/WorkLogIfy/commit/ecad03b3c32407024ba9c6737a34ed0226b9273b))
+
 ### [1.39.11](https://github.com/dmitrijs/WorkLogIfy/compare/v1.39.10...v1.39.11) (2025-10-29)
 
 
