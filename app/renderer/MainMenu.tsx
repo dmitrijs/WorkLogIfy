@@ -1,17 +1,19 @@
-import React, { useState } from 'react';
-import {useStoreContext} from "./Store/Store";
+import React, {useState} from 'react';
+import {useStore, useStoreContext} from "./Store/Store";
 
 const MainMenu = () => {
     const store = useStoreContext();
-    const [shownSubmenus, setShownSubmenus] = useState({ submenu: false });
+    const [shownSubmenus, setShownSubmenus] = useState({submenu: false});
 
     const handleMenuClick = (screen) => {
         store.setScreen(screen);
     };
 
     const toggleSubmenu = () => {
-        setShownSubmenus((prev) => ({ ...prev, submenu: !prev.submenu }));
+        setShownSubmenus((prev) => ({...prev, submenu: !prev.submenu}));
     };
+
+    const toggleDarkMode = useStore.use.toggleDarkMode();
 
     const quit = () => {
         window.ipc.send('quit.unconfirmed');
@@ -36,23 +38,35 @@ const MainMenu = () => {
                     <span onClick={toggleSubmenu}><i className="icofont-navigation-menu"></i></span>
                     <ul className={`Submenu ${shownSubmenus.submenu ? 'Visible' : ''}`}>
                         <li>
-                            <span onClick={() => { setShownSubmenus({ submenu: false }); store.toggleDarkMode(); }}>
+                            <span onClick={() => {
+                                setShownSubmenus({submenu: false});
+                                toggleDarkMode();
+                            }}>
                                 <i className="icofont-listing-box"></i> <em>Dark/Light</em>
                             </span>
                         </li>
                         <li>
-                            <span onClick={() => { setShownSubmenus({ submenu: false }); handleMenuClick('todo'); }}>
+                            <span onClick={() => {
+                                setShownSubmenus({submenu: false});
+                                handleMenuClick('todo');
+                            }}>
                                 <i className="icofont-listing-box"></i> <em>To-do</em>
                             </span>
                         </li>
                         <li>
-                            <span onClick={() => { setShownSubmenus({ submenu: false }); handleMenuClick('task.templates'); }}>
+                            <span onClick={() => {
+                                setShownSubmenus({submenu: false});
+                                handleMenuClick('task.templates');
+                            }}>
                                 <i className="icofont-copy"></i> <em>Templates</em>
                             </span>
                         </li>
                         <li className="separator"></li>
                         <li>
-                            <span onClick={() => { setShownSubmenus({ submenu: false }); quit(); }}>
+                            <span onClick={() => {
+                                setShownSubmenus({submenu: false});
+                                quit();
+                            }}>
                                 <i className="icofont-exit"></i> <em>Quit</em> {store.state.taskTimeredId && <i className="icofont-warning" title="Task is active!"></i>}
                             </span>
                         </li>

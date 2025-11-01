@@ -1,6 +1,8 @@
 import {cloneDeep, isArray, keyBy} from "lodash";
 import moment from "moment";
 import {createContext, useContext, useMemo, useState} from "react";
+import {StoreApi, UseBoundStore} from 'zustand'
+import {create} from "zustand/react";
 import {timespanToText} from '../Utils/Utils';
 import Store_GetGroupedTasks from "./Store_GetGroupedTasks";
 
@@ -38,6 +40,7 @@ function saveActiveApps(state) {
 function saveTaskTemplates(state) {
     window.ipc.sendSync('tasks.templates.save', cloneDeep(state.templates));
 }
+
 function saveTaskProjects(state) {
     window.ipc.sendSync('tasks.projects.save', cloneDeep(state.projects));
 }
@@ -60,6 +63,37 @@ function updateTaskField(tasks: any, task_id: any, field: any, value: any) {
     return tasks;
 }
 
+interface StoreBaseType {
+    darkMode: boolean
+    toggleDarkMode: () => void
+}
+
+const useStoreBase = create<StoreBaseType>((set) => ({
+    darkMode: true,
+
+    toggleDarkMode: () => {
+        set((state) => ({darkMode: !state.darkMode}))
+    },
+}));
+
+type WithSelectors<S> = S extends { getState: () => infer T }
+    ? S & { use: { [K in keyof T]: () => T[K] } }
+    : never
+
+const createSelectors = <S extends UseBoundStore<StoreApi<object>>>(
+    _store: S,
+) => {
+    const store = _store as WithSelectors<typeof _store>
+    store.use = {}
+    for (const k of Object.keys(store.getState())) {
+        ;(store.use as any)[k] = () => store((s) => s[k as keyof typeof s])
+    }
+
+    return store
+}
+
+export const useStore = createSelectors(useStoreBase)
+
 const StoreContext = createContext();
 
 const initialState = {
@@ -80,7 +114,6 @@ const initialState = {
     timerElapsedText: null,
     timerElapsedSeconds: 0,
     screen: 'tasks',
-    darkMode: true,
     is_debug: false,
     day_key: '',
     week_key: '',
@@ -130,7 +163,6 @@ type StoreMethodsType = {
     updateTask: ([task_id, field, value]) => void,
     taskAddRecordedSeconds: ([task_id, recordSeconds, jiraWorkLogId]) => void,
     setScreen: (screen) => void,
-    toggleDarkMode: () => void,
     returnToTasksScreen: () => void,
     toggleDebug: (value) => void,
     toggleTasksShowAsReport: () => void,
@@ -418,12 +450,6 @@ const StoreContentProvider = ({children}: any) => {
             storeMethods.updateState({
                 screen: state.screen,
                 tasksScreen: state.tasksScreen,
-            })
-        },
-        toggleDarkMode() {
-            state.darkMode = !state.darkMode;
-            storeMethods.updateState({
-                darkMode: state.darkMode,
             })
         },
         returnToTasksScreen() {

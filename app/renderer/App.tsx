@@ -2,7 +2,7 @@ import {cloneDeep} from "lodash";
 import moment from "moment";
 import React, {useEffect} from 'react';
 import MainMenu from './MainMenu';
-import {useStoreContext} from './Store/Store';
+import {useStore, useStoreContext} from './Store/Store';
 import ActiveAppsWindow from "./Tasks/ActiveAppsWindow";
 import CalendarWindow from "./Tasks/CalendarWindow";
 import SettingsWindow from "./Tasks/SettingsWindow";
@@ -39,10 +39,12 @@ const App = () => {
         window.ipc.send('set.progress', params);
     };
 
+    const darkMode = useStore.use.darkMode();
+
     useEffect(() => {
-        console.log('dark mode', store.state.darkMode)
-        document.body.classList.toggle('dark', store.state.darkMode);
-    }, [store.state.darkMode])
+        console.log('dark mode', darkMode)
+        document.body.classList.toggle('dark', darkMode);
+    }, [darkMode])
 
     useEffect(() => {
         window.ipc.on('change.screen', ($event, where) => {
