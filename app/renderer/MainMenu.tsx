@@ -36,6 +36,11 @@ const MainMenu = () => {
                     <span onClick={toggleSubmenu}><i className="icofont-navigation-menu"></i></span>
                     <ul className={`Submenu ${shownSubmenus.submenu ? 'Visible' : ''}`}>
                         <li>
+                            <span onClick={() => { setShownSubmenus({ submenu: false }); store.toggleDarkMode(); }}>
+                                <i className="icofont-listing-box"></i> <em>Dark/Light</em>
+                            </span>
+                        </li>
+                        <li>
                             <span onClick={() => { setShownSubmenus({ submenu: false }); handleMenuClick('todo'); }}>
                                 <i className="icofont-listing-box"></i> <em>To-do</em>
                             </span>

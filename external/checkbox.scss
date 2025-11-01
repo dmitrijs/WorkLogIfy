@@ -49,6 +49,10 @@ input[type=checkbox] {
             height: 1rem;
 
             border: 2px solid #f2f2f2;
+
+            @at-root .dark & {
+                border: 2px solid #666;
+            }
         }
     }
 

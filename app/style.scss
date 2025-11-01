@@ -1,7 +1,7 @@
 @use 'tailwindcss' as *;
 //@config "../tailwind.config.cjs";
 
-@custom-variant dark (&:is(.dark *));
+@custom-variant dark (&:where(.dark, .dark *));
 
 /* START bootstrap styles */
 
@@ -14,6 +14,10 @@ a {
 label {
     display: inline-block;
     margin-bottom: .5rem;
+}
+
+table {
+    color: inherit;
 }
 
 .btn {
@@ -33,47 +37,56 @@ label {
     border-radius: .25rem;
     transition: color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out, box-shadow .15s ease-in-out;
 }
+
 .btn-primary {
     color: #fff;
     background-color: #007bff;
     border-color: #007bff;
 }
+
 .btn-secondary {
     color: #fff;
     background-color: #6c757d;
     border-color: #6c757d;
 }
+
 .btn-outline-secondary {
     color: #6c757d;
     border-color: #6c757d;
 }
+
 .btn-group, .btn-group-vertical {
     position: relative;
-    display: inline-flex
-;
+    display: inline-flex;
     vertical-align: middle;
 }
-.btn-group-vertical>.btn, .btn-group>.btn {
+
+.btn-group-vertical > .btn, .btn-group > .btn {
     position: relative;
     flex: 1 1 auto;
 }
-.btn-group-sm>.btn, .btn-sm {
+
+.btn-group-sm > .btn, .btn-sm {
     padding: .25rem .5rem;
     font-size: .875rem;
     line-height: 1.5;
     border-radius: .2rem;
 }
-.btn-group>.btn-group:not(:first-child)>.btn, .btn-group>.btn:not(:first-child) {
+
+.btn-group > .btn-group:not(:first-child) > .btn, .btn-group > .btn:not(:first-child) {
     border-top-left-radius: 0;
     border-bottom-left-radius: 0;
 }
-.btn-group>.btn-group:not(:last-child)>.btn, .btn-group>.btn:not(:last-child):not(.dropdown-toggle) {
+
+.btn-group > .btn-group:not(:last-child) > .btn, .btn-group > .btn:not(:last-child):not(.dropdown-toggle) {
     border-top-right-radius: 0;
     border-bottom-right-radius: 0;
 }
-.btn-group>.btn-group:not(:first-child), .btn-group>.btn:not(:first-child) {
+
+.btn-group > .btn-group:not(:first-child), .btn-group > .btn:not(:first-child) {
     margin-left: -1px;
 }
+
 [type=button]:not(:disabled), [type=reset]:not(:disabled), [type=submit]:not(:disabled), button:not(:disabled) {
     cursor: pointer;
 }
@@ -199,6 +212,10 @@ table {
 
     .bg-dark {
         background-color: #dedede !important;
+
+        @at-root .dark & {
+            background-color: #666 !important;
+        }
     }
 
     .TaskEdit {
@@ -367,6 +384,10 @@ table {
 
             color: #a2a2a2;
 
+            @at-root .dark & {
+                border: 1px solid #666;
+            }
+
             &.is_weekend {
                 color: #d0d0d0;
             }
@@ -379,6 +400,14 @@ table {
                     color: #9c9c9c;
                     border-color: #e4e4e4;
                 }
+
+                @at-root .dark & {
+                    color: white;
+
+                    &.is_weekend {
+                        border-color: #777;
+                    }
+                }
             }
 
             &.is_today {
@@ -388,6 +417,11 @@ table {
             &.is01 {
                 border-left-color: #8e8e8e !important;
                 border-bottom-color: #8e8e8e !important;
+
+                @at-root .dark & {
+                    border-left-color: white !important;
+                    border-bottom-color: white !important;
+                }
             }
 
             &.is_special_day_vacation {
@@ -421,10 +455,19 @@ table {
             &:hover {
                 background-color: #e6faff;
                 border-color: #b6c8ca !important;
+
+                @at-root .dark & {
+                    background-color: #444;
+                }
             }
 
             &.is_opened {
                 border-color: black !important;
+
+                @at-root .dark & {
+                    background-color: #444;
+                    border-color: #aaa !important;
+                }
             }
 
             &:hover,
@@ -534,6 +577,10 @@ table {
         border: 1px solid grey;
         border-radius: 2px;
         padding: 1px 2px;
+
+        @at-root .dark & {
+            background: #333;
+        }
     }
 }
 
@@ -553,6 +600,10 @@ table {
         .TRow {
             &:nth-child(2n) {
                 background: #fcfcfc;
+
+                @at-root .dark & {
+                    background: #27272A;
+                }
             }
 
             .TRowContent:hover {
@@ -561,6 +612,10 @@ table {
 
                 .TCol.--playback .IconAsInput.icofont-play {
                     display: block;
+                }
+
+                @at-root .dark & {
+                    border: 1px solid #666;
                 }
             }
 
@@ -580,6 +635,10 @@ table {
             &.distributed {
                 > .TRowContent {
                     background-color: #f1f1f1;
+
+                    @at-root .dark & {
+                        background-color: #3e3e3e;
+                    }
 
                     * {
                         color: gray;
@@ -617,6 +676,10 @@ table {
             &:not(.--header):not(.isSubtask):not(.notchargeable):not(.distributed) > .TRowContent {
                 padding-top: 0;
                 border-top: 1px solid #ddd;
+
+                @at-root .dark & {
+                    border-top: 1px solid #393939;
+                }
             }
 
             &.isMissingParent {
@@ -686,6 +749,11 @@ table {
                 background-color: #ebffeb !important;
                 border: 1px solid #2fbb26 !important;
                 padding: 0;
+
+                @at-root .dark & {
+                    background-color: #244b24 !important;
+                    border: 1px solid #2c6b2c !important;
+                }
             }
         }
 
@@ -700,6 +768,10 @@ table {
         .TasksTable:not(.ShowAsReport) {
             .TRow.isOnHold {
                 background: #fffef2;
+
+                @at-root .dark & {
+                    background: #534d05;
+                }
 
                 .IconOnHold {
                     color: #E9D086 !important;
@@ -724,8 +796,16 @@ table {
             .TRow.isDone {
                 background-color: #fafffa;
 
+                @at-root .dark & {
+                    background-color: #29382b;
+                }
+
                 .IconDone {
                     color: #b7e7b7 !important;
+
+                    @at-root .dark & {
+                        color: #346734 !important;
+                    }
                 }
 
                 &:not(.timered) .IconDone {
@@ -771,6 +851,10 @@ table {
 
             padding: 2px 0px;
             color: #364abc;
+
+            @at-root .dark & {
+                color: #B9C0F1;
+            }
 
             .TCol {
                 padding: 1px 3px;
@@ -825,6 +909,10 @@ table {
         padding: 4px 6px;
         border-top: 1px solid grey;
         border-radius: 3px;
+
+        @at-root .dark & {
+            background: #222;
+        }
     }
 
     [class*=" icofont-"],
@@ -860,6 +948,14 @@ table {
                         background: #4db34d !important;
                         color: white !important;
                     }
+
+                    @at-root .dark & {
+                        background: #444;
+
+                        &.icofont-square {
+                            background: #346734 !important;
+                        }
+                    }
                 }
             }
         }
@@ -867,7 +963,7 @@ table {
         &:not(.timered) {
             .TCol.--playback {
                 .IconAsInput:hover {
-                    background: #74b874;
+                    background: #346734;
                 }
             }
         }
@@ -1092,6 +1188,10 @@ table {
         border-color: #cbcbcb;
         font-style: italic;
         resize: none;
+
+        @at-root .dark & {
+            border-color: #666;
+        }
     }
 }
 
@@ -1104,6 +1204,11 @@ table {
         justify-content: space-around;
         align-items: flex-end;
         border-bottom: 1px solid #e6e6e6;
+
+
+        @at-root .dark & {
+            border-bottom: 1px solid #666;
+        }
     }
 
     ul li {
@@ -1122,6 +1227,10 @@ table {
 
         &.Selected {
             background: #e2e2e2;
+
+            @at-root .dark & {
+                background: #444;
+            }
         }
 
         &.Hamburger {
@@ -1144,6 +1253,10 @@ table {
         &:hover {
             background: #eee;
         }
+
+        @at-root .dark &:hover {
+            background: #444;
+        }
     }
 
     ul.Submenu {
@@ -1161,6 +1274,12 @@ table {
         box-shadow: 1px 1px 6px #bbbbbb;
         text-align: left;
         z-index: 1;
+
+        @at-root .dark & {
+            background: #27272A;
+            box-shadow: 1px 1px 6px #333;
+            border: 1px solid #333;
+        }
 
         &.Visible {
             display: flex;
@@ -1181,6 +1300,10 @@ table {
 
                 &:hover {
                     background: #eee;
+
+                    @at-root .dark & {
+                        background: #333;
+                    }
                 }
 
                 em {

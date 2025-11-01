@@ -40,6 +40,11 @@ const App = () => {
     };
 
     useEffect(() => {
+        console.log('dark mode', store.state.darkMode)
+        document.body.classList.toggle('dark', store.state.darkMode);
+    }, [store.state.darkMode])
+
+    useEffect(() => {
         window.ipc.on('change.screen', ($event, where) => {
             store.setScreen(where);
         });
@@ -223,7 +228,7 @@ const App = () => {
     }, [store.state]);
 
     return (
-        <div className={`App ${store.state.is_debug ? 'isDebug' : ''}`}>
+        <div className={`App ${store.state.is_debug ? 'isDebug' : ''} dark:bg-zinc-800 dark:text-neutral-300`}>
             <div className="AppScreen">
                 <MainMenu/>
                 <React.Fragment>

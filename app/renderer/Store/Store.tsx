@@ -80,6 +80,7 @@ const initialState = {
     timerElapsedText: null,
     timerElapsedSeconds: 0,
     screen: 'tasks',
+    darkMode: true,
     is_debug: false,
     day_key: '',
     week_key: '',
@@ -129,6 +130,7 @@ type StoreMethodsType = {
     updateTask: ([task_id, field, value]) => void,
     taskAddRecordedSeconds: ([task_id, recordSeconds, jiraWorkLogId]) => void,
     setScreen: (screen) => void,
+    toggleDarkMode: () => void,
     returnToTasksScreen: () => void,
     toggleDebug: (value) => void,
     toggleTasksShowAsReport: () => void,
@@ -416,6 +418,12 @@ const StoreContentProvider = ({children}: any) => {
             storeMethods.updateState({
                 screen: state.screen,
                 tasksScreen: state.tasksScreen,
+            })
+        },
+        toggleDarkMode() {
+            state.darkMode = !state.darkMode;
+            storeMethods.updateState({
+                darkMode: state.darkMode,
             })
         },
         returnToTasksScreen() {
