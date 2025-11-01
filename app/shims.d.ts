@@ -127,6 +127,8 @@ declare type SettingsObj = {
     connected_devices_open_dashboard: boolean;
     asana_enabled: boolean;
     youtrack_enabled: boolean;
+    supabase_email: string;
+    supabase_password: string;
 }
 
 declare type CalendarStatistics = {

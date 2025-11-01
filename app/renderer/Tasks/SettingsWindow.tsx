@@ -1,3 +1,4 @@
+import supabase, {supabaseSignInWithPassword, supabaseSignOut, useSupabaseSettings} from "@/renderer/Store/Supabase";
 import React, { useState } from 'react';
 import _ from 'lodash';
 import { useStoreContext } from '../Store/Store';
@@ -5,6 +6,8 @@ import { useStoreContext } from '../Store/Store';
 const SettingsWindow = () => {
     const store = useStoreContext();
     const [asanaWorkspaces, setAsanaWorkspaces] = useState({});
+    const supabaseSettingsState = useSupabaseSettings((state) => state.state);
+    const supabaseSettingsUser = useSupabaseSettings((state) => state.user);
 
     const asanaRefreshWorkspace = () => {
         const asanaWorkspacesCall = window.ipc.sendSync('jira.request', _.cloneDeep({
@@ -27,6 +30,21 @@ const SettingsWindow = () => {
             return `${task.gid}: ${task.name} (${task.assignee_section?.name})`;
         });
         alert(tasksAsStrings.join('\n'));
+    };
+
+    const signIn = async () => {
+        const supabaseState = await supabaseSignInWithPassword(store.state.settings.supabase_email, store.state.settings.supabase_password);
+        if (supabaseState === 'enabled') {
+            await store.upsertTasks() // re-sync tasks changed locally
+            store.setDay(store.state.day_key, supabaseState);
+        }
+    };
+
+    const signOut = async () => {
+        const supabaseState = await supabaseSignOut();
+        if (supabaseState === 'unauthenticated') {
+            store.setDay(store.state.day_key, supabaseState);
+        }
     };
 
     return (
@@ -95,6 +113,24 @@ const SettingsWindow = () => {
             <br />
             <button type="button" className="btn btn-xs btn-primary" onClick={() => store.updateSettings(store.state.settings)}>save</button>
             <br />
+            <br />
+
+            {supabaseSettingsState === 'enabled' && (
+                <div>
+                    Cloud Sync authenticated as <strong>{supabaseSettingsUser?.email}</strong><br/>
+                    <button type="button" className="btn btn-xs btn-secondary" onClick={() => signOut()}>Log Out</button>
+                </div>
+            )}
+            {supabaseSettingsState === 'unauthenticated' && (
+                <div>
+                    <label>Cloud Sync email:</label> <input type="email" value={store.state.settings.supabase_email || ''} onChange={(e) => store.updateSettingsState({supabase_email: e.target.value})} placeholder="example@gmail.com"/><br/>
+                    <label>Cloud Sync password:</label> <input type="password" value={store.state.settings.supabase_password || ''} onChange={(e) => store.updateSettingsState({supabase_password: e.target.value})} placeholder="*********"/><br/>
+                    NOTE: Authenticating will re-sync local changes to cloud.<br />
+                    <button type="button" className="btn btn-xs btn-primary" onClick={() => signIn()}>Authenticate</button>
+                </div>
+            )}
+            <br />
+
             {store.state.is_debug && <div>{JSON.stringify(store.state.settings)}</div>}
         </div>
     );

@@ -4,6 +4,7 @@
   "description": "WorkLogIfy",
   "main": "dist-electron/main/index.js",
   "scripts": {
+    "generate-database-types": "supabase gen types typescript --project-id yevrfoukghkxidpgpitx --schema public > app/database.types.ts",
     "dev": "vite",
     "compile": "tsc --noEmit && vite build",
     "build": "tsc --noEmit && vite build && electron-builder --windows --publish never",
@@ -86,6 +87,7 @@
     "electron-builder": "^24.0",
     "eslint": "^9.22.0",
     "eslint-plugin-react-hooks": "^5.2.0",
+    "supabase": "^2.54.11",
     "typescript": "^5.8.2",
     "typescript-eslint": "^8.26.1"
   }

@@ -1,6 +1,7 @@
+import supabase, {supabaseCheckState, useSupabaseSettings} from "@/renderer/Store/Supabase";
 import {cloneDeep, isArray, keyBy} from "lodash";
 import moment from "moment";
-import {createContext, useContext, useMemo, useState} from "react";
+import {createContext, useContext, useEffect, useMemo, useState} from "react";
 import {StoreApi, UseBoundStore} from 'zustand'
 import {create} from "zustand/react";
 import {timespanToText} from '../Utils/Utils';
@@ -149,6 +150,7 @@ const initialState = {
 
 type StoreMethodsType = {
     updateState: (values) => void,
+    upsertTasks: () => Promise<void>,
     updateSettingsState: (values) => void,
     getEditedTask: () => TaskEditedObj,
     getEmptyTask: () => TaskEditedObj,
@@ -168,7 +170,7 @@ type StoreMethodsType = {
     toggleTasksShowAsReport: () => void,
     toggleHideUnReportable: () => void,
     taskEdit: (key) => void,
-    setDay: (day: string) => void,
+    setDay: (day: string, supabaseState?: string) => void,
     setDayFromJson: (tasksJson: string) => void,
     loadSettings: () => void,
     updateSettings: (settings, returnToTasksScreen?: boolean) => void,
@@ -215,6 +217,7 @@ const StoreContentProvider = ({children}: any) => {
             method: method,
         })
         storeMethods.updateState({tasks: {...state.tasks}})
+        storeMethods.upsertTasks();
     }
 
     function addActiveApp(state, task_id: string, activeAppDescription: string, secondsIdle: number) {
@@ -226,6 +229,7 @@ const StoreContentProvider = ({children}: any) => {
         });
         state.tasks[task_id].activeApps = activeApps;
         storeMethods.updateState({tasks: {...state.tasks}})
+        storeMethods.upsertTasks();
     }
 
     function addRecord(state, task_id: string, recordedSeconds: number, method: string, jiraWorkLogId = null) {
@@ -241,9 +245,24 @@ const StoreContentProvider = ({children}: any) => {
         records.push(record);
         state.tasks[task_id].records = records;
         storeMethods.updateState({tasks: {...state.tasks}})
+        storeMethods.upsertTasks();
     }
 
     const storeMethods: StoreMethodsType = {
+        async upsertTasks() {
+            if (useSupabaseSettings.getState().state === 'unauthenticated') {
+                return;
+            }
+            console.log("upsertTasks")
+            const tsks = [];
+            for (let task of Object.values<TaskObj>(state.tasks)) {
+                const tsk = {uid: task.id, raw: {...task}};
+                console.log("tsk", tsk)
+                tsks.push(tsk);
+            }
+            await supabase.from('tasks').upsert(tsks)
+        },
+
         updateState(values) {
             setState((state) => ({...state, ...values, _now: new Date()}));
         },
@@ -385,6 +404,7 @@ const StoreContentProvider = ({children}: any) => {
                 createdTaskId: id,
                 screen: state.screen,
             })
+            storeMethods.upsertTasks();
         },
         saveTask(task: TaskEditedObj) {
             state.tasks[task.id].code = task.code;
@@ -422,6 +442,7 @@ const StoreContentProvider = ({children}: any) => {
                 taskEditedId: null,
                 screen: state.screen,
             })
+            storeMethods.upsertTasks();
         },
         updateTask([task_id, field, value]) {
             state.tasks = updateTaskField(state.tasks, task_id, field, value);
@@ -432,6 +453,7 @@ const StoreContentProvider = ({children}: any) => {
             storeMethods.updateState({
                 tasks: {...state.tasks},
             })
+            storeMethods.upsertTasks();
         },
         taskAddRecordedSeconds([task_id, recordSeconds, jiraWorkLogId]) {
             addRecord(state, task_id, recordSeconds, 'quick', jiraWorkLogId);
@@ -484,7 +506,7 @@ const StoreContentProvider = ({children}: any) => {
                 screen: state.screen,
             })
         },
-        setDay(day: string) {
+        async setDay(day: string, supabaseState = null) {
             if (state.taskTimeredId) {
                 alert('Cannot change date if some task is active.');
                 return;
@@ -493,7 +515,24 @@ const StoreContentProvider = ({children}: any) => {
             state.week_key = moment(day, "YYYY-MM-DD").endOf('isoWeek').format('YYYY-WW');
             state.day_key_prev_week = moment(day, "YYYY-MM-DD").startOf('isoWeek').subtract(1, 'week').format('YYYY-MM-DD');
             state.day_key_next_week = moment(day, "YYYY-MM-DD").endOf('isoWeek').add(1, 'day').format('YYYY-MM-DD');
-            let workday = window.ipc.sendSync('tasks.load', state.day_key);
+
+            let workday;
+
+            workday = window.ipc.sendSync('tasks.load', state.day_key);
+
+            console.log("setDay supabaseState", supabaseState)
+            if (supabaseState === 'enabled') {
+                const tasksRaw = await supabase.from('tasks').select('*').eq('raw->>date', day).order('raw->>time_spent_seconds', {ascending: false});
+                const tasks = workday.tasks || {};
+                for (let taskRaw of tasksRaw.data) {
+                    tasks[taskRaw.uid] = taskRaw.raw;
+                }
+
+                workday = {
+                    tasks: tasks,
+                    activeApps: [],
+                }
+            }
 
             state.tasks = workday.tasks;
             state.activeApps = workday.activeApps;
@@ -508,6 +547,7 @@ const StoreContentProvider = ({children}: any) => {
                 tasks: state.tasks,
                 activeApps: state.activeApps,
             })
+            // no need to upsert tasks
         },
         setDayFromJson(tasksJson: string) {
             if (state.taskTimeredId) {
@@ -540,6 +580,7 @@ const StoreContentProvider = ({children}: any) => {
             storeMethods.updateState({
                 tasks: state.tasks,
             })
+            storeMethods.upsertTasks();
         },
         loadSettings() {
             state.settings = window.ipc.sendSync('settings.load');
@@ -585,6 +626,7 @@ const StoreContentProvider = ({children}: any) => {
                 taskInClipboard: state.taskInClipboard,
                 taskIsCloned: state.taskIsCloned,
             })
+            storeMethods.upsertTasks();
         },
         clipboardPaste() {
             if (!state.taskInClipboard) {
@@ -606,6 +648,7 @@ const StoreContentProvider = ({children}: any) => {
             storeMethods.updateState({
                 tasks: state.tasks,
             })
+            storeMethods.upsertTasks();
         },
         activateTimer(taskId: string) {
             if (taskId === null) {
@@ -622,6 +665,7 @@ const StoreContentProvider = ({children}: any) => {
                 taskTimeredId: state.taskTimeredId,
                 tasks: state.tasks,
             })
+            storeMethods.upsertTasks();
         },
         activeTimer(secondsElapsed) {
             state.timerElapsedText = '+' + timespanToText(secondsElapsed, '+');
@@ -901,25 +945,34 @@ const StoreContentProvider = ({children}: any) => {
     }
 
     // Vue.prototype.$store = store.original;
-    if (!state.initialized) {
-        storeMethods.loadSettings();
 
-        storeMethods.toggleDebug(window.ipc.sendSync('debug.state'));
-        let today = moment();
-        if (state.is_debug) {
-            today.startOf('month').endOf('isoWeek');
+    useEffect(() => {
+        async function initialize() {
+            if (!state.initialized) {
+                const supabaseState = await supabaseCheckState(); // required before setDay
+
+                storeMethods.loadSettings();
+
+                storeMethods.toggleDebug(window.ipc.sendSync('debug.state'));
+                let today = moment();
+                if (state.is_debug) {
+                    today.startOf('month').endOf('isoWeek');
+                }
+                await storeMethods.setDay(today.format("YYYY-MM-DD"), supabaseState);
+
+                storeMethods.setTaskTemplates(window.ipc.sendSync('tasks.getTaskTemplates'));
+
+                storeMethods.setTaskProjects(window.ipc.sendSync('tasks.getTaskProjects'));
+
+                state.initialized = true;
+
+                console.log('state.tasks', state.tasks)
+                storeMethods.updateState({initialized: true});
+            }
         }
-        storeMethods.setDay(today.format("YYYY-MM-DD"));
 
-        storeMethods.setTaskTemplates(window.ipc.sendSync('tasks.getTaskTemplates'));
-
-        storeMethods.setTaskProjects(window.ipc.sendSync('tasks.getTaskProjects'));
-
-        state.initialized = true;
-
-        console.log('state.tasks', state.tasks)
-        storeMethods.updateState({initialized: true});
-    }
+        initialize();
+    }, []);
 
     const contextValue = useMemo<StoreType>((): StoreType => ({
             state: state,

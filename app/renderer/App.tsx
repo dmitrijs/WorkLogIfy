@@ -1,3 +1,4 @@
+import {supabaseCheckState} from "@/renderer/Store/Supabase";
 import {cloneDeep} from "lodash";
 import moment from "moment";
 import React, {useEffect} from 'react';
@@ -40,6 +41,10 @@ const App = () => {
     };
 
     const darkMode = useStore.use.darkMode();
+
+    useEffect(() => {
+        supabaseCheckState();
+    }, []);
 
     useEffect(() => {
         console.log('dark mode', darkMode)

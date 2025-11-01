@@ -1,3 +1,4 @@
+import SyncWithCloudStatus from "@/renderer/Components/SyncWithCloudStatus";
 import {cloneDeep, map} from 'lodash';
 import moment from 'moment';
 import React, {useEffect, useMemo, useRef, useState} from 'react';
@@ -263,6 +264,7 @@ const TasksWindow = () => {
                     <i className="icofont-copy"></i>
                 </button>
             </div>
+            <SyncWithCloudStatus />
             <div className="Chart" title={JSON.stringify(total, null, 2)}>
                 <div className="Total" style={{height: '4px', background: '#696969'}}>
                     <div className="Charge" style={{height: '4px', background: '#46e148', width: `${(100 * (total.time_charge_rounded_seconds / Math.max(total.time_spent_seconds, store.state.settings.working_day_minutes * 60)))}%`}}>
