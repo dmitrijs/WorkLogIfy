@@ -257,7 +257,12 @@ const StoreContentProvider = ({children}: any) => {
             console.log("upsertTasks")
             const tsks = [];
             for (let task of Object.values<TaskObj>(state.tasks)) {
-                const tsk = {uid: task.id, raw: {...task}};
+                const tsk = {
+                    uid: task.id,
+                    date: task.date,
+                    code: task.code,
+                    raw: {...task},
+                };
                 console.log("tsk", tsk)
                 tsks.push(tsk);
             }
