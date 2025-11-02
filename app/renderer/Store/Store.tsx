@@ -533,8 +533,8 @@ const StoreContentProvider = ({children}: any) => {
 
             workday = window.ipc.sendSync('tasks.load', state.day_key);
 
-            console.log("setDay supabaseState", supabaseState)
-            if (supabaseState === 'enabled') {
+            console.log("setDay supabaseState", supabaseState, useSupabaseSettings.getState().state)
+            if ((supabaseState || useSupabaseSettings.getState().state) === 'enabled') {
                 const tasksRaw = await supabase.from('tasks').select('*').eq('raw->>date', day).order('raw->>time_spent_seconds', {ascending: false});
                 const tasks = workday.tasks || {};
                 for (let taskRaw of tasksRaw.data) {
