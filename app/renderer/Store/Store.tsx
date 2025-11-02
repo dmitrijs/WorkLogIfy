@@ -217,8 +217,6 @@ const StoreContentProvider = ({children}: any) => {
             spent_seconds: (spentSeconds - idleSeconds),
             method: method,
         })
-        storeMethods.updateState({tasks: {...state.tasks}})
-        storeMethods.upsertTasks();
     }
 
     function addActiveApp(state, task_id: string, activeAppDescription: string, secondsIdle: number) {
@@ -722,6 +720,7 @@ const StoreContentProvider = ({children}: any) => {
             updateProgressBar(null);
 
             storeMethods.updateState({
+                tasks: {...state.tasks},
                 timerElapsedText: state.timerElapsedText,
                 timerElapsedSeconds: state.timerElapsedSeconds,
                 taskTimeredId: state.taskTimeredId,
@@ -730,7 +729,9 @@ const StoreContentProvider = ({children}: any) => {
         taskAddSession([taskId, minutes, method]) {
             addSession(state, taskId, minutes * 60, method);
             saveTasks(state)
-            // storeMethods.updateState()
+
+            storeMethods.updateState({tasks: {...state.tasks}})
+            storeMethods.upsertTasks();
         },
         taskAddActiveApp([taskId, activeAppDescription, secondsIdle]) {
             addActiveApp(state, taskId, activeAppDescription, secondsIdle);
