@@ -151,6 +151,7 @@ const initialState = {
 type StoreMethodsType = {
     updateState: (values) => void,
     upsertTasks: () => Promise<void>,
+    deleteTask: (uid) => Promise<void>,
     updateSettingsState: (values) => void,
     getEditedTask: () => TaskEditedObj,
     getEmptyTask: () => TaskEditedObj,
@@ -261,6 +262,14 @@ const StoreContentProvider = ({children}: any) => {
                 tsks.push(tsk);
             }
             await supabase.from('tasks').upsert(tsks)
+        },
+
+        async deleteTask(uid: string) {
+            if (useSupabaseSettings.getState().state === 'unauthenticated') {
+                return;
+            }
+            console.log("deleteTask")
+            await supabase.from('tasks').delete().eq("uid", uid)
         },
 
         updateState(values) {
@@ -619,6 +628,7 @@ const StoreContentProvider = ({children}: any) => {
             state.taskIsCloned = false;
 
             delete state.tasks[taskId];
+            storeMethods.deleteTask(taskId);
 
             saveTasks(state);
             storeMethods.updateState({
@@ -626,7 +636,7 @@ const StoreContentProvider = ({children}: any) => {
                 taskInClipboard: state.taskInClipboard,
                 taskIsCloned: state.taskIsCloned,
             })
-            storeMethods.upsertTasks();
+            // no need to upsert tasks
         },
         clipboardPaste() {
             if (!state.taskInClipboard) {
