@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.41.0](https://github.com/dmitrijs/WorkLogIfy/compare/v1.40.0...v1.41.0) (2025-11-02)
+
+
+### Improvements
+
+* **cloud:** support storing tasks in the cloud ([80a6f0f](https://github.com/dmitrijs/WorkLogIfy/commit/80a6f0f5e6e2eccab7db72e365b06e962dce004a))
+
 ## [1.40.0](https://github.com/dmitrijs/WorkLogIfy/compare/v1.39.11...v1.40.0) (2025-11-01)
 
 
