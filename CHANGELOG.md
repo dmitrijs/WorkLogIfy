@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+### [1.41.1](https://github.com/dmitrijs/WorkLogIfy/compare/v1.41.0...v1.41.1) (2025-11-02)
+
+
+### Improvements
+
+* **tasks:** save timer elapsed time every minute ([ec920f6](https://github.com/dmitrijs/WorkLogIfy/commit/ec920f675cc7248c173cd74378e2a5c86520252c))
+
 ## [1.41.0](https://github.com/dmitrijs/WorkLogIfy/compare/v1.40.0...v1.41.0) (2025-11-02)
 
 
