@@ -294,6 +294,10 @@ table {
             &:hover {
                 cursor: pointer;
                 background-color: #e7e7e7;
+
+                @at-root .dark & {
+                    background-color: #555;
+                }
             }
         }
 
