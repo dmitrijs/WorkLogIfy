@@ -114,6 +114,7 @@ const initialState = {
     tasksHideUnReportable: false,
     timerElapsedText: null,
     timerElapsedSeconds: 0,
+    lastSavedElapsedSeconds: 0,
     screen: 'tasks',
     is_debug: false,
     day_key: '',
@@ -150,7 +151,7 @@ const initialState = {
 
 type StoreMethodsType = {
     updateState: (values) => void,
-    upsertTasks: () => Promise<void>,
+    upsertTasks: (tasks?: any) => Promise<void>,
     deleteTask: (uid) => Promise<void>,
     updateSettingsState: (values) => void,
     getEditedTask: () => TaskEditedObj,
@@ -248,13 +249,13 @@ const StoreContentProvider = ({children}: any) => {
     }
 
     const storeMethods: StoreMethodsType = {
-        async upsertTasks() {
+        async upsertTasks(tasks = null) {
             if (useSupabaseSettings.getState().state === 'unauthenticated') {
                 return;
             }
             console.log("upsertTasks")
             const tsks = [];
-            for (let task of Object.values<TaskObj>(state.tasks)) {
+            for (let task of Object.values<TaskObj>(tasks || state.tasks)) {
                 const tsk = {
                     uid: task.id,
                     date: task.date,
@@ -668,6 +669,7 @@ const StoreContentProvider = ({children}: any) => {
                 taskId = state.tasksHoveredId;
             }
             state.taskTimeredId = taskId;
+            state.lastSavedElapsedSeconds = 0;
 
             state.tasks = updateTaskField(state.tasks, taskId, 'is_on_hold', false);
             state.tasks = updateTaskField(state.tasks, taskId, 'is_done', false);
@@ -676,6 +678,7 @@ const StoreContentProvider = ({children}: any) => {
             updateProgressBar(state.tasks[taskId]);
             storeMethods.updateState({
                 taskTimeredId: state.taskTimeredId,
+                lastSavedElapsedSeconds: state.lastSavedElapsedSeconds,
                 tasks: state.tasks,
             })
             storeMethods.upsertTasks();
@@ -683,9 +686,20 @@ const StoreContentProvider = ({children}: any) => {
         activeTimer(secondsElapsed) {
             state.timerElapsedText = '+' + timespanToText(secondsElapsed, '+');
             state.timerElapsedSeconds = secondsElapsed;
+
+            if (secondsElapsed - state.lastSavedElapsedSeconds >= 60) { // save every minute
+                state.lastSavedElapsedSeconds = secondsElapsed;
+
+                const stateCopy = cloneDeep(state);
+                addSession(stateCopy, state.taskTimeredId, secondsElapsed, 'timer');
+
+                saveTasks(stateCopy)
+                storeMethods.upsertTasks(stateCopy.tasks)
+            }
             storeMethods.updateState({
                 timerElapsedText: state.timerElapsedText,
                 timerElapsedSeconds: state.timerElapsedSeconds,
+                lastSavedElapsedSeconds: state.lastSavedElapsedSeconds,
             })
         },
         setFileTotals(fileTotals) {

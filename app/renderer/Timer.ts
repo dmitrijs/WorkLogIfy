@@ -1,4 +1,3 @@
-import { useStoreContext} from "./Store/Store";
 import moment, {Moment} from "moment";
 import pkg from './../../package.json'
 
@@ -48,7 +47,7 @@ class Timer {
     stop(idleSeconds = 0, sendEvent = true) {
         if (this.handle) {
             this.timeEnd = moment.utc();
-            (window as any).storeGlobal.stopTimer([this.getSecondsElapsed(this.timeEnd), idleSeconds * ((window as any).storeGlobal.state.is_debug ? 60 : 1)]);
+            (window as any).storeGlobal.stopTimer([this.getSecondsElapsed(this.timeEnd), idleSeconds * this.getMultiplier()]);
 
             clearInterval(this.handle);
             this.handle = 0;
@@ -61,7 +60,14 @@ class Timer {
 
     getSecondsElapsed(timeEnd: Moment) {
         let timeElapsed = timeEnd.unix() - this.timeStart.unix();
-        return timeElapsed * ((window as any).storeGlobal.state.is_debug ? 60 : 1);
+        return timeElapsed * this.getMultiplier();
+    }
+
+    getMultiplier() {
+        if ((window as any).storeGlobal.state.is_debug) {
+            return 30;
+        }
+        return 1;
     }
 }
 
