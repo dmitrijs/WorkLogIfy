@@ -928,6 +928,9 @@ const StoreContentProvider = ({children}: any) => {
                 if (state.drag.nowAt[0] < 80) {
                     state.drag.minutes = 0;
                 }
+                if (state.drag.taskFrom.startsWith('universe')) {
+                    state.drag.minutes *= -1;
+                }
                 state.drag.minutes_text = timespanToText(state.drag.minutes * 60);
             }
 
@@ -935,8 +938,8 @@ const StoreContentProvider = ({children}: any) => {
         },
 
         dragStop() {
-            state.drag.readyToDrop = state.drag.minutes > 0;
-            state.drag.active = state.drag.minutes > 0;
+            state.drag.readyToDrop = Math.abs(state.drag.minutes) > 0;
+            state.drag.active = Math.abs(state.drag.minutes) > 0;
 
             if (!state.drag.active) {
                 storeMethods.dragClear();
@@ -952,9 +955,13 @@ const StoreContentProvider = ({children}: any) => {
             state.drag.readyToDrop = state.drag.active = false;
             state.drag.taskTo = task_id;
 
-            if (state.drag.minutes > 0 && state.drag.taskFrom && state.drag.taskTo && state.drag.taskFrom !== state.drag.taskTo) {
-                storeMethods.taskAddSession([state.drag.taskFrom, -state.drag.minutes, 'state.drag']);
-                storeMethods.taskAddSession([state.drag.taskTo, state.drag.minutes, 'drop']);
+            if (Math.abs(state.drag.minutes) > 0 && state.drag.taskFrom && state.drag.taskTo && state.drag.taskFrom !== state.drag.taskTo) {
+                if (state.drag.taskFrom.startsWith('universe')) {
+                    storeMethods.taskAddSession([state.drag.taskTo, state.drag.minutes, 'drop']);
+                } else {
+                    storeMethods.taskAddSession([state.drag.taskFrom, -state.drag.minutes, 'state.drag']);
+                    storeMethods.taskAddSession([state.drag.taskTo, state.drag.minutes, 'drop']);
+                }
             }
             storeMethods.dragClear(); // will save
         },

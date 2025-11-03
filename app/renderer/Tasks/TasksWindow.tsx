@@ -188,7 +188,7 @@ const TasksWindow = () => {
         <div className="TasksWindow" onMouseMove={dragContinue} onMouseUp={dragStop}>
             {store.state.drag.active && store.state.drag.distance > 20 && (
                 <div className="DragGhost" style={{left: `${store.state.drag.nowAt[0] + 6}px`, top: `${store.state.drag.nowAt[1] - 24}px`}}>
-                    {store.state.drag.minutes > 0 ? (
+                    {Math.abs(store.state.drag.minutes) > 0 ? (
                         <>
                             <span>{store.state.drag.minutes_text}</span>
                             <LineChart className="progress-bar--no-transition" height={5} total={store.state.drag.taskFrom_minutes} progress_info={store.state.drag.minutes}/>
@@ -237,7 +237,19 @@ const TasksWindow = () => {
                             <span title="Charge (Rounded)">{group.time_charge_rounded_text}</span>
                             {group.time_recorded_text !== '-' && <span title="Recorded" className="original-time"> ({group.time_recorded_text})</span>}
                             {' '}&nbsp;{' '}
-                            <span title="Spent">{group.time_spent_text}</span>
+                            <span title="Spent"
+                                  onClick={() => store.dragClear()}
+                                  onMouseDown={(event) => {
+                                      event.preventDefault();
+                                      dragStart(event, {
+                                          id: `universe/${date}`,
+                                          time_spent_seconds: 3600 * 2,
+                                          time_spent_seconds_text: '',
+                                      });
+                                  }}>
+                                {store.state.drag.taskFrom.startsWith('universe/') && <>⇩ </>}
+                                {group.time_spent_text}
+                            </span>
                         </div>
                     </div>
                     {Object.entries(group.tasks).map(([task_id, task]: any) => (
@@ -264,7 +276,7 @@ const TasksWindow = () => {
                     <i className="icofont-copy"></i>
                 </button>
             </div>
-            <SyncWithCloudStatus />
+            <SyncWithCloudStatus/>
             <div className="Chart" title={JSON.stringify(total, null, 2)}>
                 <div className="Total" style={{height: '4px', background: '#696969'}}>
                     <div className="Charge" style={{height: '4px', background: '#46e148', width: `${(100 * (total.time_charge_rounded_seconds / Math.max(total.time_spent_seconds, store.state.settings.working_day_minutes * 60)))}%`}}>

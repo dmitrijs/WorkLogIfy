@@ -312,6 +312,11 @@ export default function Store_GetGroupedTasks(state): Record<string, TaskGroupOb
             return task;
         });
 
+        if (state.drag.taskFrom?.startsWith('universe')) {
+            group.time_spent_seconds += (state.drag.minutes * 60);
+            group.time_spent_text = timespanToText(group.time_spent_seconds);
+        }
+
         {
             let secondsMissing = group.time_charge_seconds - time_charge_rounded_seconds;
             let microTimeBlockSeconds = 60 * 5;
