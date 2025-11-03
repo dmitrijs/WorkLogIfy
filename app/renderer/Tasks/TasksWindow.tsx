@@ -231,23 +231,23 @@ const TasksWindow = () => {
                     >
                         <div className="TCol --frozen"><i className="IconAsInput icofont-wall-clock"></i></div>
                         <div className="TCol --group-date">{date}</div>
-                        <div className="TCol --timespan --timespan-charge">
+                        <div className="TCol --timespan --timespan-charge"
+                             onClick={() => store.dragClear()}
+                             onMouseDown={(event) => {
+                                 event.preventDefault();
+                                 dragStart(event, {
+                                     id: `universe/${date}`,
+                                     time_spent_seconds: 3600 * 2,
+                                     time_spent_seconds_text: '',
+                                 });
+                             }}>
                             <span title="Charge (Not distributed)">{timespanToText(group.time_not_distributed_seconds)}</span>
                             {' '}&nbsp;{' '}
                             <span title="Charge (Rounded)">{group.time_charge_rounded_text}</span>
                             {group.time_recorded_text !== '-' && <span title="Recorded" className="original-time"> ({group.time_recorded_text})</span>}
                             {' '}&nbsp;{' '}
-                            <span title="Spent"
-                                  onClick={() => store.dragClear()}
-                                  onMouseDown={(event) => {
-                                      event.preventDefault();
-                                      dragStart(event, {
-                                          id: `universe/${date}`,
-                                          time_spent_seconds: 3600 * 2,
-                                          time_spent_seconds_text: '',
-                                      });
-                                  }}>
-                                {store.state.drag.taskFrom.startsWith('universe/') && <>⇩ </>}
+                            <span title="Spent">
+                                {store.state.drag.taskFrom.startsWith('universe/') && store.state.drag.minutes < 1 && <>⇩ </>}
                                 {group.time_spent_text}
                             </span>
                         </div>
