@@ -141,10 +141,10 @@ const initialState = {
         minutes_text: '',
         startedAt: [0, 0],
         nowAt: [0, 0],
-        taskFrom: 0,
+        taskFrom: '',
         taskFrom_minutes: 0,
         taskFrom_minutes_text: '',
-        taskTo: 0,
+        taskTo: '',
     },
     _now: null,
 };
@@ -966,10 +966,10 @@ const StoreContentProvider = ({children}: any) => {
             state.drag.minutes_text = '';
             state.drag.startedAt = [0, 0];
             state.drag.nowAt = [0, 0];
-            state.drag.taskFrom = 0;
+            state.drag.taskFrom = '';
             state.drag.taskFrom_minutes = 0;
             state.drag.taskFrom_minutes_text = '';
-            state.drag.taskTo = 0;
+            state.drag.taskTo = '';
             storeMethods.updateState({drag: state.drag})
         },
     }

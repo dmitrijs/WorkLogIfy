@@ -1,3 +1,4 @@
+import {cn} from "@/lib/utils";
 import React, {useCallback} from 'react';
 import LineChart from '../Components/LineChart';
 import {useStoreContext} from '../Store/Store';
@@ -33,7 +34,20 @@ const TaskRow = ({tasksGrouped, group_id, task_id, onDragStart}: any) => {
 
     return (
         <div
-            className={`TRow ${task.distributed ? 'distributed' : ''} ${!task.chargeable ? 'notchargeable' : ''} ${store.state.tasksHoveredId === task.id ? 'hovered' : ''} ${store.state.taskTimeredId === task.id ? 'timered' : ''} ${task.time_recorded_seconds ? 'hasRecords' : ''} ${task.is_done ? 'isDone' : ''} ${task.is_on_hold ? 'isOnHold' : ''} ${rootTasks[task.code || task.id]?.id === task.id ? 'isRootTask' : ''} ${task.parentId ? 'isSubtask' : ''} ${task.parentId && store.parentIsMissing(task) ? 'isMissingParent' : ''}`}
+            className={cn([
+                "TRow",
+                task.distributed && 'distributed',
+                !task.chargeable && 'notchargeable',
+                store.state.tasksHoveredId === task.id && 'hovered',
+                store.state.taskTimeredId === task.id && 'timered',
+                task.time_recorded_seconds && 'hasRecords',
+                task.is_done && 'isDone',
+                task.is_on_hold && 'isOnHold',
+                rootTasks[task.code || task.id]?.id === task.id && 'isRootTask',
+                task.parentId && 'isSubtask',
+                task.parentId && store.parentIsMissing(task) && 'isMissingParent',
+                task.id === store.state.drag.taskFrom && 'isDragFrom',
+            ])}
         >
             <div className="TRowContent" style={{display: (store.state.tasksHideUnReportable && (task.distributed || !task.chargeable)) && store.state.taskTimeredId !== task.id ? 'none' : ''}}
                  onMouseEnter={() => store.tasksUiHoveredId(task.id)}
@@ -81,6 +95,7 @@ const TaskRow = ({tasksGrouped, group_id, task_id, onDragStart}: any) => {
                     onDragStart(event, task);
                 }} title={`Final charge: ${task.time_charge_text}\nRecorded: ${task.time_recorded_text}\nNot recorded: ${task.time_unrecorded_text}`}>
                     <span className="--timespan-spent">
+                        {task.id === store.state.drag.taskFrom && store.state.drag.minutes  > 1 && '< '}
                         {store.state.taskTimeredId === task.id ? <div>{timespanToText(store.state.timerElapsedSeconds)}</div> : null}
                         {store.state.taskTimeredId === task.id && <span style={{display: 'inline'}}>&sum; </span>}
                         {task.time_spent_text}

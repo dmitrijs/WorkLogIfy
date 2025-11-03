@@ -1060,6 +1060,10 @@ table {
         min-width: 64px;
         text-align: center;
 
+        @at-root .dark & {
+            background: #333;
+        }
+
         .LineChart {
             margin: 0 -4px;
         }
