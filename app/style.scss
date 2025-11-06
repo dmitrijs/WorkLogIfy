@@ -680,18 +680,34 @@ table {
                 }
             }
 
-            .Subtasks {
+            &:has(.Subtasks) {
                 position: relative;
+
+                .TCol.--hierarchy {
+                    align-self: start;
+                }
 
                 &:before {
                     content: "";
                     display: block;
-                    height: calc(100% + 20px);
+                    height: auto;
                     width: 1px;
                     left: 13px;
-                    bottom: -22px;
+                    top: 14px;
+                    bottom: 5px;
                     position: absolute;
                     border-left: 1px dotted #aaaaaa !important;
+                }
+
+                &.isReversedOrder {
+                    .TCol.--hierarchy {
+                        align-self: end;
+                    }
+
+                    &:before {
+                        top: 5px;
+                        bottom: 15px;
+                    }
                 }
             }
 

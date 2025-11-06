@@ -92,7 +92,6 @@ const TaskRow = ({tasksGrouped, group_id, task_id, onDragStart}: any) => {
                         {store.state.tasksShowAsReport && !task.notes ? '[empty notes]' : task.notes || '\u00A0'}
                     </span>
                     {task.comment && <span className="Comment--Content">{task.comment || '\u00A0'}</span>}
-                    <span className="Comment--Content">{task.created_at}</span>
                 </div>
                 <div className="TCol --status">
                     <i className={`IconAsInput IconDone icofont-ui-check ${task.is_done ? 'active' : ''}`} onClick={() => store.updateTask([task.id, 'is_done', !task.is_done])}></i>
