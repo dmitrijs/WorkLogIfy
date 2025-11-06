@@ -64,6 +64,13 @@ class TasksSorter {
         const a = this.enhanceTask(task1);
         const b = this.enhanceTask(task2);
 
+        if (localState.settings.sorting_order === 'time_created_reversed') {
+            let sortOrder = -(task1.created_at.localeCompare(task2.created_at));
+
+            return (localState.tasksHideUnReportable || localState.tasksShowAsReport ? -1 : 1) *
+                sortOrder;
+        }
+
         if (localState.settings.sorting_order === 'last_session_group_same_code') {
             const aCode = (!a.code || a.code === 'idle' ? a.id : a.code);
             const bCode = (!b.code || b.code === 'idle' ? b.id : b.code);

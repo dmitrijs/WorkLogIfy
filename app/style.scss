@@ -691,6 +691,23 @@ table {
                 }
             }
 
+            &.isReversedOrder {
+                flex-direction: column-reverse;
+
+                &:not(.--header):not(.isSubtask):not(.notchargeable):not(.distributed) > .TRowContent {
+                    border-top: none;
+
+                    @at-root .dark & {
+                        border-bottom: 1px solid #393939;
+                    }
+                }
+
+                .Subtasks {
+                    display: flex;
+                    flex-direction: column-reverse;
+                }
+            }
+
             &.isMissingParent {
                 background-color: #ffcaca !important;
             }

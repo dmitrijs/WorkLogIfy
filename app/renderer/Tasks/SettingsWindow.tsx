@@ -109,6 +109,7 @@ const SettingsWindow = () => {
                 <option value={undefined}>Default (status, time spent, etc.)</option>
                 <option value="first_session">First session start time</option>
                 <option value="last_session_group_same_code">Last session start time, group tasks with same code</option>
+                <option value="time_created_reversed">Time created (reversed)</option>
             </select>
             <br />
             <button type="button" className="btn btn-xs btn-primary" onClick={() => store.updateSettings(store.state.settings)}>save</button>

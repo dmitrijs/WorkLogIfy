@@ -35,7 +35,7 @@ const TaskRow = ({tasksGrouped, group_id, task_id, onDragStart}: any) => {
     return (
         <div
             className={cn([
-                "TRow",
+                "TRow flex flex-col",
                 task.distributed && 'distributed',
                 !task.chargeable && 'notchargeable',
                 store.state.tasksHoveredId === task.id && 'hovered',
@@ -48,6 +48,8 @@ const TaskRow = ({tasksGrouped, group_id, task_id, onDragStart}: any) => {
                 task.parentId && 'isSubtask',
                 task.parentId && store.parentIsMissing(task) && 'isMissingParent',
                 task.id === store.state.drag.taskFrom && 'isDragFrom',
+
+                store.state.settings.sorting_order === 'time_created_reversed' && "isReversedOrder",
             ])}
         >
             <div className="TRowContent" style={{display: (store.state.tasksHideUnReportable && (task.distributed || !task.chargeable)) && store.state.taskTimeredId !== task.id ? 'none' : ''}}
@@ -56,7 +58,11 @@ const TaskRow = ({tasksGrouped, group_id, task_id, onDragStart}: any) => {
             >
                 <div className="TCol --hierarchy">
                     {!task.parentId ? (
-                        task.subtaskIds?.length ? <i className="icofont-rounded-down"></i> : <i className="icofont-rounded-right" style={{color: '#ababab'}}></i>
+                        task.subtaskIds?.length
+                            ? store.state.settings.sorting_order === 'time_created_reversed'
+                                ? <i className="icofont-rounded-up"></i>
+                                : <i className="icofont-rounded-down"></i>
+                            : <i className="icofont-rounded-right" style={{color: '#ababab'}}></i>
                     ) : null}
                 </div>
                 <div className="TCol --chargeable">
@@ -86,6 +92,7 @@ const TaskRow = ({tasksGrouped, group_id, task_id, onDragStart}: any) => {
                         {store.state.tasksShowAsReport && !task.notes ? '[empty notes]' : task.notes || '\u00A0'}
                     </span>
                     {task.comment && <span className="Comment--Content">{task.comment || '\u00A0'}</span>}
+                    <span className="Comment--Content">{task.created_at}</span>
                 </div>
                 <div className="TCol --status">
                     <i className={`IconAsInput IconDone icofont-ui-check ${task.is_done ? 'active' : ''}`} onClick={() => store.updateTask([task.id, 'is_done', !task.is_done])}></i>
