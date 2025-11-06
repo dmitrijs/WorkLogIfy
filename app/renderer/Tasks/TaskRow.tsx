@@ -95,8 +95,8 @@ const TaskRow = ({tasksGrouped, group_id, task_id, onDragStart}: any) => {
                     onDragStart(event, task);
                 }} title={`Final charge: ${task.time_charge_text}\nRecorded: ${task.time_recorded_text}\nNot recorded: ${task.time_unrecorded_text}`}>
                     <span className="--timespan-spent">
-                        {task.id === store.state.drag.taskFrom && store.state.drag.minutes > 1 && '⇩ '}
                         {store.state.taskTimeredId === task.id ? <div>{timespanToText(store.state.timerElapsedSeconds)}</div> : null}
+                        {task.id === store.state.drag.taskFrom && store.state.drag.minutes > 1 && '⇩ '}
                         {store.state.taskTimeredId === task.id && <span style={{display: 'inline'}}>&sum; </span>}
                         {task.time_spent_text}
                     </span>
