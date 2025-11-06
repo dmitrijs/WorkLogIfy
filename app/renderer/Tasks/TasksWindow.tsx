@@ -232,7 +232,7 @@ const TasksWindow = () => {
                         <div className="TCol --frozen"><i className="IconAsInput icofont-wall-clock"></i></div>
                         <div className="TCol --group-date">{date}</div>
                         <div className="TCol --timespan --timespan-charge"
-                             onClick={() => store.dragClear()}
+                             onClick={(e) => store.dropTime(e, 'universe')}
                              onMouseDown={(event) => {
                                  event.preventDefault();
                                  dragStart(event, {

@@ -741,6 +741,9 @@ const StoreContentProvider = ({children}: any) => {
             })
         },
         taskAddSession([taskId, minutes, method]) {
+            if (taskId.startsWith('universe')) {
+                return;
+            }
             addSession(state, taskId, minutes * 60, method);
             saveTasks(state)
 
@@ -956,7 +959,9 @@ const StoreContentProvider = ({children}: any) => {
             state.drag.taskTo = task_id;
 
             if (Math.abs(state.drag.minutes) > 0 && state.drag.taskFrom && state.drag.taskTo && state.drag.taskFrom !== state.drag.taskTo) {
-                if (state.drag.taskFrom.startsWith('universe')) {
+                if (state.drag.taskTo.startsWith('universe')) {
+                    storeMethods.taskAddSession([state.drag.taskFrom, -state.drag.minutes, 'state.drag']);
+                } else if (state.drag.taskFrom.startsWith('universe')) {
                     storeMethods.taskAddSession([state.drag.taskTo, state.drag.minutes, 'drop']);
                 } else {
                     storeMethods.taskAddSession([state.drag.taskFrom, -state.drag.minutes, 'state.drag']);
