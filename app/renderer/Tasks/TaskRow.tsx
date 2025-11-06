@@ -121,17 +121,19 @@ const TaskRow = ({tasksGrouped, group_id, task_id, onDragStart}: any) => {
                 </div>
             </div>
 
-            <div className="Subtasks">
-                {Object.values(task.subtaskIds || []).map(subtask_id => (
-                    <TaskRow
-                        key={subtask_id}
-                        group_id={group_id}
-                        task_id={subtask_id}
-                        tasksGrouped={tasksGrouped}
-                        onDragStart={onDragStart}
-                    />
-                ))}
-            </div>
+            {Object.values(task.subtaskIds || []).length > 0 &&
+                <div className="Subtasks">
+                    {Object.values(task.subtaskIds || []).map(subtask_id => (
+                        <TaskRow
+                            key={subtask_id}
+                            group_id={group_id}
+                            task_id={subtask_id}
+                            tasksGrouped={tasksGrouped}
+                            onDragStart={onDragStart}
+                        />
+                    ))}
+                </div>
+            }
         </div>
     );
 };

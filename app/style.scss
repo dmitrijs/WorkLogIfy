@@ -669,8 +669,6 @@ table {
 
                 .TRowContent {
                     grid-template-columns: 22px 22px 22px 73px 1fr 22px 63px 34px; /* without first column */
-                    border-left: 1px dotted #aaaaaa !important;
-                    padding-left: 0;
                 }
 
                 .TCol.--hierarchy {
@@ -679,6 +677,21 @@ table {
 
                 .TCol.--code {
                     color: #dddddd;
+                }
+            }
+
+            .Subtasks {
+                position: relative;
+
+                &:before {
+                    content: "";
+                    display: block;
+                    height: calc(100% + 20px);
+                    width: 1px;
+                    left: 13px;
+                    bottom: -22px;
+                    position: absolute;
+                    border-left: 1px dotted #aaaaaa !important;
                 }
             }
 
