@@ -931,9 +931,6 @@ const StoreContentProvider = ({children}: any) => {
                 if (state.drag.nowAt[0] < 80) {
                     state.drag.minutes = 0;
                 }
-                if (state.drag.taskFrom.startsWith('universe')) {
-                    state.drag.minutes *= -1;
-                }
                 state.drag.minutes_text = timespanToText(state.drag.minutes * 60);
             }
 

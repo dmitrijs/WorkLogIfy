@@ -237,7 +237,7 @@ const TasksWindow = () => {
                                  event.preventDefault();
                                  dragStart(event, {
                                      id: `universe/${date}`,
-                                     time_spent_seconds: 3600 * 2,
+                                     time_spent_seconds: 3600 * 1.5,
                                      time_spent_seconds_text: '',
                                  });
                              }}>
