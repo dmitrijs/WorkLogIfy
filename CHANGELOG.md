@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.42.0](https://github.com/dmitrijs/WorkLogIfy/compare/v1.41.4...v1.42.0) (2025-11-06)
+
+
+### Improvements
+
+* **ux:** added reversed tasks order ([8280921](https://github.com/dmitrijs/WorkLogIfy/commit/8280921bef32b071f5f78385fc24bf71e2456f5d))
+* **ux:** highlight tasks with little time spent ([7ac9d48](https://github.com/dmitrijs/WorkLogIfy/commit/7ac9d48f81ea0ae634e4cfb5757456fda7e51139))
+* **ux:** support adding time to tasks by drag and drop ([23da1a0](https://github.com/dmitrijs/WorkLogIfy/commit/23da1a0761e1926cf70d25d3475f7e2bf7ec1612))
+* **ux:** support discarding time from tasks ([271b67b](https://github.com/dmitrijs/WorkLogIfy/commit/271b67b7eec1686a79274eb5e327fc72e5936fab))
+
 ### [1.41.4](https://github.com/dmitrijs/WorkLogIfy/compare/v1.41.3...v1.41.4) (2025-11-03)
 
 ### [1.41.3](https://github.com/dmitrijs/WorkLogIfy/compare/v1.41.2...v1.41.3) (2025-11-03)
