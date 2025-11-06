@@ -604,10 +604,10 @@ table {
     & {
         .TRow {
             &:nth-child(2n) {
-                background: #fcfcfc;
+                background-color: #fcfcfc;
 
                 @at-root .dark & {
-                    background: #27272A;
+                    background-color: #27272A;
                 }
             }
 
@@ -634,6 +634,10 @@ table {
                 .TCol {
                     font-weight: bold;
                 }
+            }
+
+            &:not(.--header):not(.workedOn):not(.isOnHold):not(.distributed):not(.notchargeable):not(.isDone):not(.isMissingParent) {
+                background-color: #3c370f;
             }
 
             &.notchargeable,

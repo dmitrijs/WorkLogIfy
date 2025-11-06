@@ -41,6 +41,7 @@ const TaskRow = ({tasksGrouped, group_id, task_id, onDragStart}: any) => {
                 store.state.tasksHoveredId === task.id && 'hovered',
                 store.state.taskTimeredId === task.id && 'timered',
                 task.time_recorded_seconds && 'hasRecords',
+                task.time_spent_seconds >= 10 * 60 && 'workedOn',
                 task.is_done && 'isDone',
                 task.is_on_hold && 'isOnHold',
                 rootTasks[task.code || task.id]?.id === task.id && 'isRootTask',
