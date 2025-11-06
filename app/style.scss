@@ -613,14 +613,14 @@ table {
 
             .TRowContent:hover {
                 padding: 0;
-                border: 1px solid #d5d5d5;
+                border: 1px solid #d5d5d5 !important;
 
                 .TCol.--playback .IconAsInput.icofont-play {
                     display: block;
                 }
 
                 @at-root .dark & {
-                    border: 1px solid #666;
+                    border: 1px solid #666 !important;
                 }
             }
 
@@ -682,15 +682,6 @@ table {
                 }
             }
 
-            &:not(.--header):not(.isSubtask):not(.notchargeable):not(.distributed) > .TRowContent {
-                padding-top: 0;
-                border-top: 1px solid #ddd;
-
-                @at-root .dark & {
-                    border-top: 1px solid #393939;
-                }
-            }
-
             &.isReversedOrder {
                 flex-direction: column-reverse;
 
@@ -699,6 +690,7 @@ table {
 
                     @at-root .dark & {
                         border-bottom: 1px solid #393939;
+                        padding-bottom: 0;
                     }
                 }
 
