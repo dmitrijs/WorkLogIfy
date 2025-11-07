@@ -646,9 +646,14 @@ table {
                     background-color: #f1f1f1;
 
                     @at-root .dark & {
-                        background-color: #3e3e3e;
+                        background-color: #161616;
                     }
+                }
+            }
 
+            &.notchargeable:not(.timered),
+            &.distributed:not(.timered) {
+                > .TRowContent {
                     * {
                         color: gray;
                     }
@@ -673,10 +678,6 @@ table {
 
                 .TCol.--hierarchy {
                     display: none;
-                }
-
-                .TCol.--code {
-                    color: #dddddd;
                 }
             }
 
@@ -1113,17 +1114,6 @@ table {
 
     .EmptyNotesError {
         color: #b30e0d;
-    }
-
-    .TRow.distributed,
-    .TRow.notchargeable {
-        > .TRowContent {
-            .TCol {
-                .--timespan-spent {
-                    opacity: 0.35 !important;
-                }
-            }
-        }
     }
 
     .TRow.isDone {
