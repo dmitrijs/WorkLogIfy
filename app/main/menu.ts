@@ -5,10 +5,10 @@ const {Menu, app} = electron;
 export function toggleDebug(mainWindow) {
     let size = mainWindow.getContentSize();
     if (size[0] === 500) {
-        mainWindow.webContents.send('debug.toggle', 1);
+        mainWindow.webContents.send('debug.toggle', true);
         mainWindow.setContentSize(800, size[1]);
     } else {
-        mainWindow.webContents.send('debug.toggle', 0);
+        mainWindow.webContents.send('debug.toggle', false);
         mainWindow.setContentSize(500, size[1]);//test
     }
 }
