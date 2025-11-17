@@ -535,7 +535,7 @@ const StoreContentProvider = ({children}: any) => {
 
             console.log("setDay supabaseState", supabaseState, useSupabaseSettings.getState().state)
             if ((supabaseState || useSupabaseSettings.getState().state) === 'enabled') {
-                const tasksRaw = await supabase.from('tasks').select('*').eq('raw->>date', day).order('raw->>time_spent_seconds', {ascending: false});
+                const tasksRaw = await supabase.from('tasks').select('*').eq('date', day).order('raw->>time_spent_seconds', {ascending: false});
                 const tasks = workday.tasks || {};
                 for (let taskRaw of tasksRaw.data) {
                     tasks[taskRaw.uid] = taskRaw.raw;
