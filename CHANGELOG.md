@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+### [1.42.5](https://github.com/dmitrijs/WorkLogIfy/compare/v1.42.4...v1.42.5) (2025-11-17)
+
+
+### Features
+
+* **ux:** added 'today' button for updating task Date ([1998db8](https://github.com/dmitrijs/WorkLogIfy/commit/1998db87e6a27d4f3c4889f039765566c756e27e))
+* **ux:** show cloud sync status in the bottom right corner ([cdce925](https://github.com/dmitrijs/WorkLogIfy/commit/cdce925cc2a2f8c05323502f5bcf9b0306c65544))
+
 ### [1.42.4](https://github.com/dmitrijs/WorkLogIfy/compare/v1.42.3...v1.42.4) (2025-11-17)
 
 ### [1.42.3](https://github.com/dmitrijs/WorkLogIfy/compare/v1.42.2...v1.42.3) (2025-11-17)
