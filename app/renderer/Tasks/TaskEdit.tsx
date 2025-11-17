@@ -253,7 +253,19 @@ const TaskEdit = ({mode}: { mode: string }) => {
                         <td>Date:</td>
                         <td className="Complex">
                             <div>
-                                <span><input type="text" value={task.date || ''} onChange={(e) => setTask({...task, date: e.target.value})}/></span>
+                                <span className={"flex gap-1"}>
+                                    <input type="text" value={task.date || ''} onChange={(e) => setTask({...task, date: e.target.value})}/>
+                                    {task.date !== store.state.day_key && <button
+                                        className={`btn btn-xs ${task.code === 'idle' ? 'btn-secondary' : 'btn-outline-secondary'}`}
+                                        type="button"
+                                        style={{padding: '1px 8px', display: 'block', float: 'right', position: 'relative', top: '1px'}}
+                                        onClick={() => setTask({
+                                            ...task,
+                                            comment: [task.date, task.comment].filter(s => !!s).join(', '),
+                                            date: store.state.day_key,
+                                        })}
+                                    >today</button>}
+                                </span>
                                 <span>Recorded: <input type="text" className="narrow" value={task.time_record_minutes || ''} onChange={(e) => setTask({...task, time_record_minutes: e.target.value})}/>m</span>
                             </div>
                         </td>
