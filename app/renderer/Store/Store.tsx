@@ -147,6 +147,7 @@ const initialState = {
         taskTo: '',
     },
     _now: null,
+    cloudError: '',
 };
 
 type StoreMethodsType = {
@@ -265,7 +266,12 @@ const StoreContentProvider = ({children}: any) => {
                 console.log("tsk", tsk)
                 tsks.push(tsk);
             }
-            await supabase.from('tasks').upsert(tsks)
+            const response = await supabase.from('tasks').upsert(tsks)
+            if (response.error) {
+                this.updateState({
+                    cloudError: response.error.message,
+                });
+            }
         },
 
         async deleteTask(uid: string) {

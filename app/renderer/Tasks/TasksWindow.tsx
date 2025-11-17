@@ -1,4 +1,5 @@
 import SyncWithCloudStatus from "@/renderer/Components/SyncWithCloudStatus";
+import {supabaseSignInWithPassword, useSupabaseSettings} from "@/renderer/Store/Supabase";
 import {cloneDeep, map} from 'lodash';
 import moment from 'moment';
 import React, {useEffect, useMemo, useRef, useState} from 'react';
@@ -17,6 +18,7 @@ const TasksWindow = () => {
     const [tasksGrouped, setTasksGrouped] = useState<any>({});
     const [tasksGroupedAndMerged, setTasksGroupedAndMerged] = useState<any>({});
     const store = useStoreContext()
+    const state = useSupabaseSettings((state) => state.state);
     const tasksMenuOptions = useRef({
         task: null as TaskObj,
         allowCut: false,
@@ -275,6 +277,23 @@ const TasksWindow = () => {
                 <button type="button" className="btn btn-xs" style={{marginLeft: '6px', padding: '0px 8px'}} title="Copy for Slack. NOTE: Ctrl+F applies formatting in Slack" onClick={copyToClipboardAllTasks}>
                     <i className="icofont-copy"></i>
                 </button>
+                {!!store.state.settings.supabase_email && <div
+                    className={"float-right *:text-2xl! text-neutral-600 cursor-pointer"}
+                >
+                    {!!store.state.cloudError
+                        ? <i className="icofont-warning-alt text-red-500" title={store.state.cloudError}
+                             onClick={() => store.updateState({cloudError: null})}
+                        ></i>
+                        : <>
+                            {state === 'enabled' && <i className="icofont-cloud text-[#346734]"></i>}
+                            {state === 'initializing' && <i className="icofont-cloud-refresh"></i>}
+                            {state === 'unauthenticated' && <i
+                                className="icofont-warning-alt text-yellow-600"
+                                title="Not authenticated"
+                                onClick={() => supabaseSignInWithPassword(store.state.settings.supabase_email, store.state.settings.supabase_password)}
+                            ></i>}
+                        </>}
+                </div>}
             </div>
             <SyncWithCloudStatus/>
             <div className="Chart" title={JSON.stringify(total, null, 2)}>
