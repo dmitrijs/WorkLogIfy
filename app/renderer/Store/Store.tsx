@@ -257,8 +257,8 @@ const StoreContentProvider = ({children}: any) => {
             const tsks = [];
             for (let task of Object.values<TaskObj>(tasks || state.tasks)) {
                 const tsk = {
+                    date: state.day_key,
                     uid: task.id,
-                    date: task.date,
                     code: task.code,
                     raw: {...task},
                 };
