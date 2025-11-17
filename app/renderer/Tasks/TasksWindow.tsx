@@ -265,7 +265,7 @@ const TasksWindow = () => {
                 <textarea className="GlobalNotes" rows="1" ref={globalNotesInputRef} onBlur={handleBlur}></textarea>
             </div>
             {store.state.week_key && <CalendarWindow weekKey={store.state.week_key}/>}
-            <div className="ViewOptions">
+            <div className="ViewOptions px-1">
                 {store.state.drag.readyToDrop && <a href="#" onClick={store.dragClear} style={{float: 'right'}}>cancel</a>}
                 View as report:
                 <span className="label--checkbox label--checkbox--with-text">
