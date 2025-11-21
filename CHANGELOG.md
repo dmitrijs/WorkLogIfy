@@ -2,6 +2,8 @@
 
 All notable changes to this project will be documented in this file.
 
+### [1.42.7](https://github.com/dmitrijs/WorkLogIfy/compare/v1.42.6...v1.42.7) (2025-11-21)
+
 ### [1.42.6](https://github.com/dmitrijs/WorkLogIfy/compare/v1.42.5...v1.42.6) (2025-11-17)
 
 ### [1.42.5](https://github.com/dmitrijs/WorkLogIfy/compare/v1.42.4...v1.42.5) (2025-11-17)
