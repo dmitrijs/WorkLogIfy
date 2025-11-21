@@ -745,6 +745,7 @@ const StoreContentProvider = ({children}: any) => {
                 timerElapsedSeconds: state.timerElapsedSeconds,
                 taskTimeredId: state.taskTimeredId,
             })
+            storeMethods.upsertTasks();
         },
         taskAddSession([taskId, minutes, method]) {
             if (taskId.startsWith('universe')) {
