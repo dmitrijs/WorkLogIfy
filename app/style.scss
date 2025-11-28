@@ -636,10 +636,6 @@ table {
                 }
             }
 
-            &:not(.--header):not(.workedOn):not(.isOnHold):not(.distributed):not(.notchargeable):not(.isDone):not(.isMissingParent) {
-                background-color: #3c370f;
-            }
-
             &.notchargeable,
             &.distributed {
                 > .TRowContent {
@@ -814,7 +810,11 @@ table {
         }
 
         .TasksTable:not(.ShowAsReport) {
-            .TRow.isOnHold {
+            .TRow:not(.--header):not(.workedOn):not(.isOnHold):not(.distributed):not(.notchargeable):not(.isDone):not(.isMissingParent) {
+                background-color: #3c370f;
+            }
+
+            .TRow.isOnHold > .TRowContent {
                 background: #fffef2;
 
                 @at-root .dark & {
@@ -841,7 +841,7 @@ table {
                 }
             }
 
-            .TRow.isDone {
+            .TRow.isDone > .TRowContent {
                 background-color: #fafffa;
 
                 @at-root .dark & {
