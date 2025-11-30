@@ -8,7 +8,7 @@ export default function Store_GetCalendarStatistics(): CalendarStatistics {
 
     {
         let today = moment.utc();
-        let endOfThisMonth = moment(today).endOf('month').endOf('day');
+        let endOfThisMonth = moment(today).endOf('month').add(1, 'month').endOf('day');
         let startOfMonthBeforePrevious: Moment = moment(today).subtract(2, 'months').startOf('month');
         let startOfWeekOfStartOfMonthBeforePrevious = startOfMonthBeforePrevious.clone().startOf('isoWeek');
 
