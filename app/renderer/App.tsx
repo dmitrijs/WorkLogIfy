@@ -254,8 +254,11 @@ const App = () => {
                 <div className="Debug">
                     <button onClick={() => document.location.reload()} className="btn btn-secondary" style={{padding: '10px 20px', float: 'right'}}>reload</button>
                     <button type="button" className="btn btn-secondary btn-xs" onClick={save}>save</button>
-                    {Object.entries(store.state).map(([key, value]) => (key === 'settings' || key === 'fileTotals' || key === 'tasks' || key === 'activeApps' ? null :
-                            <div key={key}><strong>{key}:</strong> {(!value || typeof value === 'object') ? JSON.stringify(value) : value}</div>
+                    {Object.entries(store.state).map(([key, value]) => (key === 'settings' || key === 'fileTotals' || key === 'tasks' || key === 'activeApps' || key === 'templates'
+                            ? null
+                            : key === 'taskInClipboard'
+                                ? <div key={key}><strong>{key} (redacted):</strong> {(!value || typeof value === 'object') ? JSON.stringify({id: value.id, code: value.code}) : value}</div>
+                                : <div key={key}><strong>{key}:</strong> {(!value || typeof value === 'object') ? JSON.stringify(value) : value}</div>
                     ))}
                     <hr/>
                     Integrations:
