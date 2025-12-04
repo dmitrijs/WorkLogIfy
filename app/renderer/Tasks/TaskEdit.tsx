@@ -1,3 +1,4 @@
+import {ComboboxExternalTasks} from "@/components/ComboboxExternalTasks";
 import {ComboboxProjects} from "@/components/ComboboxProjects";
 import {ComboboxTasks} from "@/components/ComboboxTasks";
 import _ from 'lodash';
@@ -23,7 +24,7 @@ const YoutrackStates = {
 }
 
 const TaskEdit = ({mode}: { mode: string }) => {
-    const [task, setTask] = useState({});
+    const [task, setTask] = useState<TaskObj>({});
     const titleEl = useRef(null);
     const notesEl = useRef(null);
     const store = useStoreContext();
@@ -204,12 +205,13 @@ const TaskEdit = ({mode}: { mode: string }) => {
                         }}><i className="icofont-refresh"></i></a>):
                         </td>
                         <td>
-                            <ComboboxTasks currentTaskCode={task.youtrackTaskCode}
-                                           currentTask={store.state.youtrackTasks?.[task.youtrackTaskCode]}
-                                           tasksGrouped={youtrackTasksGrouped}
-                                           onChange={(idReadable: string) => {
-                                               youtrackTaskChanged(store.state.youtrackTasks?.[idReadable]);
-                                           }}
+                            <ComboboxExternalTasks
+                                currentTaskCode={task.youtrackTaskCode}
+                                currentTask={store.state.youtrackTasks?.[task.youtrackTaskCode]}
+                                tasksGrouped={youtrackTasksGrouped}
+                                onChange={(idReadable: string) => {
+                                    youtrackTaskChanged(store.state.youtrackTasks?.[idReadable]);
+                                }}
                             />
                         </td>
                     </tr>}
@@ -225,13 +227,14 @@ const TaskEdit = ({mode}: { mode: string }) => {
                                     <ComboboxProjects projects={store.getTaskProjects()} currentProject={task.code} onChange={(code) => {
                                         setTask({...task, code: code});
                                         codeChanged();
-                                    }} />
+                                    }}/>
                                     <button
                                         className={`btn btn-xs ${task.code === 'idle' ? 'btn-secondary' : 'btn-outline-secondary'}`}
                                         type="button"
                                         style={{padding: '1px 8px', display: 'block', float: 'right', position: 'relative', top: '1px'}}
                                         onClick={() => setTask({...task, code: 'idle'})}
-                                    >idle</button>
+                                    >idle
+                                    </button>
                                 </div>
                                 <span>From: <input type="text" className="narrow" value={task.source || ''} onChange={(e) => setTask({...task, source: e.target.value})}/></span>
                             </div>
@@ -281,20 +284,15 @@ const TaskEdit = ({mode}: { mode: string }) => {
                     <tr className={task.parentId && store.parentIsMissing(task) ? 'HasError' : ''}>
                         <td>Parent task:</td>
                         <td>
-                            <select value={task.parentId || ''} onChange={(e) => setTask({...task, parentId: e.target.value})}>
-                                <option value={null}></option>
-                                {Object.values(store.state.tasks).map((parentTask: TaskObj) => (
-                                    parentTask.id !== task.id && !parentTask.parentId && (
-                                        <option key={parentTask.id} value={parentTask.id}
-                                                style={{color: (parentTask.distributed || !parentTask.chargeable ? '#c1c1c1' : '')}}
-                                        >
-                                            {parentTask.code && `[${parentTask.code}]`}
-                                            {parentTask.title}
-                                            {parentTask.notes && ` (${parentTask.notes})`}
-                                        </option>
-                                    )
-                                ))}
-                            </select>
+                            <ComboboxTasks
+                                tasks={store.state.tasks}
+                                currentTaskId={task.parentId}
+                                currentTask={store.state.tasks[task.parentId]}
+                                onChange={(taskId) => {
+                                    setTask({...task, parentId: taskId});
+                                    codeChanged();
+                                }}
+                            />
                         </td>
                     </tr>
                     <tr>

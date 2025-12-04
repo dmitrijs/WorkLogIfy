@@ -54,7 +54,7 @@ export function ComboboxExternalTasks({currentTaskCode, currentTask, tasksGroupe
                     variant="outline"
                     role="combobox"
                     aria-expanded={open}
-                    className="w-full justify-between flex justify-between border-neutral-500"
+                    className="w-full justify-between flex justify-between border-neutral-500 max-w-100 overflow-hidden"
                 >
                     <span>{currentTask ? <>[{currentTask.idReadable}] {currentTask.summary}</> : (currentTaskCode ? 'Current: ' + currentTaskCode : '')}</span>
                     <ChevronDown className="opacity-50"/>
