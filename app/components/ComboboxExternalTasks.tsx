@@ -7,7 +7,7 @@ import {Icon} from "@iconify-icon/react";
 import {ChevronDown, X} from "lucide-react"
 import * as React from "react"
 
-export function ComboboxTasks({currentTaskCode, currentTask, tasksGrouped, onChange}) {
+export function ComboboxExternalTasks({currentTaskCode, currentTask, tasksGrouped, onChange}) {
     const [open, setOpen] = React.useState(false)
 
     function onSelect(value) {
