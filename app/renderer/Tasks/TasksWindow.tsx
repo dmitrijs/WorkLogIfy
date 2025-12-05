@@ -11,6 +11,44 @@ import {timespanToText, timespanToTextHours} from '../Utils/Utils';
 import CalendarWindow from './CalendarWindow';
 import TaskRow from './TaskRow';
 
+function Charts({total}) {
+    const store = useStoreContext()
+
+    const workingDayMinutes = store.state.settings.working_day_minutes;
+    const timeSpentSeconds = total.time_spent_seconds;
+    const totalChargeSeconds = total.time_charge_rounded_seconds;
+    const totalDistributedSeconds = total.time_distributed_seconds;
+
+    return <div data-what="Chart">
+        <div className="Total" style={{
+            height: '4px',
+            background: '#696969'
+        }}>
+            <div data-what="Charge" style={{
+                height: '4px',
+                background: '#46e148',
+                width: `${(100 * (totalChargeSeconds / Math.max(timeSpentSeconds, workingDayMinutes * 60)))}%`
+            }}>
+                <div className="Distributed" style={{
+                    height: '2px',
+                    background: '#b403b4',
+                    width: `${(100 * (totalDistributedSeconds / totalChargeSeconds))}%`
+                }}></div>
+            </div>
+        </div>
+        <div data-what="Total" style={{
+            width: '100%',
+            background: '#ffadad'
+        }}>
+            <div data-what="WorkingDay" style={{
+                height: '3px',
+                background: 'green',
+                width: `${(workingDayMinutes * 60) / (Math.max(timeSpentSeconds, workingDayMinutes * 60)) * 100}%`,
+            }}></div>
+        </div>
+    </div>
+}
+
 const TasksWindow = () => {
     const forceUpdateKey = useRef(1);
     const timeline = useRef(null);
@@ -296,20 +334,7 @@ const TasksWindow = () => {
                 </div>}
             </div>
             <SyncWithCloudStatus/>
-            <div className="Chart" title={JSON.stringify(total, null, 2)}>
-                <div className="Total" style={{height: '4px', background: '#696969'}}>
-                    <div className="Charge" style={{height: '4px', background: '#46e148', width: `${(100 * (total.time_charge_rounded_seconds / Math.max(total.time_spent_seconds, store.state.settings.working_day_minutes * 60)))}%`}}>
-                        <div className="Distributed" style={{height: '2px', background: '#b403b4', width: `${(100 * (total.time_distributed_seconds / total.time_charge_rounded_seconds))}%`}}></div>
-                    </div>
-                </div>
-                <div className="Total" style={{width: '100%', background: '#ffadad'}}>
-                    <div className="WorkingDay" style={{
-                        height: '3px',
-                        background: 'green',
-                        width: `${(store.state.settings.working_day_minutes * 60) / (Math.max(total.time_spent_seconds, store.state.settings.working_day_minutes * 60)) * 100}%`,
-                    }}></div>
-                </div>
-            </div>
+            <Charts total={total}/>
         </div>
     );
 };
