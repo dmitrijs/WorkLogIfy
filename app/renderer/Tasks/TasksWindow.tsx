@@ -320,7 +320,9 @@ const TasksWindow = () => {
                 >
                     {!!store.state.cloudError
                         ? <i className="icofont-warning-alt text-red-500" title={store.state.cloudError}
-                             onClick={() => store.updateState({cloudError: null})}
+                             onClick={() => supabaseSignInWithPassword(store.state.settings.supabase_email, store.state.settings.supabase_password)
+                                 .then(() => store.upsertTasks())
+                             }
                         ></i>
                         : <>
                             {state === 'enabled' && <i className="icofont-cloud text-[#346734]"></i>}

@@ -271,6 +271,10 @@ const StoreContentProvider = ({children}: any) => {
                 this.updateState({
                     cloudError: response.error.message,
                 });
+            } else {
+                this.updateState({
+                    cloudError: null,
+                });
             }
         },
 
