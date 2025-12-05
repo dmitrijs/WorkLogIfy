@@ -310,18 +310,6 @@ const TasksWindow = () => {
                     }}></div>
                 </div>
             </div>
-            <div className="SelectionStatistics">
-                {JSON.stringify(store.state.drag)}
-            </div>
-            {/*<div className="Timeline" ref={timelineRef}>
-                <div className="TimelineItems">
-                    <div style={{width: '55px'}}><span>8:36</span></div>
-                    <div style={{width: '55px'}}><span>9:15</span></div>
-                    <div style={{width: '325px'}}><span>9:25</span></div>
-                    <div style={{width: '325px'}}><span>15:40</span></div>
-                    <div style={{width: '225px'}}><span>18:40</span></div>
-                </div>
-            </div>*/}
         </div>
     );
 };

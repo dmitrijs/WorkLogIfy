@@ -257,7 +257,7 @@ const App = () => {
                     {Object.entries(store.state).map(([key, value]) => (key === 'settings' || key === 'fileTotals' || key === 'tasks' || key === 'activeApps' || key === 'templates'
                             ? null
                             : key === 'taskInClipboard'
-                                ? <div key={key}><strong>{key} (redacted):</strong> {(!value || typeof value === 'object') ? JSON.stringify({id: value.id, code: value.code}) : value}</div>
+                                ? <div key={key}><strong>{key} (redacted):</strong> {(value && typeof value === 'object') ? JSON.stringify({id: value.id, code: value.code}) : value}</div>
                                 : <div key={key}><strong>{key}:</strong> {(!value || typeof value === 'object') ? JSON.stringify(value) : value}</div>
                     ))}
                     <hr/>
