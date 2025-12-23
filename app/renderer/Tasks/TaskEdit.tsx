@@ -286,6 +286,7 @@ const TaskEdit = ({mode}: { mode: string }) => {
                         <td>
                             <ComboboxTasks
                                 tasks={store.state.tasks}
+                                excludeIds={[task.id]}
                                 currentTaskId={task.parentId}
                                 currentTask={store.state.tasks[task.parentId]}
                                 onChange={(taskId) => {

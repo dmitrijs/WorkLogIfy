@@ -6,7 +6,7 @@ import {Popover, PopoverContent, PopoverTrigger} from "@/components/ui/popover"
 import {ChevronDown, X} from "lucide-react"
 import * as React from "react"
 
-export function ComboboxTasks({currentTaskId, currentTask, tasks, onChange}: { currentTaskId: any, currentTask: TaskObj, tasks: any, onChange: any }) {
+export function ComboboxTasks({currentTaskId, currentTask, tasks, onChange, excludeIds}: { currentTaskId: any, currentTask: TaskObj, tasks: any, onChange: any, excludeIds: string[] }) {
     const [open, setOpen] = React.useState(false)
 
     function onSelect(value) {
@@ -51,7 +51,7 @@ export function ComboboxTasks({currentTaskId, currentTask, tasks, onChange}: { c
                             </CommandItem>}
                         </CommandGroup>
 
-                        {Object.values(tasks || {}).map((parentTask: TaskObj) => (<>{
+                        {Object.values(tasks || {}).filter((task: TaskObj) => !excludeIds.includes(task.id)).map((parentTask: TaskObj) => (<>{
                                 parentTask.id !== currentTask?.id && !parentTask.parentId &&
                                 <CommandItem value={`${parentTask.id}|${parentTask.code}`} key={parentTask.id} onSelect={onSelect}>
                                     <span className={"flex gap-1 items-center"}
