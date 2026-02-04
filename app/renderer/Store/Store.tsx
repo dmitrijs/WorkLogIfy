@@ -430,6 +430,8 @@ const StoreContentProvider = ({children}: any) => {
             storeMethods.upsertTasks();
         },
         saveTask(task: TaskEditedObj) {
+            const addedToParent = (!state.tasks[task.id].parentId && task.parentId);
+
             state.tasks[task.id].code = task.code;
             state.tasks[task.id].title = task.title;
             state.tasks[task.id].date = task.date;
@@ -442,6 +444,10 @@ const StoreContentProvider = ({children}: any) => {
             state.tasks[task.id].asanaTaskGid = task.asanaTaskGid;
             state.tasks[task.id].youtrackTaskCode = task.youtrackTaskCode;
             state.tasks[task.id].parentId = task.parentId;
+
+            if (addedToParent && !task.code) {
+                state.tasks[task.id].code = state.tasks[task.parentId].code;
+            }
 
             if (task.time_add_minutes) {
                 let spentSeconds = parseInt(task.time_add_minutes) * 60 || 0;
