@@ -415,7 +415,10 @@ table {
             }
 
             &.is_today {
-                border-color: #00c4ff;
+                .DayTitle {
+                    color: #00c4ff;
+                    font-weight: bold;
+                }
             }
 
             &.is01 {
@@ -469,8 +472,8 @@ table {
                 border-color: black !important;
 
                 @at-root .dark & {
-                    background-color: #444;
-                    border-color: #aaa !important;
+                    background-color: #00c4ff22;
+                    border-color: #00c4ff !important;
                 }
             }
 
