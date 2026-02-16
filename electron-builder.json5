@@ -25,8 +25,11 @@
     "artifactName": "${productName}-mac-v${version}.${ext}",
     "icon": "public/assets/app_icon_512x512.png",
     "target": [
-      "dmg"
-    ]
+      "dir"
+    ],
+    "identity": "WorkLogIfy Certificate",
+    "entitlements": "entitlements.mac.plist",  // Path to your entitlements file
+    "entitlementsInherit": "entitlements.mac.plist"
   },
   "win": {
     "target": [
