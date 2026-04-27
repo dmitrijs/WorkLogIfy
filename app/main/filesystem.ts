@@ -48,7 +48,8 @@ class Filesystem {
             return this.settings;
         }
 
-        return {};
+        this.settings = {} as SettingsObj;
+        return this.settings;
     }
 
     public static saveWorkLog(day_key, worklog, worklogProcessed, settings) {
