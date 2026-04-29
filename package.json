@@ -70,7 +70,7 @@
     "tailwindcss": "^4.1.7",
     "tailwindcss-animate": "^1.0.7",
     "typesafe-ipc": "github:dmitrijs/typesafe-ipc#ea3facd456e7bfc947dd20addcb9cab45d4cd0ad",
-    "vite": "^6.3",
+    "vite": "^7.3.2",
     "vite-plugin-electron": "^0.29.0",
     "vite-plugin-electron-renderer": "^0.14.5",
     "zustand": "^5.0.8"
@@ -90,5 +90,6 @@
     "supabase": "^2.54.11",
     "typescript": "^5.8.2",
     "typescript-eslint": "^8.26.1"
-  }
+  },
+  "packageManager": "npm@11.13.0"
 }
