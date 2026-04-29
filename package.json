@@ -2,43 +2,22 @@
   "name": "work-log-ify",
   "version": "1.42.15",
   "description": "WorkLogIfy",
+  "license": "MIT",
+  "author": "Dmitrijs Sadovskis",
   "main": "dist-electron/main/index.js",
   "scripts": {
     "generate-database-types": "supabase gen types typescript --project-id yevrfoukghkxidpgpitx --schema public > app/database.types.ts",
-    "dev": "vite",
-    "compile": "tsc --noEmit && vite build",
-    "build": "tsc --noEmit && vite build && electron-builder --windows --publish never",
-    "build-mac": "tsc --noEmit && vite build && CSC_IDENTITY_AUTO_DISCOVERY=false electron-builder --mac --publish never && codesign --force --deep --sign \"WorkLogIfy Certificate\" \"release/mac-arm64/WorkLogIfy.app\"",
+    "dev": "vp dev",
+    "compile": "tsc --noEmit && vp build",
+    "build": "tsc --noEmit && vp build && electron-builder --windows --publish never",
+    "build-mac": "tsc --noEmit && vp build && CSC_IDENTITY_AUTO_DISCOVERY=false electron-builder --mac --publish never && codesign --force --deep --sign \"WorkLogIfy Certificate\" \"release/mac-arm64/WorkLogIfy.app\"",
     "eslint": "npx eslint .",
     "standard-version": "npx standard-version",
     "standard-version-x.minor.z": "npx standard-version --release-as minor",
     "standard-version-x.y.patch": "npx standard-version --release-as patch",
     "standard-version-prerelease": "npx standard-version --prerelease local --release-as patch --skip.tag",
-    "lint": "tslint app/**/*.ts{,x}"
-  },
-  "author": "Dmitrijs Sadovskis",
-  "license": "MIT",
-  "standard-version": {
-    "header": "# Changelog\n\nAll notable changes to this project will be documented in this file.\n",
-    "types": [
-      {
-        "type": "feat",
-        "section": "Features"
-      },
-      {
-        "type": "major",
-        "section": "Features"
-      },
-      {
-        "type": "minor",
-        "section": "Improvements"
-      },
-      {
-        "type": "ux",
-        "section": "UI/UX"
-      }
-    ],
-    "releaseCommitMessageFormat": "chore(release): v{{currentTag}}"
+    "lint": "tslint app/**/*.ts{,x}",
+    "prepare": "vp config"
   },
   "dependencies": {
     "@babel/types": "*",
@@ -70,26 +49,51 @@
     "tailwindcss": "^4.1.7",
     "tailwindcss-animate": "^1.0.7",
     "typesafe-ipc": "github:dmitrijs/typesafe-ipc#ea3facd456e7bfc947dd20addcb9cab45d4cd0ad",
-    "vite": "^7.3.2",
     "vite-plugin-electron": "^0.29.0",
     "vite-plugin-electron-renderer": "^0.14.5",
     "zustand": "^5.0.8"
   },
-  "__NOTES": [
-    "electron 27+ has issues to re-draw UI elements on Windows! For example, calendar disappear until mouse moves over it. Workaround: app.disableHardwareAcceleration()",
-    "electron-builder 25+ fails to build because of node-gyp error"
-  ],
   "devDependencies": {
     "@eslint/js": "^9.22.0",
     "@iconify-icon/react": "^3.0.0",
     "@types/node": "^22.15.19",
     "electron": "^34.0",
     "electron-builder": "^24.0",
-    "eslint": "^9.22.0",
     "eslint-plugin-react-hooks": "^5.2.0",
     "supabase": "^2.54.11",
     "typescript": "^5.8.2",
-    "typescript-eslint": "^8.26.1"
+    "typescript-eslint": "^8.26.1",
+    "vite-plus": "latest"
   },
-  "packageManager": "npm@11.13.0"
+  "overrides": {
+    "vite": "npm:@voidzero-dev/vite-plus-core@latest",
+    "vitest": "npm:@voidzero-dev/vite-plus-test@latest"
+  },
+  "packageManager": "npm@11.13.0",
+  "standard-version": {
+    "header": "# Changelog\n\nAll notable changes to this project will be documented in this file.\n",
+    "types": [
+      {
+        "type": "feat",
+        "section": "Features"
+      },
+      {
+        "type": "major",
+        "section": "Features"
+      },
+      {
+        "type": "minor",
+        "section": "Improvements"
+      },
+      {
+        "type": "ux",
+        "section": "UI/UX"
+      }
+    ],
+    "releaseCommitMessageFormat": "chore(release): v{{currentTag}}"
+  },
+  "__NOTES": [
+    "electron 27+ has issues to re-draw UI elements on Windows! For example, calendar disappear until mouse moves over it. Workaround: app.disableHardwareAcceleration()",
+    "electron-builder 25+ fails to build because of node-gyp error"
+  ]
 }
