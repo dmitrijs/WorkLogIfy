@@ -600,7 +600,7 @@ const StoreContentProvider = ({ children }: any) => {
 
                 workday = {
                     tasks: tasks,
-                    activeApps: [],
+                    activeApps: workday.activeApps || [],
                 };
             }
 
