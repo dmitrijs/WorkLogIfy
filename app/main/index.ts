@@ -44,6 +44,7 @@ app.on("ready", async () => {
                   width: 800,
               }
             : {
+                  width: 500,
                   minWidth: 500,
                   maxWidth: 500,
               }),
