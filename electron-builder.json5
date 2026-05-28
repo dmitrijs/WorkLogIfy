@@ -2,47 +2,42 @@
  * @see https://www.electron.build/configuration/configuration
  */
 {
-  "$schema": "https://raw.githubusercontent.com/electron-userland/electron-builder/master/packages/app-builder-lib/scheme.json",
-  productName: "WorkLogIfy",
-  "appId": "lv.ify.worklog",
-  "asar": true,
-  "directories": {
-    "output": "release"
-  },
-  "files": [
-    "app/**",
-    "!app/main/main.ts",
-    "!app/main/tests/**",
-    "!app/renderer/**",
-    "app/renderer/.parcel/production/**",
-    "!app/**/*.map",
-    "public",
-    "./dist-electron/**/*",
-    "./dist/**/*"
-  ],
-  "mac": {
-    "category": 'public.app-category.productivity',
-    "artifactName": "${productName}-mac-v${version}.${ext}",
-    "icon": "public/assets/app_icon_512x512.png",
-    "target": [
-      "dir"
+    $schema: "https://raw.githubusercontent.com/electron-userland/electron-builder/master/packages/app-builder-lib/scheme.json",
+    productName: "WorkLogIfy",
+    appId: "lv.ify.worklog",
+    asar: true,
+    directories: {
+        output: "release",
+    },
+    files: [
+        "app/**",
+        "!app/main/main.ts",
+        "!app/main/tests/**",
+        "!app/renderer/**",
+        "app/renderer/.parcel/production/**",
+        "!app/**/*.map",
+        "public",
+        "./dist-electron/**/*",
+        "./dist/**/*",
     ],
-    "identity": "WorkLogIfy Certificate",
-    "entitlements": "entitlements.mac.plist",  // Path to your entitlements file
-    "entitlementsInherit": "entitlements.mac.plist"
-  },
-  "win": {
-    "target": [
-      "zip",
-      "nsis"
-    ],
-    "icon": "public/assets/app_icon.png",
-    "artifactName": "${productName}-win-v${version}.${ext}"
-  },
-  "nsis": {
-    "oneClick": true,
-    "perMachine": false,
-    "allowToChangeInstallationDirectory": false,
-    "deleteAppDataOnUninstall": false
-  }
+    mac: {
+        category: "public.app-category.productivity",
+        artifactName: "${productName}-mac-v${version}.${ext}",
+        icon: "public/assets/app_icon_512x512.png",
+        target: ["dir"],
+        identity: "WorkLogIfy Certificate",
+        entitlements: "entitlements.mac.plist", // Path to your entitlements file
+        entitlementsInherit: "entitlements.mac.plist",
+    },
+    win: {
+        target: ["zip", "nsis"],
+        icon: "public/assets/app_icon.png",
+        artifactName: "${productName}-win-v${version}.${ext}",
+    },
+    nsis: {
+        oneClick: true,
+        perMachine: false,
+        allowToChangeInstallationDirectory: false,
+        deleteAppDataOnUninstall: false,
+    },
 }

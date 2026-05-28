@@ -1,40 +1,39 @@
-import {spawn} from "child_process"
+import { spawn } from "child_process";
 import Filesystem from "./filesystem";
 
 class Integrations {
     public static async wakeUpDevices() {
-        if (process.platform === 'darwin') {
+        if (process.platform === "darwin") {
             return;
         }
-        console.log('> Waking up devices');
+        console.log("> Waking up devices");
 
         this.getAndroidState().then(async (result: AndroidState) => {
             if (!result.screenOn) {
-                console.log('>> wakeUpAndroid');
+                console.log(">> wakeUpAndroid");
                 await this.wakeUpAndroid();
             }
             if (!result.screenUnlocked) {
-                console.log('>> unlockAndroid');
+                console.log(">> unlockAndroid");
                 await this.unlockAndroid();
             }
 
-
             if (Filesystem.settings.connected_devices_open_dashboard) {
-                console.log('>> go fullscreen');
+                console.log(">> go fullscreen");
 
                 setTimeout(async () => {
-                    await this.runShell('adb.exe', `shell input touchscreen tap 200 200`);
-                    await this.runShell('adb.exe', 'shell input keyevent 34').then() // press 'f' to go full screen
+                    await this.runShell("adb.exe", `shell input touchscreen tap 200 200`);
+                    await this.runShell("adb.exe", "shell input keyevent 34").then(); // press 'f' to go full screen
                 }, 500);
             }
         });
     }
 
     public static async lockDevices() {
-        if (process.platform === 'darwin') {
+        if (process.platform === "darwin") {
             return;
         }
-        console.log('Locking devices');
+        console.log("Locking devices");
 
         this.getAndroidState().then(async (result: AndroidState) => {
             if (result.screenOn) {
@@ -46,42 +45,44 @@ class Integrations {
     // ---
 
     private static async wakeUpAndroid() {
-        return this.runShell('adb.exe', 'shell input keyevent 26').then();
+        return this.runShell("adb.exe", "shell input keyevent 26").then();
     }
 
     private static async unlockAndroid() {
-        await this.runShell('adb.exe', 'shell input touchscreen swipe 400 600 400 100');
-        await this.runShell('adb.exe', 'shell input text 0000');
-        return this.runShell('adb.exe', 'shell input keyevent 66');
+        await this.runShell("adb.exe", "shell input touchscreen swipe 400 600 400 100");
+        await this.runShell("adb.exe", "shell input text 0000");
+        return this.runShell("adb.exe", "shell input keyevent 66");
     }
 
     private static lockAndroid() {
-        return this.runShell('adb.exe', 'shell input keyevent 26').then();
+        return this.runShell("adb.exe", "shell input keyevent 26").then();
     }
 
     private static getAndroidState() {
-        return new Promise((resolve, reject) => {
-            this.runShell('adb.exe', 'shell dumpsys deviceidle').then((result: ShellResult) => {
-                let screenOn = null, screenUnlocked = null;
+        return new Promise<AndroidState>((resolve, _reject) => {
+            this.runShell("adb.exe", "shell dumpsys deviceidle").then((result: ShellResult) => {
+                let screenOn: boolean | null = null,
+                    screenUnlocked: boolean | null = null;
                 if (result.code === 0) {
-                    screenOn = result.stdout.match(/mScreenOn=(true|false)/)[1] === 'true';
-                    screenUnlocked = result.stdout.match(/mScreenLocked=(true|false)/)[1] === 'false';
+                    screenOn = result.stdout.match(/mScreenOn=(true|false)/)![1] === "true";
+                    screenUnlocked =
+                        result.stdout.match(/mScreenLocked=(true|false)/)![1] === "false";
                 }
-                resolve({screenOn, screenUnlocked} as AndroidState);
+                resolve({ screenOn, screenUnlocked } as AndroidState);
             });
         });
     }
 
     public static runShell(executable: string, args: string | string[]) {
-        if (typeof args === 'string') {
-            args = args.split(' ');
+        if (typeof args === "string") {
+            args = args.split(" ");
         }
-        console.log('shell:', [executable, ...args].join(' '));
-        return new Promise((resolve, error) => {
-            let bat = spawn(executable, args);
+        console.log("shell:", [executable, ...args].join(" "));
+        return new Promise<ShellResult>((resolve, _error) => {
+            const bat = spawn(executable, args);
 
-            let stdout = '';
-            let stderr = '';
+            let stdout = "";
+            let stderr = "";
 
             bat.stdout.on("data", (data: Buffer) => {
                 stdout += data.toString();
@@ -92,9 +93,9 @@ class Integrations {
             });
 
             bat.on("exit", (code: number) => {
-                resolve({code, stdout, stderr} as ShellResult);
+                resolve({ code, stdout, stderr } as ShellResult);
             });
-        })
+        });
     }
 }
 

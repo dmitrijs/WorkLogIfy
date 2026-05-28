@@ -1,5 +1,5 @@
 // NOTE: Restart "npm start" after any changes to this file
 
-import {ipcRenderer} from "electron";
+import { ipcRenderer } from "electron";
 
-window['ipc'] = ipcRenderer;
+window["ipc"] = ipcRenderer;

@@ -1,17 +1,16 @@
-import moment, {Moment} from "moment";
-import pkg from './../../package.json'
+import moment, { Moment } from "moment";
+import pkg from "./../../package.json";
 
 let baseTitle;
 
 function setTitle(timerActive = true) {
-    document.title = baseTitle + ' v' + pkg.version + (timerActive ? '' : ' - INACTIVE');
+    document.title = baseTitle + " v" + pkg.version + (timerActive ? "" : " - INACTIVE");
 }
 
 class Timer {
-
     handle: any = 0;
-    timeStart: Moment = null;
-    timeEnd: Moment = null;
+    timeStart: Moment | null = null;
+    timeEnd: Moment | null = null;
 
     init() {
         baseTitle = document.title;
@@ -22,8 +21,8 @@ class Timer {
         return !!this.handle;
     }
 
-    start(taskId = null) {
-        let wasAlreadyActive = !!this.handle;
+    start(taskId: string | null = null) {
+        const wasAlreadyActive = !!this.handle;
         if (wasAlreadyActive) {
             this.stop(0, false);
         }
@@ -35,7 +34,7 @@ class Timer {
             this.tick();
         }
         if (!wasAlreadyActive) {
-            window.ipc.send('timer-state', 'active');
+            window.ipc.send("timer-state", "active");
             setTitle(this.isActive());
         }
     }
@@ -47,19 +46,22 @@ class Timer {
     stop(idleSeconds = 0, sendEvent = true) {
         if (this.handle) {
             this.timeEnd = moment.utc();
-            (window as any).storeGlobal.stopTimer([this.getSecondsElapsed(this.timeEnd), idleSeconds * this.getMultiplier()]);
+            (window as any).storeGlobal.stopTimer([
+                this.getSecondsElapsed(this.timeEnd),
+                idleSeconds * this.getMultiplier(),
+            ]);
 
             clearInterval(this.handle);
             this.handle = 0;
         }
         if (sendEvent) {
             setTitle(false);
-            window.ipc.send('timer-state', 'stopped');
+            window.ipc.send("timer-state", "stopped");
         }
     }
 
     getSecondsElapsed(timeEnd: Moment) {
-        let timeElapsed = timeEnd.unix() - this.timeStart.unix();
+        const timeElapsed = timeEnd.unix() - this.timeStart!.unix();
         return timeElapsed * this.getMultiplier();
     }
 

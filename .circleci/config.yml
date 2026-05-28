@@ -2,93 +2,92 @@
 # Push version tag to create a new release.
 version: 2
 jobs:
+    standard_version:
+        docker:
+            - image: circleci/node:lts
+        steps:
+            - checkout
+            - run: |
+                  git tag --points-at HEAD
+                  if [ -n "$(git tag --points-at HEAD)" ]; then
+                    circleci-agent step halt
+                  fi
+            - run: git branch -u "origin/master" master
+            - run: git config user.email "sdo@inbox.lv"
+            - run: git config user.name "Dmitrijs Sadovskis"
+            - run: git config push.default simple
+            - run: npx standard-version
+            - run: git push --follow-tags
 
-  standard_version:
-    docker:
-      - image: circleci/node:lts
-    steps:
-      - checkout
-      - run: |
-          git tag --points-at HEAD
-          if [ -n "$(git tag --points-at HEAD)" ]; then
-            circleci-agent step halt
-          fi
-      - run: git branch -u "origin/master" master
-      - run: git config user.email "sdo@inbox.lv"
-      - run: git config user.name "Dmitrijs Sadovskis"
-      - run: git config push.default simple
-      - run: npx standard-version
-      - run: git push --follow-tags
+    build_windows:
+        resource_class: large
+        docker:
+            - image: electronuserland/builder:22-wine
 
-  build_windows:
-    resource_class: large
-    docker:
-      - image: electronuserland/builder:22-wine
+        steps:
+            - checkout
+            - restore_cache:
+                  keys:
+                      - npm22-deps-{{ checksum "package-lock.json" }}
 
-    steps:
-      - checkout
-      - restore_cache:
-          keys:
-            - npm22-deps-{{ checksum "package-lock.json" }}
+            - run: npm install
 
-      - run: npm install
+            - save_cache:
+                  key: npm22-deps-{{ checksum "package-lock.json" }}
+                  paths:
+                      - node_modules
 
-      - save_cache:
-          key: npm22-deps-{{ checksum "package-lock.json" }}
-          paths:
-            - node_modules
+            - run: npm run build
 
-      - run: npm run build
+            - run: mkdir circleci_workspace && mkdir circleci_workspace/artifacts && mkdir circleci_workspace/metadata
+            - run: cp release/*.zip release/*.exe circleci_workspace/artifacts/
+            - run: git describe --abbrev=0 --tags > circleci_workspace/metadata/version.txt
+            - run: awk -v start=1 '/\/compare\//{n++;next};n==start;n==start+1{exit}' CHANGELOG.md > circleci_workspace/metadata/changelog.txt
 
-      - run: mkdir circleci_workspace && mkdir circleci_workspace/artifacts && mkdir circleci_workspace/metadata
-      - run: cp release/*.zip release/*.exe circleci_workspace/artifacts/
-      - run: git describe --abbrev=0 --tags > circleci_workspace/metadata/version.txt
-      - run: awk -v start=1 '/\/compare\//{n++;next};n==start;n==start+1{exit}' CHANGELOG.md > circleci_workspace/metadata/changelog.txt
+            - store_artifacts:
+                  path: circleci_workspace/artifacts
 
-      - store_artifacts:
-          path: circleci_workspace/artifacts
+            - run: mkdir workspace
+            - persist_to_workspace:
+                  root: circleci_workspace
+                  paths:
+                      - ./artifacts
+                      - ./metadata
 
-      - run: mkdir workspace
-      - persist_to_workspace:
-          root: circleci_workspace
-          paths:
-            - ./artifacts
-            - ./metadata
-
-  publish_github_release:
-    docker:
-      - image: cibuilds/github:0.10
-    steps:
-      - attach_workspace:
-          at: ./circleci_workspace
-      - run:
-          name: "Publish Release on GitHub"
-          command: |
-            ghr -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -b "$(cat ./circleci_workspace/metadata/changelog.txt)" $(cat ./circleci_workspace/metadata/version.txt) ./circleci_workspace/artifacts/
+    publish_github_release:
+        docker:
+            - image: cibuilds/github:0.10
+        steps:
+            - attach_workspace:
+                  at: ./circleci_workspace
+            - run:
+                  name: "Publish Release on GitHub"
+                  command: |
+                      ghr -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -b "$(cat ./circleci_workspace/metadata/changelog.txt)" $(cat ./circleci_workspace/metadata/version.txt) ./circleci_workspace/artifacts/
 
 workflows:
-  version: 2
+    version: 2
 
-  publish:
-    jobs:
-      - standard_version:
-          filters:
-            branches:
-              only:
-                - release
+    publish:
+        jobs:
+            - standard_version:
+                  filters:
+                      branches:
+                          only:
+                              - release
 
-      - build_windows:
-          filters:
-            branches:
-              ignore: /.*/
-            tags:
-              only: /^v\d+\.\d+\.\d+$/
+            - build_windows:
+                  filters:
+                      branches:
+                          ignore: /.*/
+                      tags:
+                          only: /^v\d+\.\d+\.\d+$/
 
-      - publish_github_release:
-          requires:
-            - build_windows
-          filters:
-            branches:
-              ignore: /.*/
-            tags:
-              only: /^v\d+\.\d+\.\d+$/
+            - publish_github_release:
+                  requires:
+                      - build_windows
+                  filters:
+                      branches:
+                          ignore: /.*/
+                      tags:
+                          only: /^v\d+\.\d+\.\d+$/

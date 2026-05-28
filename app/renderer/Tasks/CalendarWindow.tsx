@@ -1,8 +1,8 @@
-import React, {useEffect, useMemo, useRef, useState} from 'react';
-import {useStoreContext} from '../Store/Store';
-import Store_GetCalendarStatistics from '../Store/Store_GetCalendarStatistics';
+import React, { useEffect, useMemo, useRef } from "react";
+import { useStoreContext } from "../Store/Store";
+import Store_GetCalendarStatistics from "../Store/Store_GetCalendarStatistics";
 
-const CalendarWindow = ({weekKey}: { weekKey: string }) => {
+const CalendarWindow = ({ weekKey }: { weekKey: string }) => {
     const store = useStoreContext();
     const calendarHoveredDayCode = useRef(null);
 
@@ -19,20 +19,20 @@ const CalendarWindow = ({weekKey}: { weekKey: string }) => {
         e.preventDefault();
         // createCalendarMenu(store, () => setCache(null)).popup({window: remote.getCurrentWindow()});
 
-        console.log('store.state.calendarHoveredDayCode', calendarHoveredDayCode.current)
-        window.ipc.send('calendar.showMenu', {
+        console.log("store.state.calendarHoveredDayCode", calendarHoveredDayCode.current);
+        window.ipc.send("calendar.showMenu", {
             dayCode: calendarHoveredDayCode.current,
         });
     };
 
     useEffect(() => {
-        store.setFileTotals(window.ipc.sendSync('tasks.getFileTotals'));
+        store.setFileTotals(window.ipc.sendSync("tasks.getFileTotals"));
         if (!weekKey) {
-            window.addEventListener('contextmenu', calendarMenuShow, false);
+            window.addEventListener("contextmenu", calendarMenuShow, false);
         }
         return () => {
             if (!weekKey) {
-                window.removeEventListener('contextmenu', calendarMenuShow);
+                window.removeEventListener("contextmenu", calendarMenuShow);
             }
         };
     }, [weekKey]);
@@ -41,41 +41,45 @@ const CalendarWindow = ({weekKey}: { weekKey: string }) => {
         calendarHoveredDayCode.current = store.state.calendarHoveredDayCode;
     }, [store.state.calendarHoveredDayCode]);
 
-    const weeks = weekKey ? (cache?.weeks[weekKey] ? {[weekKey]: cache.weeks[weekKey]} : {}) : cache?.weeks;
+    const weeks = weekKey
+        ? cache?.weeks[weekKey]
+            ? { [weekKey]: cache.weeks[weekKey] }
+            : {}
+        : cache?.weeks;
     const months = cache?.months;
     const days = cache?.days;
-    const specialDays = store.state.settings['special_days'] || {};
+    const specialDays = store.state.settings["special_days"] || {};
 
     if (!weeks) {
-        return <></>
+        return <></>;
     }
 
     return (
         <div className="CalendarWindow">
-            <br/>
+            <br />
             <div>
                 {Object.entries(weeks).map(([week_key, week]: any) => (
                     <div key={week_key} className="Week" data-week={week_key}>
                         {weekKey && (
-                            <a href="#" className="PrevNextButton" onClick={() => open(store.state.day_key_prev_week)}>
+                            <a
+                                href="#"
+                                className="PrevNextButton"
+                                onClick={() => open(store.state.day_key_prev_week)}
+                            >
                                 <i className="icofont-rounded-left"></i>
                             </a>
                         )}
                         {week.days.map((dayCode) => (
                             <div
                                 key={dayCode}
-                                className={`Day ${
-                                    days[dayCode].isToday ? 'is_today' : ''
-                                } ${
-                                    days[dayCode].isCurrentMonth ? 'is_current_month' : ''
-                                } ${
-                                    days[dayCode].isOpened ? 'is_opened' : ''
-                                } ${
-                                    days[dayCode].isFirstDayOfTheMonth ? 'is01' : ''
-                                } ${
-                                    days[dayCode].isWeekend ? 'is_weekend' : ''
-                                } ${
-                                    specialDays[dayCode] ? `is_special_day_${specialDays[dayCode]}` : ''
+                                className={`Day ${days[dayCode].isToday ? "is_today" : ""} ${
+                                    days[dayCode].isCurrentMonth ? "is_current_month" : ""
+                                } ${days[dayCode].isOpened ? "is_opened" : ""} ${
+                                    days[dayCode].isFirstDayOfTheMonth ? "is01" : ""
+                                } ${days[dayCode].isWeekend ? "is_weekend" : ""} ${
+                                    specialDays[dayCode]
+                                        ? `is_special_day_${specialDays[dayCode]}`
+                                        : ""
                                 }`}
                                 onClick={() => open(dayCode)}
                                 onMouseEnter={() => store.calendarHoveredDayCode(dayCode)}
@@ -83,25 +87,37 @@ const CalendarWindow = ({weekKey}: { weekKey: string }) => {
                                 title={days[dayCode].dayCode}
                             >
                                 <span className="DayTitle">{days[dayCode].title}</span>
-                                <span className="TimeCharged">{days[dayCode].charged_seconds_text}</span>
+                                <span className="TimeCharged">
+                                    {days[dayCode].charged_seconds_text}
+                                </span>
                             </div>
                         ))}
                         {!!weekKey && (
-                            <a href="#" className="PrevNextButton" onClick={() => open(store.state.day_key_next_week)}>
+                            <a
+                                href="#"
+                                className="PrevNextButton"
+                                onClick={() => open(store.state.day_key_next_week)}
+                            >
                                 <i className="icofont-rounded-right"></i>
                             </a>
                         )}
                         {!!months[week_key] && !!months[week_key].month_charged_seconds && (
                             <span className="MonthTimeCharged">
-                                <span className="_Week">{week.week_charged && `Σ ${week.week_charged_text}`}</span>
-                                <br/>
+                                <span className="_Week">
+                                    {week.week_charged && `Σ ${week.week_charged_text}`}
+                                </span>
+                                <br />
                                 <span className="_Month">
                                     {months[week_key].month_title}:
                                     <span
                                         className={`${
-                                            months[week_key].month_overtime_seconds > 0 ? 'MonthOvertime' : ''
+                                            months[week_key].month_overtime_seconds > 0
+                                                ? "MonthOvertime"
+                                                : ""
                                         } ${
-                                            months[week_key].month_overtime_seconds >= 7200 ? 'MonthOvertimeWarning' : ''
+                                            months[week_key].month_overtime_seconds >= 7200
+                                                ? "MonthOvertimeWarning"
+                                                : ""
                                         }`}
                                         title={months[week_key].month_overtime_text}
                                     >

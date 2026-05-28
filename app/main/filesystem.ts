@@ -1,16 +1,16 @@
-import {app} from "electron";
+import { app } from "electron";
 import fs from "fs";
 import moment from "moment";
 
 class Filesystem {
-    public static settings:SettingsObj;
+    public static settings: SettingsObj;
 
     public static getDir() {
-        const rootDir = app.getPath('appData');
-        const dir = rootDir + (app.isPackaged ? '/WorkLogIfy/' : '/WorkLogIfy-test/');
+        const rootDir = app.getPath("appData");
+        const dir = rootDir + (app.isPackaged ? "/WorkLogIfy/" : "/WorkLogIfy-test/");
 
         if (!fs.existsSync(dir)) {
-            fs.mkdirSync(dir, {recursive: true});
+            fs.mkdirSync(dir, { recursive: true });
         }
 
         return dir;
@@ -20,14 +20,17 @@ class Filesystem {
         const dir = this.getDir();
         let worklog = []; // should be empty
 
-        if (fs.existsSync(dir + '/worklog-' + day_key + '.json')) {
-            let contents = fs.readFileSync(dir + '/worklog-' + day_key + '.json', 'utf8');
+        if (fs.existsSync(dir + "/worklog-" + day_key + ".json")) {
+            const contents = fs.readFileSync(dir + "/worklog-" + day_key + ".json", "utf8");
             worklog = JSON.parse(contents);
             (<any>worklog).activeApps = [];
 
-            if (fs.existsSync(dir + '/worklog-' + day_key + '-activeApps.json')) {
-                let contents = fs.readFileSync(dir + '/worklog-' + day_key + '-activeApps.json', 'utf8');
-                let activeAppsFile = JSON.parse(contents);
+            if (fs.existsSync(dir + "/worklog-" + day_key + "-activeApps.json")) {
+                const contents = fs.readFileSync(
+                    dir + "/worklog-" + day_key + "-activeApps.json",
+                    "utf8",
+                );
+                const activeAppsFile = JSON.parse(contents);
                 let activeApps = [];
                 if (activeAppsFile && activeAppsFile.activeApps) {
                     activeApps = activeAppsFile.activeApps;
@@ -42,8 +45,8 @@ class Filesystem {
     public static getSettings() {
         const dir = this.getDir();
 
-        if (fs.existsSync(dir + '/settings.json')) {
-            let contents = fs.readFileSync(dir + '/settings.json', 'utf8');
+        if (fs.existsSync(dir + "/settings.json")) {
+            const contents = fs.readFileSync(dir + "/settings.json", "utf8");
             this.settings = JSON.parse(contents);
             return this.settings;
         }
@@ -56,49 +59,70 @@ class Filesystem {
         const dir = this.getDir();
         console.log("files directory: " + dir);
         delete worklog.activeApps;
-        fs.writeFileSync(dir + '/worklog-' + day_key + '.json', JSON.stringify({
-            version: 1,
-            tasks: worklog,
-        }, null, 2));
-        fs.writeFileSync(dir + '/worklog-' + day_key + '.backup_' + (moment().format('YYMMDD_HH')) + 'h.json', JSON.stringify({
-            version: 1,
-            tasks: worklog,
-        }, null, 2));
-        fs.writeFileSync(dir + '/settings.json', JSON.stringify(settings, null, 2));
+        fs.writeFileSync(
+            dir + "/worklog-" + day_key + ".json",
+            JSON.stringify(
+                {
+                    version: 1,
+                    tasks: worklog,
+                },
+                null,
+                2,
+            ),
+        );
+        fs.writeFileSync(
+            dir + "/worklog-" + day_key + ".backup_" + moment().format("YYMMDD_HH") + "h.json",
+            JSON.stringify(
+                {
+                    version: 1,
+                    tasks: worklog,
+                },
+                null,
+                2,
+            ),
+        );
+        fs.writeFileSync(dir + "/settings.json", JSON.stringify(settings, null, 2));
 
         Filesystem.settings = settings;
 
         {
             let time_charge_rounded_seconds = 0;
-            for (let group of Object.values(worklogProcessed)) {
+            for (const group of Object.values(worklogProcessed)) {
                 time_charge_rounded_seconds += (<any>group).time_charge_rounded_seconds;
             }
-            console.log('worklog_totals: sum for', day_key, 'is', time_charge_rounded_seconds);
+            console.log("worklog_totals: sum for", day_key, "is", time_charge_rounded_seconds);
 
-            let contents = this.getFileTotals();
-            let day = contents[day_key] || {
+            const contents = this.getFileTotals();
+            const day = contents[day_key] || {
                 time_charge_rounded_seconds: 0,
             };
             day.time_charge_rounded_seconds = time_charge_rounded_seconds;
             contents[day_key] = day;
-            fs.writeFileSync(dir + '/worklog_totals.json', JSON.stringify(contents, null, 2));
+            fs.writeFileSync(dir + "/worklog_totals.json", JSON.stringify(contents, null, 2));
         }
     }
 
     public static saveActiveApps(day_key, activeApps) {
         const dir = this.getDir();
-        fs.writeFileSync(dir + '/worklog-' + day_key + '-activeApps.json', JSON.stringify({
-            version: 1,
-            activeApps: activeApps,
-        }, null, 2));
+        fs.writeFileSync(
+            dir + "/worklog-" + day_key + "-activeApps.json",
+            JSON.stringify(
+                {
+                    version: 1,
+                    activeApps: activeApps,
+                },
+                null,
+                2,
+            ),
+        );
     }
 
     public static getFileTotals() {
         const dir = this.getDir();
 
         let contents = {};
-        if (fs.existsSync(dir + '/worklog_totals.json')) {
-            contents = JSON.parse(fs.readFileSync(dir + '/worklog_totals.json').toString());
+        if (fs.existsSync(dir + "/worklog_totals.json")) {
+            contents = JSON.parse(fs.readFileSync(dir + "/worklog_totals.json").toString());
             contents = contents || {};
         }
         return contents;
@@ -106,20 +130,20 @@ class Filesystem {
 
     public static saveTaskTemplates(taskTemplates) {
         const dir = this.getDir();
-        fs.writeFileSync(dir + '/worklog_templates.json', JSON.stringify(taskTemplates));
+        fs.writeFileSync(dir + "/worklog_templates.json", JSON.stringify(taskTemplates));
     }
 
     public static saveTaskProjects(taskProjects) {
         const dir = this.getDir();
-        fs.writeFileSync(dir + '/worklog_projects.json', JSON.stringify(taskProjects));
+        fs.writeFileSync(dir + "/worklog_projects.json", JSON.stringify(taskProjects));
     }
 
     public static getTaskTemplates() {
         const dir = this.getDir();
 
         let contents = [];
-        if (fs.existsSync(dir + '/worklog_templates.json')) {
-            contents = JSON.parse(fs.readFileSync(dir + '/worklog_templates.json').toString());
+        if (fs.existsSync(dir + "/worklog_templates.json")) {
+            contents = JSON.parse(fs.readFileSync(dir + "/worklog_templates.json").toString());
             contents = contents || [];
         }
         return contents;
@@ -129,8 +153,8 @@ class Filesystem {
         const dir = this.getDir();
 
         let contents = [];
-        if (fs.existsSync(dir + '/worklog_projects.json')) {
-            contents = JSON.parse(fs.readFileSync(dir + '/worklog_projects.json').toString());
+        if (fs.existsSync(dir + "/worklog_projects.json")) {
+            contents = JSON.parse(fs.readFileSync(dir + "/worklog_projects.json").toString());
             contents = contents || [];
         }
         return contents;

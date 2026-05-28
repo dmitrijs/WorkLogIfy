@@ -1,21 +1,18 @@
-import {StrictIpcRenderer} from "typesafe-ipc";
-import {IpcChannelMap} from "../shared/ipcs-map";
-import { useStoreContext} from './Store/Store'
+import { StrictIpcRenderer } from "typesafe-ipc";
+import { IpcChannelMap } from "../shared/ipcs-map";
 
-import './../style.scss';
-import './../../external/icofont/icofont.min.css';
-import './../../external/checkbox.scss';
+import "./../style.scss";
+import "./../../external/icofont/icofont.min.css";
+import "./../../external/checkbox.scss";
 import timer from "./Timer";
-import {createRoot} from 'react-dom/client'
-import moment from "moment";
+import { createRoot } from "react-dom/client";
 
-import AppBase from './AppBase'
-import IpcRendererEvent = Electron.IpcRendererEvent;
+import AppBase from "./AppBase";
 
 declare global {
     interface Window {
-        ipc: StrictIpcRenderer<IpcChannelMap>,
-        remote: any,
+        ipc: StrictIpcRenderer<IpcChannelMap>;
+        remote: any;
     }
 }
 
@@ -25,6 +22,4 @@ timer.init();
 // app.use((<any>store));
 // app.mount("#root");
 
-createRoot(document.getElementById('root')!).render(
-    <AppBase />
-)
+createRoot(document.getElementById("root")!).render(<AppBase />);

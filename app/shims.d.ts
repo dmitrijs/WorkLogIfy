@@ -1,7 +1,17 @@
+declare module "*.scss" {
+    const content: Record<string, string>;
+    export default content;
+}
+
+declare module "*.css" {
+    const content: Record<string, string>;
+    export default content;
+}
+
 declare type WorkDayObj = {
     tasks: any;
     activeApps: ActiveAppObj[];
-}
+};
 
 declare type TaskObj = {
     id: string;
@@ -47,32 +57,32 @@ declare type TaskObj = {
 
     group_key?: string;
     grouped?: boolean;
-}
+};
 
 declare type TaskGroupObj = {
-    tasks: Record<string, TaskObj>,
-    time_charge_seconds: number,
-    time_spent_seconds: number,
-    time_distributed_seconds: number,
-    time_not_distributed_seconds: number,
-    time_frozen_seconds: number,
-    time_charge_text: string,
-    time_spent_text: string,
-    time_recorded_text: string,
-    time_recorded_seconds?: number,
-    time_distributed_text?: string,
+    tasks: Record<string, TaskObj>;
+    time_charge_seconds: number;
+    time_spent_seconds: number;
+    time_distributed_seconds: number;
+    time_not_distributed_seconds: number;
+    time_frozen_seconds: number;
+    time_charge_text: string;
+    time_spent_text: string;
+    time_recorded_text: string;
+    time_recorded_seconds?: number;
+    time_distributed_text?: string;
 
-    duplicatesExist: boolean,
-    time_charge_rounded_seconds: number,
-    time_charge_rounded_text: string,
+    duplicatesExist: boolean;
+    time_charge_rounded_seconds: number;
+    time_charge_rounded_text: string;
 
     erroneous?: boolean;
-}
+};
 
 declare type TaskEditedObj = TaskObj & {
     time_add_minutes: string;
     time_record_minutes: string;
-}
+};
 
 declare type TemplateObj = {
     code?: string;
@@ -82,28 +92,28 @@ declare type TemplateObj = {
     frozen?: boolean;
     chargeable?: boolean;
     distributed?: boolean;
-}
+};
 
 declare type SessionObj = {
     spent_seconds: number;
     method: string;
     started_at: string;
     finished_at: string;
-}
+};
 
 declare type RecordObj = {
     recorded_seconds: number;
     method: string;
     created_at: string;
     jiraWorkLogId?: string;
-}
+};
 
 declare type ActiveAppObj = {
     noticed_at: string;
     description: string;
     seconds_idle: number;
     timered_task?: string;
-}
+};
 
 declare type SettingsObj = {
     jira_host: string;
@@ -129,50 +139,50 @@ declare type SettingsObj = {
     youtrack_enabled: boolean;
     supabase_email: string;
     supabase_password: string;
-}
+};
 
 declare type CalendarStatistics = {
-    days: { [key: string]: CalendarDayStatistics },
-    months: { [key: string]: CalendarMonthStatistics },
-    weeks: { [key: string]: CalendarWeekStatistics },
-}
+    days: { [key: string]: CalendarDayStatistics };
+    months: { [key: string]: CalendarMonthStatistics };
+    weeks: { [key: string]: CalendarWeekStatistics };
+};
 
 declare type CalendarDayStatistics = {
-    dayCode: string,
-    weekCode: string,
-    monthLastWeekCode: string,
-    monthName: string,
-    title: string,
-    isOpened: boolean,
-    isFirstDayOfTheMonth: boolean,
-    isToday: boolean,
-    isWeekend: boolean,
-    isCurrentMonth: boolean,
-    expectedHours: number,
-    paid: boolean,
-    charged_seconds: any,
-    charged_seconds_text: any,
-}
+    dayCode: string;
+    weekCode: string;
+    monthLastWeekCode: string;
+    monthName: string;
+    title: string;
+    isOpened: boolean;
+    isFirstDayOfTheMonth: boolean;
+    isToday: boolean;
+    isWeekend: boolean;
+    isCurrentMonth: boolean;
+    expectedHours: number;
+    paid: boolean;
+    charged_seconds: any;
+    charged_seconds_text: any;
+};
 
 declare type CalendarWeekStatistics = {
-    days: string[],
-    week_charged: number,
-    week_charged_text: string,
-}
+    days: string[];
+    week_charged: number;
+    week_charged_text: string;
+};
 
 declare type CalendarMonthStatistics = {
-    month_charged_seconds: number,
-    month_charged_seconds_text: string,
-    month_title: string,
-    month_official_seconds: number,
-    month_overtime_seconds: number,
-    month_overtime_text: string,
-}
+    month_charged_seconds: number;
+    month_charged_seconds_text: string;
+    month_title: string;
+    month_official_seconds: number;
+    month_overtime_seconds: number;
+    month_overtime_text: string;
+};
 
 declare type AsanaWorkspaceObj = {
     gid: string;
     name: string;
-}
+};
 
 declare type AsanaTaskObj = {
     gid: string;
@@ -180,13 +190,13 @@ declare type AsanaTaskObj = {
     permalink_url: string;
     completed_at?: string;
     assignee_section?: { name: string };
-}
+};
 
 declare type YoutrackTaskObj = {
-    customFields: any[],
-    idReadable,
-    summary,
-    description,
+    customFields?: any[];
+    idReadable;
+    summary;
+    description;
 
     AsanaID: string;
     Assignee: string;
@@ -196,15 +206,15 @@ declare type YoutrackTaskObj = {
     Priority: string;
     Spent_time: string;
     State: string;
-}
+};
 
 declare type ShellResult = {
     code: number;
     stdout: string;
     stderr: string;
-}
+};
 
 declare type AndroidState = {
     screenOn: boolean;
     screenUnlocked: boolean;
-}
+};

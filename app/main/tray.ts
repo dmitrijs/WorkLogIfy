@@ -1,34 +1,36 @@
 import * as path from "path";
 import electron from "electron";
 
-const {Menu, Tray, app} = electron;
+const { Menu, Tray, app } = electron;
 
 let tray;
 
 export function setTrayIconIdle() {
-    tray.setImage(path.join(process.env.PUBLIC, '/assets/trayInactive.png'));
+    tray.setImage(path.join(process.env.PUBLIC || "", "/assets/trayInactive.png"));
 }
 
 export function setTrayIconActive() {
-    tray.setImage(path.join(process.env.PUBLIC, '/assets/tray.png'));
+    tray.setImage(path.join(process.env.PUBLIC || "", "/assets/tray.png"));
 }
 
 export default function createTray(mainWindow) {
-    tray = new Tray(path.join(process.env.PUBLIC, '/assets/trayInactive.png'));
+    tray = new Tray(path.join(process.env.PUBLIC || "", "/assets/trayInactive.png"));
 
     const contextMenu = Menu.buildFromTemplate([
         {
-            label: 'Show App', click: function () {
+            label: "Show App",
+            click: function () {
                 mainWindow.show();
-            }
+            },
         },
         {
-            label: 'Quit', click: function () {
+            label: "Quit",
+            click: function () {
                 app.quit();
-            }
-        }
+            },
+        },
     ]);
-    tray.on('click', function (e) {
+    tray.on("click", function (_e) {
         if (mainWindow.isVisible()) {
             mainWindow.hide();
         } else {

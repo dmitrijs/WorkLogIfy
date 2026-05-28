@@ -1,7 +1,7 @@
 import moment from "moment";
 
 export function applyRoundingMinutes(seconds: number, rounding_minutes?: number): number {
-    let timeBlockLengthSeconds = 60 * (rounding_minutes || 10);
+    const timeBlockLengthSeconds = 60 * (rounding_minutes || 10);
     let blockCount = Math.round(seconds / timeBlockLengthSeconds);
     if (seconds >= 60 && blockCount < 1) {
         blockCount = 1;
@@ -9,22 +9,22 @@ export function applyRoundingMinutes(seconds: number, rounding_minutes?: number)
     return blockCount * timeBlockLengthSeconds;
 }
 
-export function timespanToText(seconds: number, emptyValue = '-'): string {
-    let sign = '';
+export function timespanToText(seconds: number, emptyValue = "-"): string {
+    let sign = "";
     if (seconds < 0) {
-        sign = '-';
+        sign = "-";
         seconds *= -1;
     }
     // let result = String(seconds);
-    let hours = Math.floor(seconds / 3600);
-    let minutes = Math.floor((seconds - hours * 3600) / 60);
+    const hours = Math.floor(seconds / 3600);
+    const minutes = Math.floor((seconds - hours * 3600) / 60);
 
-    let result = '';
+    let result = "";
     if (hours > 0) {
-        result += Math.floor(hours) + 'h ';
+        result += Math.floor(hours) + "h ";
     }
     if (minutes > 0) {
-        result += Math.floor(minutes) + 'm ';
+        result += Math.floor(minutes) + "m ";
     }
     if (!result) {
         result = emptyValue;
@@ -33,24 +33,24 @@ export function timespanToText(seconds: number, emptyValue = '-'): string {
 }
 
 export function timespanToTextHours(seconds: number): string {
-    let sign = '';
+    let sign = "";
     if (seconds < 0) {
-        sign = '-';
+        sign = "-";
         seconds *= -1;
     }
 
-    let hours = seconds / 3600;
+    const hours = seconds / 3600;
     if (hours >= 1) {
-        return (Math.round(hours * 10) / 10.0) + 'h';
+        return Math.round(hours * 10) / 10.0 + "h";
     }
 
-    let result = '';
-    let minutes = (seconds - Math.floor(hours) * 3600) / 60;
+    let result = "";
+    const minutes = (seconds - Math.floor(hours) * 3600) / 60;
     if (minutes > 0) {
-        result += Math.floor(minutes) + 'm ';
+        result += Math.floor(minutes) + "m ";
     }
     if (!result) {
-        return '-';
+        return "-";
     }
     return sign + result.trim();
 }
