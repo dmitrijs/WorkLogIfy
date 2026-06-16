@@ -261,9 +261,7 @@ const App = () => {
                     }
                     break;
                 case "Paste":
-                    if (task) {
-                        store.clipboardPaste();
-                    }
+                    store.clipboardPaste();
                     break;
             }
         });
