@@ -180,7 +180,7 @@ const TaskRow = ({ tasksGrouped, group_id, task_id, onDragStart }: any) => {
                 </div>
                 <div
                     className="TCol --timespan"
-                    onClick={(event) => dropTime(event, task)}
+                    onClick={(event) => dropTime(event)}
                     onMouseDown={(event) => {
                         event.preventDefault();
                         onDragStart(event, task);
@@ -232,7 +232,7 @@ const TaskRow = ({ tasksGrouped, group_id, task_id, onDragStart }: any) => {
                                 "IconAsInput icofont-play " +
                                 (task.is_done || task.is_on_hold ? "hidden" : "")
                             }
-                            onClick={(event) => startTimer(event, task)}
+                            onClick={(event) => startTimer(event)}
                         ></i>
                     )}
                     {task.is_done && (

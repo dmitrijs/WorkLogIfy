@@ -69,7 +69,12 @@ function Charts({ total }) {
 const TasksWindow = () => {
     const forceUpdateKey = useRef(1);
     const timeline = useRef(null);
-    const [total, setTotal] = useState({});
+    const [total, setTotal] = useState({
+        time_not_distributed_seconds: 0,
+        time_charge_rounded_text: '',
+        time_recorded_text: '',
+        time_spent_text: '',
+    });
     const [tasksGrouped, setTasksGrouped] = useState<any>({});
     const [tasksGroupedAndMerged, setTasksGroupedAndMerged] = useState<any>({});
     const store = useStoreContext();
@@ -379,7 +384,7 @@ const TasksWindow = () => {
             <div>
                 <textarea
                     className="GlobalNotes"
-                    rows="1"
+                    rows={1}
                     ref={globalNotesInputRef}
                     onBlur={handleBlur}
                 ></textarea>

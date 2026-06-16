@@ -8,7 +8,7 @@ const TemplatesWindow = () => {
     const projects = store.getTaskProjects();
 
     const updateProjects = (str) => {
-        store.projectsUpdate([str.split(",").map((s) => s.trim())]);
+        store.projectsUpdate(str.split(",").map((s) => s.trim()));
     };
 
     const add = () => {

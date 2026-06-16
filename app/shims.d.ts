@@ -45,6 +45,9 @@ declare type TaskObj = {
     time_add_idle_seconds?: number;
 
     timer_elapsed_seconds_text?: string;
+    
+    time_add_minutes?: string;
+    time_record_minutes?: string;
 
     sessions: SessionObj[];
     records: RecordObj[];

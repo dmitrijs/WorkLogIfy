@@ -24,7 +24,7 @@ const YoutrackStates = {
 };
 
 const TaskEdit = ({ mode }: { mode: string }) => {
-    const [task, setTask] = useState<TaskObj>({});
+    const [task, setTask] = useState<TaskEditedObj>({} as any);
     const titleEl = useRef(null);
     const notesEl = useRef(null);
     const store = useStoreContext();
@@ -191,7 +191,7 @@ const TaskEdit = ({ mode }: { mode: string }) => {
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td colSpan="2">
+                                    <td colSpan={2}>
                                         <hr style={{ marginBlock: "0.5rem" }} />
                                     </td>
                                 </tr>
@@ -459,7 +459,7 @@ const TaskEdit = ({ mode }: { mode: string }) => {
                             </td>
                         </tr>
                         <tr>
-                            <td colSpan="2">
+                            <td colSpan={2}>
                                 <button
                                     className="btn btn-outline-secondary btn-sm"
                                     type="button"

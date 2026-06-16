@@ -94,7 +94,7 @@ const createSelectors = <S extends UseBoundStore<StoreApi<object>>>(_store: S) =
 
 export const useStore = createSelectors(useStoreBase);
 
-const StoreContext = createContext();
+const StoreContext = createContext(null);
 
 const initialState = {
     initialized: false,
@@ -127,6 +127,8 @@ const initialState = {
     taskInClipboard: null as TaskObj | null,
     taskIsCloned: false,
     calendarHoveredDayCode: null,
+    
+    projects: [] as string[],
 
     asanaTasks: {} as Record<string, AsanaTaskObj>,
     youtrackTasks: {} as Record<string, YoutrackTaskObj>,
@@ -317,7 +319,7 @@ const StoreContentProvider = ({ children }: any) => {
         },
 
         getEditedTask(): TaskEditedObj {
-            return state.tasks[state.taskEditedId];
+            return state.tasks[state.taskEditedId] as TaskEditedObj;
         },
 
         getEmptyTask(): TaskEditedObj {
@@ -378,7 +380,7 @@ const StoreContentProvider = ({ children }: any) => {
             return state.projects;
         },
 
-        projectsUpdate([list]) {
+        projectsUpdate(list) {
             state.projects = list;
 
             saveTaskProjects(state);
