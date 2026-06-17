@@ -21,6 +21,10 @@ export default class IdleUser {
     private static lastWakeUp = 0;
 
     public static registerOnReady(mainWindow) {
+        // Prevent Windows from throttling/suspending timers when system is idle.
+        // Without this, Windows 11 Efficiency Mode can delay 30s intervals by 10+ minutes.
+        electron.powerSaveBlocker.start("prevent-app-suspension");
+
         electron.powerMonitor.addListener("lock-screen", () => {
             this.screenLocked = true;
             if (Filesystem.settings.connected_devices_wake_up) {
@@ -33,6 +37,15 @@ export default class IdleUser {
             if (Filesystem.settings.connected_devices_wake_up) {
                 Integrations.wakeUpDevices();
             }
+        });
+
+        electron.powerMonitor.addListener("resume", () => {
+            // System woke from sleep — fire an immediate active-app check so the gap
+            // between suspend and resume is not silently skipped.
+            mainWindow.webContents.send("user-active-app", {
+                secondsIdle: electron.powerMonitor.getSystemIdleTime(),
+                appDescription: '-"-',
+            });
         });
 
         if (Filesystem.settings.connected_devices_wake_up) {
@@ -50,7 +63,11 @@ export default class IdleUser {
                     });
                     return;
                 }
-                const obj = await activeWindow();
+                // Race against a timeout so a hung native addon can't block the event loop.
+                const obj = await Promise.race([
+                    activeWindow(),
+                    new Promise<null>((resolve) => setTimeout(() => resolve(null), 5000)),
+                ]);
                 if (!obj) {
                     return;
                 }
