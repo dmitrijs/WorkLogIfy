@@ -1,6 +1,6 @@
 # Either tag manually or push 'release' branch to create new version tag.
 # Push version tag to create a new release.
-version: 2
+version: 2.1
 jobs:
     standard_version:
         docker:
