@@ -71,9 +71,9 @@ const TasksWindow = () => {
     const timeline = useRef(null);
     const [total, setTotal] = useState({
         time_not_distributed_seconds: 0,
-        time_charge_rounded_text: '',
-        time_recorded_text: '',
-        time_spent_text: '',
+        time_charge_rounded_text: "",
+        time_recorded_text: "",
+        time_spent_text: "",
     });
     const [tasksGrouped, setTasksGrouped] = useState<any>({});
     const [tasksGroupedAndMerged, setTasksGroupedAndMerged] = useState<any>({});

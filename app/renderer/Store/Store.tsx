@@ -127,7 +127,7 @@ const initialState = {
     taskInClipboard: null as TaskObj | null,
     taskIsCloned: false,
     calendarHoveredDayCode: null,
-    
+
     projects: [] as string[],
 
     asanaTasks: {} as Record<string, AsanaTaskObj>,

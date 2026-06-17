@@ -32,7 +32,7 @@
         entitlementsInherit: "entitlements.mac.plist",
     },
     win: {
-        target: ["zip", "nsis"],
+        target: ["nsis"],
         icon: "public/assets/app_icon.png",
         artifactName: "${productName}-win-v${version}.${ext}",
     },
