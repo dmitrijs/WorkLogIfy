@@ -8,6 +8,7 @@
     beforeBuild: "scripts/beforeBuild.js",
     appId: "lv.ify.worklog",
     asar: true,
+    asarUnpack: ["**/node_modules/active-win/**"],
     directories: {
         output: "release",
     },
