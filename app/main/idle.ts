@@ -58,6 +58,7 @@ export default class IdleUser {
             (async () => {
                 if (secondsIdle > this.seconds_to_log_active_window) {
                     mainWindow.webContents.send("user-active-app", {
+                        // window could not change
                         secondsIdle: secondsIdle,
                         appDescription: '-"-',
                     });
@@ -66,14 +67,19 @@ export default class IdleUser {
                 // Race against a timeout so a hung native addon can't block the event loop.
                 const obj = await Promise.race([
                     activeWindow(),
-                    new Promise<null>((resolve) => setTimeout(() => resolve(null), 5000)),
+                    new Promise<"timeout">((resolve) =>
+                        setTimeout(() => resolve("timeout"), 10_000),
+                    ),
                 ]);
-                if (!obj) {
-                    return;
-                }
+                const appDescription =
+                    obj === "timeout"
+                        ? `active-win timeout`
+                        : obj
+                          ? `[${obj.owner?.name || obj.owner?.path || obj.title}] "${obj.title}"`
+                          : `active-win undefined`;
                 mainWindow.webContents.send("user-active-app", {
                     secondsIdle: secondsIdle,
-                    appDescription: `[${obj.owner?.name || obj.owner?.path || obj.title}] "${obj.title}"`,
+                    appDescription,
                 });
             })();
         }, this.seconds_to_log_active_window * 1000);
