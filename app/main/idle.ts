@@ -1,4 +1,4 @@
-import activeWindow from "active-win";
+import { activeWindow } from "get-windows";
 import electron from "electron";
 import moment from "moment";
 import Filesystem from "./filesystem";
