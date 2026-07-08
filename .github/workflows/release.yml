@@ -92,19 +92,9 @@ jobs:
             - id: version
               run: echo "tag=$(cat workspace/metadata/version.txt)" >> "$GITHUB_OUTPUT"
 
-            # Created as a draft first: GitHub only emails "Watching" users when a
-            # release is created directly as published. Creating it as a draft, then
-            # flipping draft -> published in a separate update, does not send that
-            # notification.
-            - name: Create draft release on GitHub
+            - name: Publish Release on GitHub
               uses: softprops/action-gh-release@v3
               with:
                   tag_name: ${{ steps.version.outputs.tag }}
                   body_path: workspace/metadata/changelog.txt
                   files: workspace/artifacts/*
-                  draft: true
-
-            - name: Publish release without notifying watchers
-              env:
-                  GH_TOKEN: ${{ github.token }}
-              run: gh release edit "${{ steps.version.outputs.tag }}" --draft=false --repo "${{ github.repository }}"
