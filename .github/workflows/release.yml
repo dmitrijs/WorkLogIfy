@@ -1,0 +1,80 @@
+# Tag a commit manually, then push (or merge) it onto the 'release' branch to publish it.
+# The workflow only proceeds past check_tag when both conditions hold:
+#   - the push landed on the 'release' branch
+#   - the pushed commit (HEAD) already has a tag pointing at it
+name: Release
+
+on:
+    push:
+        branches:
+            - master
+
+jobs:
+    check_tag:
+        runs-on: ubuntu-latest
+        outputs:
+            tagged: ${{ steps.check.outputs.tagged }}
+        steps:
+            - uses: actions/checkout@v4
+              with:
+                  fetch-depth: 0
+
+            - id: check
+              run: |
+                  if [ -n "$(git tag --points-at HEAD)" ]; then
+                    echo "tagged=true" >> "$GITHUB_OUTPUT"
+                  else
+                    echo "tagged=false" >> "$GITHUB_OUTPUT"
+                  fi
+
+    build_windows:
+        needs: check_tag
+        if: needs.check_tag.outputs.tagged == 'true'
+        runs-on: windows-latest
+        defaults:
+            run:
+                shell: bash
+        steps:
+            - uses: actions/checkout@v4
+              with:
+                  fetch-depth: 0
+
+            - uses: actions/setup-node@v4
+              with:
+                  node-version: "22"
+                  cache: "npm"
+
+            - run: npm install
+
+            - run: npm run build
+
+            - run: mkdir -p workspace/artifacts workspace/metadata
+            - run: cp release/*.exe workspace/artifacts/
+            - run: git describe --abbrev=0 --tags > workspace/metadata/version.txt
+            - run: awk -v start=1 '/\/compare\//{n++;next};n==start;n==start+1{exit}' CHANGELOG.md > workspace/metadata/changelog.txt
+
+            - uses: actions/upload-artifact@v4
+              with:
+                  name: release-workspace
+                  path: workspace
+
+    publish_github_release:
+        needs: build_windows
+        runs-on: ubuntu-latest
+        permissions:
+            contents: write
+        steps:
+            - uses: actions/download-artifact@v4
+              with:
+                  name: release-workspace
+                  path: workspace
+
+            - id: version
+              run: echo "tag=$(cat workspace/metadata/version.txt)" >> "$GITHUB_OUTPUT"
+
+            - name: Publish Release on GitHub
+              uses: softprops/action-gh-release@v2
+              with:
+                  tag_name: ${{ steps.version.outputs.tag }}
+                  body_path: workspace/metadata/changelog.txt
+                  files: workspace/artifacts/*

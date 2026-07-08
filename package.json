@@ -17,6 +17,7 @@
         "standard-version-x.y.patch": "npx standard-version --release-as patch",
         "standard-version-prerelease": "npx standard-version --prerelease local --release-as patch --skip.tag",
         "lint": "tslint app/**/*.ts{,x}",
+        "postinstall": "electron-rebuild -f -w node-pty",
         "prepare": "vp config"
     },
     "dependencies": {

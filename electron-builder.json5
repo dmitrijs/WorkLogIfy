@@ -4,11 +4,8 @@
 {
     $schema: "https://raw.githubusercontent.com/electron-userland/electron-builder/master/packages/app-builder-lib/scheme.json",
     productName: "WorkLogIfy",
-    npmRebuild: false,
-    beforeBuild: "scripts/beforeBuild.js",
     appId: "lv.ify.worklog",
     asar: true,
-    asarUnpack: ["**/node_modules/get-windows/**"],
     directories: {
         output: "release",
     },
