@@ -39,16 +39,29 @@ jobs:
               with:
                   fetch-depth: 0
 
-            - uses: actions/setup-node@v6
+            - id: setup-node
+              uses: actions/setup-node@v6
               with:
                   node-version: "24"
                   cache: "npm"
+
+            - id: node-major-version
+              run: echo "version=${NODE_VERSION%%.*}" >> "$GITHUB_OUTPUT"
+              env:
+                  NODE_VERSION: ${{ steps.setup-node.outputs.node-version }}
+
+            # package-lock.json's root "version" (and packages[""].version) mirror
+            # package.json's version, which standard-version bumps on every release
+            # commit. Hashing the raw file would invalidate the cache on every run
+            # even when dependencies didn't change, so hash a copy with those
+            # version fields stripped instead.
+            - run: jq 'del(.version) | del(.packages[""].version)' package-lock.json > .cache-lockfile.json
 
             - id: cache-node-modules
               uses: actions/cache@v5
               with:
                   path: node_modules
-                  key: ${{ runner.os }}-node-modules-${{ hashFiles('package-lock.json') }}
+                  key: ${{ runner.os }}-node${{ steps.node-major-version.outputs.version }}-node-modules-${{ hashFiles('.cache-lockfile.json') }}
 
             - if: steps.cache-node-modules.outputs.cache-hit != 'true'
               run: npm install
