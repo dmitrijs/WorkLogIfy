@@ -15,7 +15,7 @@ jobs:
         outputs:
             tagged: ${{ steps.check.outputs.tagged }}
         steps:
-            - uses: actions/checkout@v4
+            - uses: actions/checkout@v6
               with:
                   fetch-depth: 0
 
@@ -35,17 +35,17 @@ jobs:
             run:
                 shell: bash
         steps:
-            - uses: actions/checkout@v4
+            - uses: actions/checkout@v6
               with:
                   fetch-depth: 0
 
-            - uses: actions/setup-node@v4
+            - uses: actions/setup-node@v6
               with:
                   node-version: "24"
                   cache: "npm"
 
             - id: cache-node-modules
-              uses: actions/cache@v4
+              uses: actions/cache@v5
               with:
                   path: node_modules
                   key: ${{ runner.os }}-node-modules-${{ hashFiles('package-lock.json') }}
@@ -60,7 +60,7 @@ jobs:
             - run: git describe --abbrev=0 --tags > workspace/metadata/version.txt
             - run: awk -v start=1 '/\/compare\//{n++;next};n==start;n==start+1{exit}' CHANGELOG.md > workspace/metadata/changelog.txt
 
-            - uses: actions/upload-artifact@v4
+            - uses: actions/upload-artifact@v7
               with:
                   name: release-workspace
                   path: workspace
@@ -71,7 +71,7 @@ jobs:
         permissions:
             contents: write
         steps:
-            - uses: actions/download-artifact@v4
+            - uses: actions/download-artifact@v8
               with:
                   name: release-workspace
                   path: workspace
@@ -79,9 +79,19 @@ jobs:
             - id: version
               run: echo "tag=$(cat workspace/metadata/version.txt)" >> "$GITHUB_OUTPUT"
 
-            - name: Publish Release on GitHub
-              uses: softprops/action-gh-release@v2
+            # Created as a draft first: GitHub only emails "Watching" users when a
+            # release is created directly as published. Creating it as a draft, then
+            # flipping draft -> published in a separate update, does not send that
+            # notification.
+            - name: Create draft release on GitHub
+              uses: softprops/action-gh-release@v3
               with:
                   tag_name: ${{ steps.version.outputs.tag }}
                   body_path: workspace/metadata/changelog.txt
                   files: workspace/artifacts/*
+                  draft: true
+
+            - name: Publish release without notifying watchers
+              env:
+                  GH_TOKEN: ${{ github.token }}
+              run: gh release edit "${{ steps.version.outputs.tag }}" --draft=false --repo "${{ github.repository }}"
