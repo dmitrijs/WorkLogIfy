@@ -41,10 +41,17 @@ jobs:
 
             - uses: actions/setup-node@v4
               with:
-                  node-version: "22"
+                  node-version: "24"
                   cache: "npm"
 
-            - run: npm install
+            - id: cache-node-modules
+              uses: actions/cache@v4
+              with:
+                  path: node_modules
+                  key: ${{ runner.os }}-node-modules-${{ hashFiles('package-lock.json') }}
+
+            - if: steps.cache-node-modules.outputs.cache-hit != 'true'
+              run: npm install
 
             - run: npm run build
 
