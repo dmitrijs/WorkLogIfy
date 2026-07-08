@@ -78,8 +78,61 @@ jobs:
                   name: release-workspace
                   path: workspace
 
+    build_mac:
+        needs: check_tag
+        if: needs.check_tag.outputs.tagged == 'true'
+        runs-on: macos-latest
+        steps:
+            - uses: actions/checkout@v6
+              with:
+                  fetch-depth: 0
+
+            - id: setup-node
+              uses: actions/setup-node@v6
+              with:
+                  node-version: "24"
+                  cache: "npm"
+
+            - id: node-major-version
+              run: echo "version=${NODE_VERSION%%.*}" >> "$GITHUB_OUTPUT"
+              env:
+                  NODE_VERSION: ${{ steps.setup-node.outputs.node-version }}
+
+            # See build_windows: strip the version fields that standard-version
+            # bumps on every release commit so the cache key stays stable across
+            # releases when dependencies haven't actually changed.
+            - run: jq 'del(.version) | del(.packages[""].version)' package-lock.json > .cache-lockfile.json
+
+            - id: cache-node-modules
+              uses: actions/cache@v5
+              with:
+                  path: node_modules
+                  key: ${{ runner.os }}-node${{ steps.node-major-version.outputs.version }}-node-modules-${{ hashFiles('.cache-lockfile.json') }}
+
+            - if: steps.cache-node-modules.outputs.cache-hit != 'true'
+              run: npm install
+
+            - run: npm run compile
+
+            # electron-builder.json5's mac config targets "dir" with a codesign
+            # identity ("WorkLogIfy Certificate") that only exists in the
+            # maintainer's local keychain. CI has no signing cert, so override the
+            # target to dmg and force an unsigned/ad-hoc build instead of trying
+            # (and failing) to sign with that identity.
+            - run: CSC_IDENTITY_AUTO_DISCOVERY=false npx electron-builder --mac dmg --arm64 --publish never -c.mac.identity=null
+
+            - run: mkdir -p workspace/artifacts
+            - run: cp release/*.dmg workspace/artifacts/
+
+            - uses: actions/upload-artifact@v7
+              with:
+                  name: release-workspace-mac
+                  path: workspace/artifacts
+
     publish_github_release:
-        needs: build_windows
+        needs:
+            - build_windows
+            - build_mac
         runs-on: ubuntu-latest
         permissions:
             contents: write
@@ -88,6 +141,11 @@ jobs:
               with:
                   name: release-workspace
                   path: workspace
+
+            - uses: actions/download-artifact@v8
+              with:
+                  name: release-workspace-mac
+                  path: workspace/artifacts
 
             - id: version
               run: echo "tag=$(cat workspace/metadata/version.txt)" >> "$GITHUB_OUTPUT"
