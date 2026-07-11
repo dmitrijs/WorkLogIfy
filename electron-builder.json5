@@ -26,6 +26,12 @@
         icon: "public/assets/app_icon_512x512.png",
         target: ["dir"],
         identity: "WorkLogIfy Certificate",
+        // Hardened Runtime enforces library validation: every loaded framework
+        // must share the main executable's Team ID. That's meant for Apple
+        // Developer ID certs (and required for notarization); a self-signed
+        // cert has no real Team ID, so Electron's own prebuilt Electron
+        // Framework reads as a mismatch and the app fails to launch.
+        hardenedRuntime: false,
         entitlements: "entitlements.mac.plist", // Path to your entitlements file
         entitlementsInherit: "entitlements.mac.plist",
     },
