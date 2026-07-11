@@ -142,10 +142,11 @@ jobs:
 
                   security import "$CERT_PATH" -P "$MAC_CERTS_PASSWORD" -A -t cert -f pkcs12 -k "$KEYCHAIN_PATH"
 
-                  # -legacy: security export's .p12 encrypts certs with RC2-40-CBC
-                  # for old Keychain Access compatibility, which OpenSSL 3.x no
-                  # longer loads by default.
-                  openssl pkcs12 -legacy -in "$CERT_PATH" -passin pass:"$MAC_CERTS_PASSWORD" -clcerts -nokeys -out "$CERT_PEM_PATH"
+                  # Pull the cert back out via `security` (Apple's Security
+                  # framework) rather than `openssl pkcs12`: security export's
+                  # .p12 encrypts certs with the legacy RC2-40-CBC cipher, and the
+                  # runner's OpenSSL 3 build has no legacy provider to read it.
+                  security find-certificate -c "WorkLogIfy Certificate" -p "$KEYCHAIN_PATH" > "$CERT_PEM_PATH"
                   sudo security add-trusted-cert -d -r trustRoot -k "$KEYCHAIN_PATH" "$CERT_PEM_PATH"
 
                   security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k "$KEYCHAIN_PASSWORD" "$KEYCHAIN_PATH"
