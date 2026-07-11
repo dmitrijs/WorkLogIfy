@@ -115,11 +115,14 @@ jobs:
             - run: npm run compile
 
             # electron-builder.json5's mac config targets "dir" with a codesign
-            # identity ("WorkLogIfy Certificate") that only exists in the
-            # maintainer's local keychain. CI has no signing cert, so override the
-            # target to dmg and force an unsigned/ad-hoc build instead of trying
-            # (and failing) to sign with that identity.
-            - run: CSC_IDENTITY_AUTO_DISCOVERY=false npx electron-builder --mac dmg --arm64 --publish never -c.mac.identity=null
+            # identity ("WorkLogIfy Certificate") that normally only exists in the
+            # maintainer's local keychain. CSC_LINK/CSC_KEY_PASSWORD make
+            # electron-builder import that same cert into a temporary CI keychain
+            # so the build can sign with it instead of building unsigned.
+            - run: npx electron-builder --mac dmg --arm64 --publish never
+              env:
+                  CSC_LINK: ${{ secrets.MAC_CERTS }}
+                  CSC_KEY_PASSWORD: ${{ secrets.MAC_CERTS_PASSWORD }}
 
             - run: mkdir -p workspace/artifacts
             - run: cp release/*.dmg workspace/artifacts/
