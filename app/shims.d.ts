@@ -56,6 +56,7 @@ declare type TaskObj = {
 
     asanaTaskGid?: string;
     youtrackTaskCode?: string;
+    jiraTaskCode?: string;
     taskIdExtractedFrom?: string; // id of task from which current task was extracted
 
     group_key?: string;
@@ -122,6 +123,8 @@ declare type SettingsObj = {
     jira_host: string;
     jira_username: string;
     jira_password: string;
+    jira_enabled: boolean;
+    jira_query: string;
     asana_token: string;
     youtrack_domain: string;
     youtrack_token: string;
@@ -209,6 +212,14 @@ declare type YoutrackTaskObj = {
     Priority: string;
     Spent_time: string;
     State: string;
+};
+
+declare type JiraTaskObj = {
+    idReadable: string;
+    summary: string;
+    description?: string;
+    Priority?: string;
+    State?: string;
 };
 
 declare type ShellResult = {

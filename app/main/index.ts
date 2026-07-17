@@ -138,9 +138,14 @@ app.on("ready", async () => {
                     event.returnValue = { response: data };
                 })
                 .catch((err) => {
-                    console.error(err.message);
-                    event.returnValue = { error: err.message };
+                    console.error(err);
+                    const cause = err.cause?.message || err.cause?.code || err.cause;
+                    event.returnValue = { error: cause ? `${err.message}: ${cause}` : err.message };
                 });
+        });
+
+        ipcMain.on("shell.openExternal", (_event: Electron.IpcMainEvent, url: string) => {
+            shell.openExternal(url);
         });
 
         ipcMain.on("window.open", (event: Electron.IpcMainEvent) => {

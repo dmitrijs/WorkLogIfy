@@ -29,6 +29,9 @@ export function ComboboxExternalTasks({ currentTaskCode, currentTask, tasksGroup
         Major: "[&>*]:border-l-1 [&>*]:border-yellow-500",
         Normal: "[&>*]:border-l-1 [&>*]:border-green-500",
         Minor: "[&>*]:border-l-1 [&>*]:border-neutral-500",
+        High: "[&>*]:border-l-1 [&>*]:border-orange-500",
+        Medium: "[&>*]:border-l-1 [&>*]:border-yellow-500",
+        Low: "[&>*]:border-l-1 [&>*]:border-green-500",
     };
     const priorityToTextClassName = {
         "Show-stopper": "text-red-500",
@@ -36,6 +39,9 @@ export function ComboboxExternalTasks({ currentTaskCode, currentTask, tasksGroup
         Major: "text-yellow-500",
         Normal: "text-green-500",
         Minor: "text-neutral-500",
+        High: "text-orange-500",
+        Medium: "text-yellow-500",
+        Low: "text-green-500",
     };
 
     function stateIcon(state) {
@@ -50,6 +56,7 @@ export function ComboboxExternalTasks({ currentTaskCode, currentTask, tasksGroup
                     />
                 );
             case "To be discussed":
+            case "Waiting for Build":
                 return (
                     <Icon
                         icon="material-symbols-light:pause-circle-outline-rounded"
@@ -60,6 +67,7 @@ export function ComboboxExternalTasks({ currentTaskCode, currentTask, tasksGroup
                 );
             case "Open":
             case "Submitted":
+            case "To Do":
                 return (
                     <Icon
                         icon="material-symbols-light:stop-outline-rounded"
@@ -67,7 +75,19 @@ export function ComboboxExternalTasks({ currentTaskCode, currentTask, tasksGroup
                         height="16"
                     />
                 );
+            case "Approved for Prod":
+            case "In Test":
+                return (
+                    <Icon
+                        icon="material-symbols-light:done-rounded"
+                        width="16"
+                        height="16"
+                        className={"text-yellow-700"}
+                    />
+                );
+            case "Pushed to Prod":
             case "Fixed":
+            case "Done":
                 return (
                     <Icon
                         icon="material-symbols-light:done-rounded"

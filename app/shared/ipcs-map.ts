@@ -24,6 +24,7 @@ export interface IpcChannelMap {
     "flash.frame": [void];
     "jira.request": [object & { url: string } & RequestInit, { response: any }];
     "window.open": [void];
+    "shell.openExternal": [string];
 
     "debug.state": [void, boolean];
     "tasks.save": [

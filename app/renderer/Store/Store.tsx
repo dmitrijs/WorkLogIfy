@@ -132,6 +132,7 @@ const initialState = {
 
     asanaTasks: {} as Record<string, AsanaTaskObj>,
     youtrackTasks: {} as Record<string, YoutrackTaskObj>,
+    jiraTasks: {} as Record<string, JiraTaskObj>,
 
     settings: {} as SettingsObj,
     drag: {
@@ -201,6 +202,7 @@ type StoreMethodsType = {
     saveTasks: () => void;
     loadAsanaTasks: (force?: boolean) => void;
     loadYoutrackTasks: (force?: boolean) => void;
+    loadJiraTasks: (force?: boolean) => void;
     parentIsMissing: (task: TaskObj) => boolean;
     dragStart: ($event, task) => void;
     dragContinue: ($event) => void;
@@ -335,6 +337,7 @@ const StoreContentProvider = ({ children }: any) => {
                 time_record_minutes: "",
                 asanaTaskGid: "",
                 youtrackTaskCode: "",
+                jiraTaskCode: "",
                 parentId: "",
             } as TaskEditedObj;
 
@@ -419,6 +422,7 @@ const StoreContentProvider = ({ children }: any) => {
                 activeApps: [],
                 asanaTaskGid: task.asanaTaskGid,
                 youtrackTaskCode: task.youtrackTaskCode,
+                jiraTaskCode: task.jiraTaskCode,
                 parentId: task.parentId,
             };
             state.createdTaskId = id;
@@ -472,6 +476,7 @@ const StoreContentProvider = ({ children }: any) => {
             state.tasks[task.id].source = task.source;
             state.tasks[task.id].asanaTaskGid = task.asanaTaskGid;
             state.tasks[task.id].youtrackTaskCode = task.youtrackTaskCode;
+            state.tasks[task.id].jiraTaskCode = task.jiraTaskCode;
             state.tasks[task.id].parentId = task.parentId;
 
             if (addedToParent && !task.code) {
@@ -954,6 +959,49 @@ const StoreContentProvider = ({ children }: any) => {
             state.youtrackTasks = keyBy(tasksNormalized, "idReadable");
             storeMethods.updateState({
                 youtrackTasks: state.youtrackTasks,
+            });
+        },
+
+        loadJiraTasks(force = false) {
+            if (!state.settings.jira_host) {
+                return;
+            }
+            if (!force && Object.values(state.jiraTasks).length) {
+                return;
+            }
+            const auth = Buffer.from(
+                `${state.settings.jira_username}:${state.settings.jira_password}`,
+            ).toString("base64");
+            const jql =
+                state.settings.jira_query || "assignee = currentUser() AND resolution = Unresolved";
+
+            const jiraTasksCall = window.ipc.sendSync("jira.request", {
+                url:
+                    `https://${state.settings.jira_host}/rest/api/3/search/jql?` +
+                    "fields=summary,description,status,priority" +
+                    "&jql=" +
+                    encodeURIComponent(jql),
+                headers: {
+                    Authorization: `Basic ${auth}`,
+                    Accept: "application/json",
+                    "Content-Type": "application/json",
+                },
+                method: "GET",
+                redirect: "follow",
+                referrerPolicy: "no-referrer",
+            });
+
+            const tasksNormalized = jiraTasksCall.response?.issues?.map((issue: any) => ({
+                idReadable: issue.key,
+                summary: issue.fields?.summary,
+                description: issue.fields?.description,
+                Priority: issue.fields?.priority?.name,
+                State: issue.fields?.status?.name,
+            }));
+
+            state.jiraTasks = keyBy(tasksNormalized, "idReadable");
+            storeMethods.updateState({
+                jiraTasks: state.jiraTasks,
             });
         },
 

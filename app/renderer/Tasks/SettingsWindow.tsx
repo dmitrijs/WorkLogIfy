@@ -59,6 +59,22 @@ const SettingsWindow = () => {
 
     return (
         <div className="SettingsWindow">
+            <label>Jira:</label>
+            <span className="label--checkbox label--checkbox--with-text">
+                <label style={{ width: "auto", cursor: "pointer" }}>
+                    <input
+                        type="checkbox"
+                        checked={store.state.settings.jira_enabled}
+                        onChange={() =>
+                            store.updateSettingsState({
+                                jira_enabled: !store.state.settings.jira_enabled,
+                            })
+                        }
+                    />
+                    <span></span> Enabled
+                </label>
+            </span>
+            <br />
             <label>JIRA Host:</label>{" "}
             <input
                 type="text"
@@ -87,8 +103,16 @@ const SettingsWindow = () => {
                 rel="noreferrer"
                 href="https://id.atlassian.com/manage-profile/security/api-tokens"
             >
-                API tokens
+                API opts
             </a>
+            <br />
+            <label>JIRA Query (JQL):</label>{" "}
+            <input
+                type="text"
+                value={store.state.settings.jira_query || ""}
+                onChange={(e) => store.updateSettingsState({ jira_query: e.target.value })}
+                placeholder="assignee = currentUser() AND resolution = Unresolved"
+            />
             <br />
             <br />
             <label>Asana:</label>

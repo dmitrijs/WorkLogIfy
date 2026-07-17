@@ -23,6 +23,21 @@ const YoutrackStates = {
     Submitted: 30,
 };
 
+const JiraPriorities = {
+    High: 1,
+    Medium: 2,
+    Low: 3,
+};
+const JiraStates = {
+    "Approved for Prod": 1,
+    "Waiting for Build": 2,
+    "In Progress": 3,
+    "To Do": 4,
+    "In Test": 5,
+    "Pushed to Prod": 6,
+    Done: 7,
+};
+
 const TaskEdit = ({ mode }: { mode: string }) => {
     const [task, setTask] = useState<TaskEditedObj>({} as any);
     const titleEl = useRef(null);
@@ -44,6 +59,15 @@ const TaskEdit = ({ mode }: { mode: string }) => {
         ) {
             (async () => {
                 store.loadYoutrackTasks(true);
+            })();
+        }
+
+        if (
+            mode === "new" ||
+            (store.state.settings.jira_enabled && !Object.keys(store.state.jiraTasks || {}).length)
+        ) {
+            (async () => {
+                store.loadJiraTasks(true);
             })();
         }
     }, [mode]);
@@ -140,6 +164,26 @@ const TaskEdit = ({ mode }: { mode: string }) => {
         "-idReadable",
     ]);
     const youtrackTasksGrouped = _.groupBy(youtrackTasksSorted, "Priority");
+
+    const jiraTaskChanged = (jiraTask: JiraTaskObj) => {
+        if (!jiraTask) {
+            setTask({ ...task, jiraTaskCode: null });
+            return;
+        }
+        setTask({
+            ...task,
+            jiraTaskCode: jiraTask.idReadable,
+            code: jiraTask.idReadable,
+            title: jiraTask.summary,
+        });
+    };
+
+    const jiraTasksSorted = _.sortBy(store.state.jiraTasks, [
+        (a) => JiraPriorities[a.Priority] ?? 99,
+        (a) => JiraStates[a.State] ?? 99,
+        "-idReadable",
+    ]);
+    const jiraTasksGrouped = _.groupBy(jiraTasksSorted, "Priority");
 
     return (
         <div className="TaskEdit" data-mode={mode}>
@@ -279,6 +323,55 @@ const TaskEdit = ({ mode }: { mode: string }) => {
                                             );
                                         }}
                                     />
+                                </td>
+                            </tr>
+                        )}
+                        {store.state.settings.jira_enabled && (
+                            <tr>
+                                <td>
+                                    Jira (
+                                    <a
+                                        href="#"
+                                        onClick={(e) => {
+                                            e.preventDefault();
+                                            store.loadJiraTasks(true);
+                                        }}
+                                    >
+                                        <i className="icofont-refresh"></i>
+                                    </a>
+                                    ):
+                                </td>
+                                <td>
+                                    <div className={"flex gap-1 items-center"}>
+                                        <div className={"flex-1 min-w-0"}>
+                                            <ComboboxExternalTasks
+                                                currentTaskCode={task.jiraTaskCode}
+                                                currentTask={
+                                                    store.state.jiraTasks?.[task.jiraTaskCode]
+                                                }
+                                                tasksGrouped={jiraTasksGrouped}
+                                                onChange={(idReadable: string) => {
+                                                    jiraTaskChanged(
+                                                        store.state.jiraTasks?.[idReadable],
+                                                    );
+                                                }}
+                                            />
+                                        </div>
+                                        {task.jiraTaskCode && (
+                                            <a
+                                                href="#"
+                                                onClick={(e) => {
+                                                    e.preventDefault();
+                                                    window.ipc.send(
+                                                        "shell.openExternal",
+                                                        `https://${store.state.settings.jira_host}/browse/${task.jiraTaskCode}`,
+                                                    );
+                                                }}
+                                            >
+                                                <i className="icofont-external-link"></i>
+                                            </a>
+                                        )}
+                                    </div>
                                 </td>
                             </tr>
                         )}
