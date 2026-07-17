@@ -154,8 +154,15 @@ const TaskEdit = ({ mode }: { mode: string }) => {
             ...task,
             youtrackTaskCode: youtrackTask.idReadable,
             code: youtrackTask.idReadable,
-            title: youtrackTask.summary,
         });
+    };
+
+    const youtrackTitleCopy = () => {
+        const youtrackTask = store.state.youtrackTasks?.[task.youtrackTaskCode];
+        if (!youtrackTask?.summary) {
+            return;
+        }
+        setTask({ ...task, title: youtrackTask.summary });
     };
 
     const youtrackTasksSorted = _.sortBy(store.state.youtrackTasks, [
@@ -174,8 +181,15 @@ const TaskEdit = ({ mode }: { mode: string }) => {
             ...task,
             jiraTaskCode: jiraTask.idReadable,
             code: jiraTask.idReadable,
-            title: jiraTask.summary,
         });
+    };
+
+    const jiraTitleCopy = () => {
+        const jiraTask = store.state.jiraTasks?.[task.jiraTaskCode];
+        if (!jiraTask?.summary) {
+            return;
+        }
+        setTask({ ...task, title: jiraTask.summary });
     };
 
     const jiraTasksSorted = _.sortBy(store.state.jiraTasks, [
@@ -311,18 +325,40 @@ const TaskEdit = ({ mode }: { mode: string }) => {
                                     ):
                                 </td>
                                 <td>
-                                    <ComboboxExternalTasks
-                                        currentTaskCode={task.youtrackTaskCode}
-                                        currentTask={
-                                            store.state.youtrackTasks?.[task.youtrackTaskCode]
-                                        }
-                                        tasksGrouped={youtrackTasksGrouped}
-                                        onChange={(idReadable: string) => {
-                                            youtrackTaskChanged(
-                                                store.state.youtrackTasks?.[idReadable],
-                                            );
-                                        }}
-                                    />
+                                    <div className={"flex gap-1 items-center"}>
+                                        <div className={"flex-1 min-w-0"}>
+                                            <ComboboxExternalTasks
+                                                currentTaskCode={task.youtrackTaskCode}
+                                                currentTask={
+                                                    store.state.youtrackTasks?.[
+                                                        task.youtrackTaskCode
+                                                    ]
+                                                }
+                                                tasksGrouped={youtrackTasksGrouped}
+                                                onChange={(idReadable: string) => {
+                                                    youtrackTaskChanged(
+                                                        store.state.youtrackTasks?.[idReadable],
+                                                    );
+                                                }}
+                                            />
+                                        </div>
+                                        {store.state.youtrackTasks?.[task.youtrackTaskCode]
+                                            ?.summary && (
+                                            <a
+                                                href="#"
+                                                title="Copy title from Youtrack"
+                                                className={
+                                                    "flex shrink-0 items-center justify-center self-stretch py-1"
+                                                }
+                                                onClick={(e) => {
+                                                    e.preventDefault();
+                                                    youtrackTitleCopy();
+                                                }}
+                                            >
+                                                <i className="icofont-arrow-up"></i>
+                                            </a>
+                                        )}
+                                    </div>
                                 </td>
                             </tr>
                         )}
@@ -357,9 +393,27 @@ const TaskEdit = ({ mode }: { mode: string }) => {
                                                 }}
                                             />
                                         </div>
+                                        {store.state.jiraTasks?.[task.jiraTaskCode]?.summary && (
+                                            <a
+                                                href="#"
+                                                title="Copy title from Jira"
+                                                className={
+                                                    "flex shrink-0 items-center justify-center self-stretch py-1"
+                                                }
+                                                onClick={(e) => {
+                                                    e.preventDefault();
+                                                    jiraTitleCopy();
+                                                }}
+                                            >
+                                                <i className="icofont-arrow-up"></i>
+                                            </a>
+                                        )}
                                         {task.jiraTaskCode && (
                                             <a
                                                 href="#"
+                                                className={
+                                                    "flex shrink-0 items-center justify-center self-stretch py-1"
+                                                }
                                                 onClick={(e) => {
                                                     e.preventDefault();
                                                     window.ipc.send(
