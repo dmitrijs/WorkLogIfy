@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.45.0](https://github.com/dmitrijs/WorkLogIfy/compare/v1.44.10...v1.45.0) (2026-07-17)
+
+### Features
+
+- **jira:** support JIRA tasks ([f5e117c](https://github.com/dmitrijs/WorkLogIfy/commit/f5e117cd9acb6f28337a4b70fc11afca00844a14))
+
 ### [1.44.10](https://github.com/dmitrijs/WorkLogIfy/compare/v1.44.9...v1.44.10) (2026-07-11)
 
 ### [1.44.9](https://github.com/dmitrijs/WorkLogIfy/compare/v1.44.8...v1.44.9) (2026-07-11)
