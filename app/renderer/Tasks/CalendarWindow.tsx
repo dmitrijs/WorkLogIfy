@@ -4,7 +4,7 @@ import Store_GetCalendarStatistics from "../Store/Store_GetCalendarStatistics";
 
 const CalendarWindow = ({ weekKey }: { weekKey: string }) => {
     const store = useStoreContext();
-    const calendarHoveredDayCode = useRef(null);
+    const calendarHoveredDayCode = useRef<string | null>(null);
 
     const cache = useMemo(() => {
         return Store_GetCalendarStatistics();
@@ -21,7 +21,7 @@ const CalendarWindow = ({ weekKey }: { weekKey: string }) => {
 
         console.log("store.state.calendarHoveredDayCode", calendarHoveredDayCode.current);
         window.ipc.send("calendar.showMenu", {
-            dayCode: calendarHoveredDayCode.current,
+            dayCode: calendarHoveredDayCode.current as string,
         });
     };
 

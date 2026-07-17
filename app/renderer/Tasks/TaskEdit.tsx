@@ -40,8 +40,8 @@ const JiraStates = {
 
 const TaskEdit = ({ mode }: { mode: string }) => {
     const [task, setTask] = useState<TaskEditedObj>({} as any);
-    const titleEl = useRef(null);
-    const notesEl = useRef(null);
+    const titleEl = useRef<HTMLInputElement>(null);
+    const notesEl = useRef<HTMLTextAreaElement>(null);
     const store = useStoreContext();
 
     useEffect(() => {
@@ -50,7 +50,7 @@ const TaskEdit = ({ mode }: { mode: string }) => {
         } else {
             setTask({ ...store.getEditedTask(), time_add_minutes: "", time_record_minutes: "" });
         }
-        titleEl.current.focus();
+        titleEl.current?.focus();
 
         if (
             mode === "new" ||
@@ -102,7 +102,7 @@ const TaskEdit = ({ mode }: { mode: string }) => {
             updatedTask.notes = template.notes;
         }
         setTask(updatedTask);
-        notesEl.current.focus();
+        notesEl.current?.focus();
     };
 
     const back = () => {
@@ -158,7 +158,7 @@ const TaskEdit = ({ mode }: { mode: string }) => {
     };
 
     const youtrackTitleCopy = () => {
-        const youtrackTask = store.state.youtrackTasks?.[task.youtrackTaskCode];
+        const youtrackTask = store.state.youtrackTasks?.[task.youtrackTaskCode as string];
         if (!youtrackTask?.summary) {
             return;
         }
@@ -185,7 +185,7 @@ const TaskEdit = ({ mode }: { mode: string }) => {
     };
 
     const jiraTitleCopy = () => {
-        const jiraTask = store.state.jiraTasks?.[task.jiraTaskCode];
+        const jiraTask = store.state.jiraTasks?.[task.jiraTaskCode as string];
         if (!jiraTask?.summary) {
             return;
         }
@@ -193,8 +193,8 @@ const TaskEdit = ({ mode }: { mode: string }) => {
     };
 
     const jiraTasksSorted = _.sortBy(store.state.jiraTasks, [
-        (a) => JiraPriorities[a.Priority] ?? 99,
-        (a) => JiraStates[a.State] ?? 99,
+        (a) => JiraPriorities[a.Priority as string] ?? 99,
+        (a) => JiraStates[a.State as string] ?? 99,
         "-idReadable",
     ]);
     const jiraTasksGrouped = _.groupBy(jiraTasksSorted, "Priority");
@@ -290,7 +290,7 @@ const TaskEdit = ({ mode }: { mode: string }) => {
                                         }}
                                     >
                                         <option value=""></option>
-                                        {!store.state.asanaTasks?.[task.asanaTaskGid] && (
+                                        {!store.state.asanaTasks?.[task.asanaTaskGid as string] && (
                                             <option value={task.asanaTaskGid}>
                                                 Current: {task.asanaTaskGid}
                                             </option>
@@ -331,7 +331,7 @@ const TaskEdit = ({ mode }: { mode: string }) => {
                                                 currentTaskCode={task.youtrackTaskCode}
                                                 currentTask={
                                                     store.state.youtrackTasks?.[
-                                                        task.youtrackTaskCode
+                                                        task.youtrackTaskCode as string
                                                     ]
                                                 }
                                                 tasksGrouped={youtrackTasksGrouped}
@@ -342,8 +342,9 @@ const TaskEdit = ({ mode }: { mode: string }) => {
                                                 }}
                                             />
                                         </div>
-                                        {store.state.youtrackTasks?.[task.youtrackTaskCode]
-                                            ?.summary && (
+                                        {store.state.youtrackTasks?.[
+                                            task.youtrackTaskCode as string
+                                        ]?.summary && (
                                             <a
                                                 href="#"
                                                 title="Copy title from Youtrack"
@@ -383,7 +384,9 @@ const TaskEdit = ({ mode }: { mode: string }) => {
                                             <ComboboxExternalTasks
                                                 currentTaskCode={task.jiraTaskCode}
                                                 currentTask={
-                                                    store.state.jiraTasks?.[task.jiraTaskCode]
+                                                    store.state.jiraTasks?.[
+                                                        task.jiraTaskCode as string
+                                                    ]
                                                 }
                                                 tasksGrouped={jiraTasksGrouped}
                                                 onChange={(idReadable: string) => {
@@ -393,7 +396,8 @@ const TaskEdit = ({ mode }: { mode: string }) => {
                                                 }}
                                             />
                                         </div>
-                                        {store.state.jiraTasks?.[task.jiraTaskCode]?.summary && (
+                                        {store.state.jiraTasks?.[task.jiraTaskCode as string]
+                                            ?.summary && (
                                             <a
                                                 href="#"
                                                 title="Copy title from Jira"

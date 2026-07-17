@@ -94,7 +94,7 @@ const createSelectors = <S extends UseBoundStore<StoreApi<object>>>(_store: S) =
 
 export const useStore = createSelectors(useStoreBase);
 
-const StoreContext = createContext(null);
+const StoreContext = createContext<StoreType>(null as unknown as StoreType);
 
 const initialState = {
     initialized: false,
@@ -105,13 +105,13 @@ const initialState = {
     taskLastSelected: "",
     creatingByExtract: false, // new task that is created is extracted from the selected task
     creatingSubtask: false, // new task that is created is extracted as a Subtask
-    tasksHoveredId: null,
-    taskEditedId: null,
+    tasksHoveredId: null as string | null,
+    taskEditedId: null as string | null,
     tasksScreen: "tasks",
     taskTimeredId: null as string | null,
     tasksShowAsReport: false,
     tasksHideUnReportable: false,
-    timerElapsedText: null,
+    timerElapsedText: null as string | null,
     timerElapsedSeconds: 0,
     lastSavedElapsedSeconds: 0,
     screen: "tasks",
@@ -126,7 +126,7 @@ const initialState = {
     createdTaskId: "",
     taskInClipboard: null as TaskObj | null,
     taskIsCloned: false,
-    calendarHoveredDayCode: null,
+    calendarHoveredDayCode: null as string | null,
 
     projects: [] as string[],
 
@@ -313,15 +313,18 @@ const StoreContentProvider = ({ children }: any) => {
         },
 
         updateSettingsState(values) {
-            setState((state) => ({
-                ...state,
-                settings: { ...state.settings, ...values },
-                _now: new Date(),
-            }));
+            setState(
+                (state) =>
+                    ({
+                        ...state,
+                        settings: { ...state.settings, ...values },
+                        _now: new Date(),
+                    }) as any,
+            );
         },
 
         getEditedTask(): TaskEditedObj {
-            return state.tasks[state.taskEditedId] as TaskEditedObj;
+            return state.tasks[state.taskEditedId as string] as TaskEditedObj;
         },
 
         getEmptyTask(): TaskEditedObj {
@@ -729,7 +732,7 @@ const StoreContentProvider = ({ children }: any) => {
         },
         activateTimer(taskId: string) {
             if (taskId === null) {
-                taskId = state.tasksHoveredId;
+                taskId = state.tasksHoveredId as string;
             }
             state.taskTimeredId = taskId;
             state.lastSavedElapsedSeconds = 0;
@@ -755,7 +758,7 @@ const StoreContentProvider = ({ children }: any) => {
                 state.lastSavedElapsedSeconds = secondsElapsed;
 
                 const stateCopy = cloneDeep(state);
-                addSession(stateCopy, state.taskTimeredId, secondsElapsed, "timer");
+                addSession(stateCopy, state.taskTimeredId as string, secondsElapsed, "timer");
 
                 saveTasks(stateCopy);
                 storeMethods.upsertTasks(stateCopy.tasks);
@@ -787,7 +790,7 @@ const StoreContentProvider = ({ children }: any) => {
         stopTimer([secondsElapsed, secondsIdle]) {
             console.log("secondsElapsed", secondsElapsed, "secondsIdle", secondsIdle);
 
-            addSession(state, state.taskTimeredId, secondsElapsed, "timer", secondsIdle);
+            addSession(state, state.taskTimeredId as string, secondsElapsed, "timer", secondsIdle);
 
             state.timerElapsedText = "";
             state.timerElapsedSeconds = 0;
@@ -828,7 +831,7 @@ const StoreContentProvider = ({ children }: any) => {
             state.activeApps.push({
                 noticed_at: moment().toISOString(),
                 seconds_idle: secondsIdle,
-                timered_task: timeredTaskId,
+                timered_task: timeredTaskId ?? undefined,
                 description: activeAppDescription,
             });
             saveActiveApps(state);

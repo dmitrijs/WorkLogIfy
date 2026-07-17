@@ -244,7 +244,7 @@ export default defineConfig({
         assetsInlineLimit: 0,
     },
     plugins: [
-        react(),
+        react() as any,
         tailwindcss(),
         electron([
             {
@@ -316,4 +316,4 @@ export default defineConfig({
           })()
         : undefined,
     clearScreen: false,
-});
+} as any);

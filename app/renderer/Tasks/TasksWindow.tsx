@@ -223,7 +223,7 @@ const TasksWindow = () => {
         store.dragStop();
     };
 
-    const globalNotesInputRef = useRef(null);
+    const globalNotesInputRef = useRef<HTMLTextAreaElement>(null);
 
     useEffect(() => {
         if (globalNotesInputRef.current) {

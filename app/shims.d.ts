@@ -55,8 +55,8 @@ declare type TaskObj = {
     subtaskIds?: string[];
 
     asanaTaskGid?: string;
-    youtrackTaskCode?: string;
-    jiraTaskCode?: string;
+    youtrackTaskCode?: string | null;
+    jiraTaskCode?: string | null;
     taskIdExtractedFrom?: string; // id of task from which current task was extracted
 
     group_key?: string;

@@ -327,14 +327,14 @@ const App = () => {
                                           id: (value as TaskObj).id,
                                           code: (value as TaskObj).code,
                                       })
-                                    : value}
+                                    : (value as React.ReactNode)}
                             </div>
                         ) : (
                             <div key={key}>
                                 <strong>{key}:</strong>{" "}
                                 {!value || typeof value === "object"
                                     ? JSON.stringify(value)
-                                    : value}
+                                    : (value as React.ReactNode)}
                             </div>
                         ),
                     )}

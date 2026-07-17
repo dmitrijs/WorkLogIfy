@@ -4,7 +4,7 @@ import { useStoreContext } from "../Store/Store";
 
 const ActiveAppsWindow = () => {
     const store = useStoreContext();
-    const [activeApps, setActiveApps] = useState([]);
+    const [activeApps, setActiveApps] = useState<ActiveAppObj[]>([]);
 
     useEffect(() => {
         setActiveApps(store.state.activeApps.slice().reverse());
